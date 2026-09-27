@@ -87,5 +87,6 @@ assert.equal(
 );
 
 assert.match(html, /styles-v2\.css/, 'institutional redesign layer should be loaded');
+assert.match(html, /viewport-fit=cover/, 'mobile viewport should support iPhone safe areas');
 assert.match(html, /class=["'][^"']*control-disclosure/, 'secondary Stress Lab tools should use progressive disclosure');
 assert.match(html, /class=["'][^"']*analysis-disclosure/, 'advanced analysis should use progressive disclosure');
