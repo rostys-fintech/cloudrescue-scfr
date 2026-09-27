@@ -8,7 +8,7 @@ const [html, js, css] = await Promise.all([
 ]);
 
 const requiredIds = [
-  'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','themeLabel',
+  'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','themeLabel','focusStory',
   'providerSelect','marketPct','reservePct','ruleSelect',
   'strategyCards','decisionInsight','frontier','exportBtn'
 ];
@@ -22,6 +22,8 @@ assert.match(js, /resilienceFrontier/, 'app should render a resilience frontier'
 assert.match(js, /exportScenario/, 'app should expose reproducible scenario export');
 assert.match(js, /drawNetworkLines/, 'app should render provider-to-bank network connections');
 assert.match(js, /setupTheme/, 'app should initialize persistent light-dark theme switching');
+assert.match(js, /setFocusMode/, 'app should provide a presentation focus mode');
+assert.match(js, /ArrowRight/, 'story should support keyboard scene navigation');
 assert.match(js, /cloudrescue-theme/, 'theme choice should be persisted locally');
 assert.match(js, /scfr-line/, 'app should render SCFR pooled-capacity connections');
 assert.match(js, /\$\$\('\.preset'\)/, 'preset controls should use the multi-element selector helper');
