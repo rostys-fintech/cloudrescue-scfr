@@ -15,7 +15,7 @@ assert.match(earth,/ra-recovery-flow/);
 assert.match(earth,/Illustrative topology · synthetic institutions/);
 
 for (const mount of ['raEarthMount','raLabEarthMount','raEvidenceEarthMount']) {
-  assert.match(html,new RegExp('id=["\\']'+mount+'["\\']'));
+  assert.match(html,new RegExp("id=[\\\"']"+mount+"[\\\"']"));
 }
 
 assert.match(app,/createEarthSystem\(\$\('#raEarthMount'\), \{mode:'simulation'\}\)/);
