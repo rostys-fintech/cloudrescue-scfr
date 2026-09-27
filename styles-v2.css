@@ -2416,3 +2416,69 @@ html[data-theme="dark"] .heat-cell b{
 .stage-hud b{
   font-variant-numeric:tabular-nums;
 }
+
+
+/* ---------- Simplified replay utilities ---------- */
+.dots{
+  display:flex;
+  gap:5px;
+  max-width:315px;
+  margin-top:16px;
+  padding:12px 0 0;
+  border-top:1px solid var(--v2-line);
+  border-bottom:0;
+}
+.dots button{
+  width:32px;
+  min-width:32px;
+  min-height:32px;
+  padding:0;
+  border:1px solid var(--v2-line);
+  border-radius:4px;
+  background:var(--v2-surface)!important;
+}
+.dots button span{
+  width:auto;
+  height:auto;
+  border:0;
+  background:transparent!important;
+  color:var(--v2-muted);
+  font-size:8px;
+  font-weight:800;
+}
+.dots button b{
+  display:none!important;
+}
+.dots button.active{
+  border-color:var(--v2-primary);
+  background:var(--v2-primary)!important;
+}
+.dots button.active span{
+  color:#fff;
+}
+.demo-progress{
+  height:2px;
+  margin-top:8px;
+  background:#dde4e9;
+}
+#demoProgressBar{
+  background:var(--v2-primary);
+}
+.story-actions{
+  row-gap:6px;
+}
+#narrationToggle{
+  min-height:32px;
+  padding:6px 9px;
+  font-size:8px;
+}
+.voice-control{
+  min-height:32px;
+  padding:4px 8px!important;
+}
+#focusStory{
+  min-height:28px;
+  padding-top:3px;
+  padding-bottom:3px;
+  font-size:8px;
+}
