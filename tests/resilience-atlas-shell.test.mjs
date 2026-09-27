@@ -15,7 +15,7 @@ assert.doesNotMatch(html,/styles-v2\.css/);
 assert.doesNotMatch(html,/href="styles\.css/);
 
 for (const id of [
-  'raEarthMount','raThemeToggle','raRunPreview','raProviderSelect',
+  'raEarthMount','raLabEarthMount','raEvidenceEarthMount','raThemeToggle','raRunPreview','raProviderSelect',
   'raMarketPct','raReservePct','raRuleSelect','raLabResilience'
 ]) {
   assert.match(html,new RegExp(`id=["']${id}["']`),`missing ${id}`);
@@ -26,6 +26,8 @@ assert.match(js,/from '\.\/model\/simulation\.js'/);
 assert.match(js,/compareStrategies/);
 assert.match(js,/systemStats/);
 assert.doesNotMatch(js,/styles-v2/);
+assert.doesNotMatch(html,/Stage 3 mount point/);
+assert.doesNotMatch(html,/Same visualization engine/);
 
 assert.match(css,/var\(--ra-canvas\)/);
 assert.match(css,/@media\(max-width:767px\)/);
