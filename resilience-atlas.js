@@ -749,14 +749,11 @@ function isCompactTouchLayout(){
 }
 
 function focusAnimationStage(target){
-  if(!target || !isCompactTouchLayout()) return Promise.resolve(true);
+  if(!target || !isCompactTouchLayout()) return false;
 
   target.style.scrollMarginTop='68px';
   target.scrollIntoView({block:'start',behavior:'auto'});
-
-  return new Promise(resolve=>{
-    window.requestAnimationFrame(()=>window.requestAnimationFrame(()=>resolve(true)));
-  });
+  return true;
 }
 
 async function runGuidedSimulation(){
@@ -781,8 +778,7 @@ async function runGuidedSimulation(){
   setGuidedActive(true);
 
   if(isCompactTouchLayout()){
-    await focusAnimationStage($('#raEarthMount'));
-    if(runId!==guided.runId) return;
+    focusAnimationStage($('#raEarthMount'));
   }
 
   for(let i=0;i<6;i++){
@@ -1115,7 +1111,8 @@ async function runLabScenario(){
     }
 
     if(isCompactTouchLayout()){
-      await focusAnimationStage($('#raLabEarthMount'));
+      focusAnimationStage($('#raLabEarthMount'));
+      await new Promise(resolve=>window.requestAnimationFrame(()=>window.requestAnimationFrame(resolve)));
       if(runId!==labRun.runId) return;
     }
 
