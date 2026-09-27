@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#070A0F">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-lab01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-evidence01">
 </head>
 <body>
   <div class="ra-app">
@@ -302,38 +302,256 @@
       </section>
 
       <section class="ra-view" id="evidence" data-ra-view="evidence">
-        <header class="ra-evidence-head">
-          <div class="ra-kicker">MODEL &amp; EVIDENCE</div>
-          <h2>Understand what the simulator is doing.</h2>
-          <p>The redesign reuses the existing deterministic synthetic-bank model. This mode will explain assumptions, network structure, reserve logic and outputs without changing the underlying calculations.</p>
+        <header class="ra-evidence-head ra-evidence-hero">
+          <div>
+            <div class="ra-kicker">MODEL &amp; EVIDENCE</div>
+            <h2>Understand what the simulator is doing — and what it is not claiming.</h2>
+            <p>Resilience Atlas is a deterministic mechanism stress-test. It uses synthetic institutions to isolate how a shared-provider shock and different reserve-allocation rules change recovery outcomes.</p>
+          </div>
+          <div class="ra-boundary-pair">
+            <article>
+              <span>REAL-WORLD MOTIVATION</span>
+              <b>Shared ICT dependency and operational-resilience risk</b>
+              <small>Grounded in BIS, EBA and DORA material.</small>
+            </article>
+            <article>
+              <span>SYNTHETIC MODEL</span>
+              <b>Banks, workloads, readiness and numerical outputs</b>
+              <small>Illustrative test bed — not estimates of real institutions.</small>
+            </article>
+          </div>
         </header>
 
-        <div class="ra-evidence-grid">
+        <div class="ra-evidence-grid ra-evidence-top">
           <section class="ra-evidence-map">
+            <div class="ra-evidence-map-head">
+              <div>
+                <span>ANNOTATED SYSTEM MAP</span>
+                <b>One network model, explained visually</b>
+              </div>
+              <small>Illustrative topology · no real-bank locations</small>
+            </div>
             <div class="ra-earth-mount ra-earth-mount-evidence" id="raEvidenceEarthMount" data-earth-mode="evidence"></div>
           </section>
 
-          <aside class="ra-model-facts">
-            <article><span>Network</span><b>20 synthetic banks / 3 providers</b></article>
-            <article><span>Shock</span><b>One shared-provider outage</b></article>
-            <article><span>Constraint</span><b>Immediate backup capacity</b></article>
-            <article><span>Mechanisms</span><b>Market / Individual / SCFR</b></article>
-            <article><span>Outcome</span><b>Restored critical workload &amp; resilience</b></article>
+          <aside class="ra-model-facts ra-live-model">
+            <header>
+              <span>MODEL SNAPSHOT</span>
+              <b>Current assumptions</b>
+            </header>
+            <article><span>Synthetic banks</span><b id="raEvidenceBanks">20</b></article>
+            <article><span>Shared providers</span><b id="raEvidenceProviders">3</b></article>
+            <article><span>Total critical load</span><b id="raEvidenceLoad">1,538 units</b></article>
+            <article><span>Selected shock demand</span><b id="raEvidenceDemand">—</b></article>
+            <article><span>Emergency market pool</span><b id="raEvidenceMarketPool">—</b></article>
+            <article><span>System reserve pool</span><b id="raEvidenceReservePool">—</b></article>
+            <article><span>Synthetic provider HHI</span><b id="raEvidenceHHI">—</b></article>
           </aside>
         </div>
 
-        <div class="ra-causal-chain" aria-label="Model flow">
-          <span>Shock</span><i>→</i><span>Simultaneous demand</span><i>→</i><span>Available capacity</span><i>→</i><span>Reserve allocation</span><i>→</i><span>Recovery</span><i>→</i><span>Outcome</span>
-        </div>
+        <section class="ra-method-block">
+          <header class="ra-section-head">
+            <div>
+              <span>MODEL FLOW</span>
+              <h3>From shock to resilience outcome</h3>
+            </div>
+            <p>The same sequence is used by Guided Simulation and Scenario Lab.</p>
+          </header>
+          <div class="ra-causal-chain ra-causal-chain-rich" aria-label="Model flow">
+            <article><span>01</span><b>Shock</b><small>A shared provider fails.</small></article>
+            <i>→</i>
+            <article><span>02</span><b>Demand</b><small>Dependent banks need recovery capacity.</small></article>
+            <i>→</i>
+            <article><span>03</span><b>Market</b><small>Immediate backup capacity is allocated.</small></article>
+            <i>→</i>
+            <article><span>04</span><b>Reserve</b><small>Individual or pooled reserve is applied.</small></article>
+            <i>→</i>
+            <article><span>05</span><b>Readiness</b><small>Capacity is converted into restored workload.</small></article>
+            <i>→</i>
+            <article><span>06</span><b>Outcome</b><small>Recovery and systemic resilience are measured.</small></article>
+          </div>
+        </section>
+
+        <section class="ra-method-block">
+          <header class="ra-section-head">
+            <div>
+              <span>CORE EQUATIONS</span>
+              <h3>Four calculations drive the mechanism</h3>
+            </div>
+            <p>These are the equations implemented in <code>model/simulation.js</code>.</p>
+          </header>
+          <div class="ra-equation-grid">
+            <article>
+              <span>CAPACITY RATIO</span>
+              <code>min(allocated capacity / critical load, 1)</code>
+              <small>How much of the required workload has capacity behind it.</small>
+            </article>
+            <article>
+              <span>RESTORED FRACTION</span>
+              <code>capacity ratio × failover readiness</code>
+              <small>Capacity alone is not enough; readiness limits effective recovery.</small>
+            </article>
+            <article>
+              <span>RESERVE POOL</span>
+              <code>total system load × reserve %</code>
+              <small>Individual and SCFR scenarios receive the same aggregate reserve budget.</small>
+            </article>
+            <article class="ra-equation-wide">
+              <span>SYSTEMIC RESILIENCE SCORE</span>
+              <code>Σ(loadᵢ × importanceᵢ × restoredᵢ) / Σ(loadᵢ × importanceᵢ) × 100</code>
+              <small>A synthetic weighted recovery metric. It is not an official regulatory score.</small>
+            </article>
+          </div>
+        </section>
+
+        <section class="ra-method-block">
+          <header class="ra-section-head">
+            <div>
+              <span>EXPERIMENT DESIGN</span>
+              <h3>What stays fixed — and what changes</h3>
+            </div>
+            <p>The central comparison isolates coordination rather than giving one mechanism more total reserve.</p>
+          </header>
+          <div class="ra-experiment-grid">
+            <article>
+              <span>HELD CONSTANT</span>
+              <ul>
+                <li>Failed provider</li>
+                <li>Affected synthetic banks</li>
+                <li>Bank workloads, readiness and importance</li>
+                <li>Emergency-market assumption</li>
+                <li>Total aggregate reserve budget</li>
+              </ul>
+            </article>
+            <article>
+              <span>MECHANISM CHANGES</span>
+              <ul>
+                <li><b>Market:</b> immediate post-shock capacity only</li>
+                <li><b>Individual:</b> reserve remains bank-specific</li>
+                <li><b>SCFR:</b> the same reserve pool can move across affected banks</li>
+              </ul>
+            </article>
+            <article>
+              <span>SCFR ALLOCATION RULE</span>
+              <ul>
+                <li><b>Systemic:</b> critical load × stylized importance</li>
+                <li><b>Equal:</b> capacity shared across banks still in need</li>
+                <li><b>Readiness:</b> higher failover readiness first</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="ra-method-block">
+          <header class="ra-section-head">
+            <div>
+              <span>EVIDENCE BASE</span>
+              <h3>Why the research question is plausible</h3>
+            </div>
+            <p>These sources motivate studying correlated third-party ICT disruption. They do not validate the prototype's synthetic numerical outputs.</p>
+          </header>
+          <div class="ra-source-grid">
+            <a href="https://www.bis.org/publications/fsi-insight-53-managing-cloud-risk-some-considerations-oversight-critical-cloud-service-providers-financial-sector" target="_blank" rel="noreferrer">
+              <span>BIS / FSI · 2023</span>
+              <b>Managing cloud risk</b>
+              <p>Discusses systemic implications of financial-sector dependence on a concentrated cloud market.</p>
+              <small>Official source ↗</small>
+            </a>
+            <a href="https://www.eba.europa.eu/publications-and-media/publications/risk-assessment-report-june-2026" target="_blank" rel="noreferrer">
+              <span>EBA · 2026</span>
+              <b>Risk Assessment Report</b>
+              <p>Highlights operational-resilience risks associated with interconnected third-party ICT dependencies.</p>
+              <small>Official source ↗</small>
+            </a>
+            <a href="https://www.esma.europa.eu/dora-oversight" target="_blank" rel="noreferrer">
+              <span>EU DORA OVERSIGHT</span>
+              <b>Critical ICT third parties</b>
+              <p>Addresses systemic and concentration risks from reliance on critical external ICT providers.</p>
+              <small>Official source ↗</small>
+            </a>
+            <a href="https://www.bis.org/publications/cpmi-iosco-fmis-reliance-third-party-service-providers-challenges-and-risks" target="_blank" rel="noreferrer">
+              <span>CPMI–IOSCO · 2026</span>
+              <b>Reliance on third-party providers</b>
+              <p>Examines how critical third-party dependencies can amplify risk for financial market infrastructures.</p>
+              <small>Official source ↗</small>
+            </a>
+          </div>
+          <div class="ra-evidence-boundary">
+            <b>Evidence boundary</b>
+            <p>The external evidence supports the <em>problem motivation</em>. It does not establish that SCFR is feasible or that real banks would achieve the resilience scores produced here.</p>
+          </div>
+        </section>
+
+        <section class="ra-method-block">
+          <header class="ra-section-head">
+            <div>
+              <span>LIMITATIONS</span>
+              <h3>What v0.1 deliberately does not model</h3>
+            </div>
+            <p>These boundaries define the prototype rather than being hidden assumptions.</p>
+          </header>
+          <div class="ra-limit-grid">
+            <span>Market pricing &amp; bidding</span>
+            <span>Provider compatibility</span>
+            <span>Migration time</span>
+            <span>Network bottlenecks</span>
+            <span>Data synchronization</span>
+            <span>Contractual constraints</span>
+            <span>Cross-border rules</span>
+            <span>Reserve cost</span>
+            <span>Recovery-time objectives</span>
+            <span>Multi-provider failures</span>
+          </div>
+        </section>
+
+        <section class="ra-method-block ra-repro-block">
+          <header class="ra-section-head">
+            <div>
+              <span>REPRODUCIBILITY</span>
+              <h3>Inspect the assumptions, code and current scenario</h3>
+            </div>
+            <p>Same inputs produce the same outputs; the recovery engine contains no random draw.</p>
+          </header>
+
+          <div class="ra-repro-grid">
+            <a href="https://github.com/rostys-fintech/cloudrescue-scfr/blob/main/model/simulation.js" target="_blank" rel="noreferrer">
+              <span>MODEL</span><b>simulation.js</b><small>Scenario and allocation logic ↗</small>
+            </a>
+            <a href="https://github.com/rostys-fintech/cloudrescue-scfr/blob/main/data/banks.js" target="_blank" rel="noreferrer">
+              <span>INPUTS</span><b>banks.js</b><small>Synthetic bank/provider dataset ↗</small>
+            </a>
+            <a href="https://github.com/rostys-fintech/cloudrescue-scfr/tree/main/tests" target="_blank" rel="noreferrer">
+              <span>TESTS</span><b>Automated checks</b><small>Model invariants and UI regressions ↗</small>
+            </a>
+            <a href="https://github.com/rostys-fintech/cloudrescue-scfr/blob/main/research/evidence-base.md" target="_blank" rel="noreferrer">
+              <span>SOURCES</span><b>Evidence base</b><small>Research motivation and source notes ↗</small>
+            </a>
+          </div>
+
+          <div class="ra-repro-actions">
+            <div>
+              <span>CURRENT SCENARIO</span>
+              <b id="raEvidenceScenario">Blue Cloud · 20% market · 25% reserve · systemic rule</b>
+            </div>
+            <button class="ra-primary-action ra-export-action" id="raExportEvidence" type="button">
+              <span>Export scenario JSON</span><b aria-hidden="true">↓</b>
+            </button>
+          </div>
+
+          <div class="ra-disclosure">
+            <span>PROTOTYPE TRANSPARENCY</span>
+            <p>AI tools materially assisted brainstorming, code drafting, debugging, documentation and interface iteration. The project author selected the research framing and assumptions, reviewed outputs and is responsible for the final prototype.</p>
+          </div>
+        </section>
       </section>
     </main>
 
     <footer class="ra-footer">
-      <span>Resilience Atlas · Scenario Lab · Stage 5</span>
-      <span>One scenario · three recovery mechanisms · live comparison</span>
+      <span>Resilience Atlas · Model & Evidence · Stage 6</span>
+      <span>Transparent assumptions · explicit equations · reproducible scenarios</span>
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-lab01"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-evidence01"></script>
 </body>
 </html>
