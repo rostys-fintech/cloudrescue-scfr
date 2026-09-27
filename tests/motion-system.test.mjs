@@ -29,6 +29,6 @@ assert.match(css,/\.ra-request-packet,[\s\S]*\.ra-recovery-packet[\s\S]*display:
 assert.ok(js.includes("$$('.ra-scene-list button').forEach"));
 assert.ok(js.includes("$$('.ra-mobile-scene-nav button').forEach"));
 
-assert.match(html,/Semantic Motion · Stage 9/);
+assert.match(html,/Final QA · Stage 10/);
 
 console.log('Semantic motion checks passed.');
