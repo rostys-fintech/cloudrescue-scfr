@@ -5370,3 +5370,207 @@ body.ra-guided-running .ra-guided-actions{
     animation-delay:0s!important;
   }
 }
+
+
+/* =========================================================
+   GUIDED INTRO V2 — EXPLICIT FIVE-PHASE SYSTEM BUILD
+   Strong enough to read clearly on iPhone and desktop.
+   ========================================================= */
+
+#raEarthMount.ra-guided-intro{
+  overflow:hidden;
+}
+#raEarthMount.ra-guided-intro::after{
+  content:attr(data-intro-phase);
+  position:absolute;
+  z-index:40;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  max-width:calc(100% - 32px);
+  padding:8px 13px;
+  border:1px solid color-mix(in srgb,var(--ra-primary) 45%,var(--ra-border));
+  border-radius:999px;
+  background:color-mix(in srgb,var(--ra-surface) 92%,transparent);
+  color:var(--ra-text-1);
+  box-shadow:0 8px 28px rgba(0,0,0,.24);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.09em;
+  white-space:nowrap;
+  pointer-events:none;
+}
+#raEarthMount.ra-guided-intro::before{
+  content:"";
+  position:absolute;
+  z-index:3;
+  left:50%;
+  top:50%;
+  width:min(54vw,520px);
+  aspect-ratio:1;
+  border:1px solid color-mix(in srgb,var(--ra-primary) 55%,transparent);
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.72);
+  opacity:0;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb,var(--ra-primary) 14%,transparent),
+    0 0 34px color-mix(in srgb,var(--ra-primary) 18%,transparent);
+  pointer-events:none;
+}
+#raEarthMount.ra-guided-intro.ra-intro-world::before{
+  animation:raIntroScanRing 1.4s var(--ra-ease-emphasis) both;
+}
+
+/* Start with a deliberately incomplete, muted system. */
+#raEarthMount.ra-guided-intro .ra-earth-ocean{
+  opacity:.42!important;
+  filter:brightness(.62) saturate(.72)!important;
+  transition:opacity .55s ease,filter .7s ease!important;
+}
+#raEarthMount.ra-guided-intro .ra-earth-atmosphere{
+  opacity:.18!important;
+  transition:opacity .65s ease,stroke-width .65s ease!important;
+}
+#raEarthMount.ra-guided-intro .ra-earth-grid,
+#raEarthMount.ra-guided-intro .ra-earth-land{
+  opacity:.1!important;
+  transition:opacity .7s ease!important;
+}
+#raEarthMount.ra-guided-intro .ra-earth-provider{
+  opacity:0!important;
+  transition:
+    opacity .45s ease,
+    filter .55s ease!important;
+}
+#raEarthMount.ra-guided-intro .ra-earth-provider .ra-provider-halo{
+  opacity:.15!important;
+  transform:scale(.55);
+  transform-box:fill-box;
+  transform-origin:center;
+  transition:transform .62s var(--ra-ease-emphasis),opacity .5s ease!important;
+}
+#raEarthMount.ra-guided-intro .ra-earth-bank{
+  opacity:0!important;
+  transition:opacity .35s ease!important;
+}
+#raEarthMount.ra-guided-intro .ra-earth-link{
+  opacity:0!important;
+  stroke-width:1.8!important;
+  stroke-dasharray:1!important;
+  stroke-dashoffset:1!important;
+  transition:
+    opacity .35s ease,
+    stroke-dashoffset .95s var(--ra-ease-standard),
+    stroke-width .55s ease!important;
+}
+#raEarthMount.ra-guided-intro .ra-earth-packet{
+  opacity:0!important;
+  transition:opacity .35s ease!important;
+}
+#raEarthMount.ra-guided-intro .ra-earth-readout{
+  opacity:.18!important;
+  transition:opacity .45s ease!important;
+}
+
+/* 1. Earth powers on. */
+#raEarthMount.ra-guided-intro.ra-intro-world .ra-earth-ocean{
+  opacity:1!important;
+  filter:brightness(1) saturate(1)!important;
+}
+#raEarthMount.ra-guided-intro.ra-intro-world .ra-earth-atmosphere{
+  opacity:1!important;
+  stroke-width:2!important;
+}
+#raEarthMount.ra-guided-intro.ra-intro-world .ra-earth-grid,
+#raEarthMount.ra-guided-intro.ra-intro-world .ra-earth-land{
+  opacity:.82!important;
+}
+
+/* 2. The three shared providers activate visibly. */
+#raEarthMount.ra-guided-intro.ra-intro-providers .ra-earth-provider{
+  opacity:1!important;
+  filter:drop-shadow(0 0 12px var(--provider-color))!important;
+}
+#raEarthMount.ra-guided-intro.ra-intro-providers .ra-earth-provider .ra-provider-halo{
+  opacity:1!important;
+  transform:scale(1.18);
+}
+#raEarthMount.ra-guided-intro.ra-intro-providers .ra-earth-provider:nth-child(2){
+  transition-delay:.16s!important;
+}
+#raEarthMount.ra-guided-intro.ra-intro-providers .ra-earth-provider:nth-child(3){
+  transition-delay:.32s!important;
+}
+
+/* 3. Banks populate the system in a cascade. */
+#raEarthMount.ra-guided-intro.ra-intro-banks .ra-earth-bank{
+  opacity:1!important;
+  transition-delay:calc(var(--ra-intro-index,0) * .035s)!important;
+}
+#raEarthMount.ra-guided-intro.ra-intro-banks .ra-bank-node{
+  filter:drop-shadow(0 0 5px var(--node-color));
+}
+
+/* 4. Shared dependency paths visibly draw from providers to banks. */
+#raEarthMount.ra-guided-intro.ra-intro-links .ra-earth-link{
+  opacity:.78!important;
+  stroke-dashoffset:0!important;
+  stroke-width:1.75!important;
+  transition-delay:calc(var(--ra-intro-index,0) * .028s)!important;
+}
+
+/* 5. Live traffic turns on and the network settles into operation. */
+#raEarthMount.ra-guided-intro.ra-intro-flow .ra-earth-packet{
+  opacity:.95!important;
+  transition-delay:calc(var(--ra-intro-index,0) * .018s)!important;
+}
+#raEarthMount.ra-guided-intro.ra-intro-flow .ra-earth-link{
+  opacity:.36!important;
+  stroke-width:1.2!important;
+}
+#raEarthMount.ra-guided-intro.ra-intro-flow .ra-earth-readout{
+  opacity:1!important;
+}
+
+@keyframes raIntroScanRing{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.58)}
+  30%{opacity:.72}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.08)}
+}
+
+@media(max-width:767px), (pointer:coarse) and (max-width:1180px){
+  #raEarthMount.ra-guided-intro::after{
+    bottom:74px;
+    max-width:calc(100% - 24px);
+    padding:7px 10px;
+    font-size:7.5px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  #raEarthMount.ra-guided-intro::before{
+    width:min(78vw,480px);
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #raEarthMount.ra-guided-intro::before{
+    animation:none!important;
+    opacity:.25!important;
+    transform:translate(-50%,-50%) scale(1)!important;
+  }
+  #raEarthMount.ra-guided-intro .ra-earth-ocean,
+  #raEarthMount.ra-guided-intro .ra-earth-atmosphere,
+  #raEarthMount.ra-guided-intro .ra-earth-grid,
+  #raEarthMount.ra-guided-intro .ra-earth-land,
+  #raEarthMount.ra-guided-intro .ra-earth-provider,
+  #raEarthMount.ra-guided-intro .ra-earth-provider .ra-provider-halo,
+  #raEarthMount.ra-guided-intro .ra-earth-bank,
+  #raEarthMount.ra-guided-intro .ra-earth-link,
+  #raEarthMount.ra-guided-intro .ra-earth-packet,
+  #raEarthMount.ra-guided-intro .ra-earth-readout{
+    transition-duration:.16s!important;
+    transition-delay:0s!important;
+  }
+}
