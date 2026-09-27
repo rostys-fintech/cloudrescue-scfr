@@ -7635,3 +7635,233 @@ body.demo-playing .stage.scene-2 .network-line[data-provider="blue"]{
     grid-template-columns:1fr 1fr!important;
   }
 }
+
+
+/* =========================================================
+   FINAL FIDELITY PASS — approved concept, vectorized details
+   ========================================================= */
+
+.cloud-line-icon{
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+.cloud-line-icon path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+}
+.bank-line-icon{
+  display:block;
+  width:25px;
+  height:23px;
+}
+.bank-line-icon path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.6;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+}
+
+.hero-globe-svg .globe-land{
+  fill:color-mix(in srgb,var(--v2-primary) 8%,transparent);
+  stroke:color-mix(in srgb,var(--v2-primary) 22%,transparent);
+  stroke-width:1;
+  filter:drop-shadow(0 0 8px color-mix(in srgb,var(--v2-primary) 8%,transparent));
+}
+html[data-theme="analysis"] .hero-globe-svg .globe-land{
+  fill:rgba(8,104,255,.035);
+  stroke:rgba(8,104,255,.19);
+}
+
+.globe-provider .globe-cloud-icon{
+  width:58px!important;
+  height:42px!important;
+  font-size:0!important;
+  color:currentColor;
+}
+.concept-provider .cp-cloud{
+  width:48px!important;
+  height:35px!important;
+  font-size:0!important;
+  color:currentColor;
+}
+.concept-bank-row span{
+  display:grid;
+  place-items:center;
+}
+
+/* Reference-like segmented red command frame */
+.hero-cyber-frame,
+.story-layout>.card{
+  outline:1px solid color-mix(in srgb,var(--v2-primary) 4%,transparent);
+  outline-offset:-7px;
+}
+.hero-cyber-frame .hero-copy:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:9%;
+  bottom:-14px;
+  height:1px;
+  background:linear-gradient(90deg,var(--v2-primary),color-mix(in srgb,var(--v2-primary) 12%,transparent),transparent);
+  opacity:.55;
+}
+.hero-cyber-frame .hero-copy:before{
+  content:"";
+  position:absolute;
+  left:-34px;
+  top:14px;
+  width:3px;
+  height:68px;
+  background:var(--v2-primary);
+  box-shadow:0 0 16px var(--v2-primary);
+  clip-path:polygon(0 0,100% 0,100% 78%,0 100%);
+}
+
+/* Hero globe should feel alive even before simulation starts */
+.hero-globe-stage{
+  perspective:900px;
+}
+.hero-globe-svg{
+  transform-origin:52% 58%;
+  animation:apGlobeDrift 11s ease-in-out infinite alternate;
+}
+.hero-globe-orbit{
+  animation:apOrbitBreath 5.8s ease-in-out infinite;
+}
+@keyframes apGlobeDrift{
+  from{transform:translate3d(-4px,0,0) rotate(-.25deg) scale(1)}
+  to{transform:translate3d(4px,-3px,0) rotate(.28deg) scale(1.008)}
+}
+@keyframes apOrbitBreath{
+  50%{opacity:.95;transform:rotate(-6.6deg) scale(1.014)}
+}
+
+/* Provider callouts match the reference's floating labels */
+.globe-provider{
+  padding:5px 9px 5px 5px;
+  border-left:1px solid currentColor;
+  background:linear-gradient(90deg,color-mix(in srgb,currentColor 7%,transparent),transparent);
+}
+.globe-provider small{
+  opacity:.86;
+}
+
+/* Crisp cyber corner notches */
+.hero-cyber-frame .hero-shared-alert:before,
+.story-layout>.card:after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+}
+.hero-cyber-frame .hero-shared-alert:before{
+  left:-1px;
+  bottom:-1px;
+  width:33px;
+  height:2px;
+  background:var(--v2-primary);
+  box-shadow:0 0 11px color-mix(in srgb,var(--v2-primary) 50%,transparent);
+}
+.story-layout>.card:after{
+  right:9px;
+  top:9px;
+  width:38px;
+  height:1px;
+  background:var(--v2-primary);
+  opacity:.7;
+}
+
+/* Scene-one providers/banks read as hardware modules rather than generic cards */
+.concept-provider{
+  backdrop-filter:blur(6px);
+}
+.concept-provider:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:8px;
+  bottom:8px;
+  width:2px;
+  background:currentColor;
+  box-shadow:0 0 9px currentColor;
+}
+.concept-bank-row>div{
+  position:relative;
+  overflow:hidden;
+}
+.concept-bank-row>div:after{
+  content:"";
+  position:absolute;
+  left:7px;
+  right:7px;
+  bottom:5px;
+  height:1px;
+  background:currentColor;
+  opacity:.17;
+}
+
+/* Initial page reveal */
+.cyber-topbar{
+  animation:apPageDrop .5s cubic-bezier(.2,.8,.2,1) both;
+}
+.hero-cyber-frame{
+  animation:apHeroReveal .65s .08s cubic-bezier(.2,.8,.2,1) both;
+}
+#story{
+  animation:apStoryReveal .68s .16s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes apPageDrop{
+  from{opacity:0;transform:translateY(-8px)}
+  to{opacity:1;transform:none}
+}
+@keyframes apHeroReveal{
+  from{opacity:0;transform:translateY(10px) scale(.992)}
+  to{opacity:1;transform:none}
+}
+@keyframes apStoryReveal{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:none}
+}
+
+/* During autoplay, make the system view the visual focus without hiding context */
+body.demo-playing .stage-wrap{
+  position:relative;
+}
+body.demo-playing .stage-wrap:before{
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb,var(--v2-primary) 20%,transparent),
+    inset 0 0 35px color-mix(in srgb,var(--v2-primary) 5%,transparent);
+}
+
+/* Mobile keeps real vector icons and hierarchy */
+@media(max-width:900px){
+  .concept-provider .cp-cloud{
+    width:34px!important;
+    height:27px!important;
+  }
+  .bank-line-icon{
+    width:21px;
+    height:20px;
+  }
+  .hero-cyber-frame .hero-copy:before,
+  .hero-cyber-frame .hero-copy:after{
+    display:none;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hero-globe-svg,
+  .hero-globe-orbit,
+  .cyber-topbar,
+  .hero-cyber-frame,
+  #story{
+    animation:none!important;
+  }
+}
