@@ -14,6 +14,11 @@ for (const id of [
 }
 
 assert.match(js,/function scenePresentation\(/);
+assert.match(js,/In this simulation, we can see how banks depend on shared cloud providers/);
+assert.match(js,/function maleVoiceScore\(/);
+assert.match(js,/const explicitlyFemale=/);
+assert.match(js,/pauseMs:560/);
+assert.match(js,/longPauseMs:760/);
 assert.match(js,/async function runGuidedSimulation\(/);
 assert.match(js,/function speakCurrentScene\(/);
 assert.match(js,/speechSynthesis/);
