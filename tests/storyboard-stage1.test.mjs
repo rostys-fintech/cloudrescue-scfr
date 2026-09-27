@@ -25,4 +25,12 @@ assert.match(js,/animateGuidedCueCopy/);
 assert.match(js,/kicker\.textContent='LIVE CUE'/);
 assert.match(js,/caption\.textContent=cue\.caption/);
 
+assert.match(js,/commitGuidedCue/);
+
+assert.match(js,/prepareGuidedOpening/);
+
+assert.match(js,/renderGuidedShell/);
+
+assert.match(css,/GUIDED CONTINUITY ENGINE — no hard resets between cues/);
+
 console.log('Storyboard Stage 1 checks passed.');
