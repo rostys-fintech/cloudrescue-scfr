@@ -1031,7 +1031,7 @@ function applyArgsToControls(args){
   $('#marketPct').value=args.marketPct;
   $('#reservePct').value=args.reservePct;
   $('#ruleSelect').value=args.allocationRule;
-  $('.preset').forEach(b=>b.classList.remove('active'));
+  $$('.preset').forEach(b=>b.classList.remove('active'));
 }
 
 function generateScenario(){
@@ -1359,9 +1359,9 @@ $('#replayScenarioBtn').addEventListener('click',replayCurrentScenario);
 $('#generateScenarioBtn').addEventListener('click',generateScenario);
 $('#shareScenarioBtn').addEventListener('click',shareScenario);
 $('#seedInput').addEventListener('keydown',e=>{if(e.key==='Enter') generateScenario();});
-$('.challenge-tab').forEach(btn=>btn.addEventListener('click',()=>{
+$$('.challenge-tab').forEach(btn=>btn.addEventListener('click',()=>{
   activeChallenge=btn.dataset.challenge;
-  $('.challenge-tab').forEach(b=>b.classList.toggle('active',b===btn));
+  $$('.challenge-tab').forEach(b=>b.classList.toggle('active',b===btn));
   renderLab();
 }));
 $$('.sensitivity-mode').forEach(btn=>btn.addEventListener('click',()=>{
