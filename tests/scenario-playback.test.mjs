@@ -36,6 +36,11 @@ assert.match(js,/phase:'scfr'/);
 assert.match(js,/phase:'outcome'/);
 assert.match(js,/SCFR changes critical workload restored by/);
 assert.match(js,/renderLab\(\{skipEarth:true\}\)/);
+assert.match(js,/try\{/);
+assert.match(js,/finally\{/);
+assert.match(js,/requestAnimationFrame/);
+assert.match(js,/setLabSheet\(false,\{restoreFocus:false\}\)/);
+assert.match(js,/Math\.max\(620,Math\.round\(ms\*\.5\)\)/);
 
 assert.match(earth,/const labPhase=input\.labPhase\|\|null/);
 assert.match(earth,/phaseScenes=\{shock:1,demand:2,market:2,individual:3,scfr:4,outcome:5\}/);
