@@ -19,6 +19,13 @@ for (const provider of ['blue','orange','green']) {
   assert.ok(r.affectedCount > 0, `${provider}: scenario should affect at least one bank`);
 }
 
+const doubleOutage = runScenario({...base, outageProviders:['blue','orange'], strategy:'scfr'});
+assert.equal(doubleOutage.affectedCount,15,'Blue + Orange should affect the union of both provider cohorts');
+
+const allProviders = runScenario({...base, outageProviders:['blue','orange','green'], strategy:'scfr'});
+assert.equal(allProviders.affectedCount,20,'All-provider outage should affect all synthetic banks');
+assert.ok(allProviders.totalDemand > doubleOutage.totalDemand,'All-provider outage should create more demand than a two-provider outage');
+
 const frontier = resilienceFrontier({ outageProvider:'blue', marketPct:20, allocationRule:'systemic' });
 assert.equal(frontier.length, 13, 'Frontier should contain reserve levels 0..60 in 5-point steps');
 for (let i=1;i<frontier.length;i++) {

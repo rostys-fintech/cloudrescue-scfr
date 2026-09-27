@@ -6,14 +6,28 @@ const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const format = value => Math.round(value).toLocaleString('en-US');
 
+const defaultScenario = {
+  outageProviders: ['blue'],
+  marketPct: 20,
+  reservePct: 25,
+  allocationRule: 'systemic'
+};
+
 const state = {
   tab: 'simulation',
   scene: 0,
-  outageProvider: 'blue',
-  marketPct: 20,
-  reservePct: 25,
-  allocationRule: 'systemic',
+  outageProviders: [...defaultScenario.outageProviders],
+  marketPct: defaultScenario.marketPct,
+  reservePct: defaultScenario.reservePct,
+  allocationRule: defaultScenario.allocationRule,
   labStrategy: 'market'
+};
+
+const labDraft = {
+  outageProviders: [...defaultScenario.outageProviders],
+  marketPct: defaultScenario.marketPct,
+  reservePct: defaultScenario.reservePct,
+  allocationRule: defaultScenario.allocationRule
 };
 
 const guided = {
@@ -38,9 +52,31 @@ const earth = {
   evidence: createEarthSystem($('#raEvidenceEarthMount'), {mode:'evidence'})
 };
 
+function providerName(id){
+  return providers.find(item => item.id === id)?.name || id;
+}
+
+function providerNames(ids=state.outageProviders){
+  return ids.map(providerName);
+}
+
+function providerLabel(ids=state.outageProviders){
+  const names=providerNames(ids);
+  if(names.length===providers.length) return 'All providers';
+  return names.join(' + ');
+}
+
+function providerSpeechLabel(ids=state.outageProviders){
+  const names=providerNames(ids);
+  if(names.length<=1) return names[0] || 'Blue Cloud';
+  if(names.length===2) return names[0]+' and '+names[1];
+  return names.slice(0,-1).join(', ')+', and '+names.at(-1);
+}
+
 function args(){
   return {
-    outageProvider: state.outageProvider,
+    outageProvider: state.outageProviders[0] || 'blue',
+    outageProviders: [...state.outageProviders],
     marketPct: state.marketPct,
     reservePct: state.reservePct,
     allocationRule: state.allocationRule
@@ -51,14 +87,11 @@ function comparison(){
   return compareStrategies(args());
 }
 
-function providerName(id){
-  return providers.find(item => item.id === id)?.name || id;
-}
-
 function earthPayload(c){
   return {
     scene: state.scene,
-    outageProvider: state.outageProvider,
+    outageProvider: state.outageProviders[0] || 'blue',
+    outageProviders: [...state.outageProviders],
     comparison: c,
     marketPct: state.marketPct,
     reservePct: state.reservePct,
@@ -67,7 +100,8 @@ function earthPayload(c){
 }
 
 function scenePresentation(c){
-  const provider = providerName(state.outageProvider);
+  const provider = providerSpeechLabel();
+  const multiple = state.outageProviders.length > 1;
   const affected = c.market.affectedCount;
   const demand = c.market.totalDemand;
   const available = c.market.allocated;
@@ -86,19 +120,19 @@ function scenePresentation(c){
       text:'Twenty synthetic banks depend on three shared providers. In the stable state, critical capacity moves normally through the network.',
       statLabel:'SYSTEM STATE',
       statValue:'20 banks · 3 providers',
-      caption:'One shared provider can become one shared point of failure.',
+      caption:'Shared providers can become shared points of failure.',
       voice:'Start with the system in a stable state. Twenty synthetic banks rely on three shared cloud providers. This looks diversified at the institution level, but several banks still depend on the same underlying infrastructure.',
       rate:.96,
       visualDuration:4800
     },
     {
       kicker:'PROVIDER FAILURE',
-      title:provider+' goes offline.',
-      text:'Every synthetic bank connected to the failed provider loses critical capacity at the same time. The problem becomes systemic because the dependency is shared.',
+      title:provider+(multiple ? ' go offline.' : ' goes offline.'),
+      text:'Every synthetic bank connected to the failed '+(multiple ? 'providers loses' : 'provider loses')+' critical capacity at the same time. The problem becomes systemic because the dependency is shared.',
       statLabel:'AFFECTED',
       statValue:affected+' banks at once',
-      caption:provider+' fails. '+affected+' banks are disrupted simultaneously.',
-      voice:'Now '+provider+' goes offline. '+affected+' banks lose critical capacity at the same time. The important point is simultaneity. A shared dependency turns one provider outage into a system wide recovery event.',
+      caption:provider+(multiple ? ' fail. ' : ' fails. ')+affected+' banks are disrupted simultaneously.',
+      voice:'Now '+provider+(multiple ? ' go offline. ' : ' goes offline. ')+affected+' banks lose critical capacity at the same time. The important point is simultaneity. Shared dependencies can turn provider outages into a system wide recovery event.',
       rate:.92,
       visualDuration:5200
     },
@@ -188,23 +222,23 @@ function renderBaseline(){
   document.documentElement.style.setProperty('--ra-system-hhi', stats.hhi.toFixed(0));
 }
 
+function ruleLabel(value){
+  return value === 'systemic' ? 'Systemic' : value === 'equal' ? 'Equal' : 'Readiness';
+}
+
 function renderLab(){
   const c = comparison();
-  const provider = providers.find(item => item.id === state.outageProvider);
   const selected = c[state.labStrategy];
   const selectedGap = Math.max(0, selected.totalDemand-selected.allocated);
-  const ruleLabel = state.allocationRule === 'systemic' ? 'Systemic' : state.allocationRule === 'equal' ? 'Equal' : 'Readiness';
+  const shockLabel=providerLabel(state.outageProviders);
 
-  $('#raMarketLabel').textContent = state.marketPct+'%';
-  $('#raReserveLabel').textContent = state.reservePct+'%';
-  $('#raLabTitle').textContent = (provider?.name || state.outageProvider)+' outage';
-  $('#raAffectedDemand').textContent = format(c.market.totalDemand)+' units';
-  $('#raMobileProvider').textContent = provider?.name || state.outageProvider;
+  $('#raLabTitle').textContent = shockLabel+' outage';
+  $('#raMobileProvider').textContent = shockLabel;
   $('#raMobileMarket').textContent = state.marketPct+'%';
   $('#raMobileReserve').textContent = state.reservePct+'%';
   $('#raLabMarketSummary').textContent = state.marketPct+'%';
   $('#raLabReserveSummary').textContent = state.reservePct+'%';
-  $('#raLabRuleSummary').textContent = ruleLabel;
+  $('#raLabRuleSummary').textContent = ruleLabel(state.allocationRule);
 
   $('#raLabAffected').textContent = c.market.affectedCount+' / '+banks.length;
   $('#raLabUnmet').textContent = format(selectedGap);
@@ -237,7 +271,7 @@ function renderLab(){
   $('#raScfrBar').style.width = Math.max(0,Math.min(100,c.scfr.resilience))+'%';
 
   $('#raCompareContext').textContent =
-    (provider?.name || state.outageProvider)+' · '+state.marketPct+'% market · '+state.reservePct+'% reserve';
+    shockLabel+' · '+state.marketPct+'% market · '+state.reservePct+'% reserve';
 
   const insight = {
     market:'Immediate market capacity is shared across all affected banks, so simultaneous demand creates a visible capacity gap.',
@@ -256,17 +290,33 @@ function renderLab(){
   earth.lab.update(earthPayload(c));
 }
 
+function summarizeOutcome(result){
+  return {
+    resilience:Number(result.resilience.toFixed(2)),
+    affectedBanks:result.affectedCount,
+    banksRecovered:result.banksRecovered,
+    totalDemand:Number(result.totalDemand.toFixed(2)),
+    allocatedCapacity:Number(result.allocated.toFixed(2)),
+    capacityGap:Number(Math.max(0,result.totalDemand-result.allocated).toFixed(2)),
+    unmetPct:Number(result.unmetPct.toFixed(2)),
+    criticalRestoredPct:Number(result.criticalRestoredPct.toFixed(2)),
+    totalReserve:Number(result.totalReserve.toFixed(2)),
+    reserveUsed:Number(result.reserveUsed.toFixed(2)),
+    strandedReserve:Number(result.strandedReserve.toFixed(2)),
+    affectedBankIds:result.rows.map(row=>row.id)
+  };
+}
+
 function evidenceSnapshot(){
   const c=comparison();
   const stats=systemStats();
-  const provider=providers.find(item=>item.id===state.outageProvider);
   return {
     generatedAt:new Date().toISOString(),
     product:'Resilience Atlas',
     modelVersion:'v0.1 synthetic mechanism stress-test',
     scenario:{
-      outageProvider:state.outageProvider,
-      outageProviderName:provider?.name || state.outageProvider,
+      failedProviders:[...state.outageProviders],
+      failedProviderNames:providerNames(state.outageProviders),
       emergencyMarketPct:state.marketPct,
       reservePct:state.reservePct,
       allocationRule:state.allocationRule
@@ -279,9 +329,9 @@ function evidenceSnapshot(){
       syntheticProviderHHI:Number(stats.hhi.toFixed(1))
     },
     outcomes:{
-      market:c.market,
-      individual:c.individual,
-      scfr:c.scfr
+      market:summarizeOutcome(c.market),
+      individual:summarizeOutcome(c.individual),
+      scfr:summarizeOutcome(c.scfr)
     },
     boundary:'All institutions, provider assignments, workloads, readiness values, importance weights, capacity units and numerical outcomes are synthetic and illustrative.'
   };
@@ -290,10 +340,8 @@ function evidenceSnapshot(){
 function renderEvidence(){
   const c=comparison();
   const stats=systemStats();
-  const provider=providers.find(item=>item.id===state.outageProvider);
   const marketPool=c.market.allocated;
   const reservePool=c.scfr.totalReserve;
-  const ruleLabel=state.allocationRule==='systemic' ? 'systemic' : state.allocationRule==='equal' ? 'equal' : 'readiness';
 
   $('#raEvidenceBanks').textContent=String(banks.length);
   $('#raEvidenceProviders').textContent=String(providers.length);
@@ -303,31 +351,98 @@ function renderEvidence(){
   $('#raEvidenceReservePool').textContent=format(reservePool)+' units';
   $('#raEvidenceHHI').textContent=Math.round(stats.hhi).toLocaleString('en-US');
   $('#raEvidenceScenario').textContent=
-    (provider?.name || state.outageProvider)+' · '+state.marketPct+'% market · '+state.reservePct+'% reserve · '+ruleLabel+' rule';
+    providerLabel(state.outageProviders)+' · '+state.marketPct+'% market · '+state.reservePct+'% reserve · '+state.allocationRule+' rule';
 
-  earth.evidence.update({
-    outageProvider:state.outageProvider,
-    comparison:c,
-    marketPct:state.marketPct,
-    reservePct:state.reservePct
-  });
+  earth.evidence.update(earthPayload(c));
 }
 
-function exportEvidence(){
-  const snapshot=evidenceSnapshot();
-  const blob=new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'});
+function buildReadableReport(snapshot){
+  const o=snapshot.outcomes;
+  const line=(label,value)=>label.padEnd(28,' ')+value;
+  return [
+    'RESILIENCE ATLAS - SCENARIO REPORT',
+    '==================================',
+    '',
+    'Generated: '+snapshot.generatedAt,
+    'Model: '+snapshot.modelVersion,
+    '',
+    'SCENARIO',
+    '--------',
+    line('Failed providers:',snapshot.scenario.failedProviderNames.join(', ')),
+    line('Emergency market:',snapshot.scenario.emergencyMarketPct+'%'),
+    line('Prepared reserve:',snapshot.scenario.reservePct+'%'),
+    line('Allocation rule:',snapshot.scenario.allocationRule),
+    '',
+    'SYSTEM',
+    '------',
+    line('Synthetic banks:',String(snapshot.system.syntheticBanks)),
+    line('Shared providers:',String(snapshot.system.sharedProviders)),
+    line('Total critical load:',format(snapshot.system.totalCriticalLoad)+' units'),
+    line('Provider HHI:',String(snapshot.system.syntheticProviderHHI)),
+    '',
+    'OUTCOMES',
+    '--------',
+    '',
+    '[POST-SHOCK MARKET]',
+    line('Resilience score:',o.market.resilience.toFixed(2)+' / 100'),
+    line('Affected banks:',String(o.market.affectedBanks)),
+    line('Capacity gap:',format(o.market.capacityGap)+' units'),
+    line('Critical workload restored:',o.market.criticalRestoredPct.toFixed(2)+'%'),
+    '',
+    '[INDIVIDUAL RESERVES]',
+    line('Resilience score:',o.individual.resilience.toFixed(2)+' / 100'),
+    line('Capacity gap:',format(o.individual.capacityGap)+' units'),
+    line('Critical workload restored:',o.individual.criticalRestoredPct.toFixed(2)+'%'),
+    line('Stranded reserve:',format(o.individual.strandedReserve)+' units'),
+    '',
+    '[SCFR POOLED RESERVE]',
+    line('Resilience score:',o.scfr.resilience.toFixed(2)+' / 100'),
+    line('Capacity gap:',format(o.scfr.capacityGap)+' units'),
+    line('Critical workload restored:',o.scfr.criticalRestoredPct.toFixed(2)+'%'),
+    line('Reserve used:',format(o.scfr.reserveUsed)+' units'),
+    '',
+    'MODEL BOUNDARY',
+    '--------------',
+    snapshot.boundary,
+    '',
+    'This report is a readable summary of the current deterministic synthetic scenario.',
+    'For machine-readable reproducibility, use the separate Export JSON button.',
+    ''
+  ].join('\r\n');
+}
+
+function downloadBlob(filename,content,type){
+  const blob=new Blob([content],{type});
   const url=URL.createObjectURL(blob);
   const anchor=document.createElement('a');
   anchor.href=url;
-  anchor.download='resilience-atlas-scenario.json';
+  anchor.download=filename;
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
   window.setTimeout(()=>URL.revokeObjectURL(url),0);
 }
 
+function exportReadableReport(){
+  const report=buildReadableReport(evidenceSnapshot());
+  downloadBlob(
+    'resilience-atlas-scenario-report.txt',
+    '\uFEFF'+report,
+    'text/plain;charset=utf-8'
+  );
+}
+
+function exportJson(){
+  downloadBlob(
+    'resilience-atlas-scenario.json',
+    JSON.stringify(evidenceSnapshot(),null,2),
+    'application/json;charset=utf-8'
+  );
+}
+
 function setupEvidence(){
-  $('#raExportEvidence')?.addEventListener('click',exportEvidence);
+  $('#raExportEvidence')?.addEventListener('click',exportReadableReport);
+  $('#raExportJson')?.addEventListener('click',exportJson);
 }
 
 function renderScene(){
@@ -351,7 +466,10 @@ function switchTab(tab){
     view.classList.toggle('is-active', view.dataset.raView === tab);
   });
   if(tab !== 'lab' && document.body.classList.contains('ra-mobile-sheet-open')) setLabSheet(false);
-  if(tab === 'lab') renderLab();
+  if(tab === 'lab'){
+    renderLab();
+    syncLabDraftUI();
+  }
   if(tab === 'evidence') renderEvidence();
 }
 
@@ -502,7 +620,7 @@ async function runGuidedSimulation(){
 }
 
 function setupScenes(){
-  $('.ra-scene-list button').forEach(button=>{
+  $$('.ra-scene-list button').forEach(button=>{
     button.addEventListener('click',()=>{
       if(guided.active) stopGuidedSimulation();
       state.scene=Number(button.dataset.raScene);
@@ -510,7 +628,7 @@ function setupScenes(){
     });
   });
 
-  $('.ra-mobile-scene-nav button').forEach(button=>{
+  $$('.ra-mobile-scene-nav button').forEach(button=>{
     button.addEventListener('click',()=>{
       if(guided.active) stopGuidedSimulation();
       state.scene=Number(button.dataset.raMobileScene);
@@ -533,20 +651,76 @@ function setLabStrategy(strategy){
   renderLab();
 }
 
-function resetLab(){
-  state.outageProvider='blue';
-  state.marketPct=20;
-  state.reservePct=25;
-  state.allocationRule='systemic';
-  state.labStrategy='market';
+function normalizedIds(ids){
+  const order=['blue','orange','green'];
+  return order.filter(id=>ids.includes(id));
+}
 
-  $('#raProviderSelect').value=state.outageProvider;
-  $('#raMarketPct').value=String(state.marketPct);
-  $('#raReservePct').value=String(state.reservePct);
-  $('#raRuleSelect').value=state.allocationRule;
+function draftMatchesApplied(){
+  return JSON.stringify(normalizedIds(labDraft.outageProviders))===JSON.stringify(normalizedIds(state.outageProviders)) &&
+    labDraft.marketPct===state.marketPct &&
+    labDraft.reservePct===state.reservePct &&
+    labDraft.allocationRule===state.allocationRule;
+}
+
+function syncLabDraftUI(){
+  const selected=normalizedIds(labDraft.outageProviders);
+  $$('#raProviderToggles input[type="checkbox"]').forEach(input=>{
+    input.checked=selected.includes(input.value);
+  });
+
+  $('#raMarketPct').value=String(labDraft.marketPct);
+  $('#raReservePct').value=String(labDraft.reservePct);
+  $('#raRuleSelect').value=labDraft.allocationRule;
+  $('#raMarketLabel').textContent=labDraft.marketPct+'%';
+  $('#raReserveLabel').textContent=labDraft.reservePct+'%';
+  $('#raProviderSelectionCount').textContent=selected.length+' selected';
+  $('#raAffectedDemand').textContent=selected.length ? providerLabel(selected) : 'No provider selected';
+
+  const valid=selected.length>0;
+  const dirty=!draftMatchesApplied();
+  $('#raRunScenario').disabled=!valid;
+  $('#raProviderValidation').classList.toggle('is-error',!valid);
+  $('#raProviderValidation').textContent=valid
+    ? 'Select one or more providers. Multiple providers can fail simultaneously.'
+    : 'Select at least one provider before running the scenario.';
+  $('#raDraftState').textContent=!valid ? 'SELECT A PROVIDER' : dirty ? 'PENDING CHANGES' : 'SCENARIO APPLIED';
+  $('.ra-lab-run-block')?.classList.toggle('has-pending',valid && dirty);
+}
+
+function runLabScenario(){
+  const selected=normalizedIds(labDraft.outageProviders);
+  if(!selected.length) return;
+
+  state.outageProviders=[...selected];
+  state.marketPct=labDraft.marketPct;
+  state.reservePct=labDraft.reservePct;
+  state.allocationRule=labDraft.allocationRule;
 
   renderLab();
   renderBaseline();
+  renderEvidence();
+  syncLabDraftUI();
+
+  if(document.body.classList.contains('ra-mobile-sheet-open')) setLabSheet(false);
+}
+
+function resetLab(){
+  state.outageProviders=[...defaultScenario.outageProviders];
+  state.marketPct=defaultScenario.marketPct;
+  state.reservePct=defaultScenario.reservePct;
+  state.allocationRule=defaultScenario.allocationRule;
+  state.labStrategy='market';
+
+  labDraft.outageProviders=[...defaultScenario.outageProviders];
+  labDraft.marketPct=defaultScenario.marketPct;
+  labDraft.reservePct=defaultScenario.reservePct;
+  labDraft.allocationRule=defaultScenario.allocationRule;
+
+  syncLabDraftUI();
+  renderLab();
+  renderBaseline();
+  renderEvidence();
 }
 
 function setLabSheet(open){
@@ -586,26 +760,27 @@ function setupMobileLab(){
 }
 
 function setupLab(){
-  $('#raProviderSelect').addEventListener('change',event=>{
-    state.outageProvider=event.target.value;
-    renderLab();
-    renderBaseline();
+  $$('#raProviderToggles input[type="checkbox"]').forEach(input=>{
+    input.addEventListener('change',()=>{
+      labDraft.outageProviders=$$('#raProviderToggles input[type="checkbox"]:checked').map(node=>node.value);
+      syncLabDraftUI();
+    });
   });
+
   $('#raMarketPct').addEventListener('input',event=>{
-    state.marketPct=Number(event.target.value);
-    renderLab();
-    renderBaseline();
+    labDraft.marketPct=Number(event.target.value);
+    syncLabDraftUI();
   });
   $('#raReservePct').addEventListener('input',event=>{
-    state.reservePct=Number(event.target.value);
-    renderLab();
-    renderBaseline();
+    labDraft.reservePct=Number(event.target.value);
+    syncLabDraftUI();
   });
   $('#raRuleSelect').addEventListener('change',event=>{
-    state.allocationRule=event.target.value;
-    renderLab();
-    renderBaseline();
+    labDraft.allocationRule=event.target.value;
+    syncLabDraftUI();
   });
+
+  $('#raRunScenario').addEventListener('click',runLabScenario);
 
   $$('.ra-strategy-switch button').forEach(button=>{
     button.addEventListener('click',()=>setLabStrategy(button.dataset.raStrategy));
@@ -629,6 +804,7 @@ setupLab();
 setupMobileLab();
 setupEvidence();
 updateNarrationControl();
+syncLabDraftUI();
 renderScene();
 renderLab();
 renderEvidence();

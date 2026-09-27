@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#070A0F">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-motion01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-finalqa01">
 </head>
 <body>
   <div class="ra-app">
@@ -160,17 +160,27 @@
               <span>01</span>
               <div><b>Shock</b><small>Which shared dependency fails?</small></div>
             </header>
-            <label class="ra-field">
-              <span>Provider outage</span>
-              <select id="raProviderSelect">
-                <option value="blue">Blue Cloud</option>
-                <option value="orange">Orange Cloud</option>
-                <option value="green">Green Cloud</option>
-              </select>
-            </label>
+            <div class="ra-field">
+              <span>Failed cloud providers <b id="raProviderSelectionCount">1 selected</b></span>
+              <div class="ra-provider-toggle-group" id="raProviderToggles" role="group" aria-label="Failed cloud providers">
+                <label class="provider-blue">
+                  <input type="checkbox" value="blue" checked>
+                  <span><i></i><b>Blue Cloud</b><small>8 banks</small></span>
+                </label>
+                <label class="provider-orange">
+                  <input type="checkbox" value="orange">
+                  <span><i></i><b>Orange Cloud</b><small>7 banks</small></span>
+                </label>
+                <label class="provider-green">
+                  <input type="checkbox" value="green">
+                  <span><i></i><b>Green Cloud</b><small>5 banks</small></span>
+                </label>
+              </div>
+              <small class="ra-field-help" id="raProviderValidation">Select one or more providers. Multiple providers can fail simultaneously.</small>
+            </div>
             <div class="ra-inline-readout">
-              <span>Affected demand</span>
-              <b id="raAffectedDemand">—</b>
+              <span>Draft shock</span>
+              <b id="raAffectedDemand">Blue Cloud</b>
             </div>
           </section>
 
@@ -206,6 +216,16 @@
             </label>
           </section>
 
+          <div class="ra-lab-run-block">
+            <div>
+              <span id="raDraftState">SCENARIO READY</span>
+              <small>Adjust the controls, then run the scenario to apply the new assumptions.</small>
+            </div>
+            <button class="ra-primary-action ra-run-scenario" id="raRunScenario" type="button">
+              <span>Run Scenario</span><b aria-hidden="true">→</b>
+            </button>
+          </div>
+
           <div class="ra-control-note">
             <span>WHAT STAYS FIXED</span>
             <b>Same bank network and model equations</b>
@@ -216,7 +236,7 @@
         <section class="ra-lab-workspace">
           <div class="ra-canvas-toolbar ra-lab-toolbar">
             <div>
-              <span>LIVE SCENARIO</span>
+              <span>APPLIED SCENARIO</span>
               <b id="raLabTitle">Blue Cloud outage</b>
             </div>
             <div class="ra-lab-scenario-summary">
@@ -558,9 +578,14 @@
               <span>CURRENT SCENARIO</span>
               <b id="raEvidenceScenario">Blue Cloud · 20% market · 25% reserve · systemic rule</b>
             </div>
-            <button class="ra-primary-action ra-export-action" id="raExportEvidence" type="button">
-              <span>Export scenario JSON</span><b aria-hidden="true">↓</b>
-            </button>
+            <div class="ra-export-actions">
+              <button class="ra-primary-action ra-export-action" id="raExportEvidence" type="button">
+                <span>Export readable report</span><b aria-hidden="true">↓</b>
+              </button>
+              <button class="ra-secondary-action ra-export-json" id="raExportJson" type="button">
+                <span>Export JSON</span><b aria-hidden="true">{ }</b>
+              </button>
+            </div>
           </div>
 
           <div class="ra-disclosure">
@@ -574,11 +599,11 @@
     <div class="ra-mobile-sheet-backdrop" id="raLabBackdrop" hidden></div>
 
     <footer class="ra-footer">
-      <span>Resilience Atlas · Semantic Motion · Stage 9</span>
-      <span>Calm data flows · semantic transitions · accessible motion</span>
+      <span>Resilience Atlas · Final QA · Stage 10</span>
+      <span>Run-before-apply scenarios · multi-cloud shocks · readable exports</span>
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-motion01"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-finalqa01"></script>
 </body>
 </html>

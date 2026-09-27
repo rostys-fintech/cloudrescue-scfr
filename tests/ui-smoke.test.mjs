@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const [html, js, css] = await Promise.all([
-  readFile(new URL('../index.html', import.meta.url), 'utf8'),
+  readFile(new URL('../cloudrescue-legacy.html', import.meta.url), 'utf8'),
   readFile(new URL('../app.js', import.meta.url), 'utf8'),
   readFile(new URL('../styles.css', import.meta.url), 'utf8')
 ]);
@@ -14,7 +14,7 @@ const requiredIds = [
 ];
 
 for (const id of requiredIds) {
-  assert.match(html, new RegExp(`id=["']${id}["']`), `index.html should contain #${id}`);
+  assert.match(html, new RegExp(`id=["']${id}["']`), `cloudrescue-legacy.html should contain #${id}`);
 }
 
 assert.match(js, /compareStrategies/, 'app should call the simulation comparison');

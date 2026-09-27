@@ -15,7 +15,7 @@ assert.doesNotMatch(html,/styles-v2\.css/);
 assert.doesNotMatch(html,/href="styles\.css/);
 
 for (const id of [
-  'raEarthMount','raLabEarthMount','raEvidenceEarthMount','raThemeToggle','raRunPreview','raProviderSelect',
+  'raEarthMount','raLabEarthMount','raEvidenceEarthMount','raThemeToggle','raRunPreview','raProviderToggles','raRunScenario',
   'raMarketPct','raReservePct','raRuleSelect','raLabResilience'
 ]) {
   assert.match(html,new RegExp(`id=["']${id}["']`),`missing ${id}`);

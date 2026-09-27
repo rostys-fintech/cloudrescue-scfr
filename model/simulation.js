@@ -3,8 +3,16 @@ import { banks } from '../data/banks.js';
 const clamp = (x, min=0, max=1) => Math.max(min, Math.min(max, x));
 const totalSystemLoad = banks.reduce((s,b)=>s+b.criticalLoad,0);
 
-function affectedBanks(outageProvider) {
-  return banks.filter(b => b.provider === outageProvider).map(b => ({...b, allocation:0}));
+function normalizeOutageProviders(outageProviders, outageProvider='blue') {
+  const raw = Array.isArray(outageProviders) ? outageProviders : [outageProvider];
+  const allowed = new Set(['blue','orange','green']);
+  const normalized = [...new Set(raw.filter(p => allowed.has(p)))];
+  return normalized.length ? normalized : ['blue'];
+}
+
+function affectedBanks(outageProviders) {
+  const failed = new Set(outageProviders);
+  return banks.filter(b => failed.has(b.provider)).map(b => ({...b, allocation:0}));
 }
 
 function priorityValue(bank, rule) {
@@ -80,12 +88,14 @@ function finalize(rows, totalReserve, reserveUsed, strandedReserve=0) {
 
 export function runScenario({
   outageProvider='blue',
+  outageProviders,
   marketPct=20,
   reservePct=25,
   strategy='market',
   allocationRule='systemic'
 }={}) {
-  const affected = affectedBanks(outageProvider);
+  const failedProviders = normalizeOutageProviders(outageProviders, outageProvider);
+  const affected = affectedBanks(failedProviders);
   const affectedDemand = affected.reduce((s,b)=>s+b.criticalLoad,0);
   const marketPool = affectedDemand * marketPct/100;
   const reservePool = totalSystemLoad * reservePct/100;
@@ -128,10 +138,10 @@ export function compareStrategies(args={}) {
   };
 }
 
-export function resilienceFrontier({outageProvider='blue', marketPct=20, allocationRule='systemic'}={}) {
+export function resilienceFrontier({outageProvider='blue', outageProviders, marketPct=20, allocationRule='systemic'}={}) {
   const points=[];
   for (let reservePct=0; reservePct<=60; reservePct+=5) {
-    const c=compareStrategies({outageProvider,marketPct,reservePct,allocationRule});
+    const c=compareStrategies({outageProvider,outageProviders,marketPct,reservePct,allocationRule});
     points.push({reservePct, market:c.market.resilience, individual:c.individual.resilience, scfr:c.scfr.resilience});
   }
   return points;
