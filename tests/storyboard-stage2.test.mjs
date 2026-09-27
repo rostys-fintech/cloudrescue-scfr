@@ -32,4 +32,8 @@ assert.match(js,/animateGuidedCueCopy/);
 assert.match(js,/kicker\.textContent='FAILURE SEQUENCE'/);
 assert.match(js,/caption\.textContent=cue\.caption/);
 
+assert.match(js,/ra-cue-transitioning/);
+
+assert.match(css,/#raEarthMount\.ra-cue-transitioning \.ra-earth-svg/);
+
 console.log('Storyboard Stage 2 checks passed.');
