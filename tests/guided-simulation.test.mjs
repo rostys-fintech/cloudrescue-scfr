@@ -35,7 +35,7 @@ assert.match(js,/playGuidedAudioScene\(i,runId\)/);
 assert.match(js,/guidedDelay\(story\.visualDuration,runId\)/);
 assert.match(js,/earth\.simulation\.setPaused/);
 assert.match(js,/function focusAnimationStage\(/);
-assert.match(js,/window\.scrollTo/);
+assert.match(js,/scrollIntoView\(/);
 assert.match(js,/focusAnimationStage\(\$\('#raEarthMount'\)\)/);
 assert.match(js,/raHudPause/);
 assert.match(js,/raHudStop/);
