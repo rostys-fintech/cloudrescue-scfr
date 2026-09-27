@@ -13,7 +13,7 @@
     })();
   </script>
   <title>CloudRescue — SCFR Stress Lab</title>
-  <link rel="stylesheet" href="styles.css?v=20260927-1202">
+  <link rel="stylesheet" href="styles.css?v=20260927-1215">
 </head>
 <body>
 <div class="shell">
@@ -43,6 +43,10 @@
       <div class="eyebrow">FIRSTCOMMIT · SYNTHETIC RESEARCH PROTOTYPE</div>
       <h1>CloudRescue</h1>
       <p>Can a banking system survive a shared cloud outage?</p>
+      <div class="hero-actions">
+        <button id="heroDemo" class="btn primary">▶ Watch 35s narrated demo</button>
+        <button id="heroLab" class="btn secondary">Open Stress Lab</button>
+      </div>
     </div>
     <div class="hero-badge"><span>Research engine</span><b>SCFR Stress Lab</b></div>
   </section>
@@ -64,10 +68,12 @@
           <div class="story-actions">
             <button id="backScene" class="btn secondary">← Back</button>
             <button id="nextScene" class="btn primary">Next →</button>
-            <button id="autoScene" class="btn secondary">▶ Auto-play</button>
+            <button id="autoScene" class="btn secondary">▶ Watch demo</button>
+            <button id="narrationToggle" class="btn secondary" aria-pressed="true">🔊 Narration</button>
             <button id="focusStory" class="btn secondary">⛶ Focus view</button>
           </div>
           <div id="sceneDots" class="dots" aria-label="Story progress"></div>
+          <div class="demo-progress" aria-label="Narrated demo progress"><i id="demoProgressBar"></i></div>
         </article>
 
         <article class="card stage-wrap">
@@ -80,6 +86,7 @@
             </div>
             <div id="shockPulse" class="shock-pulse" aria-hidden="true"></div>
             <div class="provider-grid" id="providers"></div>
+            <div id="visualSignal" class="visual-signal" aria-hidden="true"></div>
             <div class="network-grid" id="bankGroups"></div>
 
             <div id="flowLayer" class="flow-layer" aria-hidden="true">
@@ -91,6 +98,10 @@
             </div>
 
             <div id="compareOverlay" class="compare-overlay"></div>
+            <div id="storyCaption" class="story-caption" aria-live="polite">
+              <span id="captionKicker">NORMAL OPERATIONS</span>
+              <strong id="captionText">Twenty banks. Three shared cloud providers.</strong>
+            </div>
             <div class="scfr-reserve-layer" id="scfrReserveLayer">
               <div class="reserve-node">
                 <span>SCFR RESERVE</span>
@@ -227,6 +238,6 @@
 
   <footer><span>CloudRescue · SCFR Stress Lab</span><span>Rostyslav Honcharenko · 2026</span></footer>
 </div>
-<script type="module" src="app.js?v=20260927-1202"></script>
+<script type="module" src="app.js?v=20260927-1215"></script>
 </body>
 </html>
