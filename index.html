@@ -23,11 +23,11 @@
   <meta name="twitter:title" content="CloudRescue — Systemic Cloud Resilience Lab">
   <meta name="twitter:description" content="A reproducible stress lab for shared-provider shocks and coordinated recovery in banking.">
   <link rel="stylesheet" href="styles.css?v=20260927-1930">
-  <link rel="stylesheet" href="styles-v2.css?v=20260927-cyber03">
+  <link rel="stylesheet" href="styles-v2.css?v=20260927-frame01">
 </head>
 <body>
 <div class="shell">
-  <header class="topbar">
+  <header class="topbar cyber-topbar">
     <div class="brand-lockup">
       <div class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 32 32">
@@ -35,14 +35,21 @@
           <circle cx="16" cy="8" r="2.2"></circle>
           <circle cx="25" cy="8" r="2.2"></circle>
           <path d="M7 10.5v4.5h9m9-4.5v4.5h-9m0-4.5v12"></path>
-          <rect x="11" y="22" width="10" height="4.5" rx="1"></rect>
+          <rect x="11" y="22" width="10" height="4.5"></rect>
         </svg>
       </div>
       <div>
-        <strong>CloudRescue</strong>
-        <span>Systemic Cloud Resilience Lab</span>
+        <strong>Cloud<span>Rescue</span></strong>
+        <small>Systemic Cloud Resilience Lab</small>
       </div>
     </div>
+
+    <nav class="tabs cyber-tabs" aria-label="CloudRescue sections">
+      <button class="tab active" data-tab="story">Crisis Replay</button>
+      <button class="tab" data-tab="lab">Stress Lab</button>
+      <button class="tab" data-tab="method">Methodology</button>
+    </nav>
+
     <div class="topbar-meta">
       <button id="themeToggle" class="theme-toggle mode-switch" type="button" aria-label="Switch between Crisis and Analysis themes" aria-pressed="false">
         <span class="mode-name mode-crisis">CRISIS</span>
@@ -52,7 +59,7 @@
     </div>
   </header>
 
-  <section class="hero hero-institutional">
+  <section class="hero hero-institutional hero-cyber-frame">
     <div class="hero-copy">
       <div class="eyebrow">SYSTEMIC RESILIENCE // LIVE RESEARCH PROTOTYPE</div>
       <h1><span class="hero-cloud-word">Cloud</span><span class="hero-rescue-word">Rescue</span></h1>
@@ -62,16 +69,16 @@
         <b>Same shock. Same reserve budget. Better coordination?</b>
       </div>
       <div class="hero-actions">
-        <button id="heroDemo" class="btn primary">Run guided replay</button>
-        <button id="heroLab" class="btn secondary">Open Stress Lab</button>
+        <button id="heroDemo" class="btn primary hero-auto">▶ Run Auto-Simulation</button>
+        <button id="heroLab" class="btn secondary">Open Stress Lab →</button>
       </div>
     </div>
 
     <div class="hero-system" aria-label="Shared cloud dependency illustration">
       <div class="hero-system-head">
-        <span>SYSTEM TOPOLOGY // LIVE MODEL</span>
-        <b>Shared dependency topology</b>
-        <small>Synthetic network · deterministic engine</small>
+        <span>LIVE SYSTEM TOPOLOGY</span>
+        <b>Shared dependency network</b>
+        <small>20 synthetic banks · deterministic model</small>
       </div>
       <div class="hero-network">
         <div class="hero-cloud hero-cloud-a"><span>CLOUD A</span><b>08</b><small>dependent banks</small></div>
@@ -103,11 +110,7 @@
     </div>
   </section>
 
-  <nav class="tabs" aria-label="CloudRescue sections">
-    <button class="tab active" data-tab="story">Crisis Replay</button>
-    <button class="tab" data-tab="lab">Stress Lab</button>
-    <button class="tab" data-tab="method">Methodology</button>
-  </nav>
+  
 
   <main>
     <section id="story" class="panel active">
@@ -118,7 +121,7 @@
           <p id="sceneText"></p>
           <div id="sceneStat" class="scene-stat"></div>
           <div class="story-actions">
-            <button id="autoScene" class="btn primary story-play">Run replay</button>
+            <button id="autoScene" class="btn primary story-play">▶ Auto-Simulation</button>
             <div class="story-nav" aria-label="Scene navigation">
               <button id="backScene" class="btn secondary">Previous</button>
               <button id="nextScene" class="btn secondary">Next</button>
@@ -395,6 +398,6 @@
     <span>Rostyslav Honcharenko · 2026</span>
   </footer>
 </div>
-<script type="module" src="app.js?v=20260927-cyber03"></script>
+<script type="module" src="app.js?v=20260927-frame01"></script>
 </body>
 </html>
