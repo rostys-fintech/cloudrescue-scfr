@@ -735,6 +735,25 @@ function applyGuidedMetric(cue,c){
   }
 }
 
+function animateGuidedCueCopy(sceneIndex,cue){
+  const kicker=$('#raGuidedKicker');
+  const caption=$('#raGuidedCaption');
+  const canvasTitle=$('#raCanvasTitle');
+  const copy=$('#raGuidedHud .ra-guided-copy');
+
+  if(sceneIndex===0) kicker.textContent='LIVE CUE';
+  else if(sceneIndex===1) kicker.textContent='FAILURE SEQUENCE';
+
+  caption.textContent=cue.caption;
+  canvasTitle.textContent=cue.caption;
+
+  [copy,canvasTitle].filter(Boolean).forEach(node=>{
+    node.classList.remove('is-cue-entering');
+    void node.offsetWidth;
+    node.classList.add('is-cue-entering');
+  });
+}
+
 function applyGuidedCue(sceneIndex,cue){
   if(!cue) return;
   const key=sceneIndex+':'+cue.id;
@@ -743,22 +762,18 @@ function applyGuidedCue(sceneIndex,cue){
   const mount=$('#raEarthMount');
   if(!mount) return;
 
+  mount.classList.add('ra-guided-sync','ra-cue-blend');
+  const previous=GUIDED_CUE_CLASSES.find(klass=>mount.classList.contains(klass));
+  if(previous) mount.dataset.previousCue=previous.replace('ra-sync-','');
   mount.classList.remove(...GUIDED_CUE_CLASSES);
-  mount.classList.add('ra-guided-sync','ra-sync-'+cue.id);
+  mount.classList.add('ra-sync-'+cue.id);
   mount.dataset.guidedCaption=cue.caption;
   mount.dataset.guidedCue=cue.id;
   guided.cueKey=key;
 
   const c=comparison();
   earth.simulation.update({...earthPayload(c),scene:cue.visualScene});
-  $('#raCanvasTitle').textContent=cue.caption;
-  if(sceneIndex===0){
-    $('#raGuidedKicker').textContent='LIVE CUE';
-    $('#raGuidedCaption').textContent=cue.caption;
-  }else if(sceneIndex===1){
-    $('#raGuidedKicker').textContent='FAILURE SEQUENCE';
-    $('#raGuidedCaption').textContent=cue.caption;
-  }
+  animateGuidedCueCopy(sceneIndex,cue);
   applyGuidedMetric(cue,c);
 }
 
