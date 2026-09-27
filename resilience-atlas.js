@@ -767,6 +767,12 @@ async function runGuidedSimulation(){
   guided.paused=false;
   earth.simulation.setPaused?.(false);
 
+  /* Guided Simulation is a fixed explanatory baseline. Scenario Lab remains
+     the place for user-defined multi-provider shocks and parameter changes. */
+  state.outageProviders=[...defaultScenario.outageProviders];
+  state.marketPct=defaultScenario.marketPct;
+  state.reservePct=defaultScenario.reservePct;
+  state.allocationRule=defaultScenario.allocationRule;
   state.scene=0;
   renderScene();
   setGuidedActive(true);
@@ -787,7 +793,10 @@ async function runGuidedSimulation(){
       guidedDelay(story.visualDuration,runId)
     ]);
 
-    if(!spoken || !visualComplete || runId!==guided.runId) return;
+    if(!spoken || !visualComplete || runId!==guided.runId){
+      if(runId===guided.runId) stopGuidedSimulation();
+      return;
+    }
   }
 
   if(runId===guided.runId){
