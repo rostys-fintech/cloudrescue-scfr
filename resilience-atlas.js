@@ -12,7 +12,8 @@ const state = {
   outageProvider: 'blue',
   marketPct: 20,
   reservePct: 25,
-  allocationRule: 'systemic'
+  allocationRule: 'systemic',
+  labStrategy: 'market'
 };
 
 const guided = {
@@ -60,7 +61,8 @@ function earthPayload(c){
     outageProvider: state.outageProvider,
     comparison: c,
     marketPct: state.marketPct,
-    reservePct: state.reservePct
+    reservePct: state.reservePct,
+    labStrategy: state.labStrategy
   };
 }
 
@@ -189,17 +191,64 @@ function renderBaseline(){
 function renderLab(){
   const c = comparison();
   const provider = providers.find(item => item.id === state.outageProvider);
+  const selected = c[state.labStrategy];
+  const selectedGap = Math.max(0, selected.totalDemand-selected.allocated);
+  const ruleLabel = state.allocationRule === 'systemic' ? 'Systemic' : state.allocationRule === 'equal' ? 'Equal' : 'Readiness';
 
   $('#raMarketLabel').textContent = state.marketPct+'%';
   $('#raReserveLabel').textContent = state.reservePct+'%';
   $('#raLabTitle').textContent = (provider?.name || state.outageProvider)+' outage';
+  $('#raAffectedDemand').textContent = format(c.market.totalDemand)+' units';
+  $('#raLabMarketSummary').textContent = state.marketPct+'%';
+  $('#raLabReserveSummary').textContent = state.reservePct+'%';
+  $('#raLabRuleSummary').textContent = ruleLabel;
+
   $('#raLabAffected').textContent = c.market.affectedCount+' / '+banks.length;
-  $('#raLabUnmet').textContent = format(Math.max(0, c.market.totalDemand - c.market.allocated));
-  $('#raLabRestored').textContent = Math.round(c.scfr.criticalRestoredPct)+'%';
-  $('#raLabResilience').textContent = Math.round(c.scfr.resilience);
+  $('#raLabUnmet').textContent = format(selectedGap);
+  $('#raLabRestored').textContent = Math.round(selected.criticalRestoredPct)+'%';
+  $('#raLabResilience').textContent = Math.round(selected.resilience);
+
+  $('#raLabUnmetNote').textContent =
+    state.labStrategy === 'market' ? 'units after market capacity' :
+    state.labStrategy === 'individual' ? 'units after individual reserve' :
+    'units after pooled reserve';
+  $('#raLabRestoredNote').textContent =
+    state.labStrategy === 'market' ? 'market-only recovery' :
+    state.labStrategy === 'individual' ? 'with ring-fenced reserve' :
+    'with pooled SCFR reserve';
+
   $('#raMarketScore').textContent = Math.round(c.market.resilience);
   $('#raIndividualScore').textContent = Math.round(c.individual.resilience);
   $('#raScfrScore').textContent = Math.round(c.scfr.resilience);
+
+  $('#raMarketRestored').textContent = Math.round(c.market.criticalRestoredPct)+'%';
+  $('#raIndividualRestored').textContent = Math.round(c.individual.criticalRestoredPct)+'%';
+  $('#raScfrRestored').textContent = Math.round(c.scfr.criticalRestoredPct)+'%';
+
+  $('#raMarketGap').textContent = format(Math.max(0,c.market.totalDemand-c.market.allocated));
+  $('#raIndividualStranded').textContent = format(c.individual.strandedReserve);
+  $('#raScfrUsed').textContent = format(c.scfr.reserveUsed);
+
+  $('#raMarketBar').style.width = Math.max(0,Math.min(100,c.market.resilience))+'%';
+  $('#raIndividualBar').style.width = Math.max(0,Math.min(100,c.individual.resilience))+'%';
+  $('#raScfrBar').style.width = Math.max(0,Math.min(100,c.scfr.resilience))+'%';
+
+  $('#raCompareContext').textContent =
+    (provider?.name || state.outageProvider)+' · '+state.marketPct+'% market · '+state.reservePct+'% reserve';
+
+  const insight = {
+    market:'Immediate market capacity is shared across all affected banks, so simultaneous demand creates a visible capacity gap.',
+    individual:'Bank-specific reserves improve recovery, but unused reserve can remain stranded because it cannot move across institutions.',
+    scfr:'The total reserve budget is pooled and reallocated under the selected rule, allowing capacity to move toward affected banks.'
+  };
+  $('#raMechanismInsight').textContent = insight[state.labStrategy];
+
+  $('.ra-strategy-switch button').forEach(button=>{
+    button.classList.toggle('is-active',button.dataset.raStrategy===state.labStrategy);
+  });
+  $('.ra-model-card').forEach(button=>{
+    button.classList.toggle('is-active',button.dataset.raCompare===state.labStrategy);
+  });
 
   earth.lab.update(earthPayload(c));
 }
@@ -398,6 +447,28 @@ function setupScenes(){
   });
 }
 
+function setLabStrategy(strategy){
+  if(!['market','individual','scfr'].includes(strategy)) return;
+  state.labStrategy=strategy;
+  renderLab();
+}
+
+function resetLab(){
+  state.outageProvider='blue';
+  state.marketPct=20;
+  state.reservePct=25;
+  state.allocationRule='systemic';
+  state.labStrategy='market';
+
+  $('#raProviderSelect').value=state.outageProvider;
+  $('#raMarketPct').value=String(state.marketPct);
+  $('#raReservePct').value=String(state.reservePct);
+  $('#raRuleSelect').value=state.allocationRule;
+
+  renderLab();
+  renderBaseline();
+}
+
 function setupLab(){
   $('#raProviderSelect').addEventListener('change',event=>{
     state.outageProvider=event.target.value;
@@ -419,6 +490,14 @@ function setupLab(){
     renderLab();
     renderBaseline();
   });
+
+  $('.ra-strategy-switch button').forEach(button=>{
+    button.addEventListener('click',()=>setLabStrategy(button.dataset.raStrategy));
+  });
+  $('.ra-model-card').forEach(button=>{
+    button.addEventListener('click',()=>setLabStrategy(button.dataset.raCompare));
+  });
+  $('#raResetLab').addEventListener('click',resetLab);
 }
 
 if('speechSynthesis' in window){
