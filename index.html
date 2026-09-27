@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="CloudRescue: an interactive banking cloud-outage simulator powered by the SCFR concept.">
+  <title>CloudRescue — SCFR Stress Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="shell">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">FIRSTCOMMIT · SYNTHETIC RESEARCH PROTOTYPE</div>
+      <h1>CloudRescue</h1>
+      <p>Can a banking system survive a shared cloud outage?</p>
+    </div>
+    <div class="hero-badge"><span>Research engine</span><b>SCFR Stress Lab</b></div>
+  </header>
+
+  <nav class="tabs" aria-label="CloudRescue sections">
+    <button class="tab active" data-tab="story">Watch the crisis</button>
+    <button class="tab" data-tab="lab">Stress Lab</button>
+    <button class="tab" data-tab="method">Methodology</button>
+  </nav>
+
+  <main>
+    <section id="story" class="panel active">
+      <div class="story-layout">
+        <article class="card narrative">
+          <div class="scene-label">SCENE <span id="sceneNo">1</span> / 6</div>
+          <h2 id="sceneTitle">Meet the system</h2>
+          <p id="sceneText"></p>
+          <div id="sceneStat" class="scene-stat"></div>
+          <div class="story-actions">
+            <button id="backScene" class="btn secondary">← Back</button>
+            <button id="nextScene" class="btn primary">Next →</button>
+            <button id="autoScene" class="btn secondary">▶ Auto-play</button>
+          </div>
+          <div id="sceneDots" class="dots" aria-label="Story progress"></div>
+        </article>
+
+        <article class="card stage-wrap">
+          <div id="stage" class="stage scene-1">
+            <div class="provider-grid" id="providers"></div>
+            <div class="network-grid" id="bankGroups"></div>
+
+            <div id="flowLayer" class="flow-layer" aria-hidden="true">
+              <div class="flow-box demand"><span>Affected demand</span><strong id="flowDemand">0</strong><small>capacity units</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box market"><span>Spot capacity</span><strong id="flowMarket">0</strong><small>available after shock</small></div>
+              <div class="flow-plus">+</div>
+              <div class="flow-box reserve"><span>Pre-reserved</span><strong id="flowReserve">0</strong><small>same budget in both reserve models</small></div>
+            </div>
+
+            <div id="compareOverlay" class="compare-overlay"></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="research-question">
+        <span>CORE QUESTION</span>
+        <b>Can pooling and pre-arranged allocation of backup cloud capacity improve systemic recovery without increasing the total reserve?</b>
+      </div>
+    </section>
+
+    <section id="lab" class="panel">
+      <div class="lab-layout">
+        <aside class="card controls">
+          <div class="eyebrow">YOU ARE THE RESILIENCE COORDINATOR</div>
+          <h2>Design a stronger system</h2>
+          <p>Change one assumption at a time and rerun the same synthetic shock.</p>
+
+          <label>Provider outage
+            <select id="providerSelect">
+              <option value="blue">Blue Cloud</option>
+              <option value="orange">Orange Cloud</option>
+              <option value="green">Green Cloud</option>
+            </select>
+          </label>
+
+          <label>Emergency market capacity <b id="marketLabel">20%</b>
+            <input id="marketPct" type="range" min="0" max="50" value="20" step="5">
+            <small>Share of affected critical demand sourced after the shock.</small>
+          </label>
+
+          <label>Total pre-reserved capacity <b id="reserveLabel">25%</b>
+            <input id="reservePct" type="range" min="0" max="60" value="25" step="5">
+            <small>Individual Reserves and SCFR receive the same total reserve budget.</small>
+          </label>
+
+          <label>SCFR allocation rule
+            <select id="ruleSelect">
+              <option value="systemic">Systemic priority</option>
+              <option value="equal">Equal allocation</option>
+              <option value="readiness">Readiness first</option>
+            </select>
+          </label>
+
+          <button id="runBtn" class="btn primary full">Run stress test</button>
+
+          <div id="challenge" class="challenge">
+            <span>SCENARIO CHALLENGE</span>
+            <b>Reach ≥80 resilience with ≤30% reserve.</b>
+            <p id="challengeText">Try a configuration.</p>
+          </div>
+        </aside>
+
+        <div class="results">
+          <div class="card shock-head">
+            <div>
+              <div class="eyebrow">SHOCK SUMMARY</div>
+              <h2 id="shockTitle">Blue Cloud outage</h2>
+              <p id="shockCopy"></p>
+            </div>
+            <div id="affectedPill" class="pill"></div>
+          </div>
+
+          <div id="strategyCards" class="strategy-grid"></div>
+
+          <div class="card chart-card">
+            <div class="chart-head">
+              <div><div class="eyebrow">RESILIENCE FRONTIER</div><h3>How much reserve is enough?</h3></div>
+              <p>Systemic resilience as the reserve budget increases.</p>
+            </div>
+            <div id="frontier" class="chart"></div>
+          </div>
+
+          <div class="card evidence-note">
+            <b>Research guardrail</b>
+            <span>Every result above is an illustrative output from a synthetic model — not a forecast or assessment of a real bank.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="method" class="panel">
+      <div class="method-grid">
+        <article class="card prose">
+          <div class="eyebrow">MODEL LOGIC</div>
+          <h2>Transparent by design</h2>
+          <ol>
+            <li>One synthetic provider fails.</li>
+            <li>All banks connected to it simultaneously require backup capacity.</li>
+            <li>Spot-market capacity is scarce.</li>
+            <li>Individual reserves are ring-fenced bank by bank.</li>
+            <li>SCFR receives the same reserve budget, but pools it across affected banks.</li>
+            <li>Recovery is limited by both capacity and each bank's failover readiness.</li>
+          </ol>
+        </article>
+        <article class="card formula-card">
+          <div class="eyebrow">HEADLINE METRIC</div>
+          <h2>Systemic Resilience Score</h2>
+          <div class="formula">SRS = Σ(wᵢ × rᵢ) / Σ(wᵢ) × 100</div>
+          <p><b>wᵢ</b> combines critical workload and stylized systemic importance. <b>rᵢ</b> is the restored fraction after capacity allocation and readiness constraints.</p>
+          <div class="guardrail">v0.1 is intentionally synthetic. Empirical calibration is a future research stage.</div>
+        </article>
+        <article class="card roadmap-card">
+          <div class="eyebrow">RESEARCH ROADMAP</div>
+          <h2>From hackathon MVP to research companion</h2>
+          <div class="roadmap">
+            <div><b>v0.1</b><span>FirstCommit MVP</span><small>Scenario engine + animated explainer</small></div>
+            <div><b>v0.2</b><span>Sensitivity analysis</span><small>More shocks, rules and robustness checks</small></div>
+            <div><b>v0.3</b><span>Empirical calibration</span><small>Public operational-resilience evidence</small></div>
+            <div><b>v1.0</b><span>Research companion</span><small>Reproducible stress scenarios and policy analysis</small></div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>CloudRescue · SCFR Stress Lab</span><span>Rostyslav Honcharenko · 2026</span></footer>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
