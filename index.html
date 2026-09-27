@@ -23,7 +23,7 @@
   <meta name="twitter:title" content="CloudRescue — Systemic Cloud Resilience Lab">
   <meta name="twitter:description" content="A reproducible stress lab for shared-provider shocks and coordinated recovery in banking.">
   <link rel="stylesheet" href="styles.css?v=20260927-1930">
-  <link rel="stylesheet" href="styles-v2.css?v=20260927-2715">
+  <link rel="stylesheet" href="styles-v2.css?v=20260927-2840">
 </head>
 <body>
 <div class="shell">
@@ -127,12 +127,15 @@
           <p id="sceneText"></p>
           <div id="sceneStat" class="scene-stat"></div>
           <div class="story-actions">
-            <button id="backScene" class="btn secondary">Back</button>
-            <button id="nextScene" class="btn primary">Next</button>
-            <button id="autoScene" class="btn secondary">Run replay</button>
-            <button id="narrationToggle" class="btn secondary" aria-pressed="true">Narration on</button>
-            <label class="voice-control"><span>Narrator</span><select id="voiceSelect" aria-label="Narrator voice"><option>Loading…</option></select></label>
-            <button id="focusStory" class="btn secondary">Focus view</button>
+            <button id="autoScene" class="btn primary story-play">Run replay</button>
+            <div class="story-nav" aria-label="Scene navigation">
+              <button id="backScene" class="btn secondary">Previous</button>
+              <button id="nextScene" class="btn secondary">Next</button>
+            </div>
+            <div class="story-utils">
+              <button id="narrationToggle" class="utility-btn" aria-pressed="true">Narration on</button>
+              <button id="focusStory" class="utility-btn">Focus view</button>
+            </div>
           </div>
           <div id="sceneDots" class="dots" aria-label="Story progress"></div>
           <div class="demo-progress" aria-label="Narrated demo progress"><i id="demoProgressBar"></i></div>
@@ -167,7 +170,7 @@
             </div>
 
             <div id="compareOverlay" class="compare-overlay"></div>
-            <div id="storyCaption" class="story-caption" aria-live="polite">
+            <div id="storyCaption" class="story-caption sr-only" aria-live="polite">
               <span id="captionKicker">NORMAL OPERATIONS</span>
               <strong id="captionText">Twenty banks. Three shared cloud providers.</strong>
             </div>
@@ -182,15 +185,6 @@
         </article>
       </div>
 
-      <div class="evidence-rail" aria-label="Evidence basis">
-        <span>EVIDENCE BASIS</span>
-        <b>Third-party ICT concentration is a documented operational-resilience concern.</b>
-        <div>
-          <a href="https://www.bis.org/publications/fsi-insight-53-managing-cloud-risk-some-considerations-oversight-critical-cloud-service-providers-financial-sector" target="_blank" rel="noopener">BIS / FSI</a>
-          <a href="https://www.esma.europa.eu/dora-oversight" target="_blank" rel="noopener">DORA</a>
-          <a href="https://www.eba.europa.eu/publications-and-media/publications/risk-assessment-report-june-2026" target="_blank" rel="noopener">EBA 2026</a>
-        </div>
-      </div>
     </section>
 
     <section id="lab" class="panel">
@@ -200,17 +194,17 @@
           <h2>Configure stress scenario</h2>
           <p>Change one assumption at a time and rerun the same synthetic shock.</p>
 
-          <div class="scenario-generator">
-            <div class="scenario-generator-head">
-              <span>REPRODUCIBLE SCENARIO</span>
-              <b id="scenarioId">CR-BASE</b>
+          <details class="control-disclosure reproducibility">
+            <summary><span>Reproducibility</span><b id="scenarioId">CR-BASE</b></summary>
+            <div class="disclosure-body">
+              <div class="scenario-seed-row">
+                <input id="seedInput" type="text" maxlength="24" placeholder="Scenario seed" aria-label="Scenario seed">
+                <button id="generateScenarioBtn" class="btn secondary" type="button">Generate</button>
+              </div>
+              <button id="shareScenarioBtn" class="btn secondary full" type="button">Copy scenario link</button>
+              <button id="exportBtn" class="btn secondary full">Export scenario JSON</button>
             </div>
-            <div class="scenario-seed-row">
-              <input id="seedInput" type="text" maxlength="24" placeholder="Enter a seed or leave blank" aria-label="Scenario seed">
-              <button id="generateScenarioBtn" class="btn secondary" type="button">Generate</button>
-            </div>
-            <button id="shareScenarioBtn" class="btn secondary full" type="button">Copy scenario link</button>
-          </div>
+          </details>
 
           <div class="control-section-label">STRESS ASSUMPTIONS</div>
           <div class="presets" aria-label="Scenario presets">
@@ -245,20 +239,19 @@
             </select>
           </label>
 
-          <div class="control-section-label actions-label">SCENARIO OUTPUT</div>
-          <button id="exportBtn" class="btn secondary full">Export scenario JSON</button>
-
-          <div id="challenge" class="challenge">
-            <span>CONSTRAINT TESTS</span>
-            <div class="challenge-tabs" role="group" aria-label="Challenge mission">
-              <button class="challenge-tab active" data-challenge="efficiency">Efficiency</button>
-              <button class="challenge-tab" data-challenge="scarcity">Scarcity</button>
-              <button class="challenge-tab" data-challenge="coordination">Coordination</button>
+          <details id="challenge" class="control-disclosure challenge">
+            <summary><span>Constraint tests</span><small>Optional</small></summary>
+            <div class="disclosure-body">
+              <div class="challenge-tabs" role="group" aria-label="Constraint test">
+                <button class="challenge-tab active" data-challenge="efficiency">Efficiency</button>
+                <button class="challenge-tab" data-challenge="scarcity">Scarcity</button>
+                <button class="challenge-tab" data-challenge="coordination">Coordination</button>
+              </div>
+              <b id="challengeTitle">Reach ≥80 resilience with ≤30% reserve.</b>
+              <p id="challengeText">Try a configuration.</p>
+              <div id="challengeMetrics" class="challenge-metrics"></div>
             </div>
-            <b id="challengeTitle">Reach ≥80 resilience with ≤30% reserve.</b>
-            <p id="challengeText">Try a configuration.</p>
-            <div id="challengeMetrics" class="challenge-metrics"></div>
-          </div>
+          </details>
         </aside>
 
         <div class="results">
@@ -284,13 +277,19 @@
 
           <div id="beforeAfter" class="card before-after-card" aria-label="Individual reserves versus SCFR comparison"></div>
 
-          <div class="card chart-card">
-            <div class="chart-head">
-              <div><div class="eyebrow">RESILIENCE FRONTIER</div><h3>How much reserve is enough?</h3></div>
-              <p>Systemic resilience as the reserve budget increases.</p>
+          <details class="card analysis-disclosure">
+            <summary>
+              <div><span>Advanced analysis</span><b>Resilience Frontier</b></div>
+              <small>Reserve budget sensitivity</small>
+            </summary>
+            <div class="analysis-body">
+              <div class="chart-head">
+                <div><h3>How much reserve is enough?</h3></div>
+                <p>Systemic resilience as the reserve budget increases.</p>
+              </div>
+              <div id="frontier" class="chart"></div>
             </div>
-            <div id="frontier" class="chart"></div>
-          </div>
+          </details>
 
           <div class="card sensitivity-card">
             <div class="sensitivity-head">
@@ -415,6 +414,6 @@
     <span>Rostyslav Honcharenko · 2026</span>
   </footer>
 </div>
-<script type="module" src="app.js?v=20260927-2715"></script>
+<script type="module" src="app.js?v=20260927-2840"></script>
 </body>
 </html>
