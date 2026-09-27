@@ -732,7 +732,12 @@ function setGuidedActive(active){
 function stopGuidedSimulation(){
   guided.runId++;
   guided.paused=false;
-  $('#raEarthMount')?.classList.remove('ra-guided-intro');
+  const introMount=$('#raEarthMount');
+  introMount?.classList.remove(
+    'ra-guided-intro','ra-intro-world','ra-intro-providers',
+    'ra-intro-banks','ra-intro-links','ra-intro-flow'
+  );
+  if(introMount) delete introMount.dataset.introPhase;
   earth.simulation.setPaused?.(false);
   guidedAudio.pause();
   guidedAudio.currentTime=0;
@@ -757,22 +762,44 @@ function focusAnimationStage(target){
   return true;
 }
 
-function startGuidedIntro(runId){
+async function startGuidedIntro(runId){
   const mount=$('#raEarthMount');
-  if(!mount) return Promise.resolve(false);
+  if(!mount) return false;
 
-  mount.classList.remove('ra-guided-intro');
+  const phases=[
+    {className:'ra-intro-world',title:'Initializing global system map',delay:700},
+    {className:'ra-intro-providers',title:'Activating 3 shared cloud providers',delay:900},
+    {className:'ra-intro-banks',title:'Connecting 20 synthetic banks',delay:1150},
+    {className:'ra-intro-links',title:'Mapping shared dependencies',delay:1250},
+    {className:'ra-intro-flow',title:'Starting critical data flows',delay:1350}
+  ];
+
+  mount.classList.remove(
+    'ra-guided-intro','ra-intro-world','ra-intro-providers',
+    'ra-intro-banks','ra-intro-links','ra-intro-flow'
+  );
   void mount.offsetWidth;
   mount.classList.add('ra-guided-intro');
-  $('#raCanvasTitle').textContent='Mapping shared dependencies';
+  mount.dataset.introPhase='BOOTING SYSTEM';
 
-  return guidedDelay(4300,runId).then(continued=>{
-    if(runId===guided.runId){
-      mount.classList.remove('ra-guided-intro');
-      if(state.scene===0) $('#raCanvasTitle').textContent=sceneTitles[0];
-    }
-    return continued;
-  });
+  for(const phase of phases){
+    if(runId!==guided.runId) return false;
+    mount.classList.add(phase.className);
+    mount.dataset.introPhase=phase.title.toUpperCase();
+    $('#raCanvasTitle').textContent=phase.title;
+    const continued=await guidedDelay(phase.delay,runId);
+    if(!continued) return false;
+  }
+
+  if(runId===guided.runId){
+    mount.classList.remove(
+      'ra-guided-intro','ra-intro-world','ra-intro-providers',
+      'ra-intro-banks','ra-intro-links','ra-intro-flow'
+    );
+    delete mount.dataset.introPhase;
+    if(state.scene===0) $('#raCanvasTitle').textContent=sceneTitles[0];
+  }
+  return runId===guided.runId;
 }
 
 async function runGuidedSimulation(){
