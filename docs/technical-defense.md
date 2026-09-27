@@ -191,7 +191,7 @@ No database is needed.
 
 ---
 
-## 13. Is Replay this crisis a separate animation?
+## 13. Is Replay scenario a separate animation?
 
 No.
 
