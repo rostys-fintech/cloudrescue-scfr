@@ -25,6 +25,8 @@ assert.match(js, /setupTheme/, 'app should initialize persistent light-dark them
 assert.match(js, /setFocusMode/, 'app should provide a presentation focus mode');
 assert.match(js, /SpeechSynthesisUtterance/, 'narrated demo should use browser speech synthesis');
 assert.match(js, /preferredNarrator/, 'narration should prefer a configured analytical narrator voice');
+assert.match(js, /utterance\.onend/, 'guided demo should wait for actual narration completion');
+assert.match(js, /demoRunId/, 'cancelled narration must not advance a newer demo run');
 assert.match(js, /outcomeBanks/, 'final story should visualize recovery at bank level');
 assert.match(js, /reserveTokens/, 'reserve fragmentation should be shown with visual capacity tokens');
 assert.match(js, /runSceneMotion/, 'guided story should choreograph moving capacity');
@@ -46,6 +48,9 @@ assert.match(css, /\.outcome-banks/, 'bank-level recovery outcomes should be vis
 assert.match(css, /\.motion-layer/, 'moving capacity should have a dedicated overlay layer');
 assert.match(css, /\.ring-fence/, 'individual-reserve fragmentation should show a ring-fence barrier');
 assert.match(css, /cameraIncident/, 'scene transitions should include guided camera motion');
+assert.match(css, /body\.demo-playing \.scene-3 \.visual-signal/, 'shortage scene should promote one dominant visual mechanism');
+assert.match(css, /blocked-impact/, 'ring-fence collision should have a visible impact cue');
+assert.match(css, /same-budget-badge/, 'SCFR scene should visibly state that no extra reserve is added');
 assert.match(html, /WHY THIS PROBLEM IS REAL/, 'story should visibly ground the scenario in real regulatory evidence');
 
 console.log('✓ CloudRescue interface smoke checks passed');
