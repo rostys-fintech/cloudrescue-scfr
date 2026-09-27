@@ -1089,6 +1089,7 @@ async function runLabScenario(){
   labRun.runId++;
   const runId=labRun.runId;
   let completed=false;
+  setLabRunActive(true);
 
   try{
     if(document.body.classList.contains('ra-mobile-sheet-open')){
@@ -1100,8 +1101,6 @@ async function runLabScenario(){
       $('#raLabEarthMount')?.scrollIntoView({block:'center',behavior:'auto'});
       await labRunWait(90,runId);
     }
-
-    setLabRunActive(true);
 
     const phases=scenarioPlaybackPhases(c);
     for(let index=0;index<phases.length;index++){
