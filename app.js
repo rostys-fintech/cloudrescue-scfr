@@ -10,12 +10,12 @@ const defaults = { outageProvider:'blue', marketPct:20, reservePct:25, allocatio
 
 const scenes = [
   {
-    title:'Meet the system',
-    text:'Twenty stylized banks rely on three synthetic cloud providers for critical workloads. Everything is operating normally.',
-    stat:'20 banks · 3 providers · normal operations',
-    kicker:'NORMAL OPERATIONS',
-    caption:'20 banks depend on 3 shared cloud providers.',
-    voice:'This synthetic banking system has twenty banks using three shared cloud providers for critical workloads.',
+    title:'Why this risk exists',
+    text:'Financial institutions increasingly depend on a limited set of critical ICT and cloud providers. CloudRescue turns that real concentration-risk problem into a transparent synthetic stress test.',
+    stat:'Real concentration risk · synthetic 20-bank illustration',
+    kicker:'REAL-WORLD MOTIVATION',
+    caption:'A common provider can become a common point of operational stress.',
+    voice:'Financial institutions increasingly depend on a limited set of critical technology and cloud providers. CloudRescue models that real concentration risk with a transparent synthetic banking network.',
     duration:5200,
     cue:'normal'
   },
@@ -175,11 +175,11 @@ function renderVisualSignal(c){
 
   if(scene === 0){
     el.innerHTML = `
-      <div class="signal-pill"><b>20</b><span>synthetic banks</span></div>
-      <div class="signal-separator">→</div>
-      <div class="signal-pill"><b>3</b><span>shared providers</span></div>
-      <div class="signal-separator">→</div>
-      <div class="signal-pill safe"><b>100%</b><span>normal operations</span></div>`;
+      <div class="motivation-signal">
+        <div class="motivation-row"><span>REAL-WORLD ISSUE</span><b>Critical ICT concentration risk</b></div>
+        <div class="motivation-arrow">→</div>
+        <div class="motivation-row"><span>SYNTHETIC TEST BED</span><b>20 banks · 3 providers</b></div>
+      </div>`;
   } else if(scene === 1){
     el.innerHTML = `
       <div class="signal-alert"><span class="signal-icon">!</span><b>1 provider outage</b><span>8 banks affected simultaneously</span></div>`;
