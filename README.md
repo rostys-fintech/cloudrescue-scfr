@@ -23,7 +23,7 @@ The prototype compares three mechanisms under the same shock:
 ## What the user can do
 
 ### Watch the Crisis
-A six-scene animated explainer shows:
+A six-scene **guided audiovisual explainer** shows:
 
 - a synthetic banking-cloud network in normal operation;
 - a shared cloud provider outage;
@@ -31,6 +31,14 @@ A six-scene animated explainer shows:
 - fragmentation under individual reserves;
 - pooled allocation under SCFR;
 - a transition from story mode into an interactive experiment.
+
+The guided mode includes:
+- plain-language subtitles;
+- optional browser voice narration;
+- restrained incident / recovery sound cues;
+- animated shortage and reserve-fragmentation visuals;
+- a presentation-focused view for judging or screen recording;
+- keyboard scene navigation.
 
 ### Stress Lab
 The user can change:
