@@ -23,7 +23,7 @@
   <meta name="twitter:title" content="CloudRescue — Systemic Cloud Resilience Lab">
   <meta name="twitter:description" content="A reproducible stress lab for shared-provider shocks and coordinated recovery in banking.">
   <link rel="stylesheet" href="styles.css?v=20260927-1930">
-  <link rel="stylesheet" href="styles-v2.css?v=20260927-3205">
+  <link rel="stylesheet" href="styles-v2.css?v=20260927-3245">
 </head>
 <body>
 <div class="shell">
@@ -184,18 +184,6 @@
           <h2>Configure stress scenario</h2>
           <p>Change one assumption at a time and rerun the same synthetic shock.</p>
 
-          <details class="control-disclosure reproducibility">
-            <summary><span>Reproducibility</span><b id="scenarioId">CR-BASE</b></summary>
-            <div class="disclosure-body">
-              <div class="scenario-seed-row">
-                <input id="seedInput" type="text" maxlength="24" placeholder="Scenario seed" aria-label="Scenario seed">
-                <button id="generateScenarioBtn" class="btn secondary" type="button">Generate</button>
-              </div>
-              <button id="shareScenarioBtn" class="btn secondary full" type="button">Copy scenario link</button>
-              <button id="exportBtn" class="btn secondary full">Export scenario JSON</button>
-            </div>
-          </details>
-
           <div class="control-section-label">STRESS ASSUMPTIONS</div>
           <div class="presets" aria-label="Scenario presets">
             <button class="preset active" data-preset="baseline">Baseline</button>
@@ -228,6 +216,18 @@
               <option value="readiness">Readiness first</option>
             </select>
           </label>
+
+          <details class="control-disclosure reproducibility">
+            <summary><span>Reproducibility</span><b id="scenarioId">CR-BASE</b></summary>
+            <div class="disclosure-body">
+              <div class="scenario-seed-row">
+                <input id="seedInput" type="text" maxlength="24" placeholder="Scenario seed" aria-label="Scenario seed">
+                <button id="generateScenarioBtn" class="btn secondary" type="button">Generate</button>
+              </div>
+              <button id="shareScenarioBtn" class="btn secondary full" type="button">Copy scenario link</button>
+              <button id="exportBtn" class="btn secondary full">Export scenario JSON</button>
+            </div>
+          </details>
 
           <details id="challenge" class="control-disclosure challenge">
             <summary><span>Constraint tests</span><small>Optional</small></summary>
@@ -394,6 +394,6 @@
     <span>Rostyslav Honcharenko · 2026</span>
   </footer>
 </div>
-<script type="module" src="app.js?v=20260927-3205"></script>
+<script type="module" src="app.js?v=20260927-3245"></script>
 </body>
 </html>
