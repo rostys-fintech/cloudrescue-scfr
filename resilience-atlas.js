@@ -572,7 +572,7 @@ function maleVoiceScore(voice){
   const name=(voice?.name||'').toLowerCase();
   const lang=(voice?.lang||'').toLowerCase();
 
-  const maleNames=/\b(daniel|aaron|arthur|alex|andrew|guy|brian|ryan|christopher|eric|oliver|tom|nathan|evan|reed|eddy|rishi|ralph|bruce)\b/;
+  const maleNames=/\b(daniel|aaron|arthur|alex|andrew|guy|brian|ryan|christopher|eric|oliver|tom|nathan|evan|reed|eddy|rishi|ralph|bruce|david|mark|james|george|richard|lee)\b/;
   const explicitlyFemale=/\b(ava|samantha|karen|moira|jenny|aria|victoria|tessa|allison|susan|zira)\b/;
 
   if(explicitlyFemale.test(name)) return -1000;
@@ -590,6 +590,9 @@ function maleVoiceScore(voice){
   if(/\bbrian\b/.test(name)) score+=132;
   if(/\bryan\b/.test(name)) score+=128;
   if(/\bchristopher\b/.test(name)) score+=124;
+  if(/\bdavid\b/.test(name)) score+=122;
+  if(/\bjames\b/.test(name)) score+=121;
+  if(/\bgeorge\b/.test(name)) score+=120;
   if(/\baaron\b/.test(name)) score+=120;
   if(/\barthur\b/.test(name)) score+=116;
   if(/\balex\b/.test(name)) score+=112;
