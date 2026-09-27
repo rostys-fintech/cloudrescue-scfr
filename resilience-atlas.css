@@ -635,3 +635,432 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
     animation:none!important;
   }
 }
+
+
+/* =========================================================
+   STAGE 4 — GUIDED SIMULATION
+   One Earth, six states, one continuous narrated story.
+   ========================================================= */
+
+.ra-story-rail{
+  position:relative;
+  overflow:hidden;
+  transition:
+    width var(--ra-duration-slow) var(--ra-ease-standard),
+    opacity var(--ra-duration-base) var(--ra-ease-standard),
+    border-color var(--ra-duration-base) var(--ra-ease-standard);
+}
+.ra-story-rail:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ra-primary) 3%,transparent),transparent 36%);
+}
+.ra-story-head{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.ra-scene-counter{
+  color:var(--ra-text-3);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+.ra-story-copy{
+  position:relative;
+  z-index:1;
+  margin-top:36px;
+}
+.ra-story-kicker{
+  display:block;
+  color:var(--ra-primary);
+  font-size:9px;
+  font-weight:850;
+  letter-spacing:.12em;
+}
+.ra-story-copy h1{
+  margin-top:10px!important;
+  max-width:9.5ch;
+  font-size:clamp(2.15rem,3.2vw,3.2rem)!important;
+  line-height:.98!important;
+}
+.ra-story-copy p{
+  max-width:36ch;
+  margin:16px 0 0!important;
+  font-size:13px;
+  line-height:1.58!important;
+}
+
+.ra-story-stat{
+  position:relative;
+  z-index:1;
+  margin-top:26px;
+  padding:14px 0;
+  border-top:1px solid var(--ra-border);
+  border-bottom:1px solid var(--ra-border);
+}
+.ra-story-stat span{
+  display:block;
+  color:var(--ra-text-3);
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.1em;
+}
+.ra-story-stat b{
+  display:block;
+  margin-top:5px;
+  color:var(--ra-text-1);
+  font-size:18px;
+  line-height:1.25;
+}
+
+.ra-sim-controls{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  margin-top:20px;
+}
+.ra-sim-controls .ra-primary-action{
+  margin-top:0!important;
+  min-width:0;
+}
+.ra-quiet-action{
+  min-width:104px;
+  min-height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:0 12px;
+  border:1px solid var(--ra-border);
+  border-radius:var(--ra-radius-sm);
+  background:var(--ra-surface-raised);
+  color:var(--ra-text-2);
+  font-size:9px;
+  font-weight:760;
+  cursor:pointer;
+}
+.ra-quiet-action[aria-pressed="true"]{
+  color:var(--ra-primary);
+  border-color:color-mix(in srgb,var(--ra-primary) 26%,var(--ra-border));
+}
+.ra-speaker-icon{
+  font-size:10px;
+  letter-spacing:-.12em;
+}
+
+.ra-story-rail .ra-scene-list{
+  position:relative;
+  z-index:1;
+  margin-top:22px;
+}
+.ra-story-note{
+  position:relative;
+  z-index:1;
+  margin-top:auto;
+  padding-top:18px;
+  color:var(--ra-text-3);
+  transition:opacity var(--ra-duration-base) var(--ra-ease-standard);
+}
+.ra-story-note span{
+  display:block;
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.1em;
+}
+.ra-story-note p{
+  margin:5px 0 0!important;
+  font-size:10px!important;
+  line-height:1.45!important;
+}
+
+/* Timeline / narration HUD visually sits on the Earth without replacing it. */
+.ra-guided-hud{
+  position:relative;
+  z-index:12;
+  width:calc(100% - 32px);
+  min-height:96px;
+  margin:-112px 16px 16px;
+  border:1px solid var(--ra-border-strong);
+  border-radius:var(--ra-radius-sm);
+  background:color-mix(in srgb,var(--ra-surface) 84%,transparent);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 16px 36px rgba(0,0,0,.18);
+  overflow:hidden;
+  transition:
+    border-color var(--ra-duration-base) var(--ra-ease-standard),
+    background var(--ra-duration-base) var(--ra-ease-standard),
+    transform var(--ra-duration-base) var(--ra-ease-standard);
+}
+.ra-guided-status{
+  min-height:27px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:8px;
+  padding:5px 12px;
+  border-bottom:1px solid var(--ra-border);
+}
+.ra-guided-status b,
+.ra-guided-status span{
+  font-size:8px;
+  letter-spacing:.08em;
+}
+.ra-guided-status b{
+  color:var(--ra-text-2);
+}
+.ra-guided-status span:last-child{
+  color:var(--ra-text-3);
+}
+.ra-guided-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--ra-text-3);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--ra-text-3) 35%,transparent);
+}
+.ra-guided-main{
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  gap:12px;
+  align-items:center;
+  min-height:61px;
+  padding:8px 12px 11px;
+}
+.ra-waveform{
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding-right:12px;
+  border-right:1px solid var(--ra-border);
+}
+.ra-waveform i{
+  display:block;
+  width:2px;
+  height:7px;
+  border-radius:99px;
+  background:var(--ra-primary);
+  opacity:.34;
+}
+.ra-guided-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.ra-guided-copy span{
+  color:var(--ra-primary);
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.11em;
+}
+.ra-guided-copy strong{
+  max-width:72ch;
+  color:var(--ra-text-1);
+  font-size:12px;
+  line-height:1.35;
+}
+.ra-guided-progress{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:0;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:4px;
+  height:2px;
+}
+.ra-guided-progress i{
+  background:var(--ra-border-strong);
+}
+.ra-guided-progress i.is-done{
+  background:color-mix(in srgb,var(--ra-primary) 44%,var(--ra-border-strong));
+}
+.ra-guided-progress i.is-active{
+  background:var(--ra-primary);
+  box-shadow:0 0 8px color-mix(in srgb,var(--ra-primary) 58%,transparent);
+}
+
+/* Running mode: remove peripheral noise, not useful context. */
+body.ra-guided-running .ra-story-rail{
+  border-color:color-mix(in srgb,var(--ra-primary) 27%,var(--ra-border));
+}
+body.ra-guided-running .ra-story-note{
+  opacity:.34;
+}
+body.ra-guided-running .ra-scene-list button:not(.is-active){
+  opacity:.42;
+}
+body.ra-guided-running .ra-scene-list button{
+  pointer-events:none;
+}
+body.ra-guided-running .ra-guided-hud{
+  border-color:color-mix(in srgb,var(--ra-primary) 34%,var(--ra-border-strong));
+  background:color-mix(in srgb,var(--ra-surface) 78%,transparent);
+}
+body.ra-guided-running .ra-guided-dot{
+  background:var(--ra-teal);
+  box-shadow:0 0 9px color-mix(in srgb,var(--ra-teal) 60%,transparent);
+  animation:raGuidedDot 1.45s ease-in-out infinite;
+}
+body.ra-guided-running .ra-earth-system[data-earth-mode="simulation"]{
+  box-shadow:inset 0 0 50px color-mix(in srgb,var(--ra-primary) 3%,transparent);
+}
+
+/* Waveform moves only while actual narration is speaking. */
+.ra-guided-hud.is-speaking .ra-waveform i{
+  opacity:.84;
+  animation:raVoiceWave 780ms ease-in-out infinite alternate;
+}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(2){animation-delay:-.09s}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(3){animation-delay:-.21s}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(4){animation-delay:-.34s}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(5){animation-delay:-.14s}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(6){animation-delay:-.27s}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(7){animation-delay:-.41s}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(8){animation-delay:-.18s}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(9){animation-delay:-.31s}
+.ra-guided-hud.is-speaking .ra-waveform i:nth-child(10){animation-delay:-.06s}
+
+/* Semantic scene accents stay subtle and local. */
+#simulation:has(#raEarthMount[data-scene="1"]) .ra-story-kicker,
+#simulation:has(#raEarthMount[data-scene="1"]) .ra-guided-copy span{
+  color:var(--ra-critical);
+}
+#simulation:has(#raEarthMount[data-scene="2"]) .ra-story-kicker,
+#simulation:has(#raEarthMount[data-scene="2"]) .ra-guided-copy span,
+#simulation:has(#raEarthMount[data-scene="3"]) .ra-story-kicker,
+#simulation:has(#raEarthMount[data-scene="3"]) .ra-guided-copy span{
+  color:var(--ra-warning);
+}
+#simulation:has(#raEarthMount[data-scene="4"]) .ra-story-kicker,
+#simulation:has(#raEarthMount[data-scene="4"]) .ra-guided-copy span,
+#simulation:has(#raEarthMount[data-scene="5"]) .ra-story-kicker,
+#simulation:has(#raEarthMount[data-scene="5"]) .ra-guided-copy span{
+  color:var(--ra-teal);
+}
+
+[data-ra-theme="light"] .ra-guided-hud{
+  background:rgba(255,255,255,.86);
+  box-shadow:0 14px 32px rgba(28,72,115,.11);
+}
+[data-ra-theme="light"] .ra-story-rail:before{
+  background:linear-gradient(180deg,rgba(22,119,232,.035),transparent 36%);
+}
+
+@keyframes raVoiceWave{
+  from{height:6px}
+  to{height:29px}
+}
+@keyframes raGuidedDot{
+  50%{opacity:.5;transform:scale(.78)}
+}
+
+@media(min-width:1200px){
+  body.ra-guided-running #simulation{
+    grid-template-columns:minmax(290px,22%) minmax(0,1fr);
+  }
+}
+
+@media(max-width:1199px){
+  .ra-story-copy h1{
+    max-width:18ch;
+  }
+  .ra-story-note{
+    margin-top:20px;
+  }
+}
+
+@media(max-width:767px){
+  .ra-story-rail{
+    order:2;
+  }
+  .ra-canvas-shell{
+    order:1;
+  }
+  #simulation{
+    display:grid;
+  }
+  .ra-story-copy{
+    margin-top:20px;
+  }
+  .ra-story-copy h1{
+    max-width:none;
+    font-size:30px!important;
+  }
+  .ra-sim-controls{
+    grid-template-columns:1fr;
+  }
+  .ra-quiet-action{
+    min-height:44px;
+  }
+  .ra-story-rail .ra-scene-list{
+    grid-template-columns:repeat(6,minmax(84px,1fr));
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .ra-story-rail .ra-scene-list::-webkit-scrollbar{display:none}
+  .ra-guided-hud{
+    width:calc(100% - 16px);
+    margin:-104px 8px 8px;
+    min-height:88px;
+  }
+  .ra-guided-main{
+    grid-template-columns:56px minmax(0,1fr);
+    gap:8px;
+    min-height:56px;
+    padding-inline:9px;
+  }
+  .ra-waveform{
+    gap:2px;
+    padding-right:7px;
+  }
+  .ra-waveform i{
+    width:2px;
+  }
+  .ra-guided-copy strong{
+    font-size:10.5px;
+    line-height:1.3;
+  }
+  .ra-guided-status{
+    padding-inline:9px;
+  }
+}
+
+@media(max-width:429px){
+  .ra-guided-status span:last-child{
+    display:none;
+  }
+  .ra-guided-status{
+    grid-template-columns:auto 1fr;
+  }
+  .ra-guided-main{
+    grid-template-columns:42px minmax(0,1fr);
+  }
+  .ra-waveform{
+    gap:1.5px;
+  }
+  .ra-guided-copy span{
+    font-size:7px;
+  }
+  .ra-guided-copy strong{
+    font-size:9.5px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  body.ra-guided-running .ra-guided-dot,
+  .ra-guided-hud.is-speaking .ra-waveform i{
+    animation:none!important;
+  }
+}

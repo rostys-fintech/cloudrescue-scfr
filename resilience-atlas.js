@@ -15,6 +15,13 @@ const state = {
   allocationRule: 'systemic'
 };
 
+const guided = {
+  active: false,
+  narration: true,
+  runId: 0,
+  voice: null
+};
+
 const sceneTitles = [
   'Stable dependency network',
   'Shared-provider failure',
@@ -43,6 +50,10 @@ function comparison(){
   return compareStrategies(args());
 }
 
+function providerName(id){
+  return providers.find(item => item.id === id)?.name || id;
+}
+
 function earthPayload(c){
   return {
     scene: state.scene,
@@ -53,20 +64,125 @@ function earthPayload(c){
   };
 }
 
+function scenePresentation(c){
+  const provider = providerName(state.outageProvider);
+  const affected = c.market.affectedCount;
+  const demand = c.market.totalDemand;
+  const available = c.market.allocated;
+  const gap = Math.max(0,demand-available);
+  const stranded = c.individual.strandedReserve;
+  const reserve = c.scfr.totalReserve;
+  const restored = Math.round(c.scfr.criticalRestoredPct);
+  const marketScore = Math.round(c.market.resilience);
+  const individualScore = Math.round(c.individual.resilience);
+  const scfrScore = Math.round(c.scfr.resilience);
+
+  return [
+    {
+      kicker:'SHARED DEPENDENCY',
+      title:'One network. Shared dependencies.',
+      text:'Twenty synthetic banks depend on three shared providers. In the stable state, critical capacity moves normally through the network.',
+      statLabel:'SYSTEM STATE',
+      statValue:'20 banks · 3 providers',
+      caption:'One shared provider can become one shared point of failure.',
+      voice:'Start with the system in a stable state. Twenty synthetic banks rely on three shared cloud providers. This looks diversified at the institution level, but several banks still depend on the same underlying infrastructure.',
+      rate:.96,
+      visualDuration:4800
+    },
+    {
+      kicker:'PROVIDER FAILURE',
+      title:provider+' goes offline.',
+      text:'Every synthetic bank connected to the failed provider loses critical capacity at the same time. The problem becomes systemic because the dependency is shared.',
+      statLabel:'AFFECTED',
+      statValue:affected+' banks at once',
+      caption:provider+' fails. '+affected+' banks are disrupted simultaneously.',
+      voice:'Now '+provider+' goes offline. '+affected+' banks lose critical capacity at the same time. The important point is simultaneity. A shared dependency turns one provider outage into a system wide recovery event.',
+      rate:.92,
+      visualDuration:5200
+    },
+    {
+      kicker:'CAPACITY SHORTAGE',
+      title:'Recovery demand arrives at once.',
+      text:'Affected banks seek backup capacity simultaneously. Immediate market supply is smaller than total recovery demand.',
+      statLabel:'CAPACITY GAP',
+      statValue:format(gap)+' units',
+      caption:format(demand)+' units demanded. '+format(available)+' are immediately available.',
+      voice:'The affected banks now request backup capacity together. They need '+format(demand)+' units, while the immediate market can provide '+format(available)+'. That leaves a capacity gap of '+format(gap)+' units.',
+      rate:.91,
+      visualDuration:5400
+    },
+    {
+      kicker:'STRANDED RESERVE',
+      title:'Reserve exists, but cannot move.',
+      text:'Individual reserves improve preparedness, yet unused capacity at unaffected banks remains ring fenced instead of reaching the institutions under stress.',
+      statLabel:'STRANDED RESERVE',
+      statValue:format(stranded)+' units',
+      caption:'Capacity exists elsewhere in the system, but ring-fencing prevents redistribution.',
+      voice:'Individual reserves help, but they are assigned bank by bank. In this scenario, '+format(stranded)+' reserve units remain stranded outside the affected institutions while recovery demand is still unmet.',
+      rate:.91,
+      visualDuration:5600
+    },
+    {
+      kicker:'POOLED RECOVERY',
+      title:'The same reserve is coordinated.',
+      text:'SCFR changes the allocation rule rather than adding a larger budget. Pre-arranged pooled capacity can be redirected toward affected banks.',
+      statLabel:'WORKLOAD RESTORED',
+      statValue:restored+'%',
+      caption:'The same '+format(reserve)+' reserve units can move toward the banks that need them.',
+      voice:'SCFR does not add a new reserve budget. It changes coordination. The same '+format(reserve)+' reserve units are pooled in advance and directed toward the affected banks. Critical workload restoration rises to '+restored+' percent in this synthetic run.',
+      rate:.94,
+      visualDuration:5600
+    },
+    {
+      kicker:'OUTCOME',
+      title:'Same shock. Different coordination.',
+      text:'The comparison isolates the mechanism: the shock and assumptions stay fixed while the recovery rule changes.',
+      statLabel:'RESILIENCE SCORE',
+      statValue:'Market '+marketScore+' · Individual '+individualScore+' · SCFR '+scfrScore,
+      caption:'Same shock. Same reserve budget. Different coordination.',
+      voice:'The final comparison isolates the coordination effect. The market score is '+marketScore+', individual reserves score '+individualScore+', and the pooled SCFR mechanism scores '+scfrScore+'. This is a synthetic mechanism test, not a forecast. You can now change the assumptions in Scenario Lab.',
+      rate:.93,
+      visualDuration:6200
+    }
+  ];
+}
+
+function renderStory(c){
+  const story = scenePresentation(c)[state.scene];
+
+  $('#raSceneCounter').textContent = String(state.scene+1).padStart(2,'0')+' / 06';
+  $('#raSceneKicker').textContent = story.kicker;
+  $('#raSceneTitle').textContent = story.title;
+  $('#raSceneText').textContent = story.text;
+  $('#raSceneStatLabel').textContent = story.statLabel;
+  $('#raSceneStatValue').textContent = story.statValue;
+
+  $('#raGuidedScene').textContent = 'SCENE '+String(state.scene+1).padStart(2,'0')+' / 06';
+  $('#raGuidedKicker').textContent = story.kicker;
+  $('#raGuidedCaption').textContent = story.caption;
+  $('#raGuidedStatus').textContent = guided.active ? 'RUNNING' : 'READY';
+
+  $$('#raGuidedProgress i').forEach((node,index)=>{
+    node.classList.toggle('is-done', index < state.scene);
+    node.classList.toggle('is-active', index === state.scene);
+  });
+}
+
 function renderBaseline(){
   const c = comparison();
   const stats = systemStats();
 
-  $('#raBankCount').textContent = banks.length;
-  $('#raProviderCount').textContent = providers.length;
-  $('#raBaselineGap').textContent = format(Math.max(0, c.market.totalDemand - c.market.allocated));
-  $('#raAffected').textContent = state.scene === 0 ? `0 / ${banks.length}` : `${c.market.affectedCount} / ${banks.length}`;
+  if($('#raBankCount')) $('#raBankCount').textContent = banks.length;
+  if($('#raProviderCount')) $('#raProviderCount').textContent = providers.length;
+  if($('#raBaselineGap')) $('#raBaselineGap').textContent = format(Math.max(0, c.market.totalDemand - c.market.allocated));
+  $('#raAffected').textContent = state.scene === 0 ? '0 / '+banks.length : c.market.affectedCount+' / '+banks.length;
   $('#raUnmet').textContent = state.scene < 2 ? '0' : format(Math.max(0, c.market.totalDemand - c.market.allocated));
-  $('#raRestored').textContent = state.scene < 4 ? '—' : `${Math.round(c.scfr.criticalRestoredPct)}%`;
+  $('#raRestored').textContent = state.scene < 4 ? '—' : Math.round(c.scfr.criticalRestoredPct)+'%';
   $('#raResilience').textContent = state.scene < 5 ? '—' : Math.round(c.scfr.resilience);
   $('#raSystemStatus').textContent = state.scene === 0 ? 'SYSTEM STABLE' : state.scene < 4 ? 'SYSTEM UNDER STRESS' : 'RECOVERY ACTIVE';
 
   earth.simulation.update(earthPayload(c));
+  renderStory(c);
   document.documentElement.style.setProperty('--ra-system-hhi', stats.hhi.toFixed(0));
 }
 
@@ -74,12 +190,12 @@ function renderLab(){
   const c = comparison();
   const provider = providers.find(item => item.id === state.outageProvider);
 
-  $('#raMarketLabel').textContent = `${state.marketPct}%`;
-  $('#raReserveLabel').textContent = `${state.reservePct}%`;
-  $('#raLabTitle').textContent = `${provider?.name || state.outageProvider} outage`;
-  $('#raLabAffected').textContent = `${c.market.affectedCount} / ${banks.length}`;
+  $('#raMarketLabel').textContent = state.marketPct+'%';
+  $('#raReserveLabel').textContent = state.reservePct+'%';
+  $('#raLabTitle').textContent = (provider?.name || state.outageProvider)+' outage';
+  $('#raLabAffected').textContent = c.market.affectedCount+' / '+banks.length;
   $('#raLabUnmet').textContent = format(Math.max(0, c.market.totalDemand - c.market.allocated));
-  $('#raLabRestored').textContent = `${Math.round(c.scfr.criticalRestoredPct)}%`;
+  $('#raLabRestored').textContent = Math.round(c.scfr.criticalRestoredPct)+'%';
   $('#raLabResilience').textContent = Math.round(c.scfr.resilience);
   $('#raMarketScore').textContent = Math.round(c.market.resilience);
   $('#raIndividualScore').textContent = Math.round(c.individual.resilience);
@@ -106,6 +222,7 @@ function renderScene(){
 }
 
 function switchTab(tab){
+  if(guided.active) stopGuidedSimulation();
   state.tab = tab;
   $$('.ra-nav-tab').forEach(button=>{
     button.classList.toggle('is-active', button.dataset.raTab === tab);
@@ -144,40 +261,169 @@ function setupTheme(){
   sync();
 }
 
+function englishVoices(){
+  if(!('speechSynthesis' in window)) return [];
+  return window.speechSynthesis.getVoices().filter(voice=>/^en/i.test(voice.lang));
+}
+
+function chooseNarrator(){
+  const voices=englishVoices();
+  const preferences=[
+    /Microsoft.*(Guy|Andrew|Ryan|Brian|Christopher|Eric).*(Natural|Online)/i,
+    /Google UK English Male/i,
+    /Daniel.*(Enhanced|Premium)/i,
+    /^Daniel$/i,
+    /Aaron.*(Enhanced|Premium)/i,
+    /^Aaron$/i,
+    /Arthur.*(Enhanced|Premium)/i,
+    /^Arthur$/i,
+    /Alex.*(Enhanced|Premium)/i,
+    /^Alex$/i
+  ];
+  for(const pattern of preferences){
+    const match=voices.find(voice=>pattern.test(voice.name));
+    if(match) return match;
+  }
+  return voices.find(voice=>/^en-GB/i.test(voice.lang)) ||
+         voices.find(voice=>/^en-US/i.test(voice.lang)) ||
+         voices[0] || null;
+}
+
+function updateNarrationControl(){
+  const button=$('#raNarrationToggle');
+  button.setAttribute('aria-pressed',guided.narration ? 'true' : 'false');
+  $('#raNarrationLabel').textContent=guided.narration ? 'Narration on' : 'Narration off';
+}
+
+function wait(ms,runId){
+  return new Promise(resolve=>{
+    window.setTimeout(()=>{
+      resolve(runId===guided.runId);
+    },ms);
+  });
+}
+
+function speakCurrentScene(story,runId){
+  if(!guided.narration || !('speechSynthesis' in window)){
+    return wait(story.visualDuration,runId);
+  }
+
+  return new Promise(resolve=>{
+    window.speechSynthesis.cancel();
+
+    const utterance=new SpeechSynthesisUtterance(story.voice);
+    guided.voice ||= chooseNarrator();
+    if(guided.voice) utterance.voice=guided.voice;
+    utterance.lang=guided.voice?.lang || 'en-GB';
+    utterance.rate=story.rate || .93;
+    utterance.pitch=.98;
+    utterance.volume=.96;
+
+    const hud=$('#raGuidedHud');
+    hud.classList.add('is-speaking');
+
+    let settled=false;
+    const finish=()=>{
+      if(settled) return;
+      settled=true;
+      hud.classList.remove('is-speaking');
+      resolve(runId===guided.runId);
+    };
+
+    utterance.onend=finish;
+    utterance.onerror=finish;
+
+    const words=story.voice.trim().split(/\s+/).length;
+    const safetyMs=Math.max(story.visualDuration,words/(utterance.rate*2.2)*1000+2400);
+    window.setTimeout(finish,safetyMs);
+    window.speechSynthesis.speak(utterance);
+  });
+}
+
+function setGuidedActive(active){
+  guided.active=active;
+  document.body.classList.toggle('ra-guided-running',active);
+  $('#raRunLabel').textContent=active ? 'Stop Simulation' : state.scene===5 ? 'Replay Guided Simulation' : 'Run Guided Simulation';
+  $('#raGuidedStatus').textContent=active ? 'RUNNING' : state.scene===5 ? 'COMPLETE' : 'READY';
+}
+
+function stopGuidedSimulation(){
+  guided.runId++;
+  setGuidedActive(false);
+  $('#raGuidedHud').classList.remove('is-speaking');
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+async function runGuidedSimulation(){
+  if(guided.active){
+    stopGuidedSimulation();
+    return;
+  }
+
+  guided.runId++;
+  const runId=guided.runId;
+  setGuidedActive(true);
+
+  for(let i=0;i<6;i++){
+    if(runId!==guided.runId) return;
+    state.scene=i;
+    renderScene();
+
+    const story=scenePresentation(comparison())[i];
+    const continued=await speakCurrentScene(story,runId);
+    if(!continued || runId!==guided.runId) return;
+  }
+
+  if(runId===guided.runId){
+    setGuidedActive(false);
+    $('#raGuidedStatus').textContent='COMPLETE';
+  }
+}
+
 function setupScenes(){
   $$('.ra-scene-list button').forEach(button=>{
     button.addEventListener('click',()=>{
-      state.scene = Number(button.dataset.raScene);
+      if(guided.active) stopGuidedSimulation();
+      state.scene=Number(button.dataset.raScene);
       renderScene();
     });
   });
 
-  $('#raRunPreview').addEventListener('click',()=>{
-    state.scene = state.scene >= 5 ? 0 : state.scene + 1;
-    renderScene();
+  $('#raRunPreview').addEventListener('click',runGuidedSimulation);
+
+  $('#raNarrationToggle').addEventListener('click',()=>{
+    guided.narration=!guided.narration;
+    updateNarrationControl();
+    if(!guided.narration && 'speechSynthesis' in window) window.speechSynthesis.cancel();
   });
 }
 
 function setupLab(){
   $('#raProviderSelect').addEventListener('change',event=>{
-    state.outageProvider = event.target.value;
+    state.outageProvider=event.target.value;
     renderLab();
     renderBaseline();
   });
   $('#raMarketPct').addEventListener('input',event=>{
-    state.marketPct = Number(event.target.value);
+    state.marketPct=Number(event.target.value);
     renderLab();
     renderBaseline();
   });
   $('#raReservePct').addEventListener('input',event=>{
-    state.reservePct = Number(event.target.value);
+    state.reservePct=Number(event.target.value);
     renderLab();
     renderBaseline();
   });
   $('#raRuleSelect').addEventListener('change',event=>{
-    state.allocationRule = event.target.value;
+    state.allocationRule=event.target.value;
     renderLab();
     renderBaseline();
+  });
+}
+
+if('speechSynthesis' in window){
+  window.speechSynthesis.addEventListener?.('voiceschanged',()=>{
+    guided.voice=chooseNarrator();
   });
 }
 
@@ -185,6 +431,7 @@ setupTabs();
 setupTheme();
 setupScenes();
 setupLab();
+updateNarrationControl();
 renderScene();
 renderLab();
 renderEvidence();

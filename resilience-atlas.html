@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#070A0F">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-earth01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-guided01">
 </head>
 <body>
   <div class="ra-app">
@@ -44,20 +44,32 @@
 
     <main class="ra-main">
       <section class="ra-view is-active" id="simulation" data-ra-view="simulation">
-        <aside class="ra-rail">
-          <div class="ra-kicker">SIMULATION</div>
-          <h1>See systemic dependency become a recovery problem.</h1>
-          <p>One shared-provider shock. Twenty synthetic banks. Three recovery mechanisms using the same underlying model.</p>
-
-          <div class="ra-rail-metrics" aria-label="Baseline system summary">
-            <div><span>BANKS</span><b id="raBankCount">20</b></div>
-            <div><span>PROVIDERS</span><b id="raProviderCount">3</b></div>
-            <div><span>BASELINE GAP</span><b id="raBaselineGap">—</b></div>
+        <aside class="ra-rail ra-story-rail">
+          <div class="ra-story-head">
+            <div class="ra-kicker">GUIDED SIMULATION</div>
+            <span class="ra-scene-counter" id="raSceneCounter">01 / 06</span>
           </div>
 
-          <button class="ra-primary-action" id="raRunPreview" type="button">
-            <span>Run Simulation</span><b aria-hidden="true">→</b>
-          </button>
+          <div class="ra-story-copy" aria-live="polite">
+            <span class="ra-story-kicker" id="raSceneKicker">SHARED DEPENDENCY</span>
+            <h1 id="raSceneTitle">One network. Shared dependencies.</h1>
+            <p id="raSceneText">Twenty synthetic banks depend on three shared providers. In a stable state, capacity flows normally through the network.</p>
+          </div>
+
+          <div class="ra-story-stat">
+            <span id="raSceneStatLabel">SYSTEM STATE</span>
+            <b id="raSceneStatValue">20 banks · 3 providers</b>
+          </div>
+
+          <div class="ra-sim-controls">
+            <button class="ra-primary-action" id="raRunPreview" type="button">
+              <span id="raRunLabel">Run Guided Simulation</span><b aria-hidden="true">→</b>
+            </button>
+            <button class="ra-quiet-action" id="raNarrationToggle" type="button" aria-pressed="true">
+              <span class="ra-speaker-icon" aria-hidden="true">◖))</span>
+              <span id="raNarrationLabel">Narration on</span>
+            </button>
+          </div>
 
           <div class="ra-scene-list" aria-label="Simulation sequence">
             <button class="is-active" data-ra-scene="0"><span>01</span><b>Stable network</b></button>
@@ -65,7 +77,12 @@
             <button data-ra-scene="2"><span>03</span><b>Capacity shortage</b></button>
             <button data-ra-scene="3"><span>04</span><b>Stranded reserve</b></button>
             <button data-ra-scene="4"><span>05</span><b>Pooled recovery</b></button>
-            <button data-ra-scene="5"><span>06</span><b>Stabilized comparison</b></button>
+            <button data-ra-scene="5"><span>06</span><b>Compare outcomes</b></button>
+          </div>
+
+          <div class="ra-story-note">
+            <span>SYNTHETIC MODEL</span>
+            <p>The guided story uses the same deterministic scenario engine as Scenario Lab.</p>
           </div>
         </aside>
 
@@ -83,6 +100,26 @@
           </div>
 
           <div class="ra-earth-mount" id="raEarthMount" data-earth-mode="simulation"></div>
+
+          <div class="ra-guided-hud" id="raGuidedHud" aria-live="polite">
+            <div class="ra-guided-status">
+              <span class="ra-guided-dot" aria-hidden="true"></span>
+              <b id="raGuidedStatus">READY</b>
+              <span id="raGuidedScene">SCENE 01 / 06</span>
+            </div>
+            <div class="ra-guided-main">
+              <div class="ra-waveform" id="raWaveform" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              </div>
+              <div class="ra-guided-copy">
+                <span id="raGuidedKicker">SHARED DEPENDENCY</span>
+                <strong id="raGuidedCaption">One shared provider can become one shared point of failure.</strong>
+              </div>
+            </div>
+            <div class="ra-guided-progress" id="raGuidedProgress" aria-hidden="true">
+              <i class="is-active"></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
 
           <div class="ra-outcome-strip">
             <article><span>Affected banks</span><b id="raAffected">8 / 20</b><small>baseline outage</small></article>
@@ -187,11 +224,11 @@
     </main>
 
     <footer class="ra-footer">
-      <span>Resilience Atlas · Earth System Engine · Stage 3</span>
-      <span>One Earth · three modes · same simulation model</span>
+      <span>Resilience Atlas · Guided Simulation · Stage 4</span>
+      <span>One Earth · six scenes · one continuous story</span>
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-earth01"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-guided01"></script>
 </body>
 </html>

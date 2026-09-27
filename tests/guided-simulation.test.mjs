@@ -1,0 +1,33 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+
+const html = fs.readFileSync(new URL('../resilience-atlas.html', import.meta.url), 'utf8');
+const css = fs.readFileSync(new URL('../resilience-atlas.css', import.meta.url), 'utf8');
+const js = fs.readFileSync(new URL('../resilience-atlas.js', import.meta.url), 'utf8');
+
+for (const id of [
+  'raSceneCounter','raSceneKicker','raSceneTitle','raSceneText','raSceneStatValue',
+  'raRunPreview','raNarrationToggle','raGuidedHud','raGuidedStatus',
+  'raGuidedScene','raGuidedCaption','raGuidedProgress'
+]) {
+  assert.match(html,new RegExp("id=[\\\"']"+id+"[\\\"']"),'missing '+id);
+}
+
+assert.match(js,/function scenePresentation\(/);
+assert.match(js,/async function runGuidedSimulation\(/);
+assert.match(js,/function speakCurrentScene\(/);
+assert.match(js,/speechSynthesis/);
+assert.match(js,/guided\.active/);
+assert.match(js,/state\.scene=i/);
+assert.match(js,/earth\.simulation\.update/);
+
+assert.match(css,/STAGE 4 — GUIDED SIMULATION/);
+assert.match(css,/\.ra-guided-hud/);
+assert.match(css,/\.ra-waveform/);
+assert.match(css,/body\.ra-guided-running/);
+assert.match(css,/prefers-reduced-motion/);
+
+assert.doesNotMatch(html,/Crisis Replay/);
+assert.doesNotMatch(html,/Stress Lab/);
+
+console.log('Guided simulation checks passed.');
