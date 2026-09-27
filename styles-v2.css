@@ -1922,3 +1922,121 @@ html[data-theme="dark"] .controls{
   }
   .method-intro h2{font-size:28px}
 }
+
+
+/* ---------- Compact evidence source rail ---------- */
+.evidence-rail{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  gap:14px 18px;
+  align-items:center;
+  margin-top:12px;
+  padding:13px 0 2px;
+  border-top:1px solid var(--v2-line);
+  color:var(--v2-muted);
+}
+.evidence-rail>span{
+  font-size:8px;
+  font-weight:850;
+  letter-spacing:.12em;
+  color:#72879a;
+}
+.evidence-rail>b{
+  color:var(--v2-ink-2);
+  font-size:10px;
+  font-weight:620;
+}
+.evidence-rail>div{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.evidence-rail a{
+  position:relative;
+  color:#5e7890;
+  font-size:9px;
+  font-weight:750;
+  text-decoration:none;
+}
+.evidence-rail a:hover{color:var(--v2-ink)}
+.evidence-rail a+a:before{
+  content:"";
+  position:absolute;
+  left:-7px;
+  top:50%;
+  width:2px;height:2px;
+  border-radius:50%;
+  background:#91a0ad;
+}
+
+/* ---------- Controlled-comparison context ---------- */
+.comparison-context{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  margin:0 0 14px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:5px;
+  overflow:hidden;
+  background:rgba(255,255,255,.025);
+}
+.comparison-context>div{
+  min-width:0;
+  padding:11px 13px;
+  border-right:1px solid rgba(255,255,255,.1);
+}
+.comparison-context>div:last-child{border-right:0}
+.comparison-context span{
+  display:block;
+  color:#7892a5;
+  font-size:7.5px;
+  font-weight:850;
+  letter-spacing:.1em;
+}
+.comparison-context b{
+  display:block;
+  margin-top:4px;
+  color:#d9e5ec;
+  font-size:10px;
+  line-height:1.25;
+  font-weight:680;
+}
+
+/* Reduce decorative chrome across research views */
+.roadmap-card,
+.learning-card,
+.evidence-card,
+.architecture-card{
+  overflow:hidden;
+}
+.method-grid>.card{
+  border-radius:6px;
+}
+.formula{
+  font-size:24px;
+  line-height:1.35;
+}
+.prose ol{
+  padding-left:22px;
+}
+.prose li{
+  margin-bottom:10px;
+  line-height:1.6;
+}
+
+@media(max-width:760px){
+  .evidence-rail{
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+  .comparison-context{
+    grid-template-columns:1fr 1fr;
+  }
+  .comparison-context>div:nth-child(2){
+    border-right:0;
+  }
+  .comparison-context>div:nth-child(-n+2){
+    border-bottom:1px solid rgba(255,255,255,.1);
+  }
+}
