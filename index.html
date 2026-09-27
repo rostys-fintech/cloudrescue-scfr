@@ -13,7 +13,7 @@
     })();
   </script>
   <title>CloudRescue — SCFR Stress Lab</title>
-  <link rel="stylesheet" href="styles.css?v=20260927-1645">
+  <link rel="stylesheet" href="styles.css?v=20260927-1705">
 </head>
 <body>
 <div class="shell">
@@ -148,6 +148,19 @@
           <div class="eyebrow">YOU ARE THE RESILIENCE COORDINATOR</div>
           <h2>Design a stronger system</h2>
           <p>Change one assumption at a time and rerun the same synthetic shock.</p>
+
+          <div class="scenario-generator">
+            <div class="scenario-generator-head">
+              <span>REPRODUCIBLE SCENARIO</span>
+              <b id="scenarioId">CR-BASE</b>
+            </div>
+            <div class="scenario-seed-row">
+              <input id="seedInput" type="text" maxlength="24" placeholder="Enter a seed or leave blank" aria-label="Scenario seed">
+              <button id="generateScenarioBtn" class="btn secondary" type="button">Generate</button>
+            </div>
+            <button id="shareScenarioBtn" class="btn secondary full" type="button">⧉ Copy scenario link</button>
+          </div>
+
           <div class="presets" aria-label="Scenario presets">
             <button class="preset active" data-preset="baseline">Baseline</button>
             <button class="preset" data-preset="scarcity">Severe scarcity</button>
@@ -184,9 +197,15 @@
           <button id="exportBtn" class="btn secondary full">↓ Export scenario JSON</button>
 
           <div id="challenge" class="challenge">
-            <span>SCENARIO CHALLENGE</span>
-            <b>Reach ≥80 resilience with ≤30% reserve.</b>
+            <span>CHALLENGE MODE</span>
+            <div class="challenge-tabs" role="group" aria-label="Challenge mission">
+              <button class="challenge-tab active" data-challenge="efficiency">Efficiency</button>
+              <button class="challenge-tab" data-challenge="scarcity">Scarcity</button>
+              <button class="challenge-tab" data-challenge="coordination">Coordination</button>
+            </div>
+            <b id="challengeTitle">Reach ≥80 resilience with ≤30% reserve.</b>
             <p id="challengeText">Try a configuration.</p>
+            <div id="challengeMetrics" class="challenge-metrics"></div>
           </div>
         </aside>
 
@@ -314,6 +333,6 @@
 
   <footer><span>CloudRescue · SCFR Stress Lab</span><span>Rostyslav Honcharenko · 2026</span></footer>
 </div>
-<script type="module" src="app.js?v=20260927-1645"></script>
+<script type="module" src="app.js?v=20260927-1705"></script>
 </body>
 </html>
