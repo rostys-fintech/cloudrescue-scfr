@@ -16,6 +16,8 @@ CloudRescue is an interactive, browser-based systemic cloud resilience simulator
 
 Judge-facing materials are kept in `docs/`:
 
+- [START HERE — judge & submission guide](docs/START-HERE.md)
+
 - [Final Devpost copy](docs/devpost-final-copy.md)
 - [Devpost form map](docs/devpost-form-map.md)
 - [3–5 minute demo script](docs/demo-script.md)
@@ -220,6 +222,7 @@ cloudrescue-scfr/
 │   ├── simulation.test.mjs
 │   └── ui-smoke.test.mjs
 ├── docs/
+│   ├── START-HERE.md
 │   ├── devpost-submission-draft.md
 │   ├── devpost-final-copy.md
 │   ├── devpost-form-map.md
