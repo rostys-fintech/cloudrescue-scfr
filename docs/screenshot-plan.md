@@ -5,18 +5,25 @@
 All final screenshots should use the **same desktop viewport**, preferably 16:9, and the **institutional v2** interface.
 
 Primary visual language now:
-- dark systemic-risk hero;
-- dark live-system monitoring canvas;
-- dark Stress Lab control rail;
-- light analytical results;
-- dark controlled-comparison screen;
-- report-style Methodology.
+- **CRISIS mode:** black + crimson, angular system-console aesthetic;
+- **ANALYSIS mode:** white + electric blue, clean research-console aesthetic;
+- sharp cut-corner geometry rather than rounded SaaS cards;
+- live-system topology, technical grid and restrained glow;
+- the same product can switch instantly between alert and analysis views.
 
 Do not mix screenshots from the earlier white-card UI.
 
+## Theme rule
+
+Use **CRISIS mode** for the main Devpost visual sequence because it has the strongest cinematic identity.
+
+Include **one ANALYSIS-mode screenshot** near the end to demonstrate the dual-mode product system.
+
+Do not alternate themes randomly between adjacent screenshots.
+
 ## Screenshot 1 — Hero / product identity
 
-Capture the full dark hero.
+Capture the full **CRISIS-mode** hero.
 
 Must show:
 - CloudRescue title;
@@ -125,9 +132,9 @@ Suggested caption:
 
 > **Sensitivity analysis shows where coordination matters across market-capacity and reserve assumptions.**
 
-## Screenshot 8 — Methodology / research framework
+## Screenshot 8 — ANALYSIS mode / Methodology
 
-Capture the Research Framework introduction plus either:
+Switch to **ANALYSIS** and capture the Research Framework introduction plus either:
 - model architecture, or
 - Real-world motivation / synthetic boundary.
 
