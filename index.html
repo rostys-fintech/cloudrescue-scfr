@@ -4,8 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="CloudRescue: an interactive banking cloud-outage simulator powered by the SCFR concept.">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    (() => {
+      const saved = localStorage.getItem('cloudrescue-theme');
+      const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (systemDark ? 'dark' : 'light');
+    })();
+  </script>
   <title>CloudRescue — SCFR Stress Lab</title>
-  <link rel="stylesheet" href="styles.css?v=20260927-0950">
+  <link rel="stylesheet" href="styles.css?v=20260927-1157">
 </head>
 <body>
 <div class="shell">
@@ -22,6 +30,11 @@
       <span>Research prototype</span>
       <span class="divider"></span>
       <span>v0.1</span>
+      <span class="divider"></span>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
+        <span class="theme-icon" aria-hidden="true">◐</span>
+        <span id="themeLabel">Dark</span>
+      </button>
     </div>
   </header>
 
@@ -213,6 +226,6 @@
 
   <footer><span>CloudRescue · SCFR Stress Lab</span><span>Rostyslav Honcharenko · 2026</span></footer>
 </div>
-<script type="module" src="app.js?v=20260927-0950"></script>
+<script type="module" src="app.js?v=20260927-1157"></script>
 </body>
 </html>
