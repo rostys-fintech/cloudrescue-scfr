@@ -1,5 +1,7 @@
 # FirstCommit final submission checklist — CloudRescue
 
+**UI baseline:** institutional v2 redesign. Do not use screenshots from the earlier white-card dashboard version.
+
 ## 1. Live product QA
 
 Before recording or submitting:
@@ -20,12 +22,12 @@ Before recording or submitting:
 - [ ] Confirm the final comparison renders all three mechanisms.
 - [ ] Test all three Stress Lab presets.
 - [ ] Change each slider and selector manually.
-- [ ] Test **Replay this crisis** after changing assumptions.
+- [ ] Test **Replay scenario** after changing assumptions.
 - [ ] Generate a seeded scenario twice and confirm the same seed reproduces the same assumptions.
 - [ ] Open a copied scenario link in a new tab and confirm the assumptions reload.
 - [ ] Export scenario JSON.
 - [ ] Switch both Sensitivity Explorer modes.
-- [ ] Test all three Challenge Mode missions.
+- [ ] Test all three Constraint Tests missions.
 - [ ] Open Methodology and check all external evidence links.
 - [ ] Test at least one narrow/mobile browser width.
 
@@ -70,12 +72,12 @@ Target: **3:30–4:15**.
 
 - [ ] Start with the problem, not a feature list.
 - [ ] Let the built-in guided story explain the mechanism.
-- [ ] Show **Replay this crisis** to prove the story is model-driven.
-- [ ] Show Before / After with the same reserve budget.
+- [ ] Show **Replay scenario** to prove the story is model-driven.
+- [ ] Show Controlled Comparison with the same reserve budget.
 - [ ] Show Sensitivity Explorer.
 - [ ] Show seeded reproducibility / share link briefly.
 - [ ] Show Methodology + real/synthetic distinction.
-- [ ] End with Build Journey / Learning & Growth.
+- [ ] End with Development Journey / Learning & Growth.
 - [ ] Keep mouse movement slow and deliberate.
 - [ ] Record at 1080p where possible.
 - [ ] Check audio level before recording the final take.
@@ -89,10 +91,10 @@ Capture at least:
 - [ ] Shared-provider outage scene.
 - [ ] Ring-fenced reserve scene.
 - [ ] SCFR pooled-recovery scene.
-- [ ] Before / After comparison.
+- [ ] Controlled Comparison comparison.
 - [ ] Sensitivity Explorer.
-- [ ] Stress Lab with Challenge Mode.
-- [ ] Methodology / architecture or Build Journey.
+- [ ] Stress Lab with Constraint Tests.
+- [ ] Methodology / architecture or Development Journey.
 
 Prefer screenshots in the same theme and browser size.
 
