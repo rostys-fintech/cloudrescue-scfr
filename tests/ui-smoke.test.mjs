@@ -73,7 +73,7 @@ assert.match(css, /\.learning-card/, 'FirstCommit learning journey should be vis
 assert.match(css, /\.hero-summary/, 'landing page should expose a professional prototype summary');
 assert.match(html, /OBSERVED IN THE REAL WORLD/, 'methodology should distinguish observed evidence from synthetic assumptions');
 assert.match(html, /DEVELOPMENT JOURNEY · FIRSTCOMMIT/, 'submission should communicate learning and growth');
-assert.match(html, /Shared dependency topology/, 'landing page should summarize the shared-provider model');
+assert.match(html, /Shared dependency network/, 'landing page should summarize the shared-provider model');
 assert.match(html, /AI-assisted, human-owned/, 'submission should disclose AI assistance and project ownership');
 
 console.log('✓ CloudRescue interface smoke checks passed');
