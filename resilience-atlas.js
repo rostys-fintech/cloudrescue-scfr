@@ -120,70 +120,70 @@ function scenePresentation(c){
 
   return [
     {
-      kicker:'SHARED DEPENDENCY',
-      title:'One network. Shared dependencies.',
-      text:'Twenty synthetic banks depend on three shared providers. In the stable state, critical capacity moves normally through the network.',
-      statLabel:'SYSTEM STATE',
-      statValue:'20 banks · 3 providers',
-      caption:'Shared providers can become shared points of failure.',
-      voice:'Start with the system in a stable state. Twenty synthetic banks rely on three shared cloud providers. This looks diversified at the institution level, but several banks still depend on the same underlying infrastructure.',
-      rate:.96,
-      visualDuration:4800
+      kicker:'HOW THE SYSTEM WORKS',
+      title:'Banks depend on shared cloud providers.',
+      text:'In this simulation, we see how twenty synthetic banks depend on three shared cloud providers for critical digital capacity. Several banks use the same provider, so one technical failure can affect many institutions at the same time.',
+      statLabel:'SYSTEM STRUCTURE',
+      statValue:'20 banks · 3 shared providers',
+      caption:'Banks are connected to shared infrastructure, not isolated technology stacks.',
+      voice:'In this simulation, we can see how banks depend on shared cloud providers. Twenty synthetic banks use three providers for critical digital capacity. Several banks depend on the same provider. This means that one provider failure can affect many banks at the same time.',
+      rate:.86,
+      visualDuration:6200
     },
     {
-      kicker:'PROVIDER FAILURE',
-      title:provider+(multiple ? ' go offline.' : ' goes offline.'),
-      text:'Every synthetic bank connected to the failed '+(multiple ? 'providers loses' : 'provider loses')+' critical capacity at the same time. The problem becomes systemic because the dependency is shared.',
-      statLabel:'AFFECTED',
-      statValue:affected+' banks at once',
-      caption:provider+(multiple ? ' fail. ' : ' fails. ')+affected+' banks are disrupted simultaneously.',
-      voice:'Now '+provider+(multiple ? ' go offline. ' : ' goes offline. ')+affected+' banks lose critical capacity at the same time. The important point is simultaneity. Shared dependencies can turn provider outages into a system wide recovery event.',
-      rate:.92,
-      visualDuration:5200
+      kicker:'SHARED PROVIDER FAILURE',
+      title:provider+(multiple ? ' fail at the same time.' : ' fails.'),
+      text:'The banks connected to the failed '+(multiple ? 'providers lose' : 'provider loses')+' access to critical capacity together. A technical problem at one shared dependency therefore becomes a system-wide recovery problem.',
+      statLabel:'AFFECTED BANKS',
+      statValue:affected+' of '+banks.length,
+      caption:affected+' banks become affected because they share the same failed infrastructure.',
+      voice:'Now, '+provider+(multiple ? ' fail at the same time.' : ' fails.')+' The banks connected to '+(multiple ? 'these providers' : 'this provider')+' lose critical capacity together. In this scenario, '+affected+' banks are affected. The important point is that the shock is shared.',
+      rate:.84,
+      visualDuration:6500
     },
     {
-      kicker:'CAPACITY SHORTAGE',
-      title:'Recovery demand arrives at once.',
-      text:'Affected banks seek backup capacity simultaneously. Immediate market supply is smaller than total recovery demand.',
+      kicker:'RECOVERY DEMAND',
+      title:'Many banks need backup capacity together.',
+      text:'Affected banks try to recover at the same time. Their combined demand for backup capacity can be larger than the capacity immediately available in the market.',
       statLabel:'CAPACITY GAP',
       statValue:format(gap)+' units',
-      caption:format(demand)+' units demanded. '+format(available)+' are immediately available.',
-      voice:'The affected banks now request backup capacity together. They need '+format(demand)+' units, while the immediate market can provide '+format(available)+'. That leaves a capacity gap of '+format(gap)+' units.',
-      rate:.91,
-      visualDuration:5400
+      caption:format(demand)+' units are requested, but only '+format(available)+' are immediately available.',
+      voice:'Next, the affected banks try to recover at the same time. Together, they need '+format(demand)+' units of backup capacity. The market can immediately provide '+format(available)+' units. So, the remaining capacity gap is '+format(gap)+' units.',
+      rate:.83,
+      visualDuration:6800
     },
     {
-      kicker:'STRANDED RESERVE',
-      title:'Reserve exists, but cannot move.',
-      text:'Individual reserves improve preparedness, yet unused capacity at unaffected banks remains ring fenced instead of reaching the institutions under stress.',
+      kicker:'INDIVIDUAL RESERVES',
+      title:'Some reserve exists, but it cannot move freely.',
+      text:'With individual reserves, each bank keeps its own prepared capacity. Unused reserve at one institution cannot automatically be transferred to another bank that is under stress.',
       statLabel:'STRANDED RESERVE',
       statValue:format(stranded)+' units',
-      caption:'Capacity exists elsewhere in the system, but ring-fencing prevents redistribution.',
-      voice:'Individual reserves help, but they are assigned bank by bank. In this scenario, '+format(stranded)+' reserve units remain stranded outside the affected institutions while recovery demand is still unmet.',
-      rate:.91,
-      visualDuration:5600
+      caption:'Reserve can remain unused in one place while another bank still needs capacity.',
+      voice:'Now we add individual reserves. Each bank has its own prepared capacity. This improves recovery. But the reserve is ring fenced. Capacity that is unused by one bank cannot automatically move to another bank that needs it. In this run, '+format(stranded)+' reserve units remain stranded.',
+      rate:.82,
+      visualDuration:7200
     },
     {
-      kicker:'POOLED RECOVERY',
-      title:'The same reserve is coordinated.',
-      text:'SCFR changes the allocation rule rather than adding a larger budget. Pre-arranged pooled capacity can be redirected toward affected banks.',
+      kicker:'SHARED CLOUD FAILOVER RESERVE',
+      title:'The same reserve can be pooled and redirected.',
+      text:'SCFR keeps the same total reserve budget but changes how it is coordinated. Unused prepared capacity can be redirected toward the affected banks that need it most.',
       statLabel:'WORKLOAD RESTORED',
       statValue:restored+'%',
-      caption:'The same '+format(reserve)+' reserve units can move toward the banks that need them.',
-      voice:'SCFR does not add a new reserve budget. It changes coordination. The same '+format(reserve)+' reserve units are pooled in advance and directed toward the affected banks. Critical workload restoration rises to '+restored+' percent in this synthetic run.',
-      rate:.94,
-      visualDuration:5600
+      caption:'Pooling changes allocation, not the size of the total reserve budget.',
+      voice:'Now we test S C F R, the Shared Cloud Failover Reserve. The total reserve budget does not increase. The difference is coordination. Unused capacity can be pooled and redirected to the affected banks. In this synthetic run, '+restored+' percent of critical workload is restored.',
+      rate:.82,
+      visualDuration:7600
     },
     {
-      kicker:'OUTCOME',
-      title:'Same shock. Different coordination.',
-      text:'The comparison isolates the mechanism: the shock and assumptions stay fixed while the recovery rule changes.',
+      kicker:'COMPARISON',
+      title:'The same shock produces different recovery outcomes.',
+      text:'The failed provider, bank network and total reserve budget stay fixed. What changes is the recovery mechanism: market capacity only, individual reserves, or pooled SCFR coordination.',
       statLabel:'RESILIENCE SCORE',
       statValue:'Market '+marketScore+' · Individual '+individualScore+' · SCFR '+scfrScore,
-      caption:'Same shock. Same reserve budget. Different coordination.',
-      voice:'The final comparison isolates the coordination effect. The market score is '+marketScore+', individual reserves score '+individualScore+', and the pooled SCFR mechanism scores '+scfrScore+'. This is a synthetic mechanism test, not a forecast. You can now change the assumptions in Scenario Lab.',
-      rate:.93,
-      visualDuration:6200
+      caption:'The comparison isolates how reserve coordination changes the modeled recovery outcome.',
+      voice:'Finally, we compare the three recovery mechanisms under the same shock. The market-only resilience score is '+marketScore+'. Individual reserves produce a score of '+individualScore+'. The pooled S C F R mechanism produces a score of '+scfrScore+'. The simulation shows how coordination can change recovery when banks depend on shared infrastructure. These results are synthetic, not a forecast for real banks.',
+      rate:.82,
+      visualDuration:8000
     }
   ];
 }
