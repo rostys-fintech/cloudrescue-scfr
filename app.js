@@ -44,6 +44,29 @@ const scenes = [
 let scene = 0;
 let autoplay = null;
 
+function setupTheme(){
+  const button = $('#themeToggle');
+  const label = $('#themeLabel');
+  if(!button || !label) return;
+
+  const sync = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    label.textContent = dark ? 'Light' : 'Dark';
+    button.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    button.setAttribute('title', dark ? 'Switch to light theme' : 'Switch to dark theme');
+  };
+
+  button.addEventListener('click',()=>{
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('cloudrescue-theme', next);
+    sync();
+    requestAnimationFrame(drawNetworkLines);
+  });
+
+  sync();
+}
+
 function providerName(id){ return providers.find(p=>p.id===id)?.name || id; }
 
 function renderNetwork(){
@@ -390,6 +413,7 @@ $('#runBtn').addEventListener('click',renderLab);
 $('#exportBtn').addEventListener('click',exportScenario);
 
 renderNetwork();
+setupTheme();
 setupStory();
 renderLab();
 requestAnimationFrame(drawNetworkLines);
