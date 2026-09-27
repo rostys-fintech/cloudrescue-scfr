@@ -1,5 +1,6 @@
 import { banks, providers } from './data/banks.js';
 import { compareStrategies, systemStats } from './model/simulation.js';
+import { createEarthSystem } from './earth-system.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -23,6 +24,12 @@ const sceneTitles = [
   'Recovery outcome comparison'
 ];
 
+const earth = {
+  simulation: createEarthSystem($('#raEarthMount'), {mode:'simulation'}),
+  lab: createEarthSystem($('#raLabEarthMount'), {mode:'lab'}),
+  evidence: createEarthSystem($('#raEvidenceEarthMount'), {mode:'evidence'})
+};
+
 function args(){
   return {
     outageProvider: state.outageProvider,
@@ -36,6 +43,16 @@ function comparison(){
   return compareStrategies(args());
 }
 
+function earthPayload(c){
+  return {
+    scene: state.scene,
+    outageProvider: state.outageProvider,
+    comparison: c,
+    marketPct: state.marketPct,
+    reservePct: state.reservePct
+  };
+}
+
 function renderBaseline(){
   const c = comparison();
   const stats = systemStats();
@@ -43,12 +60,13 @@ function renderBaseline(){
   $('#raBankCount').textContent = banks.length;
   $('#raProviderCount').textContent = providers.length;
   $('#raBaselineGap').textContent = format(Math.max(0, c.market.totalDemand - c.market.allocated));
-  $('#raAffected').textContent = `${c.market.affectedCount} / ${banks.length}`;
-  $('#raUnmet').textContent = format(Math.max(0, c.market.totalDemand - c.market.allocated));
-  $('#raRestored').textContent = `${Math.round(c.scfr.criticalRestoredPct)}%`;
-  $('#raResilience').textContent = Math.round(c.scfr.resilience);
-  $('#raSystemStatus').textContent = state.scene === 0 ? 'SYSTEM STABLE' : 'SIMULATION READY';
+  $('#raAffected').textContent = state.scene === 0 ? `0 / ${banks.length}` : `${c.market.affectedCount} / ${banks.length}`;
+  $('#raUnmet').textContent = state.scene < 2 ? '0' : format(Math.max(0, c.market.totalDemand - c.market.allocated));
+  $('#raRestored').textContent = state.scene < 4 ? '—' : `${Math.round(c.scfr.criticalRestoredPct)}%`;
+  $('#raResilience').textContent = state.scene < 5 ? '—' : Math.round(c.scfr.resilience);
+  $('#raSystemStatus').textContent = state.scene === 0 ? 'SYSTEM STABLE' : state.scene < 4 ? 'SYSTEM UNDER STRESS' : 'RECOVERY ACTIVE';
 
+  earth.simulation.update(earthPayload(c));
   document.documentElement.style.setProperty('--ra-system-hhi', stats.hhi.toFixed(0));
 }
 
@@ -66,6 +84,17 @@ function renderLab(){
   $('#raMarketScore').textContent = Math.round(c.market.resilience);
   $('#raIndividualScore').textContent = Math.round(c.individual.resilience);
   $('#raScfrScore').textContent = Math.round(c.scfr.resilience);
+
+  earth.lab.update(earthPayload(c));
+}
+
+function renderEvidence(){
+  earth.evidence.update({
+    outageProvider: state.outageProvider,
+    comparison: comparison(),
+    marketPct: state.marketPct,
+    reservePct: state.reservePct
+  });
 }
 
 function renderScene(){
@@ -85,6 +114,7 @@ function switchTab(tab){
     view.classList.toggle('is-active', view.dataset.raView === tab);
   });
   if(tab === 'lab') renderLab();
+  if(tab === 'evidence') renderEvidence();
 }
 
 function setupTabs(){
@@ -157,3 +187,4 @@ setupScenes();
 setupLab();
 renderScene();
 renderLab();
+renderEvidence();
