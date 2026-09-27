@@ -29,6 +29,7 @@ assert.match(js, /loadScenarioFromURL/, 'shared scenario links should restore as
 assert.match(js, /challengeEvaluation/, 'challenge mode should evaluate multiple mission constraints');
 assert.match(js, /drawNetworkLines/, 'app should render provider-to-bank network connections');
 assert.match(js, /setupTheme/, 'app should initialize persistent Crisis-Analysis theme switching');
+assert.match(js, /isMobileView/, 'replay navigation should include mobile-specific behavior');
 assert.match(js, /setFocusMode/, 'app should provide a presentation focus mode');
 assert.match(js, /SpeechSynthesisUtterance/, 'narrated demo should use browser speech synthesis');
 assert.match(js, /preferredNarrator/, 'narration should prefer a configured analytical narrator voice');
@@ -48,6 +49,7 @@ assert.match(js, /ArrowRight/, 'story should support keyboard scene navigation')
 assert.match(js, /cloudrescue-theme/, 'theme choice should be persisted locally');
 assert.match(html, /mode-crisis/, 'theme switch should expose Crisis mode');
 assert.match(html, /mode-analysis/, 'theme switch should expose Analysis mode');
+assert.match(html, /mobile-system-map/, 'phone layout should include a dedicated shared-dependency map');
 assert.match(js, /'crisis'\s*\?\s*'analysis'\s*:\s*'crisis'/, 'theme toggle should switch between Crisis and Analysis modes');
 assert.match(js, /scfr-line/, 'app should render SCFR pooled-capacity connections');
 assert.match(js, /\$\$\('\.preset'\)/, 'preset controls should use the multi-element selector helper');
