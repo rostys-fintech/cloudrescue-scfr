@@ -4,96 +4,211 @@
 **CloudRescue**
 
 ## Tagline
-**Stress-testing how banks recover from a shared cloud outage.**
+**A visual stress lab for systemic cloud-outage resilience in banking.**
 
 ## One-sentence description
-CloudRescue is an interactive crisis simulator that lets users watch a synthetic banking cloud outage unfold, then compare an uncoordinated market scramble, ring-fenced individual reserves, and a pooled Systemic Cloud Failover Reserve (SCFR).
+CloudRescue is an interactive, synthetic crisis simulator that shows what happens when multiple banks depend on the same critical cloud provider and need scarce backup capacity at the same time — then compares three recovery mechanisms under the same shock and reserve budget.
 
 ## Inspiration
-Cloud resilience is often treated as an institution-by-institution problem. But if many banks depend on the same provider, a severe outage can create a second-order problem: several institutions may need scarce backup capacity at the same time.
+Cloud resilience is often discussed institution by institution: does one bank have a backup plan, a second provider, or disaster-recovery capacity?
 
-I wanted to make that coordination problem visible, interactive and testable.
+But third-party ICT concentration creates a system-level question. If many financial institutions depend on a limited set of critical providers, one disruption can create simultaneous recovery demand across multiple firms.
+
+The real-world motivation is documented by BIS, EBA and the EU DORA framework. CloudRescue does **not** claim that the synthetic 20-bank network represents real institutions. Instead, it uses a transparent synthetic system to make the coordination problem visible and testable.
+
+The central question is:
+
+> If the total reserve budget stays the same, can better coordination improve systemic recovery?
 
 ## What it does
-CloudRescue models a synthetic system of 20 banks connected to three synthetic cloud providers.
+CloudRescue models a synthetic banking system with 20 stylized banks and three synthetic cloud providers.
 
-When one provider fails, the app:
-1. identifies affected banks;
-2. calculates their simultaneous critical-workload demand;
-3. allocates scarce emergency capacity under three mechanisms;
-4. compares systemic outcomes;
-5. lets the user change reserve size, spot-market capacity and allocation rules.
+A user can:
 
-The three recovery mechanisms are:
+1. watch a guided audiovisual crisis story;
+2. trigger a provider outage;
+3. see simultaneous backup-capacity demand emerge;
+4. compare three recovery mechanisms;
+5. change emergency-market capacity, reserve size and SCFR allocation rules;
+6. replay any Stress Lab configuration as an animated crisis;
+7. inspect a before/after comparison under the **same reserve budget**;
+8. explore a resilience sensitivity heatmap;
+9. generate deterministic seeded scenarios;
+10. copy a shareable scenario link that reconstructs the same assumptions;
+11. export the scenario and model outputs as JSON;
+12. try challenge missions focused on efficiency, scarcity and coordination.
 
-- **Market Scramble** — banks source limited emergency capacity only after the outage.
-- **Individual Reserves** — capacity is pre-reserved, but ring-fenced bank by bank.
-- **SCFR Pooled Reserve** — the same total pre-reserved capacity is pooled and reallocated across affected banks.
+## The three recovery mechanisms
 
-The interface combines a **35-second guided audiovisual crisis story** with an interactive Stress Lab and a resilience-frontier visualization. The story uses plain-language captions, optional browser narration, incident/recovery sound cues, and a presentation focus mode so a non-specialist can understand the mechanism before touching the model controls.
+### 1. Market Scramble
+Affected banks source emergency capacity only after the outage. When many institutions need capacity at the same time, the immediately available market may be insufficient.
+
+### 2. Individual Reserves
+Capacity is reserved before the crisis, but it remains ring-fenced bank by bank. Some capacity can therefore remain stranded outside the institutions that need it.
+
+### 3. SCFR Pooled Reserve
+The same aggregate pre-reserved capacity is pooled and allocated across affected banks using an explicit rule.
+
+The key comparison is deliberately constrained:
+
+> **Same shock. Same reserve budget. Different coordination.**
+
+## Why the visual story matters
+My first versions of the project relied too heavily on dashboards and numbers. A non-specialist could see the outputs without necessarily understanding the mechanism.
+
+I rebuilt the interface around a guided story:
+
+- a shared provider fails;
+- dependent banks are affected in sequence;
+- emergency requests visibly flow toward scarce backup capacity;
+- ring-fenced reserve tokens visibly hit a barrier and remain stranded;
+- the same reserve tokens are then pooled through SCFR and redirected toward affected banks;
+- the final scene compares bank-level recovery outcomes side by side.
+
+The guided mode includes captions, optional browser narration, scene-specific pacing, focus mode and restrained incident/recovery sound cues.
 
 ## What makes the comparison fairer
-The Individual Reserves and SCFR scenarios use the **same total reserve budget**.
+Individual Reserves and SCFR receive the **same total reserve budget**.
 
-The difference is allocation, not quantity.
+The prototype therefore does not ask whether “more reserve” improves resilience. It asks whether a different allocation mechanism can use the **same aggregate reserve** more effectively.
 
-That means the prototype asks a more interesting question than “does more backup capacity help?”:
+The Before / After view makes this constraint visible and shows which part of the result comes from coordination rather than quantity.
 
-> Can coordination and pooling improve systemic recovery using the same aggregate reserve?
+## Reproducibility
+CloudRescue is designed so the demo is not just a hard-coded animation.
+
+The project includes:
+
+- deterministic simulation logic;
+- explicit synthetic bank data;
+- deterministic seeded scenario generation;
+- Scenario IDs;
+- shareable URLs that reconstruct scenario assumptions;
+- scenario JSON export;
+- model-invariant tests;
+- UI smoke checks;
+- continuous checks through GitHub Actions.
+
+The same input assumptions always reproduce the same output.
+
+## Sensitivity Explorer
+One scenario is not enough to understand a mechanism.
+
+The Stress Lab includes a heatmap that recalculates outcomes across combinations of:
+
+- emergency-market capacity; and
+- pre-reserved capacity.
+
+Users can switch between:
+
+- **SCFR resilience**, and
+- **SCFR uplift versus Individual Reserves**.
+
+This makes it easier to see where coordination matters and where it adds little value.
+
+## Challenge Mode
+To make experimentation more engaging, CloudRescue includes three missions:
+
+- **Efficiency** — reach high resilience while limiting the reserve budget;
+- **Scarcity** — maintain recovery when emergency-market capacity is very low;
+- **Coordination** — create a meaningful uplift over ring-fenced individual reserves.
+
+Each mission exposes its criteria directly, so the user can see which constraint is binding.
 
 ## How I built it
-The project is a static browser application with:
-- deterministic synthetic bank data;
-- a separate simulation engine;
-- explicit allocation rules;
-- automated model invariants;
-- continuous tests through GitHub Actions;
-- dynamic SVG provider-to-bank network visualization;
-- browser-native speech synthesis and lightweight sound cues for the guided demo;
-- downloadable scenario results for reproducibility.
+CloudRescue is a static browser application built without a front-end framework.
 
-No external framework is required for the MVP.
+The MVP uses:
+
+- vanilla JavaScript;
+- a separate deterministic simulation engine;
+- synthetic bank/provider data;
+- dynamic SVG network connections;
+- animated DOM/SVG capacity flows;
+- browser-native speech synthesis;
+- scenario serialization through URL parameters and JSON;
+- GitHub Pages;
+- automated model and interface checks through GitHub Actions.
 
 ## Challenges I ran into
-The hardest part was avoiding a demo that was visually persuasive but analytically weak.
+The hardest challenge was not implementing another feature. It was keeping the prototype **analytically honest while making it visually persuasive**.
 
-I therefore added several guardrails:
-- all institutions are synthetic;
-- outputs are explicitly labelled illustrative;
-- reserve budgets are held equal in the core comparison;
-- assumptions are documented;
-- the simulation has automated invariant tests;
-- the UI exposes the mechanism rather than hiding it.
+Several problems forced redesigns:
+
+- early versions were too text-heavy;
+- some visual effects made the site look more like a gaming dashboard than a financial-risk tool;
+- fixed autoplay timers could cut narration off mid-sentence;
+- numerical outputs were understandable to me but not necessarily to a non-specialist;
+- UI changes occasionally created regressions in story initialization.
+
+I responded by:
+
+- rebuilding the visual language around an institutional banking/fintech style;
+- making narration completion drive scene changes;
+- turning reserve fragmentation into visible movement and barriers;
+- adding regression checks for the DOM interactions that had failed;
+- separating observed real-world motivation from synthetic model assumptions;
+- keeping the reserve budget constant in the core comparison.
 
 ## Accomplishments I am proud of
-- translating a finance/systemic-risk idea into explicit software logic;
-- building a visual story that explains the crisis before asking the user to change assumptions;
-- making the crisis understandable without requiring specialist knowledge through narration, subtitles and animated visual cues;
-- separating the research engine from the interface;
-- making scenarios exportable rather than leaving results trapped inside the dashboard;
-- creating a prototype that can continue beyond the hackathon as a research companion.
+- translating a systemic-risk idea into explicit computational logic;
+- separating the model engine from the interface;
+- making an abstract allocation mechanism visible through motion rather than only numbers;
+- replaying any interactive Stress Lab scenario as a narrated crisis;
+- creating deterministic seeded scenarios and shareable scenario links;
+- adding sensitivity analysis rather than relying on one headline result;
+- building automated invariants and interface checks;
+- making the synthetic/empirical boundary explicit in the product itself.
 
 ## What I learned
-My background is finance and banking rather than software engineering. Building CloudRescue taught me how to:
-- turn a policy concept into explicit computational assumptions;
-- structure deterministic simulation logic;
-- test model invariants;
-- design an interactive data story;
-- build a reproducible public research prototype.
+My background is finance and banking rather than software engineering.
+
+During FirstCommit I learned how to move from:
+
+**financial-stability question → explicit assumptions → deterministic model → interactive visualization → reproducibility → testing → deployment**
+
+More specifically, I learned how to:
+
+- turn a policy concept into computational rules;
+- structure deterministic allocation logic;
+- reason about invariants and edge cases;
+- design dynamic SVG/DOM visualizations;
+- debug state and timing problems in an interactive browser application;
+- synchronize narration with visual state;
+- build reproducible scenario links;
+- use GitHub Actions to catch regressions;
+- communicate a technical research concept to non-specialists.
+
+## What is real — and what is synthetic
+
+### Observed real-world motivation
+- third-party ICT concentration risk;
+- dependence on critical external technology and cloud providers;
+- operational-resilience concerns documented by regulators.
+
+### Synthetic in CloudRescue v0.1
+- the 20-bank network;
+- provider assignments;
+- workload and readiness values;
+- capacity units;
+- resilience scores;
+- numerical improvements shown by the simulation.
+
+CloudRescue v0.1 is therefore an **illustrative mechanism stress-test**, not a forecast and not an assessment of any real bank or cloud provider.
 
 ## What is next
-The FirstCommit version is **v0.1**.
+The next research stages would be:
 
-Planned research extensions include:
-- richer outage types;
-- multi-cloud and geographic dependencies;
-- sensitivity and uncertainty analysis;
-- cost-aware reserve optimization;
-- empirical calibration using public operational-resilience evidence;
-- a reproducible research companion for the broader SCFR project.
+1. broader sensitivity and uncertainty analysis;
+2. additional outage and multi-provider dependency structures;
+3. cost-aware reserve optimization;
+4. empirical calibration where public evidence is defensible;
+5. expert validation with operational-resilience and cloud-infrastructure practitioners;
+6. governance, liability and incentive design for a pooled mechanism.
 
-## Important limitation
-CloudRescue v0.1 is a **synthetic illustrative stress-test**. It does not evaluate any real bank or provider and does not claim that SCFR would produce a specific real-world improvement.
+The long-term goal is for CloudRescue to become a reproducible research companion for the broader SCFR concept.
 
 ## AI assistance disclosure
-AI tools assisted with brainstorming, code drafting, debugging, documentation and interface iteration. I reviewed the assumptions, research logic, outputs and final project decisions and disclose this assistance as part of the submission.
+AI tools assisted with brainstorming, code drafting, debugging, documentation and interface iteration.
+
+I remained responsible for the research framing, assumptions, interpretation, model guardrails, testing decisions, feature selection and final submission.
