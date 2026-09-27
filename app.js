@@ -10,54 +10,54 @@ const defaults = { outageProvider:'blue', marketPct:20, reservePct:25, allocatio
 
 const scenes = [
   {
-    title:'Why this risk exists',
-    text:'Financial institutions increasingly depend on a limited set of critical ICT and cloud providers. CloudRescue turns that real concentration-risk problem into a transparent synthetic stress test.',
-    stat:'Real concentration risk · synthetic 20-bank illustration',
-    kicker:'REAL-WORLD MOTIVATION',
-    caption:'A common provider can become a common point of operational stress.',
+    title:'Shared dependency',
+    text:'Many banks can depend on the same critical provider. One failure can therefore affect several institutions at the same time.',
+    stat:'20 synthetic banks · 3 shared providers',
+    kicker:'SHARED DEPENDENCY',
+    caption:'One shared provider can become one shared point of failure.',
     voice:'Here is the risk. Banks increasingly rely on a small number of critical technology and cloud providers. When many institutions share the same provider, one outage can become a common shock.',
     rate:.94,pitch:.98,visualDuration:5600,cue:'normal'
   },
   {
-    title:'One shared provider fails',
-    text:'A severe outage at Blue Cloud instantly affects every bank whose critical workloads depend on it. A local incident becomes a system-wide coordination problem.',
+    title:'One provider fails',
+    text:'When the shared provider fails, every dependent bank needs recovery capacity at the same time.',
     stat:'8 banks affected at the same time',
-    kicker:'COMMON SHOCK',
+    kicker:'PROVIDER FAILURE',
     caption:'Blue Cloud fails. 8 banks are disrupted at once.',
     voice:'Now, Blue Cloud goes down. Eight banks lose critical capacity at the same time. This is no longer one bank’s IT problem. It is a system-wide recovery problem.',
     rate:.90,pitch:.96,visualDuration:6000,cue:'alert'
   },
   {
-    title:'Everyone needs Plan B at once',
-    text:'Affected banks request emergency backup capacity simultaneously. Spot capacity exists, but aggregate demand is much larger than what can be sourced after the shock.',
-    stat:'Emergency demand exceeds immediate supply',
-    kicker:'CAPACITY SCRAMBLE',
+    title:'Backup capacity runs short',
+    text:'Affected banks request backup capacity at the same time. Immediate supply is smaller than total demand.',
+    stat:'Immediate backup supply cannot meet total demand',
+    kicker:'CAPACITY SHORTAGE',
     caption:'608 units demanded. Only 122 are immediately available.',
     voice:'All eight banks reach for backup capacity at once. They need six hundred and eight units. The emergency market can supply only one hundred and twenty-two. Most of the demand is still waiting.',
     rate:.89,pitch:.96,visualDuration:6800,cue:'shortage'
   },
   {
-    title:'Individual reserves can still fragment',
-    text:'Each bank has its own reserve, but reserve belonging to unaffected banks cannot move. Capacity may sit unused while affected banks still face shortages.',
+    title:'Reserve is stuck in the wrong places',
+    text:'Bank-specific reserves help, but unused capacity at unaffected banks cannot move to the banks that need it.',
     stat:'Same reserve budget · ring-fenced allocation',
-    kicker:'FRAGMENTED RESERVES',
+    kicker:'STRANDED RESERVE',
     caption:'Some reserve exists — but it is locked in the wrong places.',
     voice:'Individual reserves help, but there is a catch. Capacity is ring-fenced, bank by bank. It cannot simply move to where the shock is. Here, two hundred and fifty-seven units remain stranded while affected banks are still short.',
     rate:.89,pitch:.96,visualDuration:7200,cue:'fragment'
   },
   {
-    title:'SCFR pools the reserve before the crisis',
-    text:'The same total reserve is pooled and reallocated across affected banks using a transparent rule. The difference is coordination, not a larger reserve budget.',
+    title:'Pool the same reserve',
+    text:'SCFR uses the same total reserve budget, but allows it to move across affected banks under a predefined allocation rule.',
     stat:'Same reserve · different allocation mechanism',
-    kicker:'COORDINATED RECOVERY',
+    kicker:'POOLED RECOVERY',
     caption:'SCFR redirects the same reserve budget to where it is needed.',
     voice:'SCFR changes the coordination rule, not the budget. The same reserve is pooled in advance, then directed to the affected banks that need it most. Watch what happens to recovery.',
     rate:.93,pitch:.98,visualDuration:6800,cue:'recovery'
   },
   {
-    title:'Now test the system yourself',
-    text:'The explainer becomes an experiment. Change reserve size, spot capacity and allocation rules in the Stress Lab and see how the synthetic system responds.',
-    stat:'Animated story → interactive research prototype',
+    title:'Compare the outcomes',
+    text:'The same shock and reserve budget produce different recovery outcomes under different allocation mechanisms.',
+    stat:'Same shock · same reserve budget · different allocation',
     kicker:'RESULT',
     caption:'Same shock. Same reserve budget. Different coordination.',
     voice:'In this synthetic run, coordination materially improves recovery. This is not a forecast. It is a way to test the mechanism. Same shock. Same reserve budget. Different coordination. Now change the assumptions yourself.',
@@ -668,12 +668,12 @@ function renderImpact(c){
   const availableShare=c.market.totalDemand ? Math.round(c.market.allocated/c.market.totalDemand*100) : 0;
   const strandedShare=c.individual.totalReserve ? Math.round(c.individual.strandedReserve/c.individual.totalReserve*100) : 0;
   const data = [
-    ['REAL-WORLD RISK','Shared dependency','Many institutions can depend on the same critical provider.'],
-    ['COMMON SHOCK',`${c.market.affectedCount} banks. One outage.`,'A single provider failure hits multiple institutions at once.'],
-    ['CAPACITY SHORTAGE',`Only ${availableShare}% available`,'Most immediate backup demand cannot be met after the shock.'],
-    ['FRAGMENTATION',`${strandedShare}% of reserve stranded`,'Capacity exists — but ring-fencing keeps it in the wrong places.'],
-    ['COORDINATED RECOVERY','Same reserve. Better allocation.','SCFR changes where capacity can go, not how much reserve exists.'],
-    ['RESULT','Coordination changes the outcome','The same shock produces very different recovery paths.']
+    ['SHARED DEPENDENCY','Many banks. Same provider.','A shared dependency can become a shared point of failure.'],
+    ['PROVIDER FAILURE',`${c.market.affectedCount} banks affected`,'One provider outage hits multiple banks at the same time.'],
+    ['CAPACITY SHORTAGE',`Only ${availableShare}% available`,'Immediate backup capacity cannot meet total demand.'],
+    ['STRANDED RESERVE',`${strandedShare}% cannot move`,'Reserve exists, but some of it is held by unaffected banks.'],
+    ['POOLED RECOVERY','Same reserve. Better allocation.','SCFR changes where reserve can go, not how much reserve exists.'],
+    ['RESULT','Allocation changes recovery','The shock and reserve budget stay the same.']
   ][scene];
   $('#impactKicker').textContent=data[0];
   $('#impactValue').textContent=data[1];
@@ -700,12 +700,12 @@ function applyScene(){
   clearStatuses();
   const affected = c.market.rows;
   const storyStatus = [
-    'Normal operations',
-    'Shared provider outage',
-    'Emergency capacity scramble',
-    'Ring-fenced reserves',
-    'SCFR pooled reserve',
-    'Interactive stress test'
+    'Shared dependency',
+    'Provider outage',
+    'Backup capacity shortage',
+    'Stranded reserve',
+    'Pooled recovery',
+    'Outcome comparison'
   ][scene];
   $('#stageStatus').textContent = storyStatus;
   $('#hudAffected').textContent = scene === 0 ? '0 / 20' : `${c.market.affectedCount} / 20`;
@@ -894,10 +894,9 @@ function strategyCard(name,label,r,best){
     <h3>${name}</h3>
     <div class="score">${Math.round(r.resilience)} <small>/ 100</small></div>
     <div class="bar"><i style="width:${Math.min(100,r.resilience)}%"></i></div>
-    <div class="metric"><span>Banks recovered ≥80%</span><b>${r.banksRecovered}/${r.affectedCount}</b></div>
-    <div class="metric"><span>Critical workload restored</span><b>${pct(r.criticalRestoredPct)}</b></div>
-    <div class="metric"><span>Unmet capacity demand</span><b>${pct(r.unmetPct)}</b></div>
-    <div class="metric"><span>Unused / stranded reserve</span><b>${num(r.strandedReserve)}</b></div>
+    <div class="metric"><span>Workload restored</span><b>${pct(r.criticalRestoredPct)}</b></div>
+    <div class="metric"><span>Unmet demand</span><b>${pct(r.unmetPct)}</b></div>
+    <div class="metric"><span>Reserve left unused</span><b>${num(r.strandedReserve)}</b></div>
   </article>`;
 }
 
@@ -1312,9 +1311,9 @@ function renderLab(){
   $('#affectedPill').textContent=`${c.market.affectedCount} / ${banks.length} banks affected`;
 
   const list = [
-    ['Post-shock market sourcing','POST-SHOCK',c.market],
-    ['Individual reserves','RING-FENCED',c.individual],
-    ['SCFR pooled reserve','COORDINATED',c.scfr]
+    ['Emergency market','POST-SHOCK',c.market],
+    ['Individual reserves','BANK-SPECIFIC',c.individual],
+    ['SCFR pooled reserve','POOLED',c.scfr]
   ];
   const best = Math.max(...list.map(x=>x[2].resilience));
   $('#strategyCards').innerHTML = list.map(([n,l,r])=>strategyCard(n,l,r,r.resilience===best)).join('');
