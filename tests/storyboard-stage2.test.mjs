@@ -28,7 +28,8 @@ assert.match(css,/raStage2AffectedBanks/);
 assert.match(css,/raStage2SystemicRing/);
 
 assert.match(js,/else if\(sceneIndex===1\)/);
-assert.match(js,/animateGuidedCueCopy/);\nassert.match(js,/kicker\.textContent='FAILURE SEQUENCE'/);
+assert.match(js,/animateGuidedCueCopy/);
+assert.match(js,/kicker\.textContent='FAILURE SEQUENCE'/);
 assert.match(js,/caption\.textContent=cue\.caption/);
 
 console.log('Storyboard Stage 2 checks passed.');
