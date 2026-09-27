@@ -62,6 +62,9 @@ The Stress Lab also includes:
 - **Replay this crisis** — any live Stress Lab configuration can be handed back to the guided audiovisual story;
 - a **Before / After** comparison that holds the reserve budget constant and changes only the allocation mechanism;
 - a **Sensitivity Explorer** for SCFR resilience and uplift across reserve and emergency-market assumptions;
+- a **seeded scenario generator** that deterministically creates a provider shock, market-capacity level, reserve budget and allocation rule;
+- **shareable scenario links** that reconstruct the same assumptions for another user;
+- three interactive **Challenge Mode** missions focused on efficiency, severe scarcity and coordination advantage;
 - a reproducible JSON export of the full scenario and model outputs.
 
 ## What is real — and what is synthetic
@@ -115,7 +118,7 @@ The evidence base supports studying the problem; it does **not** validate the sy
 
 ## Research roadmap
 
-- **v0.1 — FirstCommit MVP:** synthetic scenario engine + guided audiovisual story + scenario replay + sensitivity explorer.
+- **v0.1 — FirstCommit MVP:** synthetic scenario engine + guided audiovisual story + scenario replay + sensitivity explorer + reproducible seeded scenarios + challenge mode.
 - **v0.2 — Sensitivity analysis:** more shock types, allocation rules and robustness checks.
 - **v0.3 — Empirical calibration:** public evidence on cloud concentration and operational resilience.
 - **v1.0 — Research companion:** reproducible scenario analysis to accompany the SCFR research project.
