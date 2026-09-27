@@ -62,7 +62,7 @@
   <section class="hero hero-institutional hero-cyber-frame">
     <div class="hero-copy">
       <div class="eyebrow">SYSTEMIC RESILIENCE // LIVE RESEARCH PROTOTYPE</div>
-      <h1><span class="hero-cloud-word">Cloud</span><span class="hero-rescue-word">Rescue</span></h1>
+      <h1><span class="hero-cloud-word">Cloud</span><span class="hero-rescue-word">Rescue</span><span class="hero-slashes" aria-hidden="true">//</span></h1>
       <p>Stress-test how shared cloud dependency can turn one operational outage into a system-wide recovery problem.</p>
       <div class="hero-thesis">
         <span>CORE HYPOTHESIS</span>
@@ -80,10 +80,14 @@
         <b>Shared dependency network</b>
         <small>20 synthetic banks · deterministic model</small>
       </div>
+      <div class="hero-shared-alert" aria-label="Shared provider failure can affect multiple banks across regions">
+        <i aria-hidden="true">△</i>
+        <div><b>SHARED PROVIDER FAILURE</b><small>CAN AFFECT MULTIPLE BANKS ACROSS REGIONS</small></div>
+      </div>
       <div class="hero-network">
-        <div class="hero-cloud hero-cloud-a"><span>CLOUD A</span><b>08</b><small>dependent banks</small></div>
-        <div class="hero-cloud hero-cloud-b"><span>CLOUD B</span><b>07</b><small>dependent banks</small></div>
-        <div class="hero-cloud hero-cloud-c"><span>CLOUD C</span><b>05</b><small>dependent banks</small></div>
+        <div class="hero-cloud hero-cloud-a"><span>BLUE CLOUD</span><b>08</b><small>dependent banks</small></div>
+        <div class="hero-cloud hero-cloud-b"><span>ORANGE CLOUD</span><b>07</b><small>dependent banks</small></div>
+        <div class="hero-cloud hero-cloud-c"><span>GREEN CLOUD</span><b>05</b><small>dependent banks</small></div>
 
         <svg class="hero-network-lines" viewBox="0 0 720 280" preserveAspectRatio="none" aria-hidden="true">
           <path d="M120 64 C120 126 130 132 130 192"></path>
@@ -114,9 +118,9 @@
           <b>3 providers → 20 banks</b>
         </div>
         <div class="mobile-provider-row">
-          <div class="mobile-provider risk"><span>CLOUD A</span><b>8</b><small>banks</small></div>
-          <div class="mobile-provider"><span>CLOUD B</span><b>7</b><small>banks</small></div>
-          <div class="mobile-provider"><span>CLOUD C</span><b>5</b><small>banks</small></div>
+          <div class="mobile-provider risk"><span>BLUE CLOUD</span><b>8</b><small>banks</small></div>
+          <div class="mobile-provider"><span>ORANGE CLOUD</span><b>7</b><small>banks</small></div>
+          <div class="mobile-provider"><span>GREEN CLOUD</span><b>5</b><small>banks</small></div>
         </div>
         <div class="mobile-map-arrow" aria-hidden="true">
           <i></i><i></i><i></i>
@@ -145,7 +149,7 @@
   <main>
     <section id="story" class="panel active">
       <div class="story-layout">
-        <article class="card narrative">
+        <article class="card narrative" data-frame-label="CRISIS REPLAY">
           <div class="scene-label">SCENE <span id="sceneNo">1</span> / 6</div>
           <h2 id="sceneTitle">Shared dependency</h2>
           <p id="sceneText"></p>
@@ -165,7 +169,7 @@
           <div class="demo-progress" aria-label="Narrated demo progress"><i id="demoProgressBar"></i></div>
         </article>
 
-        <article class="card stage-wrap">
+        <article class="card stage-wrap" data-frame-label="LIVE SYSTEM VIEW">
           <div id="stage" class="stage scene-1">
             <svg id="networkLines" class="network-lines" aria-hidden="true"></svg>
             <div id="motionLayer" class="motion-layer" aria-hidden="true"></div>
