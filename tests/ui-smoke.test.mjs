@@ -8,7 +8,7 @@ const [html, js, css] = await Promise.all([
 ]);
 
 const requiredIds = [
-  'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','themeLabel','focusStory','heroDemo','heroLab','narrationToggle','storyCaption','captionKicker','captionText','visualSignal','demoProgressBar','impactOverlay','impactKicker','impactValue','impactLabel',
+  'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','themeLabel','focusStory','heroDemo','heroLab','narrationToggle','voiceSelect','storyCaption','captionKicker','captionText','visualSignal','demoProgressBar','impactOverlay','impactKicker','impactValue','impactLabel',
   'providerSelect','marketPct','reservePct','ruleSelect',
   'strategyCards','decisionInsight','frontier','exportBtn'
 ];
@@ -24,6 +24,9 @@ assert.match(js, /drawNetworkLines/, 'app should render provider-to-bank network
 assert.match(js, /setupTheme/, 'app should initialize persistent light-dark theme switching');
 assert.match(js, /setFocusMode/, 'app should provide a presentation focus mode');
 assert.match(js, /SpeechSynthesisUtterance/, 'narrated demo should use browser speech synthesis');
+assert.match(js, /preferredNarrator/, 'narration should prefer a configured analytical narrator voice');
+assert.match(js, /outcomeBanks/, 'final story should visualize recovery at bank level');
+assert.match(js, /reserveTokens/, 'reserve fragmentation should be shown with visual capacity tokens');
 assert.match(js, /renderVisualSignal/, 'story should render visual event cues');
 assert.match(js, /renderImpact/, 'story should expose a high-signal outcome for every scene');
 assert.match(js, /startDemo/, 'story should support timed narrated autoplay');
@@ -34,6 +37,9 @@ assert.match(js, /\$\$\('\.preset'\)/, 'preset controls should use the multi-ele
 assert.match(css, /\.stage\.scene-2/, 'story should include scene-specific visual transitions');
 assert.match(css, /\.decision-insight/, 'research insight panel should be styled');
 assert.match(css, /\.impact-overlay/, 'large scene outcome callout should be styled');
+assert.match(css, /\.capacity-story/, 'capacity shortage should have a dedicated visual mechanism');
+assert.match(css, /\.reserve-mechanism/, 'reserve fragmentation should have a dedicated visual mechanism');
+assert.match(css, /\.outcome-banks/, 'bank-level recovery outcomes should be visually encoded');
 assert.match(html, /WHY THIS PROBLEM IS REAL/, 'story should visibly ground the scenario in real regulatory evidence');
 
 console.log('✓ CloudRescue interface smoke checks passed');
