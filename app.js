@@ -67,6 +67,56 @@ function renderNetwork(){
   }).join('');
 }
 
+function localPoint(el, xFraction=.5, yFraction=.5){
+  const stage = $('#stage');
+  const sr = stage.getBoundingClientRect();
+  const er = el.getBoundingClientRect();
+  const sx = stage.offsetWidth / sr.width;
+  const sy = stage.offsetHeight / sr.height;
+  return {
+    x: ((er.left - sr.left) + er.width * xFraction) * sx,
+    y: ((er.top - sr.top) + er.height * yFraction) * sy
+  };
+}
+
+function curvePath(a,b){
+  const dy = Math.max(28, Math.abs(b.y-a.y)*.42);
+  return `M ${a.x.toFixed(1)} ${a.y.toFixed(1)} C ${a.x.toFixed(1)} ${(a.y+dy).toFixed(1)}, ${b.x.toFixed(1)} ${(b.y-dy).toFixed(1)}, ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+}
+
+function drawNetworkLines(){
+  const svg = $('#networkLines');
+  const stage = $('#stage');
+  if(!svg || !stage) return;
+  svg.setAttribute('viewBox', `0 0 ${stage.offsetWidth} ${stage.offsetHeight}`);
+
+  const paths = [];
+  banks.forEach(bank=>{
+    const providerEl = document.querySelector(`.provider[data-provider="${bank.provider}"]`);
+    const bankEl = document.querySelector(`.bank[data-bank="${bank.id}"]`);
+    if(!providerEl || !bankEl) return;
+    const a = localPoint(providerEl,.5,1);
+    const b = localPoint(bankEl,.5,0);
+    paths.push(`<path class="network-line" data-provider="${bank.provider}" d="${curvePath(a,b)}"></path>`);
+  });
+
+  if(scene === 4){
+    const reserve = document.querySelector('.reserve-node');
+    const affected = compareStrategies(defaults).scfr.rows;
+    if(reserve){
+      const a = localPoint(reserve,.5,0);
+      affected.forEach(bank=>{
+        const bankEl = document.querySelector(`.bank[data-bank="${bank.id}"]`);
+        if(!bankEl) return;
+        const b = localPoint(bankEl,.5,1);
+        paths.push(`<path class="network-line scfr-line" d="${curvePath(a,b)}"></path>`);
+      });
+    }
+  }
+
+  svg.innerHTML = paths.join('');
+}
+
 function comparisonHTML(){
   const c = compareStrategies(defaults);
   const rows = [
@@ -135,7 +185,17 @@ function applyScene(){
     });
   }
 
-  if(scene >= 4) $('#compareOverlay').innerHTML = comparisonHTML();
+  if(scene === 4){
+    c.scfr.rows.forEach(b=>{
+      const el = document.querySelector(`.bank[data-bank="${b.id}"]`);
+      if(!el) return;
+      el.classList.remove('affected');
+      el.classList.add(b.recovered?'restored':'waiting');
+    });
+  }
+
+  $('#compareOverlay').innerHTML = scene === 5 ? comparisonHTML() : '';
+  requestAnimationFrame(drawNetworkLines);
 
   $('#backScene').disabled = scene===0;
   $('#nextScene').textContent = scene===scenes.length-1 ? 'Open Stress Lab →' : 'Next →';
@@ -332,3 +392,9 @@ $('#exportBtn').addEventListener('click',exportScenario);
 renderNetwork();
 setupStory();
 renderLab();
+requestAnimationFrame(drawNetworkLines);
+let resizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(drawNetworkLines,120);
+});
