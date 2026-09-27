@@ -34,27 +34,37 @@ Which institutional v2 screens to capture and the recommended Devpost order.
 
 30-second pitch, 60-second pitch and concise answers to likely judge questions.
 
-### 7. Technical defense
+### 7. Technical ownership pass
+[technical-ownership-pass.md](technical-ownership-pass.md)
+
+Checklist for understanding and explaining the project without relying on AI during judging.
+
+### 8. Model walkthrough
+[model-walkthrough.md](model-walkthrough.md)
+
+Plain-language explanation of the simulation engine, formulas, baseline numbers and model simplifications.
+
+### 9. Technical defense
 [technical-defense.md](technical-defense.md)
 
 Model assumptions, implementation logic, limitations and likely technical questions.
 
-### 8. Judging map
+### 10. Judging map
 [judging-map.md](judging-map.md)
 
 Maps CloudRescue evidence to the FirstCommit judging criteria.
 
-### 9. Development log
+### 11. Development log
 [development-log.md](development-log.md)
 
 The full learning and iteration story from research question to deployed prototype.
 
-### 10. Final submission status
+### 12. Final submission status
 [final-submission-status.md](final-submission-status.md)
 
 What is complete and what still must be done before submission.
 
-### 11. Final QA checklist
+### 13. Final QA checklist
 [submission-checklist.md](submission-checklist.md)
 
 Last checks before pressing Submit.
