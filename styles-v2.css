@@ -2640,3 +2640,48 @@ html[data-theme="dark"] .heat-cell b{
     border-right:0;
   }
 }
+
+
+/* ---------- Product footer ---------- */
+.product-footer{
+  margin-top:34px;
+  padding:18px 0 0;
+  border-top:1px solid var(--v2-line);
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:24px;
+  align-items:end;
+  color:var(--v2-muted);
+  font-size:9px;
+}
+.product-footer>div b{
+  display:block;
+  color:var(--v2-ink);
+  font-size:11px;
+  margin-bottom:3px;
+}
+.product-footer>div span{
+  color:var(--v2-muted);
+}
+.product-footer nav{
+  display:flex;
+  gap:14px;
+}
+.product-footer a{
+  color:#5f788e;
+  text-decoration:none;
+  font-weight:700;
+}
+.product-footer a:hover{
+  color:var(--v2-ink);
+}
+.product-footer>span{
+  white-space:nowrap;
+}
+@media(max-width:760px){
+  .product-footer{
+    grid-template-columns:1fr;
+    align-items:start;
+    gap:10px;
+  }
+}
