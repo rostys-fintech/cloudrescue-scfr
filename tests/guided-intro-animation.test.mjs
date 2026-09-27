@@ -30,7 +30,7 @@ assert.match(js,/Connecting 20 synthetic banks/);
 assert.match(js,/Starting critical data flows/);
 assert.match(js,/introComplete=i===0/);
 assert.match(js,/introFinished/);
-assert.match(js,/classList\.remove\('ra-guided-intro'\)/);
+assert.match(js,/classList\.remove\(\s*'ra-guided-intro'/);
 
 assert.match(css,/GUIDED INTRO — BUILD THE SHARED DEPENDENCY MAP ON SCENE 01/);
 assert.match(css,/raIntroAtmosphere/);
