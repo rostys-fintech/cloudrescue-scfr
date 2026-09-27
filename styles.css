@@ -1779,3 +1779,30 @@ body.demo-playing #focusStory{
     position:relative;left:auto;top:auto;transform:none;width:100%;
   }
 }
+
+
+/* Visible cause -> effect propagation when the shared provider fails */
+.scene-2 .provider[data-provider="blue"]{
+  animation:providerFailure .62s cubic-bezier(.2,.8,.2,1) both,incidentBorder 1.4s .62s ease-in-out infinite;
+}
+@keyframes providerFailure{
+  0%{transform:translateY(0) scale(1);filter:none}
+  45%{transform:translateY(3px) scale(.985);filter:saturate(.8)}
+  100%{transform:translateY(0) scale(1);filter:none}
+}
+.scene-2 .bank.affected{
+  animation:bankShockCascade .56s calc(var(--bank-order,0)*.085s + .22s) cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes bankShockCascade{
+  0%{background:var(--surface);border-color:var(--line);transform:translateY(0);opacity:.7}
+  45%{background:#ffe6ea;border-color:#dd8e98;transform:translateY(-2px);opacity:1}
+  100%{background:var(--red-soft);border-color:#e3a6ae;transform:none;opacity:1}
+}
+html[data-theme="dark"] .scene-2 .bank.affected{
+  animation-name:bankShockCascadeDark;
+}
+@keyframes bankShockCascadeDark{
+  0%{background:#101b26;border-color:#263646;transform:translateY(0);opacity:.7}
+  45%{background:#43242b;border-color:#8b4b57;transform:translateY(-2px);opacity:1}
+  100%{background:var(--red-soft);border-color:#5c333c;transform:none;opacity:1}
+}
