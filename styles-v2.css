@@ -4554,3 +4554,127 @@ html[data-theme="analysis"] .hero-auto{
     min-height:640px!important;
   }
 }
+
+
+/* ---------- Hero topology: cinematic radar field instead of boxed mini-dashboard ---------- */
+.hero-network{
+  overflow:hidden!important;
+  isolation:isolate;
+}
+.hero-network:before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:50%;
+  top:58%;
+  width:86%;
+  aspect-ratio:1.9/1;
+  transform:translate(-50%,-50%);
+  border:1px solid color-mix(in srgb,var(--v2-primary) 34%,transparent);
+  border-radius:50%!important;
+  background:
+    radial-gradient(ellipse at center,transparent 0 34%,color-mix(in srgb,var(--v2-primary) 5%,transparent) 34.3% 34.8%,transparent 35.1% 50%,color-mix(in srgb,var(--v2-primary) 5%,transparent) 50.3% 50.7%,transparent 51%),
+    linear-gradient(90deg,transparent 49.8%,color-mix(in srgb,var(--v2-primary) 11%,transparent) 50%,transparent 50.2%),
+    linear-gradient(0deg,transparent 49.8%,color-mix(in srgb,var(--v2-primary) 10%,transparent) 50%,transparent 50.2%);
+  box-shadow:
+    0 0 80px color-mix(in srgb,var(--v2-primary) 8%,transparent),
+    inset 0 0 80px color-mix(in srgb,var(--v2-primary) 4%,transparent);
+  opacity:.9;
+}
+.hero-network:after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:50%;
+  top:58%;
+  width:62%;
+  height:92%;
+  transform:translate(-50%,-50%);
+  border-left:1px solid color-mix(in srgb,var(--v2-primary) 12%,transparent);
+  border-right:1px solid color-mix(in srgb,var(--v2-primary) 12%,transparent);
+  border-radius:50%;
+  opacity:.7;
+}
+.hero-cloud,
+.hero-bank-cluster,
+.hero-network-lines,
+.hero-risk-note{
+  z-index:2!important;
+}
+.hero-cloud{
+  border:0!important;
+  border-top:1px solid var(--v2-primary)!important;
+  border-bottom:1px solid var(--v2-line)!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--v2-primary) 6%,transparent),transparent)!important;
+  clip-path:none!important;
+  box-shadow:none!important;
+}
+.hero-cloud:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:-1px;
+  width:34%;
+  height:2px;
+  background:var(--v2-primary);
+  box-shadow:0 0 15px color-mix(in srgb,var(--v2-primary) 55%,transparent);
+}
+.hero-bank-cluster{
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  gap:8px!important;
+  flex-wrap:wrap;
+  border:0!important;
+  border-top:1px solid var(--v2-line)!important;
+  border-bottom:1px solid var(--v2-line)!important;
+  background:transparent!important;
+}
+.hero-bank-cluster i{
+  width:14px!important;
+  height:14px!important;
+  border:1px solid color-mix(in srgb,var(--v2-primary) 55%,transparent)!important;
+  background:color-mix(in srgb,var(--v2-primary) 13%,transparent)!important;
+  box-shadow:0 0 11px color-mix(in srgb,var(--v2-primary) 20%,transparent)!important;
+  transform:rotate(45deg);
+}
+.hero-network-lines{
+  z-index:1!important;
+  filter:drop-shadow(0 0 5px color-mix(in srgb,var(--v2-primary) 30%,transparent));
+}
+.hero-network-lines path{
+  stroke-width:1.4!important;
+}
+.hero-network-lines .hero-risk-line{
+  stroke-width:2.2!important;
+}
+html[data-theme="crisis"] .hero-network:before{
+  background:
+    radial-gradient(ellipse at center,rgba(255,22,50,.035),transparent 55%),
+    radial-gradient(ellipse at center,transparent 0 34%,rgba(255,36,61,.07) 34.3% 34.8%,transparent 35.1% 50%,rgba(255,36,61,.06) 50.3% 50.7%,transparent 51%),
+    linear-gradient(90deg,transparent 49.8%,rgba(255,36,61,.08) 50%,transparent 50.2%),
+    linear-gradient(0deg,transparent 49.8%,rgba(255,36,61,.07) 50%,transparent 50.2%);
+}
+html[data-theme="analysis"] .hero-network:before{
+  background:
+    radial-gradient(ellipse at center,rgba(11,99,229,.025),transparent 58%),
+    radial-gradient(ellipse at center,transparent 0 34%,rgba(11,99,229,.06) 34.3% 34.8%,transparent 35.1% 50%,rgba(11,99,229,.05) 50.3% 50.7%,transparent 51%),
+    linear-gradient(90deg,transparent 49.8%,rgba(11,99,229,.065) 50%,transparent 50.2%),
+    linear-gradient(0deg,transparent 49.8%,rgba(11,99,229,.055) 50%,transparent 50.2%);
+}
+
+/* Primary CTA dominates; secondary action intentionally quieter. */
+.hero-actions .btn.secondary{
+  min-width:176px;
+  color:var(--v2-muted)!important;
+  border-color:var(--v2-line)!important;
+}
+.hero-actions .btn.secondary:hover{
+  color:var(--v2-ink)!important;
+  border-color:var(--v2-line-strong)!important;
+}
+.hero-auto{
+  min-width:256px!important;
+  min-height:52px!important;
+  font-size:12px!important;
+}
