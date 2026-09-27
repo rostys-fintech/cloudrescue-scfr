@@ -69,6 +69,7 @@ let scene = 0;
 let autoplay = null;
 let narrationEnabled = true;
 let audioContext = null;
+let sceneTimers = [];
 
 function setupTheme(){
   const button = $('#themeToggle');
@@ -128,13 +129,14 @@ function populateNarratorVoices(){
 
   const voices=englishVoices();
   const preferred=preferredNarrator(voices);
-  select.innerHTML=voices.map(v=>`<option value="${v.name}">${v.name} · ${v.lang}</option>`).join('');
+  const ordered = preferred ? [preferred,...voices.filter(v=>v.name!==preferred.name)] : voices;
+  select.innerHTML=ordered.map((v,i)=>`<option value="${v.name}">${i===0 && preferred ? 'Recommended · ' : ''}${v.name} · ${v.lang}</option>`).join('');
   if(preferred) select.value=preferred.name;
 
-  select.addEventListener('change',()=>{
+  select.onchange=()=>{
     localStorage.setItem('cloudrescue-narrator',select.value);
     if(autoplay && narrationEnabled) speakScene();
-  });
+  };
 }
 
 function getEnglishVoice(){
@@ -352,6 +354,182 @@ function curvePath(a,b){
   return `M ${a.x.toFixed(1)} ${a.y.toFixed(1)} C ${a.x.toFixed(1)} ${(a.y+dy).toFixed(1)}, ${b.x.toFixed(1)} ${(b.y-dy).toFixed(1)}, ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
 }
 
+function clearSceneMotion(){
+  sceneTimers.forEach(clearTimeout);
+  sceneTimers=[];
+  const layer=$('#motionLayer');
+  if(layer) layer.innerHTML='';
+  $('#ringFence')?.classList.remove('active','hit');
+}
+
+function later(fn,delay){
+  const id=setTimeout(fn,delay);
+  sceneTimers.push(id);
+  return id;
+}
+
+function motionPoint(el,x=.5,y=.5){
+  return el ? localPoint(el,x,y) : null;
+}
+
+function makeMotionToken(start,{kind='capacity',label='',size=10}={}){
+  const layer=$('#motionLayer');
+  if(!layer || !start) return null;
+  const token=document.createElement('span');
+  token.className=`motion-token ${kind}`;
+  token.style.left=`${start.x}px`;
+  token.style.top=`${start.y}px`;
+  token.style.width=`${size}px`;
+  token.style.height=`${size}px`;
+  if(label) token.textContent=label;
+  layer.appendChild(token);
+  return token;
+}
+
+function animateToken(start,end,{kind='capacity',delay=0,duration=950,label='',size=10,onArrive}={}){
+  later(()=>{
+    const token=makeMotionToken(start,{kind,label,size});
+    if(!token || !end) return;
+    const dx=end.x-start.x;
+    const dy=end.y-start.y;
+    const anim=token.animate([
+      {transform:'translate(0,0) scale(.65)',opacity:0},
+      {transform:`translate(${dx*.12}px,${dy*.12}px) scale(1)`,opacity:1,offset:.16},
+      {transform:`translate(${dx}px,${dy}px) scale(.9)`,opacity:1}
+    ],{duration,easing:'cubic-bezier(.22,.8,.25,1)',fill:'forwards'});
+    anim.onfinish=()=>{
+      onArrive?.();
+      token.remove();
+    };
+  },delay);
+}
+
+function animateBlockedToken(source,target,barrierX,{delay=0,duration=1700}={}){
+  later(()=>{
+    const start=motionPoint(source);
+    const end=motionPoint(target);
+    if(!start || !end) return;
+    const token=makeMotionToken(start,{kind:'locked',label:'●',size:11});
+    if(!token) return;
+    const bx=barrierX-start.x;
+    const by=(end.y-start.y)*.72;
+    const anim=token.animate([
+      {transform:'translate(0,0) scale(.75)',opacity:.2},
+      {transform:`translate(${bx+7}px,${by}px) scale(1)`,opacity:1,offset:.48},
+      {transform:`translate(${bx+2}px,${by}px) scale(1.18)`,opacity:1,offset:.58},
+      {transform:`translate(${bx+14}px,${by}px) scale(.9)`,opacity:.75,offset:.68},
+      {transform:'translate(0,0) scale(.7)',opacity:.15}
+    ],{duration,easing:'cubic-bezier(.2,.75,.25,1)',fill:'forwards'});
+    later(()=>{
+      $('#ringFence')?.classList.add('hit');
+      later(()=>$('#ringFence')?.classList.remove('hit'),260);
+    },delay+duration*.5);
+    anim.onfinish=()=>token.remove();
+  },delay);
+}
+
+function setBankOutcome(el,row){
+  if(!el || !row) return;
+  el.classList.remove('affected','restored','waiting');
+  if(row.restoredFraction >= .8) el.classList.add('restored');
+  else el.classList.add('waiting');
+}
+
+function positionRingFence(){
+  const blue=document.querySelector('.bank-group[data-provider="blue"]');
+  const orange=document.querySelector('.bank-group[data-provider="orange"]');
+  const fence=$('#ringFence');
+  if(!blue || !orange || !fence) return null;
+  const a=motionPoint(blue,1,.5);
+  const b=motionPoint(orange,0,.5);
+  const x=(a.x+b.x)/2;
+  fence.style.left=`${x}px`;
+  const top=Math.min(motionPoint(blue,.5,0).y,motionPoint(orange,.5,0).y);
+  const bottom=Math.max(motionPoint(blue,.5,1).y,motionPoint(orange,.5,1).y);
+  fence.style.top=`${top}px`;
+  fence.style.height=`${Math.max(180,bottom-top)}px`;
+  return x;
+}
+
+function runSceneMotion(c){
+  clearSceneMotion();
+
+  if(scene===2){
+    const reservoir=document.querySelector('.capacity-reservoir');
+    if(!reservoir) return;
+    const target=motionPoint(reservoir,.5,.52);
+    c.market.rows.forEach((row,i)=>{
+      const bank=document.querySelector(`.bank[data-bank="${row.id}"]`);
+      const start=motionPoint(bank,.92,.5);
+      animateToken(start,target,{kind:'request',delay:350+i*110,duration:820,size:8});
+    });
+
+    const supplied=c.market.rows.filter(r=>r.allocation>1);
+    supplied.forEach((row,i)=>{
+      const bank=document.querySelector(`.bank[data-bank="${row.id}"]`);
+      const end=motionPoint(bank,.84,.5);
+      animateToken(target,end,{
+        kind:'capacity',
+        delay:1650+i*260,
+        duration:900,
+        size:11,
+        onArrive:()=>bank?.classList.add('market-help')
+      });
+    });
+    later(()=>document.querySelector('.queue-label')?.classList.add('pulse'),1550);
+  }
+
+  if(scene===3){
+    const fenceX=positionRingFence();
+    $('#ringFence')?.classList.add('active');
+    if(fenceX==null) return;
+    const sources=banks.filter(b=>b.provider!=='blue').slice(0,7);
+    const targets=c.individual.rows;
+    sources.forEach((bank,i)=>{
+      const source=document.querySelector(`.bank[data-bank="${bank.id}"]`);
+      const target=document.querySelector(`.bank[data-bank="${targets[i%targets.length].id}"]`);
+      animateBlockedToken(source,target,fenceX,{delay:500+i*170,duration:1750});
+    });
+  }
+
+  if(scene===4){
+    const pool=document.querySelector('.pool-node');
+    if(!pool) return;
+    const poolPoint=motionPoint(pool,.5,.5);
+    const sourceBanks=banks.filter((_,i)=>i%2===0).slice(0,10);
+
+    sourceBanks.forEach((bank,i)=>{
+      const source=document.querySelector(`.bank[data-bank="${bank.id}"]`);
+      animateToken(motionPoint(source,.5,.9),poolPoint,{
+        kind:'pooled',
+        delay:260+i*90,
+        duration:900,
+        size:9
+      });
+    });
+
+    c.scfr.rows.forEach((row,i)=>{
+      const bank=document.querySelector(`.bank[data-bank="${row.id}"]`);
+      const end=motionPoint(bank,.5,.72);
+      animateToken(poolPoint,end,{
+        kind:'capacity',
+        delay:1650+i*190,
+        duration:820,
+        size:11,
+        onArrive:()=>setBankOutcome(bank,row)
+      });
+    });
+  }
+}
+
+function triggerCamera(){
+  const stage=$('#stage');
+  if(!stage) return;
+  stage.classList.remove('scene-enter');
+  void stage.offsetWidth;
+  stage.classList.add('scene-enter');
+}
+
 function drawNetworkLines(){
   const svg = $('#networkLines');
   const stage = $('#stage');
@@ -478,16 +656,21 @@ function applyScene(){
   }
 
   if(scene === 4){
+    // Start in the disrupted state; capacity tokens visibly restore banks one by one.
     c.scfr.rows.forEach(b=>{
       const el = document.querySelector(`.bank[data-bank="${b.id}"]`);
       if(!el) return;
-      el.classList.remove('affected');
-      el.classList.add(b.recovered?'restored':'waiting');
+      el.classList.remove('restored','waiting');
+      el.classList.add('affected');
     });
   }
 
   $('#compareOverlay').innerHTML = scene === 5 ? comparisonHTML() : '';
-  requestAnimationFrame(drawNetworkLines);
+  requestAnimationFrame(()=>{
+    drawNetworkLines();
+    runSceneMotion(c);
+    triggerCamera();
+  });
 
   $('#backScene').disabled = scene===0;
   $('#nextScene').textContent = scene===scenes.length-1 ? 'Open Stress Lab →' : 'Next →';
@@ -502,6 +685,7 @@ function updateDemoProgress(){
 
 function stopAuto(){
   if(autoplay){ clearTimeout(autoplay); autoplay=null; }
+  clearSceneMotion();
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
   $('#autoScene').textContent='▶ Watch demo';
 }
