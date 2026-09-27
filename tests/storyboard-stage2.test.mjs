@@ -27,10 +27,11 @@ assert.match(css,/raStage2Shockwave/);
 assert.match(css,/raStage2AffectedBanks/);
 assert.match(css,/raStage2SystemicRing/);
 
-assert.match(js,/else if\(sceneIndex===1\)/);
-assert.match(js,/animateGuidedCueCopy/);
-assert.match(js,/kicker\.textContent='FAILURE SEQUENCE'/);
-assert.match(js,/caption\.textContent=cue\.caption/);
+assert.match(js,/if\(sceneIndex===1\) return 'FAILURE SEQUENCE'/);
+assert.match(js,/function guidedCueKicker\(/);
+assert.match(js,/function commitGuidedCue\(/);
+assert.match(js,/return 'FAILURE SEQUENCE'/);
+assert.match(js,/\$\('#raGuidedCaption'\)\.textContent=cue\.caption/);
 
 assert.match(js,/ra-cue-transitioning/);
 
