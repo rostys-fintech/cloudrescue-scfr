@@ -13,7 +13,7 @@
     })();
   </script>
   <title>CloudRescue — SCFR Stress Lab</title>
-  <link rel="stylesheet" href="styles.css?v=20260927-1540">
+  <link rel="stylesheet" href="styles.css?v=20260927-1600">
 </head>
 <body>
 <div class="shell">
@@ -221,6 +221,21 @@
             <div id="frontier" class="chart"></div>
           </div>
 
+          <div class="card sensitivity-card">
+            <div class="sensitivity-head">
+              <div>
+                <div class="eyebrow">SENSITIVITY EXPLORER</div>
+                <h3>Where does coordination matter most?</h3>
+                <p>Explore resilience across different emergency-market and reserve-capacity assumptions.</p>
+              </div>
+              <div class="sensitivity-switch" role="group" aria-label="Sensitivity view">
+                <button class="sensitivity-mode active" data-mode="scfr">SCFR resilience</button>
+                <button class="sensitivity-mode" data-mode="uplift">SCFR uplift</button>
+              </div>
+            </div>
+            <div id="sensitivityHeatmap" class="sensitivity-heatmap"></div>
+          </div>
+
           <div class="card evidence-note">
             <b>Research guardrail</b>
             <span>Every result above is an illustrative output from a synthetic model — not a forecast or assessment of a real bank.</span>
@@ -250,10 +265,33 @@
           <p><b>wᵢ</b> combines critical workload and stylized systemic importance. <b>rᵢ</b> is the restored fraction after capacity allocation and readiness constraints.</p>
           <div class="guardrail">v0.1 is intentionally synthetic. Empirical calibration is a future research stage.</div>
         </article>
+        <article class="card architecture-card">
+          <div class="eyebrow">HOW IT WORKS</div>
+          <h2>From common shock to measurable recovery</h2>
+          <div class="architecture-flow">
+            <div><span>1</span><b>Synthetic bank network</b><small>20 stylized institutions linked to shared providers</small></div>
+            <i>→</i>
+            <div><span>2</span><b>Provider outage</b><small>A common operational shock hits dependent banks together</small></div>
+            <i>→</i>
+            <div><span>3</span><b>Capacity allocation</b><small>Market, individual reserves, or pooled SCFR</small></div>
+            <i>→</i>
+            <div><span>4</span><b>Recovery engine</b><small>Allocation × failover readiness determines restored workload</small></div>
+            <i>→</i>
+            <div><span>5</span><b>Systemic score</b><small>Weighted recovery becomes the Systemic Resilience Score</small></div>
+          </div>
+          <div class="architecture-tech">
+            <span>Vanilla JavaScript</span><span>Deterministic model</span><span>SVG network</span><span>Reproducible JSON</span><span>Automated model checks</span>
+          </div>
+        </article>
+
         <article class="card evidence-card">
           <div class="eyebrow">REAL-WORLD MOTIVATION</div>
           <h2>The problem is observed. The numbers are synthetic.</h2>
           <p>CloudRescue does not assume that 20 named banks literally use three named providers. The prototype uses a stylized network to stress-test a real concentration-risk mechanism documented by BIS, DORA and the EBA.</p>
+          <div class="reality-grid">
+            <div class="reality-real"><span>OBSERVED IN THE REAL WORLD</span><b>Third-party ICT concentration risk</b><b>Critical-provider dependency</b><b>Operational-resilience concern</b></div>
+            <div class="reality-synthetic"><span>SYNTHETIC IN THIS MVP</span><b>20-bank network</b><b>Provider assignments</b><b>Capacity and readiness values</b></div>
+          </div>
           <div class="evidence-grid">
             <a href="https://www.bis.org/publications/fsi-insight-53-managing-cloud-risk-some-considerations-oversight-critical-cloud-service-providers-financial-sector" target="_blank" rel="noopener"><span>BIS / FSI Insights 53</span><b>Cloud use for critical services is rising; disruption at a major CSP may have systemic implications.</b></a>
             <a href="https://www.esma.europa.eu/dora-oversight" target="_blank" rel="noopener"><span>DORA Oversight</span><b>EU framework explicitly addresses systemic and concentration risks from reliance on limited ICT providers.</b></a>
@@ -276,6 +314,6 @@
 
   <footer><span>CloudRescue · SCFR Stress Lab</span><span>Rostyslav Honcharenko · 2026</span></footer>
 </div>
-<script type="module" src="app.js?v=20260927-1540"></script>
+<script type="module" src="app.js?v=20260927-1600"></script>
 </body>
 </html>
