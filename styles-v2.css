@@ -2971,3 +2971,46 @@ html[data-theme="dark"] .heat-cell b{
     align-items:flex-start;
   }
 }
+
+
+/* ---------- Compact post-comparison mechanism summary ---------- */
+.strategy-card{
+  min-height:225px!important;
+  padding:17px 18px!important;
+}
+.strategy-card .score{
+  margin:12px 0 8px;
+  font-size:39px!important;
+}
+.strategy-card .bar{
+  margin-bottom:10px;
+}
+.strategy-card .metric{
+  padding:7px 0!important;
+}
+.strategy-card .metric span{
+  font-size:8.5px!important;
+}
+.strategy-card .metric b{
+  font-size:10.5px;
+}
+.before-after-card{
+  margin-top:14px!important;
+  margin-bottom:6px!important;
+}
+.advanced-divider{
+  height:1px;
+  margin:24px 0 22px;
+  background:var(--v2-line);
+}
+.analysis-body .sensitivity-head{
+  margin-bottom:14px;
+}
+.analysis-body .sensitivity-heatmap{
+  margin-bottom:2px;
+}
+
+/* Default page should end cleanly after the research guardrail. */
+.evidence-note{
+  margin-bottom:0!important;
+}
