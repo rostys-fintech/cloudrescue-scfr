@@ -6,6 +6,12 @@ CloudRescue is an interactive, browser-based systemic cloud resilience simulator
 
 > **Status:** v0.1 hackathon MVP. All banks, cloud providers, workloads and resilience outputs are synthetic and illustrative. The prototype does not assess any real institution or predict real-world recovery outcomes.
 
+## Live demo
+
+**GitHub Pages:** https://rostys-fintech.github.io/cloudrescue-scfr/
+
+**Repository:** https://github.com/rostys-fintech/cloudrescue-scfr
+
 ## Why this project exists
 
 Many banks can depend on the same small set of external cloud providers. A severe provider outage can therefore create a coordination problem: several banks may need backup infrastructure at the same time, while emergency capacity is scarce.
@@ -137,6 +143,39 @@ AI tools were used as a development aid for brainstorming, code drafting, debugg
 - **v0.3 — Empirical calibration:** public evidence on cloud concentration and operational resilience.
 - **v1.0 — Research companion:** reproducible scenario analysis to accompany the SCFR research project.
 
+## Technologies used
+
+- **HTML5** — semantic application structure.
+- **CSS3** — responsive institutional UI, light/dark themes and motion design.
+- **Vanilla JavaScript (ES modules)** — application state, scenario controls and guided story.
+- **SVG** — provider-to-bank dependency connections and resilience-frontier visualization.
+- **Web Speech API** — optional browser-native English narration.
+- **Web Animations API** — moving request, reserve and recovery tokens.
+- **URLSearchParams** — shareable deterministic scenario links.
+- **Blob / JSON export** — reproducible scenario snapshots.
+- **Node.js** — automated model and interface checks.
+- **GitHub Actions** — continuous syntax, model-invariant and UI smoke checks.
+- **GitHub Pages** — public deployment.
+
+No external front-end framework, charting library or runtime API is required for the MVP.
+
+## Credits and external resources
+
+CloudRescue uses no third-party visual asset pack, commercial template or copied interface.
+
+The real-world motivation is informed by public operational-resilience material from:
+
+- **BIS / Financial Stability Institute** — cloud concentration and systemic implications:  
+  https://www.bis.org/publications/fsi-insight-53-managing-cloud-risk-some-considerations-oversight-critical-cloud-service-providers-financial-sector
+- **EU DORA Oversight / ESMA** — critical ICT third-party provider and concentration-risk oversight:  
+  https://www.esma.europa.eu/dora-oversight
+- **European Banking Authority, Risk Assessment Report 2026** — third-party ICT dependency and operational-resilience risk:  
+  https://www.eba.europa.eu/publications-and-media/publications/risk-assessment-report-june-2026
+
+These sources motivate the problem only. They do **not** validate CloudRescue's synthetic numerical outputs or the SCFR mechanism.
+
+All interface icons used in the application are simple project-authored inline SVG shapes or text-based UI elements.
+
 ## Run locally
 
 No build step or external library is required.
@@ -150,7 +189,7 @@ Then open `http://localhost:8000`.
 ## Repository structure
 
 ```text
-cloudrescue/
+cloudrescue-scfr/
 ├── index.html
 ├── styles.css
 ├── app.js
@@ -160,7 +199,17 @@ cloudrescue/
 │   └── simulation.js
 ├── research/
 │   ├── methodology.md
-│   └── assumptions.md
+│   ├── assumptions.md
+│   ├── evidence-base.md
+│   └── validation-plan.md
+├── tests/
+│   ├── simulation.test.mjs
+│   └── ui-smoke.test.mjs
+├── docs/
+│   ├── devpost-submission-draft.md
+│   ├── demo-script.md
+│   ├── screenshot-plan.md
+│   └── submission-checklist.md
 └── README.md
 ```
 
