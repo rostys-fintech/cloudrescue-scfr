@@ -25,12 +25,12 @@ https://firstcommit.devpost.com/
 - Added browser narration and solved timing problems where scenes could advance before narration finished.
 - Added regression tests after UI selector bugs broke interaction.
 - Added seeded scenarios, share links and reproducible JSON export.
-- Added a visible Build Journey section.
+- Added a visible Development Journey section.
 - Added an explicit AI-assistance disclosure and ownership statement.
 
 ### What the video must show
 
-Show **Build Journey · FirstCommit** near the end.
+Show **Development Journey · FirstCommit** near the end.
 
 Say clearly:
 
@@ -132,7 +132,7 @@ Be able to explain:
 - Narration synchronized to speech completion.
 - Focus View.
 - Six-stage crisis journey.
-- Before / After mechanism comparison.
+- Controlled Comparison mechanism comparison.
 - Real vs Synthetic transparency block.
 - Methodology architecture view.
 - Consistent light/dark institutional interface.
@@ -206,7 +206,7 @@ Key evidence:
 Key evidence:
 
 - finance background;
-- Build Journey section;
+- Development Journey section;
 - documented bugs and redesigns;
 - move from static numbers to mechanism-first visualization;
 - CI / reproducibility / deployment learning.
