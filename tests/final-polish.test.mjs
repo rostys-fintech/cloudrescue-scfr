@@ -14,12 +14,13 @@ assert.equal((html.match(/role="tab"/g)||[]).length,3);
 assert.match(html,/aria-selected="true"/);
 assert.match(html,/20260927-polish01/);
 
-assert.match(js,/function voiceQualityScore\(/);
+assert.match(js,/function maleVoiceScore\(/);
 assert.match(js,/premium/);
 assert.match(js,/enhanced/);
 assert.match(js,/natural/);
-assert.match(js,/\bava\b/);
-assert.match(js,/\bsamantha\b/);
+assert.match(js,/\\bdaniel\\b/);
+assert.match(js,/\\bandrew\\b/);
+assert.match(js,/explicitlyFemale/);
 assert.match(js,/function waitForNarrator\(/);
 assert.match(js,/function narrationChunks\(/);
 assert.match(js,/function narrationProfile\(/);
