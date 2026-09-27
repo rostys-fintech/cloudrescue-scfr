@@ -47,4 +47,4 @@ assert.match(css,/ra-intro-links/);
 assert.match(css,/ra-intro-flow/);
 assert.match(css,/animation:none!important/);
 
-console.log('Guided intro animation checks passed.');
+console.log('Visible five-phase guided intro checks passed.');
