@@ -1,11 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <path d="M4 4h42l14 14v42H18L4 46Z" fill="#050608"/>
-  <path d="M8 8h35l13 13v35H21L8 43Z" fill="none" stroke="#ff243d" stroke-width="2"/>
-  <g fill="none" stroke="#ff243d" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter">
-    <circle cx="17" cy="18" r="3"/>
-    <circle cx="32" cy="18" r="3"/>
-    <circle cx="47" cy="18" r="3"/>
-    <path d="M17 22v9h15M47 22v9H32M32 22v18"/>
-    <rect x="23" y="40" width="18" height="8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Resilience Atlas">
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="#08111A"/>
+  <rect x="4.75" y="4.75" width="54.5" height="54.5" rx="15.25" fill="none" stroke="#213446" stroke-width="1.5"/>
+  <g fill="none" stroke="#35A7FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="29" cy="30" r="17"/>
+    <path d="M12 30h34"/>
+    <path d="M29 13c5.2 4.9 7.7 10.5 7.7 17S34.2 42.1 29 47c-5.2-4.9-7.7-10.5-7.7-17S23.8 17.9 29 13Z"/>
+    <path d="M16.5 20.5c7 3.2 18 3.2 25 0M16.5 39.5c7-3.2 18-3.2 25 0"/>
   </g>
+  <path d="M37.5 46.8c-2.8 0-5-2-5-4.6 0-2.3 1.8-4.2 4.2-4.5.9-3.2 3.8-5.4 7.3-5.4 4 0 7.2 2.9 7.6 6.6 2.5.3 4.4 2.3 4.4 4.7 0 2.7-2.3 4.9-5.2 4.9H37.5Z" fill="#08111A" stroke="#27D3B2" stroke-width="2.2" stroke-linejoin="round"/>
+  <circle cx="43.8" cy="43.2" r="2.2" fill="#27D3B2"/>
+  <path d="M41.6 43.2h-5.1" stroke="#27D3B2" stroke-width="1.7" stroke-linecap="round"/>
 </svg>
