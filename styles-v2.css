@@ -3959,3 +3959,98 @@ html[data-theme="analysis"] .flow-box{
   .before-after-card:before,
   .method-intro:before{display:none}
 }
+
+
+/* ---------- Legacy token remap: eliminate old multi-color SaaS palette ---------- */
+html[data-theme="crisis"]{
+  --canvas:#050608;
+  --surface:#090b0e;
+  --surface-subtle:#0d1014;
+  --navy:#f5f7f9;
+  --navy-2:#c9ced5;
+  --blue:#ff243d;
+  --blue-soft:rgba(255,36,61,.10);
+  --green:#f1f4f7;
+  --green-soft:rgba(241,244,247,.065);
+  --amber:#ff5569;
+  --amber-soft:rgba(255,36,61,.08);
+  --red:#ff243d;
+  --red-soft:rgba(255,36,61,.11);
+  --text:#f5f7f9;
+  --muted:#818995;
+  --muted-2:#626a74;
+  --line:rgba(255,40,62,.20);
+  --line-strong:rgba(255,40,62,.50);
+  --shadow:none;
+  --shadow-lg:none;
+}
+html[data-theme="analysis"]{
+  --canvas:#f5f9fe;
+  --surface:#ffffff;
+  --surface-subtle:#edf5ff;
+  --navy:#071a33;
+  --navy-2:#24425f;
+  --blue:#0b63e5;
+  --blue-soft:rgba(11,99,229,.09);
+  --green:#0b63e5;
+  --green-soft:rgba(11,99,229,.075);
+  --amber:#3b78b5;
+  --amber-soft:rgba(11,99,229,.065);
+  --red:#d72f45;
+  --red-soft:rgba(215,47,69,.075);
+  --text:#071a33;
+  --muted:#607891;
+  --muted-2:#8499ad;
+  --line:rgba(11,99,229,.18);
+  --line-strong:rgba(11,99,229,.46);
+  --shadow:none;
+  --shadow-lg:none;
+}
+
+/* All healthy topology rails obey current mode; only actual incident states use danger red. */
+html[data-theme="crisis"] .hero-cloud-a,
+html[data-theme="crisis"] .hero-cloud-b,
+html[data-theme="crisis"] .hero-cloud-c,
+html[data-theme="analysis"] .hero-cloud-a,
+html[data-theme="analysis"] .hero-cloud-b,
+html[data-theme="analysis"] .hero-cloud-c{
+  border-top-color:var(--v2-primary)!important;
+}
+html[data-theme="crisis"] .network-line[data-provider="blue"],
+html[data-theme="crisis"] .network-line[data-provider="orange"],
+html[data-theme="crisis"] .network-line[data-provider="green"]{
+  stroke:rgba(255,36,61,.30)!important;
+}
+html[data-theme="analysis"] .network-line[data-provider="blue"],
+html[data-theme="analysis"] .network-line[data-provider="orange"],
+html[data-theme="analysis"] .network-line[data-provider="green"]{
+  stroke:rgba(11,99,229,.28)!important;
+}
+html[data-theme="analysis"] .stage[data-outage="blue"].scene-2 .network-line[data-provider="blue"],
+html[data-theme="analysis"] .stage[data-outage="blue"].scene-3 .network-line[data-provider="blue"],
+html[data-theme="analysis"] .stage[data-outage="orange"].scene-2 .network-line[data-provider="orange"],
+html[data-theme="analysis"] .stage[data-outage="orange"].scene-3 .network-line[data-provider="orange"],
+html[data-theme="analysis"] .stage[data-outage="green"].scene-2 .network-line[data-provider="green"],
+html[data-theme="analysis"] .stage[data-outage="green"].scene-3 .network-line[data-provider="green"]{
+  stroke:#d72f45!important;
+  filter:drop-shadow(0 0 5px rgba(215,47,69,.28));
+}
+html[data-theme="crisis"] .stage[data-outage="blue"].scene-2 .network-line[data-provider="blue"],
+html[data-theme="crisis"] .stage[data-outage="blue"].scene-3 .network-line[data-provider="blue"],
+html[data-theme="crisis"] .stage[data-outage="orange"].scene-2 .network-line[data-provider="orange"],
+html[data-theme="crisis"] .stage[data-outage="orange"].scene-3 .network-line[data-provider="orange"],
+html[data-theme="crisis"] .stage[data-outage="green"].scene-2 .network-line[data-provider="green"],
+html[data-theme="crisis"] .stage[data-outage="green"].scene-3 .network-line[data-provider="green"]{
+  stroke:#ff243d!important;
+  filter:drop-shadow(0 0 7px rgba(255,36,61,.55));
+}
+
+/* Remove soft rounded remnants from system diagrams. */
+.provider,.bank,.bank-group,.flow-box,.outage-cloud,.capacity-reservoir,
+.reserve-source,.reserve-outcome,.pool-node,.queue-label,.reserve-node,
+.compare-card,.same-budget-badge,.challenge-metrics>div{
+  border-radius:0!important;
+}
+.bar,.compare-bar,.capacity-blocks i,.demo-progress{
+  border-radius:0!important;
+}
