@@ -79,7 +79,7 @@ function buildSvg(mode){
     const pos=BANK_POSITIONS[bank.id];
     const p=PROVIDER_META[bank.provider];
     const d=curvePath(p.x,p.y,pos[0],pos[1],index);
-    const dur=(8+(index%5)*1.35).toFixed(2);
+    const dur=(11+(index%5)*1.8).toFixed(2);
     const begin=(-index*.43).toFixed(2);
     return '<circle class="ra-earth-packet provider-'+bank.provider+'" data-provider="'+bank.provider+'" r="2.25"><animateMotion path="'+d+'" dur="'+dur+'s" begin="'+begin+'s" repeatCount="indefinite"></animateMotion></circle>';
   }).join('');
@@ -108,13 +108,23 @@ function buildSvg(mode){
   const requestPaths=banks.map(function(bank,index){
     const pos=BANK_POSITIONS[bank.id];
     const d=curvePath(pos[0],pos[1],500,503,index+19);
-    return '<path class="ra-request-flow" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" d="'+d+'"></path>';
+    const dur=(5.8+(index%4)*.8).toFixed(2);
+    const begin=(-index*.31).toFixed(2);
+    return '<path class="ra-request-flow" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" d="'+d+'"></path>'+
+      '<circle class="ra-request-packet" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" r="2">'+
+        '<animateMotion path="'+d+'" dur="'+dur+'s" begin="'+begin+'s" repeatCount="indefinite"></animateMotion>'+
+      '</circle>';
   }).join('');
 
   const recoveryPaths=banks.map(function(bank,index){
     const pos=BANK_POSITIONS[bank.id];
     const d=curvePath(500,503,pos[0],pos[1],index+31);
-    return '<path class="ra-recovery-flow" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" d="'+d+'"></path>';
+    const dur=(6.6+(index%4)*.9).toFixed(2);
+    const begin=(-index*.36).toFixed(2);
+    return '<path class="ra-recovery-flow" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" d="'+d+'"></path>'+
+      '<circle class="ra-recovery-packet" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" r="2.1">'+
+        '<animateMotion path="'+d+'" dur="'+dur+'s" begin="'+begin+'s" repeatCount="indefinite"></animateMotion>'+
+      '</circle>';
   }).join('');
 
   const lands=LAND_PATHS.map(function(d){ return '<path d="'+d+'"></path>'; }).join('');
@@ -157,6 +167,10 @@ function buildSvg(mode){
       '<g class="ra-earth-requests">'+requestPaths+'</g>'+
       '<g class="ra-earth-recovery">'+recoveryPaths+'</g>'+
       '<g class="ra-earth-bank-layer">'+bankNodes+'</g>'+
+      '<g class="ra-market-node" transform="translate(500 503)">'+
+        '<circle class="ra-market-ring" r="27"></circle><circle class="ra-market-core" r="7"></circle>'+
+        '<text x="0" y="-36">CAPACITY MARKET</text><text class="sub" x="0" y="43">immediate backup</text>'+
+      '</g>'+
       '<g class="ra-pool-node" transform="translate(500 503)">'+
         '<circle class="ra-pool-ring" r="29"></circle><circle class="ra-pool-core" r="8"></circle>'+
         '<text x="0" y="-38">SCFR POOL</text><text class="sub" x="0" y="44">shared reserve</text>'+
@@ -199,6 +213,7 @@ export function createEarthSystem(mount,options){
   const affectedLabel=mount.querySelector('[data-earth-affected]');
   const gapLabel=mount.querySelector('[data-earth-gap]');
   const restoredLabel=mount.querySelector('[data-earth-restored]');
+  let previousSignature='';
 
   function update(input){
     input=input||{};
@@ -210,6 +225,15 @@ export function createEarthSystem(mount,options){
     const labStrategy=input.labStrategy||'market';
     const labScene=labStrategy==='market' ? 2 : labStrategy==='individual' ? 3 : 4;
     const effectiveScene = mode==='evidence' ? 0 : mode==='lab' ? labScene : scene;
+    const signature=[effectiveScene,outageProvider,labStrategy,marketPct,reservePct].join('|');
+
+    if(previousSignature && signature!==previousSignature){
+      mount.classList.remove('ra-state-changing');
+      void mount.offsetWidth;
+      mount.classList.add('ra-state-changing');
+      window.setTimeout(function(){ mount.classList.remove('ra-state-changing'); },760);
+    }
+    previousSignature=signature;
 
     mount.dataset.scene=String(effectiveScene);
     mount.dataset.outageProvider=outageProvider;
@@ -277,6 +301,10 @@ export function createEarthSystem(mount,options){
       const active=affectedSet.has(path.dataset.bank) && effectiveScene===2 && mode!=='evidence';
       path.classList.toggle('is-visible',active);
     });
+    svg.querySelectorAll('.ra-request-packet').forEach(function(packet){
+      const active=affectedSet.has(packet.dataset.bank) && effectiveScene===2 && mode!=='evidence';
+      packet.classList.toggle('is-visible',active);
+    });
 
     svg.querySelectorAll('.ra-recovery-flow').forEach(function(path){
       const active=affectedSet.has(path.dataset.bank) && (effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence';
@@ -284,6 +312,18 @@ export function createEarthSystem(mount,options){
       const row=byId.get(path.dataset.bank);
       path.style.setProperty('--ra-flow-restored',row ? clamp(row.restoredFraction).toFixed(3) : '0');
     });
+    svg.querySelectorAll('.ra-recovery-packet').forEach(function(packet){
+      const active=affectedSet.has(packet.dataset.bank) && (effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence';
+      packet.classList.toggle('is-visible',active);
+      const row=byId.get(packet.dataset.bank);
+      packet.style.setProperty('--ra-flow-restored',row ? clamp(row.restoredFraction).toFixed(3) : '0');
+    });
+
+    const marketNode=svg.querySelector('.ra-market-node');
+    if(marketNode){
+      marketNode.classList.toggle('is-visible',effectiveScene===2 && mode!=='evidence');
+      marketNode.classList.toggle('is-active',effectiveScene===2 && mode!=='evidence');
+    }
 
     const pool=svg.querySelector('.ra-pool-node');
     if(pool){
