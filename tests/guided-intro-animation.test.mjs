@@ -23,7 +23,8 @@ assert.match(js,/at:14\.049,id:'s1-risk'/);
 assert.match(js,/function cueAtTime\(/);
 assert.match(js,/guidedAudio\.currentTime/);
 assert.match(js,/if\(sceneIndex===0\)/);
-assert.match(js,/animateGuidedCueCopy/);\nassert.match(js,/kicker\.textContent='LIVE CUE'/);
+assert.match(js,/animateGuidedCueCopy/);
+assert.match(js,/kicker\.textContent='LIVE CUE'/);
 assert.match(js,/function startGuidedCueSync\(/);
 assert.doesNotMatch(js,/function startGuidedIntro\(/);
 
