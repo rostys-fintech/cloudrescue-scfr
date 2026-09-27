@@ -14,7 +14,7 @@
   </script>
   <title>CloudRescue — SCFR Stress Lab</title>
   <link rel="stylesheet" href="styles.css?v=20260927-1930">
-  <link rel="stylesheet" href="styles-v2.css?v=20260927-2005">
+  <link rel="stylesheet" href="styles-v2.css?v=20260927-2035">
 </head>
 <body>
 <div class="shell">
@@ -39,22 +39,59 @@
     </div>
   </header>
 
-  <section class="hero">
-    <div>
+  <section class="hero hero-institutional">
+    <div class="hero-copy">
       <div class="eyebrow">SYSTEMIC RESILIENCE · RESEARCH PROTOTYPE</div>
       <h1>CloudRescue</h1>
-      <p>Stress-test how a banking system recovers from a shared cloud outage.</p>
+      <p>Stress-test how shared cloud dependency can turn one operational outage into a system-wide recovery problem.</p>
+      <div class="hero-thesis">
+        <span>CORE HYPOTHESIS</span>
+        <b>Same shock. Same reserve budget. Better coordination?</b>
+      </div>
       <div class="hero-actions">
         <button id="heroDemo" class="btn primary">Run guided replay</button>
         <button id="heroLab" class="btn secondary">Open Stress Lab</button>
       </div>
+      <div class="hero-meta-line">
+        <span>20 synthetic banks</span><i></i>
+        <span>3 shared providers</span><i></i>
+        <span>3 recovery mechanisms</span>
+      </div>
     </div>
-    <div class="hero-summary" aria-label="Prototype summary">
-      <header><span>MODEL SCOPE</span><b>Systemic cloud failover</b></header>
-      <div><span>SYNTHETIC SYSTEM</span><b>20</b><small>banks</small></div>
-      <div><span>SHARED DEPENDENCY</span><b>3</b><small>providers</small></div>
-      <div><span>RECOVERY MODELS</span><b>3</b><small>mechanisms</small></div>
-      <p>Real concentration-risk motivation. Synthetic, reproducible stress-test.</p>
+
+    <div class="hero-system" aria-label="Shared cloud dependency illustration">
+      <div class="hero-system-head">
+        <span>LIVE MODEL PREVIEW</span>
+        <b>Shared dependency topology</b>
+        <small>Synthetic network · deterministic engine</small>
+      </div>
+      <div class="hero-network">
+        <div class="hero-cloud hero-cloud-a"><span>CLOUD A</span><b>08</b><small>dependent banks</small></div>
+        <div class="hero-cloud hero-cloud-b"><span>CLOUD B</span><b>07</b><small>dependent banks</small></div>
+        <div class="hero-cloud hero-cloud-c"><span>CLOUD C</span><b>05</b><small>dependent banks</small></div>
+
+        <svg class="hero-network-lines" viewBox="0 0 720 280" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M120 64 C120 126 130 132 130 192"></path>
+          <path d="M360 64 C360 126 360 132 360 192"></path>
+          <path d="M600 64 C600 126 590 132 590 192"></path>
+          <path class="hero-risk-line" d="M120 64 C120 126 130 132 130 192"></path>
+        </svg>
+
+        <div class="hero-bank-cluster cluster-a">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="hero-bank-cluster cluster-b">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="hero-bank-cluster cluster-c">
+          <i></i><i></i><i></i><i></i><i></i>
+        </div>
+
+        <div class="hero-risk-note">
+          <span>CONCENTRATION RISK</span>
+          <b>One provider failure can create simultaneous recovery demand.</b>
+        </div>
+      </div>
     </div>
   </section>
 
