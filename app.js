@@ -678,7 +678,7 @@ function comparisonHTML(args=storyArgs){
       <div class="compare-score">${Math.round(r.resilience)} <small>/100</small></div>
       <div class="compare-bar"><i style="width:${Math.min(100,r.resilience)}%"></i></div>
       <p>Systemic Resilience Score</p>
-      <div class="compare-outcome-label">8 affected banks</div>
+      <div class="compare-outcome-label">${r.affectedCount} affected banks</div>
       ${outcomeBanks(r.rows,true)}
       <div class="mini"><span>Banks recovered</span><b>${r.banksRecovered}/${r.affectedCount}</b></div>
       <div class="mini"><span>Critical workload restored</span><b>${pct(r.criticalRestoredPct)}</b></div>
@@ -976,6 +976,72 @@ function currentArgs(){
   };
 }
 
+function mechanismPanel(title,label,r,{scfr=false}={}){
+  const strandedShare=r.totalReserve ? r.strandedReserve/r.totalReserve : 0;
+  return `
+    <article class="mechanism-panel ${scfr?'after':''}">
+      <div class="mechanism-panel-head">
+        <div><span>${label}</span><h3>${title}</h3></div>
+        <div class="mechanism-score"><b>${Math.round(r.resilience)}</b><small>/100 resilience</small></div>
+      </div>
+
+      <div class="mechanism-visual">
+        <div class="mechanism-reserve">
+          <span>SAME RESERVE BUDGET</span>
+          ${reserveTokens(10,scfr?0:strandedShare,scfr)}
+        </div>
+
+        <div class="mechanism-flow ${scfr?'flow-open':'flow-blocked'}">
+          <span class="flow-line"></span>
+          <b>${scfr?'POOLED':'RING-FENCED'}</b>
+          <small>${scfr?'capacity can move to affected banks':'capacity stays bank-specific'}</small>
+        </div>
+
+        <div class="mechanism-banks">
+          <span>AFFECTED BANKS</span>
+          ${outcomeBanks(r.rows)}
+        </div>
+      </div>
+
+      <div class="mechanism-foot">
+        <div><span>Critical workload restored</span><b>${pct(r.criticalRestoredPct)}</b></div>
+        <div><span>Reserve stranded</span><b>${num(r.strandedReserve)}</b></div>
+      </div>
+    </article>`;
+}
+
+function renderBeforeAfter(c,args){
+  const uplift=c.scfr.resilience-c.individual.resilience;
+  $('#beforeAfter').innerHTML=`
+    <div class="before-after-head">
+      <div>
+        <div class="eyebrow">BEFORE / AFTER · SAME SHOCK · SAME RESERVE</div>
+        <h2>What changes when reserve becomes movable?</h2>
+      </div>
+      <div class="same-budget-proof">
+        <span>Total pre-reserved capacity</span>
+        <b>${num(c.scfr.totalReserve)} units</b>
+        <small>identical in both panels</small>
+      </div>
+    </div>
+
+    <div class="before-after-grid">
+      ${mechanismPanel('Individual reserves','BEFORE',c.individual)}
+      <div class="mechanism-delta">
+        <span>ONLY THE ALLOCATION RULE CHANGES</span>
+        <b>+${uplift.toFixed(1)}</b>
+        <small>resilience points</small>
+        <i>→</i>
+      </div>
+      ${mechanismPanel('SCFR pooled reserve','AFTER',c.scfr,{scfr:true})}
+    </div>
+
+    <div class="before-after-note">
+      <b>No extra reserve is added.</b>
+      <span>The experiment isolates coordination: ring-fenced capacity versus a pre-arranged pooled allocation rule.</span>
+    </div>`;
+}
+
 function renderInsight(c,args){
   const uplift = c.scfr.resilience - c.individual.resilience;
   const strandedReduction = c.individual.strandedReserve - c.scfr.strandedReserve;
@@ -1020,6 +1086,17 @@ function exportScenario(){
   URL.revokeObjectURL(url);
 }
 
+function replayCurrentScenario(){
+  storyArgs={...currentArgs()};
+  storyFromLab=true;
+  stopAuto();
+  switchTab('story');
+  setNarration(true);
+  setFocusMode(true);
+  scene=0;
+  startDemo({reset:false});
+}
+
 function renderLab(){
   const args = currentArgs();
 
@@ -1041,6 +1118,7 @@ function renderLab(){
 
   renderFrontier(args);
   renderInsight(c,args);
+  renderBeforeAfter(c,args);
 
   const success = c.scfr.resilience>=80 && args.reservePct<=30;
   $('#challenge').classList.toggle('success',success);
@@ -1055,6 +1133,7 @@ function renderLab(){
 $$('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.dataset.preset)));
 $('#runBtn').addEventListener('click',renderLab);
 $('#exportBtn').addEventListener('click',exportScenario);
+$('#replayScenarioBtn').addEventListener('click',replayCurrentScenario);
 
 renderNetwork();
 setupTheme();
