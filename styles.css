@@ -915,3 +915,91 @@ html[data-theme="dark"] .evidence-strip a:hover{background:#172331}
   .motivation-signal{grid-template-columns:1fr}
   .motivation-arrow{text-align:center;transform:rotate(90deg)}
 }
+
+
+/* High-signal scene outcome callouts */
+.impact-overlay{
+  position:absolute;
+  right:34px;
+  top:78px;
+  z-index:7;
+  width:250px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.94);
+  border-radius:12px;
+  padding:11px 13px;
+  box-shadow:0 8px 24px rgba(15,31,51,.07);
+  backdrop-filter:blur(8px);
+  pointer-events:none;
+}
+.impact-overlay span{
+  display:block;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#7890a8;
+}
+.impact-overlay b{
+  display:block;
+  margin:4px 0 3px;
+  font-size:22px;
+  line-height:1;
+  letter-spacing:-.035em;
+  color:var(--navy);
+}
+.impact-overlay small{
+  display:block;
+  color:#788a9c;
+  font-size:8px;
+  line-height:1.35;
+}
+.scene-2 .impact-overlay,
+.scene-3 .impact-overlay{border-color:#e7bbc1;background:rgba(255,246,247,.96)}
+.scene-4 .impact-overlay{border-color:#e8d1a1;background:rgba(255,250,239,.97)}
+.scene-5 .impact-overlay{border-color:#b9dccf;background:rgba(244,251,248,.97)}
+.scene-6 .impact-overlay{border-color:#b9cced;background:rgba(247,250,255,.97)}
+
+/* Focus attention on the affected dependency chain */
+.scene-2 .bank-group[data-provider="orange"],
+.scene-2 .bank-group[data-provider="green"],
+.scene-3 .bank-group[data-provider="orange"],
+.scene-3 .bank-group[data-provider="green"],
+.scene-4 .bank-group[data-provider="orange"],
+.scene-4 .bank-group[data-provider="green"]{
+  opacity:.52;
+  filter:saturate(.65);
+}
+.scene-5 .bank-group[data-provider="orange"],
+.scene-5 .bank-group[data-provider="green"]{opacity:.72}
+.bank-group{transition:opacity .35s ease,filter .35s ease}
+
+html[data-theme="dark"] .impact-overlay{
+  background:rgba(19,31,44,.96);
+  border-color:var(--line);
+}
+html[data-theme="dark"] .impact-overlay b{color:#eef4f8}
+html[data-theme="dark"] .impact-overlay small{color:#94a6b7}
+html[data-theme="dark"] .scene-2 .impact-overlay,
+html[data-theme="dark"] .scene-3 .impact-overlay{background:rgba(49,28,34,.97);border-color:#6a3943}
+html[data-theme="dark"] .scene-4 .impact-overlay{background:rgba(43,36,24,.97);border-color:#655330}
+html[data-theme="dark"] .scene-5 .impact-overlay{background:rgba(20,41,34,.97);border-color:#356551}
+html[data-theme="dark"] .scene-6 .impact-overlay{background:rgba(20,31,49,.97);border-color:#385276}
+
+body.story-focus .impact-overlay{
+  top:82px;
+  right:28px;
+  width:285px;
+  padding:14px 16px;
+}
+body.story-focus .impact-overlay b{font-size:28px}
+
+@media(max-width:900px){
+  .impact-overlay{
+    position:relative;
+    right:auto;
+    top:auto;
+    width:100%;
+    margin:8px 0;
+  }
+}
