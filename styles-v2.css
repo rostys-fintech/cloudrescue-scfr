@@ -972,3 +972,94 @@ html[data-theme="dark"] .btn{
   .evidence-strip>div,.evidence-strip>a{border-right:0;border-bottom:1px solid var(--v2-line)}
   .evidence-strip>*:last-child{border-bottom:0}
 }
+
+
+/* ---------- Executive summary header ---------- */
+.hero-summary>header{
+  padding:14px 16px 12px;
+  border-bottom:1px solid var(--v2-line);
+  background:var(--v2-surface-2);
+}
+.hero-summary>header span{
+  display:block;
+  color:var(--v2-muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.1em;
+}
+.hero-summary>header b{
+  display:block;
+  margin-top:4px;
+  color:var(--v2-ink);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+
+/* ---------- Enterprise control grouping ---------- */
+.control-section-label{
+  margin:17px 0 8px;
+  padding-top:14px;
+  border-top:1px solid var(--v2-line);
+  color:var(--v2-muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.11em;
+}
+.actions-label{margin-bottom:10px}
+.control-section-label+.presets{margin-top:0}
+
+/* ---------- Restrained motion language ---------- */
+.motion-token{
+  box-shadow:none!important;
+}
+.motion-token.request,
+.motion-token.capacity,
+.motion-token.locked,
+.motion-token.pooled{
+  box-shadow:none!important;
+  border-width:1px;
+}
+.affected-bank-icon,
+.request-banks i,
+.pool-node,
+.pooled-story .reserve-token,
+.scene-3 .bank.affected,
+.scene-4 .bank.waiting{
+  animation:none!important;
+}
+.outage-wave{
+  animation:none!important;
+}
+.scene-2 .shock-pulse,
+.scene-3 .shock-pulse{
+  animation:none!important;
+}
+.queue-label.pulse{
+  animation:queuePulseV2 .45s ease 1!important;
+}
+@keyframes queuePulseV2{
+  50%{background:rgba(182,66,77,.06)}
+}
+.ring-fence.hit{
+  animation:fenceHitV2 .2s ease 1!important;
+}
+@keyframes fenceHitV2{
+  50%{border-left-color:var(--v2-danger)}
+}
+.scene-5 .pool-node{
+  box-shadow:0 0 0 1px rgba(31,122,90,.12)!important;
+}
+.same-budget-badge{
+  border-radius:4px!important;
+  box-shadow:none!important;
+}
+
+/* Keep camera movement subtle and product-like */
+.stage.scene-2.scene-enter,
+.stage.scene-3.scene-enter,
+.stage.scene-4.scene-enter,
+.stage.scene-5.scene-enter,
+.stage.scene-6.scene-enter{
+  animation-duration:.48s!important;
+}
