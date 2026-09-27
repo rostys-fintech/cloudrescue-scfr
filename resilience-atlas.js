@@ -31,12 +31,12 @@ const labDraft = {
 };
 
 const GUIDED_AUDIO_TRACKS = [
-  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=53aba024-847e-46ca-996d-cc8b794740b9c.wav',durationMs:18965},
-  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=1544c69a-3032-41c3-ab11-42709b8f8573.wav',durationMs:15020},
-  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=8a9d59ed-77be-46a3-88a1-7f6280d8e24b.wav',durationMs:13087},
-  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=1fa3f8dd-858f-4731-a834-1e0cc7537392.wav',durationMs:17528},
-  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=f409d816-701e-4689-a87e-047159a59d0a.wav',durationMs:15882},
-  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=7ca4bcc0-89e4-4b44-aebf-dd36236dbee4.wav',durationMs:23876}
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=1d2a60f2-2dc1-41ab-9feb-d7c3b8a3f820.wav',durationMs:17842},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=8630f5b1-7b6e-4c63-84e8-5f2551ddc12b.wav',durationMs:16013},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=de6b3f25-4a42-4d8a-abee-d4979d0c395b.wav',durationMs:12539},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=77965ee8-99bc-417b-afc5-0f1e533656fc.wav',durationMs:16274},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=a16036c5-ef1c-4a08-93c6-57ad62c434cc.wav',durationMs:16823},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=d798f2ca-cec2-4199-87d5-80cd7ae53419.wav',durationMs:24137}
 ];
 
 const guidedAudio = new Audio();
@@ -593,7 +593,7 @@ function updateNarrationControl(){
   const button=$('#raNarrationToggle');
   button.setAttribute('aria-pressed',guided.narration ? 'true' : 'false');
   button.dataset.voiceQuality='neural';
-  button.title='HeyGen neural narrator · Orson — Firm & Measured';
+  button.title='HeyGen neural narrator · Viktor — Serious & Composed';
   $('#raNarrationLabel').textContent=guided.narration ? 'Narration on' : 'Narration off';
 
   const pauseButton=$('#raSpeechPause');
@@ -741,19 +741,22 @@ function stopGuidedSimulation(){
   $('#raGuidedHud').classList.remove('is-speaking');
 }
 
+function isCompactTouchLayout(){
+  const coarse=window.matchMedia?.('(pointer: coarse)').matches || false;
+  const narrow=window.innerWidth<=960;
+  const phoneLandscape=coarse && window.innerWidth<=1180 && window.innerHeight<=720;
+  return narrow || phoneLandscape;
+}
+
 function focusAnimationStage(target){
-  if(!target || window.innerWidth>=768) return Promise.resolve(true);
+  if(!target || !isCompactTouchLayout()) return Promise.resolve(true);
 
-  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  const headerOffset=68;
-  const top=Math.max(0,target.getBoundingClientRect().top+window.scrollY-headerOffset);
+  target.style.scrollMarginTop='68px';
+  target.scrollIntoView({block:'start',behavior:'auto'});
 
-  window.scrollTo({
-    top,
-    behavior:'auto'
+  return new Promise(resolve=>{
+    window.requestAnimationFrame(()=>window.requestAnimationFrame(()=>resolve(true)));
   });
-
-  return Promise.resolve(true);
 }
 
 async function runGuidedSimulation(){
@@ -777,8 +780,9 @@ async function runGuidedSimulation(){
   renderScene();
   setGuidedActive(true);
 
-  if(window.innerWidth<768){
-    focusAnimationStage($('#raEarthMount'));
+  if(isCompactTouchLayout()){
+    await focusAnimationStage($('#raEarthMount'));
+    if(runId!==guided.runId) return;
   }
 
   for(let i=0;i<6;i++){
@@ -1110,7 +1114,7 @@ async function runLabScenario(){
       await labRunWait(310,runId);
     }
 
-    if(window.innerWidth<768){
+    if(isCompactTouchLayout()){
       await focusAnimationStage($('#raLabEarthMount'));
       if(runId!==labRun.runId) return;
     }
@@ -1209,7 +1213,7 @@ function setupMobileLab(){
   });
 
   window.addEventListener('resize',()=>{
-    if(window.innerWidth>=768 && document.body.classList.contains('ra-mobile-sheet-open')){
+    if(!isCompactTouchLayout() && document.body.classList.contains('ra-mobile-sheet-open')){
       setLabSheet(false);
     }
   });
