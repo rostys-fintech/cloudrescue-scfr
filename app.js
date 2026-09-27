@@ -769,7 +769,7 @@ function stopAuto(){
   document.body.classList.remove('demo-playing');
   clearSceneMotion();
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
-  $('#autoScene').textContent='Run replay';
+  $('#autoScene').textContent='▶ Auto-Simulation';
 }
 
 async function playDemoScene(runId){
@@ -804,7 +804,7 @@ function startDemo({reset=true}={}){
   const runId=demoRunId;
   autoplay=-1;
   document.body.classList.add('demo-playing');
-  $('#autoScene').textContent='Stop replay';
+  $('#autoScene').textContent='■ Stop Simulation';
   playDemoScene(runId);
 }
 
