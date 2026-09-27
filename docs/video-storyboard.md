@@ -181,7 +181,7 @@ Hold the screen for ~2 seconds.
 ## 2:38–2:58 — Sensitivity Explorer
 
 ### Action
-Scroll to **Sensitivity Explorer**.
+Open **Advanced analysis**, then show **Sensitivity Explorer**.
 
 Switch:
 **SCFR resilience → SCFR uplift**.
