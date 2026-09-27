@@ -4,28 +4,54 @@ const clamp = (v,min=0,max=1)=>Math.max(min,Math.min(max,v));
 const fmt = v => Math.round(v).toLocaleString('en-US');
 
 const PROVIDER_META = {
-  blue:   { x: 270, y: 176, label:'Blue Cloud' },
-  orange: { x: 545, y: 154, label:'Orange Cloud' },
-  green:  { x: 792, y: 236, label:'Green Cloud' }
+  blue:   { x: 352, y: 205, label:'Blue Cloud' },
+  orange: { x: 520, y: 190, label:'Orange Cloud' },
+  green:  { x: 657, y: 254, label:'Green Cloud' }
 };
 
-/* Illustrative positions only: all institutions are synthetic. */
+/* Synthetic node placement on a shared illustrative globe.
+   Positions are visual only and do not represent real institutions or provider regions. */
 const BANK_POSITIONS = {
-  B01:[236,250], B02:[322,214], B03:[404,260], B04:[472,334],
-  B05:[575,246], B06:[650,220], B07:[690,325], B08:[788,292],
-  B09:[278,310], B10:[366,238], B11:[438,306], B12:[526,218],
-  B13:[612,318], B14:[714,265], B15:[760,358],
-  B16:[328,356], B17:[458,226], B18:[548,354], B19:[658,302], B20:[814,334]
+  B01:[315,210], B02:[342,232], B03:[377,244], B04:[388,306],
+  B05:[421,357], B06:[490,214], B07:[522,234], B08:[542,292],
+  B09:[531,335], B10:[566,216], B11:[596,238], B12:[634,248],
+  B13:[662,282], B14:[611,308], B15:[690,304],
+  B16:[506,254], B17:[566,274], B18:[671,392], B19:[713,397], B20:[613,359]
 };
 
+/* A deliberately simplified but geographically recognizable world silhouette.
+   The same geometry is rendered in every Resilience Atlas mode. */
 const LAND_PATHS = [
-  'M190 190 C220 150 276 135 322 150 C350 160 366 184 360 207 C354 228 333 239 318 260 C305 279 292 300 266 307 C236 314 207 293 191 270 C174 246 169 217 190 190 Z',
-  'M347 315 C371 304 395 312 410 334 C423 354 420 378 411 399 C400 425 395 455 375 481 C362 497 344 487 337 466 C329 443 333 416 325 392 C316 363 319 330 347 315 Z',
-  'M493 185 C512 170 544 167 565 180 C578 188 580 201 567 211 C551 222 528 221 511 215 C498 210 484 198 493 185 Z',
-  'M506 225 C537 209 573 217 590 244 C604 267 599 294 587 317 C572 346 560 384 535 398 C516 408 501 389 496 366 C489 335 477 306 477 276 C476 254 487 235 506 225 Z',
-  'M576 176 C618 146 690 143 749 160 C796 174 831 200 846 233 C857 257 844 278 819 284 C790 291 763 278 739 292 C713 308 685 302 663 286 C639 269 616 258 591 253 C568 248 551 232 554 211 C556 196 564 185 576 176 Z',
-  'M735 376 C759 358 799 359 823 375 C843 389 841 410 824 423 C804 438 775 442 752 431 C732 421 720 394 735 376 Z',
-  'M352 116 C376 102 407 105 422 123 C432 137 421 151 402 155 C380 160 356 150 347 136 C342 128 344 121 352 116 Z'
+  /* North America */
+  'M274 176 L291 158 L314 149 L337 151 L353 145 L374 155 L389 170 L408 176 L421 191 L416 206 L424 219 L414 231 L420 245 L409 254 L413 270 L401 281 L395 298 L379 305 L370 321 L356 319 L349 304 L336 295 L332 278 L319 269 L312 252 L299 244 L295 227 L281 216 L272 198 Z',
+  /* Central America */
+  'M370 304 L382 305 L391 315 L397 326 L393 337 L401 347 L397 356 L389 352 L385 340 L377 334 L374 321 L365 315 Z',
+  /* South America */
+  'M386 314 L404 309 L423 319 L438 334 L446 353 L443 373 L451 393 L445 416 L437 437 L426 459 L411 480 L397 493 L387 486 L386 466 L378 451 L380 428 L372 411 L373 389 L366 372 L371 354 L365 337 L376 321 Z',
+  /* Greenland */
+  'M390 110 L411 94 L436 98 L449 112 L443 130 L429 144 L409 141 L394 129 L385 115 Z',
+  /* Europe */
+  'M468 193 L479 182 L491 180 L500 171 L510 173 L520 166 L531 174 L542 171 L553 181 L562 186 L557 195 L566 201 L556 211 L544 211 L538 219 L522 218 L515 212 L503 216 L496 208 L483 211 L476 203 L466 200 Z',
+  /* British Isles */
+  'M474 183 L479 171 L485 168 L489 178 L485 189 L478 193 Z',
+  /* Africa */
+  'M493 222 L514 215 L536 221 L552 234 L562 253 L558 273 L568 291 L561 314 L550 332 L544 355 L533 376 L520 396 L505 405 L495 393 L487 372 L477 352 L476 329 L466 307 L472 283 L466 264 L477 245 Z',
+  /* Madagascar */
+  'M559 360 L567 367 L566 386 L558 401 L552 392 L554 374 Z',
+  /* Asia */
+  'M545 190 L568 170 L596 163 L620 167 L644 161 L670 169 L695 176 L718 189 L734 208 L743 226 L739 243 L725 250 L716 263 L700 265 L691 276 L673 276 L662 289 L645 289 L634 301 L619 297 L610 285 L594 282 L586 269 L573 265 L565 251 L552 245 L554 229 L546 217 L554 203 Z',
+  /* India */
+  'M590 282 L603 277 L616 284 L624 299 L619 316 L610 334 L601 326 L595 309 L588 294 Z',
+  /* Southeast Asia */
+  'M640 289 L654 291 L666 300 L674 313 L667 321 L655 315 L649 305 L638 302 Z',
+  /* Japan */
+  'M704 245 L710 238 L714 244 L711 253 L715 261 L709 268 L705 260 L706 252 Z',
+  /* Indonesia */
+  'M658 329 L672 326 L681 331 L695 330 L706 335 L700 342 L685 341 L676 346 L664 342 Z',
+  /* Australia */
+  'M650 382 L669 371 L697 369 L718 377 L734 390 L729 407 L713 419 L695 421 L679 414 L661 416 L648 404 Z',
+  /* New Zealand */
+  'M739 420 L746 426 L744 438 L738 445 L734 438 Z'
 ];
 
 function providerCount(id){
@@ -68,6 +94,10 @@ function sceneLabel(scene,mode){
 }
 
 function buildSvg(mode){
+  const idSuffix=String(mode||'system').replace(/[^a-z0-9_-]/gi,'-');
+  const oceanGradientId='raOceanGlow-'+idSuffix;
+  const sphereLightId='raSphereLight-'+idSuffix;
+  const globeClipId='raGlobeClip-'+idSuffix;
   const providerLinks=banks.map(function(bank,index){
     const pos=BANK_POSITIONS[bank.id];
     const p=PROVIDER_META[bank.provider];
@@ -143,16 +173,21 @@ function buildSvg(mode){
 
   return '<svg class="ra-earth-svg" viewBox="0 0 1000 620" role="img" aria-label="Illustrative global system map of twenty synthetic banks and three shared providers">'+
     '<defs>'+
-      '<radialGradient id="raOceanGlow" cx="48%" cy="42%" r="64%">'+
+      '<radialGradient id="'+oceanGradientId+'" cx="39%" cy="31%" r="74%">'+
         '<stop offset="0%" stop-color="var(--ra-earth-ocean-core)"></stop>'+
-        '<stop offset="76%" stop-color="var(--ra-earth-ocean)"></stop>'+
+        '<stop offset="73%" stop-color="var(--ra-earth-ocean)"></stop>'+
         '<stop offset="100%" stop-color="var(--ra-earth-rim)"></stop>'+
       '</radialGradient>'+
-      '<clipPath id="raGlobeClip"><circle cx="500" cy="310" r="252"></circle></clipPath>'+
+      '<radialGradient id="'+sphereLightId+'" cx="34%" cy="27%" r="72%">'+
+        '<stop offset="0%" stop-color="#ffffff" stop-opacity=".12"></stop>'+
+        '<stop offset="48%" stop-color="#ffffff" stop-opacity=".025"></stop>'+
+        '<stop offset="100%" stop-color="#000000" stop-opacity=".13"></stop>'+
+      '</radialGradient>'+
+      '<clipPath id="'+globeClipId+'"><circle cx="500" cy="310" r="252"></circle></clipPath>'+
     '</defs>'+
     '<circle class="ra-earth-atmosphere" cx="500" cy="310" r="263"></circle>'+
-    '<circle class="ra-earth-ocean" cx="500" cy="310" r="252"></circle>'+
-    '<g clip-path="url(#raGlobeClip)">'+
+    '<circle class="ra-earth-ocean" cx="500" cy="310" r="252" fill="url(#'+oceanGradientId+')"></circle>'+
+    '<g clip-path="url(#'+globeClipId+')">'+
       '<g class="ra-earth-grid" aria-hidden="true">'+
         '<ellipse cx="500" cy="310" rx="252" ry="82"></ellipse>'+
         '<ellipse cx="500" cy="310" rx="252" ry="156"></ellipse>'+
@@ -162,6 +197,7 @@ function buildSvg(mode){
         '<path d="M248 310H752"></path>'+
       '</g>'+
       '<g class="ra-earth-land">'+lands+'</g>'+
+      '<circle class="ra-earth-sphere-light" cx="500" cy="310" r="252" fill="url(#'+sphereLightId+')"></circle>'+
       '<g class="ra-earth-network">'+providerLinks+'</g>'+
       '<g class="ra-earth-packets">'+dataPackets+'</g>'+
       '<g class="ra-earth-requests">'+requestPaths+'</g>'+
