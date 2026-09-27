@@ -3280,3 +3280,231 @@ body,
     }
   }
 }
+
+
+/* =========================================================
+   STAGE 9 — MOTION SYSTEM
+   Motion explains routing, constraint and recovery.
+   No ballistic paths, flashing alarms or decorative shake.
+   ========================================================= */
+
+.ra-earth-packet{
+  opacity:.54;
+}
+
+/* State changes settle in rather than "hit" the interface. */
+.ra-earth-system.ra-state-changing .ra-earth-network,
+.ra-earth-system.ra-state-changing .ra-earth-bank-layer,
+.ra-earth-system.ra-state-changing .ra-earth-provider-layer{
+  animation:raStateSettle 760ms var(--ra-ease-emphasis) both;
+}
+.ra-earth-system.ra-state-changing .ra-earth-readout{
+  animation:raReadoutSettle 620ms var(--ra-ease-standard) both;
+}
+
+/* Provider outage is one restrained local pulse. */
+.ra-earth-provider.is-outage .ra-provider-core{
+  animation:raProviderSignal 760ms var(--ra-ease-emphasis) 1;
+}
+.ra-earth-provider.is-outage .ra-provider-halo{
+  animation:raProviderHalo 980ms var(--ra-ease-standard) 1;
+}
+
+/* Capacity requests move toward a neutral market hub. */
+.ra-request-packet,
+.ra-recovery-packet{
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 360ms var(--ra-ease-standard);
+}
+.ra-request-packet{
+  fill:var(--ra-warning);
+}
+.ra-request-packet.is-visible{
+  opacity:.68;
+}
+.ra-request-flow.is-visible{
+  opacity:calc(.13 + var(--ra-market-strength,.4) * .28);
+  animation:raDemandDrift 9s linear infinite;
+}
+
+/* Immediate market node appears only during the shortage phase. */
+.ra-market-node{
+  opacity:0;
+  transition:opacity 360ms var(--ra-ease-standard);
+}
+.ra-market-node.is-visible{
+  opacity:1;
+}
+.ra-market-ring{
+  fill:color-mix(in srgb,var(--ra-warning) 4%,transparent);
+  stroke:color-mix(in srgb,var(--ra-warning) 42%,transparent);
+  stroke-width:1;
+  stroke-dasharray:2 5;
+}
+.ra-market-core{
+  fill:var(--ra-warning);
+}
+.ra-market-node text{
+  text-anchor:middle;
+  fill:var(--ra-warning);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.075em;
+}
+.ra-market-node text.sub{
+  fill:var(--ra-text-3);
+  font-size:7px;
+  font-weight:600;
+  letter-spacing:0;
+}
+.ra-market-node.is-active .ra-market-ring{
+  animation:raMarketQueue 5.6s linear infinite;
+}
+
+/* Individual reserve: capacity is visible but stays local. */
+.ra-earth-bank.show-reserve .ra-bank-reserve{
+  animation:raReserveOrbit 10s linear infinite;
+}
+.ra-earth-bank.is-stranded .ra-bank-reserve{
+  opacity:.78;
+  stroke:var(--ra-orange);
+}
+
+/* Pooled recovery is a calmer outward routing flow. */
+.ra-recovery-packet{
+  fill:var(--ra-teal);
+}
+.ra-recovery-packet.is-visible{
+  opacity:calc(.34 + var(--ra-flow-restored,.5) * .42);
+}
+.ra-recovery-flow.is-visible{
+  opacity:calc(.14 + var(--ra-reserve-strength,.4) * .42);
+  animation:raRecoveryDrift 11s linear infinite;
+}
+.ra-pool-node.is-active .ra-pool-ring{
+  animation:raPoolSignal 4.8s ease-in-out infinite;
+}
+
+/* Recovered nodes settle rather than flash. */
+.ra-earth-bank.is-recovering .ra-bank-node,
+.ra-earth-bank.is-recovered .ra-bank-node,
+.ra-earth-bank.is-partial .ra-bank-node{
+  transition:
+    fill 620ms var(--ra-ease-emphasis),
+    stroke 620ms var(--ra-ease-emphasis),
+    opacity 620ms var(--ra-ease-standard);
+}
+.ra-earth-bank.is-recovering .ra-bank-halo{
+  animation:raRecoveryHalo 3.8s ease-in-out infinite;
+}
+
+/* Guided Simulation uses the same calm timing language. */
+body.ra-guided-running .ra-guided-dot{
+  animation:raGuidedDotCalm 2.1s ease-in-out infinite;
+}
+.ra-guided-hud.is-speaking .ra-waveform i{
+  animation-duration:980ms;
+}
+
+/* Analysis theme removes luminous motion residue. */
+[data-ra-theme="light"] .ra-request-packet,
+[data-ra-theme="light"] .ra-recovery-packet{
+  filter:none;
+}
+[data-ra-theme="light"] .ra-market-core,
+[data-ra-theme="light"] .ra-pool-core{
+  filter:none;
+}
+[data-ra-theme="light"] .ra-earth-provider.is-outage .ra-provider-halo,
+[data-ra-theme="light"] .ra-earth-bank.is-recovering .ra-bank-halo{
+  filter:none;
+}
+
+@keyframes raStateSettle{
+  0%{opacity:.72;transform:translateY(2px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+@keyframes raReadoutSettle{
+  0%{opacity:.68;transform:translateY(-3px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+@keyframes raProviderSignal{
+  0%{transform:scale(1);opacity:1}
+  48%{transform:scale(1.18);opacity:.78}
+  100%{transform:scale(1);opacity:1}
+}
+@keyframes raProviderHalo{
+  0%{opacity:.46;transform:scale(.92)}
+  55%{opacity:.92;transform:scale(1.08)}
+  100%{opacity:.58;transform:scale(1)}
+}
+@keyframes raDemandDrift{
+  to{stroke-dashoffset:-42}
+}
+@keyframes raRecoveryDrift{
+  to{stroke-dashoffset:-50}
+}
+@keyframes raMarketQueue{
+  to{stroke-dashoffset:-28}
+}
+@keyframes raReserveOrbit{
+  to{stroke-dashoffset:-24}
+}
+@keyframes raPoolSignal{
+  0%,100%{opacity:.78;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.035)}
+}
+@keyframes raRecoveryHalo{
+  0%,100%{opacity:.45}
+  50%{opacity:.82}
+}
+@keyframes raGuidedDotCalm{
+  0%,100%{opacity:.72;transform:scale(.9)}
+  50%{opacity:1;transform:scale(1)}
+}
+
+/* Retire earlier, more aggressive motion definitions where overridden. */
+@keyframes raProviderShock{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.18);opacity:.8}
+}
+@keyframes raPoolBreath{
+  0%,100%{transform:scale(1);opacity:.82}
+  50%{transform:scale(1.035);opacity:1}
+}
+
+@media(max-width:767px){
+  .ra-request-packet.is-visible,
+  .ra-recovery-packet.is-visible{
+    opacity:.62;
+  }
+  .ra-earth-system.ra-state-changing .ra-earth-network,
+  .ra-earth-system.ra-state-changing .ra-earth-bank-layer,
+  .ra-earth-system.ra-state-changing .ra-earth-provider-layer{
+    animation-duration:620ms;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ra-earth-packet,
+  .ra-request-packet,
+  .ra-recovery-packet{
+    display:none!important;
+  }
+  .ra-earth-system.ra-state-changing .ra-earth-network,
+  .ra-earth-system.ra-state-changing .ra-earth-bank-layer,
+  .ra-earth-system.ra-state-changing .ra-earth-provider-layer,
+  .ra-earth-system.ra-state-changing .ra-earth-readout,
+  .ra-earth-provider.is-outage .ra-provider-core,
+  .ra-earth-provider.is-outage .ra-provider-halo,
+  .ra-market-node.is-active .ra-market-ring,
+  .ra-earth-bank.show-reserve .ra-bank-reserve,
+  .ra-recovery-flow.is-visible,
+  .ra-request-flow.is-visible,
+  .ra-pool-node.is-active .ra-pool-ring,
+  .ra-earth-bank.is-recovering .ra-bank-halo,
+  body.ra-guided-running .ra-guided-dot{
+    animation:none!important;
+  }
+}
