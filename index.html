@@ -23,7 +23,7 @@
   <meta name="twitter:title" content="CloudRescue — Systemic Cloud Resilience Lab">
   <meta name="twitter:description" content="A reproducible stress lab for shared-provider shocks and coordinated recovery in banking.">
   <link rel="stylesheet" href="styles.css?v=20260927-1930">
-  <link rel="stylesheet" href="styles-v2.css?v=20260927-2960">
+  <link rel="stylesheet" href="styles-v2.css?v=20260927-3030">
 </head>
 <body>
 <div class="shell">
@@ -269,42 +269,42 @@
 
           <div id="decisionInsight" class="card decision-insight"></div>
 
+          <div id="beforeAfter" class="card before-after-card" aria-label="Individual reserves versus SCFR comparison"></div>
+
           <div class="section-heading">
-            <div><span>Recovery options</span><h2>Same shock. Different coordination.</h2></div>
-            <p>Individual Reserves and SCFR use the same total reserve budget.</p>
+            <div><span>All recovery options</span><h2>Three ways to respond to the same outage.</h2></div>
+            <p>The model holds the shock constant and compares how recovery capacity is allocated.</p>
           </div>
           <div id="strategyCards" class="strategy-grid"></div>
 
-          <div id="beforeAfter" class="card before-after-card" aria-label="Individual reserves versus SCFR comparison"></div>
-
           <details class="card analysis-disclosure">
             <summary>
-              <div><span>Advanced analysis</span><b>Resilience Frontier</b></div>
-              <small>Reserve budget sensitivity</small>
+              <div><span>Advanced analysis</span><b>Robustness & sensitivity</b></div>
+              <small>Frontier + parameter grid</small>
             </summary>
             <div class="analysis-body">
               <div class="chart-head">
-                <div><h3>How much reserve is enough?</h3></div>
+                <div><div class="eyebrow">RESILIENCE FRONTIER</div><h3>How much reserve is enough?</h3></div>
                 <p>Systemic resilience as the reserve budget increases.</p>
               </div>
               <div id="frontier" class="chart"></div>
+
+              <div class="advanced-divider"></div>
+
+              <div class="sensitivity-head">
+                <div>
+                  <div class="eyebrow">SENSITIVITY EXPLORER</div>
+                  <h3>Where does coordination matter most?</h3>
+                  <p>Compare outcomes across different backup-market and reserve assumptions.</p>
+                </div>
+                <div class="sensitivity-switch" role="group" aria-label="Sensitivity view">
+                  <button class="sensitivity-mode active" data-mode="scfr">SCFR score</button>
+                  <button class="sensitivity-mode" data-mode="uplift">Coordination uplift</button>
+                </div>
+              </div>
+              <div id="sensitivityHeatmap" class="sensitivity-heatmap"></div>
             </div>
           </details>
-
-          <div class="card sensitivity-card">
-            <div class="sensitivity-head">
-              <div>
-                <div class="eyebrow">SENSITIVITY EXPLORER</div>
-                <h3>Where does coordination matter most?</h3>
-                <p>Explore resilience across different emergency-market and reserve-capacity assumptions.</p>
-              </div>
-              <div class="sensitivity-switch" role="group" aria-label="Sensitivity view">
-                <button class="sensitivity-mode active" data-mode="scfr">SCFR resilience</button>
-                <button class="sensitivity-mode" data-mode="uplift">SCFR uplift</button>
-              </div>
-            </div>
-            <div id="sensitivityHeatmap" class="sensitivity-heatmap"></div>
-          </div>
 
           <div class="card evidence-note">
             <b>Research guardrail</b>
@@ -391,16 +391,6 @@
           </div>
         </article>
 
-        <article class="card roadmap-card">
-          <div class="eyebrow">RESEARCH ROADMAP</div>
-          <h2>From hackathon MVP to research companion</h2>
-          <div class="roadmap">
-            <div><b>v0.1</b><span>FirstCommit MVP</span><small>Scenario engine + animated explainer</small></div>
-            <div><b>v0.2</b><span>Sensitivity analysis</span><small>More shocks, rules and robustness checks</small></div>
-            <div><b>v0.3</b><span>Empirical calibration</span><small>Public operational-resilience evidence</small></div>
-            <div><b>v1.0</b><span>Research companion</span><small>Reproducible stress scenarios and policy analysis</small></div>
-          </div>
-        </article>
       </div>
     </section>
   </main>
@@ -414,6 +404,6 @@
     <span>Rostyslav Honcharenko · 2026</span>
   </footer>
 </div>
-<script type="module" src="app.js?v=20260927-2960"></script>
+<script type="module" src="app.js?v=20260927-3030"></script>
 </body>
 </html>
