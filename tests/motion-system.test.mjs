@@ -12,7 +12,11 @@ assert.match(earth,/ra-market-node/);
 assert.match(earth,/CAPACITY MARKET/);
 assert.match(earth,/ra-state-changing/);
 assert.match(earth,/previousSignature/);
-assert.match(earth,/animateMotion path/);
+assert.doesNotMatch(earth,/<animateMotion/);
+assert.match(earth,/function animatePackets\(/);
+assert.match(earth,/requestAnimationFrame\(animatePackets\)/);
+assert.match(earth,/getPointAtLength/);
+assert.match(earth,/function refreshPacketGeometry\(/);
 assert.match(earth,/const dur=\(5\.8/);
 assert.match(earth,/const dur=\(6\.6/);
 
@@ -24,7 +28,8 @@ assert.match(css,/@keyframes raProviderSignal/);
 assert.match(css,/@keyframes raStateSettle/);
 assert.match(css,/@keyframes raRecoveryDrift/);
 assert.match(css,/prefers-reduced-motion/);
-assert.match(css,/\.ra-request-packet,[\s\S]*\.ra-recovery-packet[\s\S]*display:none!important/);
+assert.match(css,/IOS-SAFE PACKET MOTION/);
+assert.doesNotMatch(css,/\.ra-earth-packet,[\s\S]{0,120}display:none!important/);
 
 assert.ok(js.includes("$$('.ra-scene-list button').forEach"));
 assert.ok(js.includes("$$('.ra-mobile-scene-nav button').forEach"));
