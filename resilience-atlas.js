@@ -243,23 +243,88 @@ function renderLab(){
   };
   $('#raMechanismInsight').textContent = insight[state.labStrategy];
 
-  $('.ra-strategy-switch button').forEach(button=>{
+  $$('.ra-strategy-switch button').forEach(button=>{
     button.classList.toggle('is-active',button.dataset.raStrategy===state.labStrategy);
   });
-  $('.ra-model-card').forEach(button=>{
+  $$('.ra-model-card').forEach(button=>{
     button.classList.toggle('is-active',button.dataset.raCompare===state.labStrategy);
   });
 
   earth.lab.update(earthPayload(c));
 }
 
+function evidenceSnapshot(){
+  const c=comparison();
+  const stats=systemStats();
+  const provider=providers.find(item=>item.id===state.outageProvider);
+  return {
+    generatedAt:new Date().toISOString(),
+    product:'Resilience Atlas',
+    modelVersion:'v0.1 synthetic mechanism stress-test',
+    scenario:{
+      outageProvider:state.outageProvider,
+      outageProviderName:provider?.name || state.outageProvider,
+      emergencyMarketPct:state.marketPct,
+      reservePct:state.reservePct,
+      allocationRule:state.allocationRule
+    },
+    system:{
+      syntheticBanks:banks.length,
+      sharedProviders:providers.length,
+      totalCriticalLoad:stats.totalSystemLoad,
+      providerLoads:stats.providerLoads,
+      syntheticProviderHHI:Number(stats.hhi.toFixed(1))
+    },
+    outcomes:{
+      market:c.market,
+      individual:c.individual,
+      scfr:c.scfr
+    },
+    boundary:'All institutions, provider assignments, workloads, readiness values, importance weights, capacity units and numerical outcomes are synthetic and illustrative.'
+  };
+}
+
 function renderEvidence(){
+  const c=comparison();
+  const stats=systemStats();
+  const provider=providers.find(item=>item.id===state.outageProvider);
+  const marketPool=c.market.allocated;
+  const reservePool=c.scfr.totalReserve;
+  const ruleLabel=state.allocationRule==='systemic' ? 'systemic' : state.allocationRule==='equal' ? 'equal' : 'readiness';
+
+  $('#raEvidenceBanks').textContent=String(banks.length);
+  $('#raEvidenceProviders').textContent=String(providers.length);
+  $('#raEvidenceLoad').textContent=format(stats.totalSystemLoad)+' units';
+  $('#raEvidenceDemand').textContent=format(c.market.totalDemand)+' units';
+  $('#raEvidenceMarketPool').textContent=format(marketPool)+' units';
+  $('#raEvidenceReservePool').textContent=format(reservePool)+' units';
+  $('#raEvidenceHHI').textContent=Math.round(stats.hhi).toLocaleString('en-US');
+  $('#raEvidenceScenario').textContent=
+    (provider?.name || state.outageProvider)+' · '+state.marketPct+'% market · '+state.reservePct+'% reserve · '+ruleLabel+' rule';
+
   earth.evidence.update({
-    outageProvider: state.outageProvider,
-    comparison: comparison(),
-    marketPct: state.marketPct,
-    reservePct: state.reservePct
+    outageProvider:state.outageProvider,
+    comparison:c,
+    marketPct:state.marketPct,
+    reservePct:state.reservePct
   });
+}
+
+function exportEvidence(){
+  const snapshot=evidenceSnapshot();
+  const blob=new Blob([JSON.stringify(snapshot,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const anchor=document.createElement('a');
+  anchor.href=url;
+  anchor.download='resilience-atlas-scenario.json';
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  window.setTimeout(()=>URL.revokeObjectURL(url),0);
+}
+
+function setupEvidence(){
+  $('#raExportEvidence')?.addEventListener('click',exportEvidence);
 }
 
 function renderScene(){
@@ -491,10 +556,10 @@ function setupLab(){
     renderBaseline();
   });
 
-  $('.ra-strategy-switch button').forEach(button=>{
+  $$('.ra-strategy-switch button').forEach(button=>{
     button.addEventListener('click',()=>setLabStrategy(button.dataset.raStrategy));
   });
-  $('.ra-model-card').forEach(button=>{
+  $$('.ra-model-card').forEach(button=>{
     button.addEventListener('click',()=>setLabStrategy(button.dataset.raCompare));
   });
   $('#raResetLab').addEventListener('click',resetLab);
@@ -510,6 +575,7 @@ setupTabs();
 setupTheme();
 setupScenes();
 setupLab();
+setupEvidence();
 updateNarrationControl();
 renderScene();
 renderLab();
