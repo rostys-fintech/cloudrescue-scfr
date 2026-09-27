@@ -1,3 +1,9 @@
+> **ARCHIVED / SUPERSEDED** — kept only as part of the development history.
+>
+> For the current submission, use [devpost-final-copy.md](devpost-final-copy.md) and [devpost-form-map.md](devpost-form-map.md).
+
+---
+
 # Devpost submission draft — CloudRescue
 
 ## Project title
