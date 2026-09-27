@@ -2,15 +2,17 @@
 
 Updated: 27 Sep 2026
 
+**Current release candidate:** `submission-freeze-clean-final-2026-09-27` @ `5805435`
+
 FirstCommit deadline: **30 Sep 2026, 5:00 PM EDT**
 For Germany on that date: **23:00 CEST**.
 
 ## Product
 
 - [x] Working public web prototype
-- [x] Institutional v2 redesign
+- [x] Institutional v2 clean redesign
 - [x] Guided Crisis Replay
-- [x] Narration controls
+- [x] Automatic preferred narrator + narration toggle
 - [x] Dark live-system monitoring canvas
 - [x] Interactive Stress Lab
 - [x] Deterministic simulation engine
@@ -19,12 +21,12 @@ For Germany on that date: **23:00 CEST**.
 - [x] SCFR Pooled Reserve
 - [x] Controlled Comparison
 - [x] Resilience Frontier
-- [x] Sensitivity Explorer
+- [x] Sensitivity Explorer (advanced analysis)
 - [x] Seeded scenarios
 - [x] Scenario IDs
 - [x] Shareable scenario links
 - [x] JSON export
-- [x] Constraint Tests
+- [x] Constraint Tests (optional disclosure)
 - [x] Light / dark theme
 - [x] Custom favicon / product metadata
 
