@@ -2777,3 +2777,162 @@ html[data-theme="dark"] .learning-note span{color:#95a9bb}
   .learning-steps{grid-template-columns:1fr}
   .learning-note{flex-direction:column}
 }
+
+
+/* ---------- Final typography and landing-page polish ---------- */
+.hero-summary{
+  min-width:360px;
+  max-width:430px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  padding:12px;
+  border:1px solid var(--line);
+  background:var(--surface);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+}
+.hero-summary>div{
+  min-width:0;
+  border:1px solid var(--line);
+  background:var(--surface-subtle);
+  border-radius:10px;
+  padding:10px 9px;
+}
+.hero-summary span{
+  display:block;
+  color:#7b8d9f;
+  font-size:8px;
+  line-height:1.25;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.hero-summary b{
+  display:block;
+  margin:5px 0 1px;
+  color:var(--navy);
+  font-size:26px;
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.hero-summary small{
+  display:block;
+  color:#687c90;
+  font-size:10px;
+}
+.hero-summary p{
+  grid-column:1/-1;
+  margin:2px 2px 0;
+  color:#65788b;
+  font-size:10px;
+  line-height:1.45;
+}
+
+/* Minimum professional text rhythm: avoid 6–8px dashboard microcopy on desktop */
+.eyebrow,
+.scene-label,
+.provider small,
+.bank small,
+.stage-hud span,
+.controls label>small,
+.strategy-card .metric,
+.compare-card>p,
+.mini,
+.axis-label,
+.chart-head p,
+.section-heading p,
+.evidence-strip span,
+.evidence-grid span,
+.reality-grid span,
+.architecture-tech span,
+.learning-steps small,
+.learning-note span,
+.challenge>p,
+.challenge-metrics span,
+.challenge-metrics small,
+.scenario-generator-head span,
+.heat-x-labels b,
+.heat-y,
+.heat-axis-title,
+.heat-x-title,
+.heat-legend,
+.compare-outcome-label{
+  font-size:9px;
+}
+
+.brand-lockup strong{font-size:15px}
+.brand-lockup span{font-size:11px}
+.topbar-meta{font-size:11px}
+.tab{font-size:13px}
+.hero p{font-size:20px}
+.hero-actions .btn{font-size:12px}
+.narrative>p{font-size:14px}
+.scene-stat{font-size:12px}
+.stage-hud b{font-size:12px}
+.provider strong{font-size:14px}
+.bank b{font-size:10.5px}
+.controls>p{font-size:12px}
+.controls label{font-size:11.5px}
+.strategy-card h3{font-size:16px}
+.metric{font-size:10px}
+.decision-insight p{font-size:10.5px}
+.evidence-strip b{font-size:9.5px}
+.evidence-intro b{font-size:10.5px}
+.evidence-card>p{font-size:11.5px}
+.evidence-grid b{font-size:10.5px}
+.architecture-flow>div b{font-size:10.5px}
+.architecture-flow>div small{font-size:9px}
+.learning-steps b{font-size:10.5px}
+.learning-note b{font-size:9px}
+.scenario-seed-row input{font-size:9px}
+.challenge>b{font-size:10.5px}
+.challenge-tab{font-size:8px}
+.challenge-metrics b{font-size:11.5px}
+.sensitivity-mode{font-size:9px}
+.heat-cell b{font-size:10.5px}
+.before-after-note span{font-size:9px}
+.before-after-note b{font-size:9.5px}
+.mechanism-panel-head h3{font-size:17px}
+.mechanism-foot span{font-size:8px}
+.mechanism-foot b{font-size:12.5px}
+
+/* More whitespace between major information blocks */
+.results>.card,
+.results>.section-heading,
+.results>.strategy-grid{
+  margin-bottom:14px;
+}
+.results>.decision-insight,
+.results>.before-after-card,
+.results>.chart-card,
+.results>.sensitivity-card{
+  margin-top:14px;
+}
+.method-grid{
+  gap:16px;
+}
+.method-grid>.card{
+  box-shadow:0 7px 22px rgba(15,31,51,.045);
+}
+
+/* Dark landing summary */
+html[data-theme="dark"] .hero-summary{
+  background:var(--surface);
+  border-color:var(--line);
+}
+html[data-theme="dark"] .hero-summary>div{
+  background:#101a25;
+  border-color:#263646;
+}
+html[data-theme="dark"] .hero-summary b{color:#edf3f8}
+html[data-theme="dark"] .hero-summary span,
+html[data-theme="dark"] .hero-summary small,
+html[data-theme="dark"] .hero-summary p{color:#96a7b8}
+
+@media(max-width:880px){
+  .hero-summary{min-width:0;width:100%;max-width:none}
+}
+@media(max-width:560px){
+  .hero-summary{grid-template-columns:1fr}
+  .hero-summary p{grid-column:auto}
+}
