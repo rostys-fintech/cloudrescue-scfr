@@ -39,6 +39,67 @@ const GUIDED_AUDIO_TRACKS = [
   {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=d798f2ca-cec2-4199-87d5-80cd7ae53419.wav',durationMs:24137}
 ];
 
+/* Cue times use HeyGen word-level timestamps from the exact Viktor audio
+   tracks above. Visual state changes therefore follow spoken phrases rather
+   than approximate scene timers. */
+const GUIDED_CUES = [
+  [
+    {at:0,id:'s1-world',caption:'GLOBAL SYSTEM MAP',visualScene:0},
+    {at:1.749,id:'s1-providers',caption:'SHARED CLOUD PROVIDERS',visualScene:0},
+    {at:2.304,id:'s1-banks',caption:'BANK DEPENDENCIES',visualScene:0},
+    {at:3.243,id:'s1-links',caption:'SHARED CLOUD DEPENDENCIES',visualScene:0},
+    {at:5.035,id:'s1-flow',caption:'20 BANKS · 3 PROVIDERS',visualScene:0},
+    {at:10.197,id:'s1-cluster',caption:'MULTIPLE BANKS · SAME PROVIDER',visualScene:0},
+    {at:14.049,id:'s1-risk',caption:'ONE PROVIDER · SHARED RISK',visualScene:0}
+  ],
+  [
+    {at:0,id:'s2-stable',caption:'STABLE SHARED INFRASTRUCTURE',visualScene:0},
+    {at:1.237,id:'s2-target',caption:'ONE SHARED CLOUD PROVIDER',visualScene:0},
+    {at:2.603,id:'s2-fail',caption:'PROVIDER OFFLINE',visualScene:1},
+    {at:3.669,id:'s2-affected',caption:'CONNECTED BANKS AFFECTED',visualScene:1},
+    {at:4.736,id:'s2-capacity-lost',caption:'CRITICAL CAPACITY LOST',visualScene:1},
+    {at:8.448,id:'s2-shared',caption:'THE SHOCK IS SHARED',visualScene:1},
+    {at:14.032,id:'s2-systemic',caption:'SYSTEM-WIDE RECOVERY PROBLEM',visualScene:1}
+  ],
+  [
+    {at:0,id:'s3-affected',caption:'AFFECTED BANKS',visualScene:1},
+    {at:2.645,id:'s3-recover',caption:'SIMULTANEOUS RECOVERY',visualScene:1},
+    {at:4.736,id:'s3-request',caption:'BACKUP CAPACITY REQUESTED',visualScene:2},
+    {at:6.827,id:'s3-market',caption:'MARKET CAPACITY LIMITED',visualScene:2},
+    {at:9.003,id:'s3-queue',caption:'DEMAND EXCEEDS IMMEDIATE SUPPLY',visualScene:2},
+    {at:10.155,id:'s3-gap',caption:'RECOVERY CAPACITY GAP',visualScene:2}
+  ],
+  [
+    {at:0,id:'s4-before',caption:'RECOVERY SHORTAGE',visualScene:2},
+    {at:.299,id:'s4-reserves',caption:'INDIVIDUAL RESERVES',visualScene:3},
+    {at:3.712,id:'s4-ringfenced',caption:'RESERVES ARE RING-FENCED',visualScene:3},
+    {at:4.907,id:'s4-unused',caption:'UNUSED CAPACITY EXISTS',visualScene:3},
+    {at:7.168,id:'s4-blocked',caption:'CAPACITY CANNOT MOVE BETWEEN BANKS',visualScene:3},
+    {at:12.025,id:'s4-stranded',caption:'RESERVE EXISTS · SHORTAGE REMAINS',visualScene:3},
+    {at:14.457,id:'s4-shortage',caption:'SOME BANKS STILL FACE SHORTAGES',visualScene:3}
+  ],
+  [
+    {at:0,id:'s5-individual',caption:'INDIVIDUAL RESERVE STATE',visualScene:3},
+    {at:1.365,id:'s5-pool',caption:'SCFR · SHARED CLOUD FAILOVER RESERVE',visualScene:3},
+    {at:5.51,id:'s5-samebudget',caption:'SAME TOTAL RESERVE BUDGET',visualScene:3},
+    {at:8.198,id:'s5-coordinate',caption:'THE DIFFERENCE IS COORDINATION',visualScene:3},
+    {at:10.461,id:'s5-ready',caption:'UNUSED CAPACITY BECOMES AVAILABLE',visualScene:4},
+    {at:13.192,id:'s5-redirect',caption:'CAPACITY POOLED AND REDIRECTED',visualScene:4},
+    {at:14.984,id:'s5-recover',caption:'RECOVERY REACHES AFFECTED BANKS',visualScene:4}
+  ],
+  [
+    {at:0,id:'s6-compare',caption:'THREE RECOVERY MECHANISMS',visualScene:5},
+    {at:4.821,id:'s6-market',caption:'MARKET CAPACITY ONLY',visualScene:5,metric:'market'},
+    {at:6.528,id:'s6-individual',caption:'INDIVIDUAL RESERVES',visualScene:5,metric:'individual'},
+    {at:8.235,id:'s6-scfr',caption:'POOLED SCFR COORDINATION',visualScene:5,metric:'scfr'},
+    {at:11.508,id:'s6-outcome',caption:'SAME SHOCK · DIFFERENT RECOVERY',visualScene:5,metric:'all'},
+    {at:20.295,id:'s6-boundary',caption:'SYNTHETIC RESULT · NOT A FORECAST',visualScene:5,metric:'boundary'}
+  ]
+];
+
+const GUIDED_CUE_CLASSES = GUIDED_CUES.flat().map(cue=>'ra-sync-'+cue.id);
+
+
 const guidedAudio = new Audio();
 guidedAudio.preload='auto';
 guidedAudio.setAttribute('playsinline','');
@@ -49,7 +110,9 @@ const guided = {
   narration: true,
   paused: false,
   runId: 0,
-  audioFinish: null
+  audioFinish: null,
+  cueRaf: 0,
+  cueKey: ''
 };
 
 const labRun = {
@@ -631,6 +694,107 @@ function guidedDelay(ms,runId){
   });
 }
 
+function clearGuidedCue({restore=true}={}){
+  if(guided.cueRaf){
+    window.cancelAnimationFrame(guided.cueRaf);
+    guided.cueRaf=0;
+  }
+
+  const mount=$('#raEarthMount');
+  if(mount){
+    mount.classList.remove('ra-guided-sync',...GUIDED_CUE_CLASSES);
+    delete mount.dataset.guidedCaption;
+    delete mount.dataset.guidedCue;
+  }
+  guided.cueKey='';
+
+  if(restore && state.scene>=0){
+    renderScene();
+  }
+}
+
+function applyGuidedMetric(cue,c){
+  if(state.scene!==5 || !cue.metric) return;
+
+  if(cue.metric==='market'){
+    $('#raSceneStatLabel').textContent='MARKET RESILIENCE';
+    $('#raSceneStatValue').textContent=Math.round(c.market.resilience);
+  }else if(cue.metric==='individual'){
+    $('#raSceneStatLabel').textContent='INDIVIDUAL RESERVE RESILIENCE';
+    $('#raSceneStatValue').textContent=Math.round(c.individual.resilience);
+  }else if(cue.metric==='scfr'){
+    $('#raSceneStatLabel').textContent='SCFR RESILIENCE';
+    $('#raSceneStatValue').textContent=Math.round(c.scfr.resilience);
+  }else if(cue.metric==='boundary'){
+    $('#raSceneStatLabel').textContent='EVIDENCE BOUNDARY';
+    $('#raSceneStatValue').textContent='Synthetic · not a forecast';
+  }else{
+    const story=scenePresentation(c)[5];
+    $('#raSceneStatLabel').textContent=story.statLabel;
+    $('#raSceneStatValue').textContent=story.statValue;
+  }
+}
+
+function applyGuidedCue(sceneIndex,cue){
+  if(!cue) return;
+  const key=sceneIndex+':'+cue.id;
+  if(guided.cueKey===key) return;
+
+  const mount=$('#raEarthMount');
+  if(!mount) return;
+
+  mount.classList.remove(...GUIDED_CUE_CLASSES);
+  mount.classList.add('ra-guided-sync','ra-sync-'+cue.id);
+  mount.dataset.guidedCaption=cue.caption;
+  mount.dataset.guidedCue=cue.id;
+  guided.cueKey=key;
+
+  const c=comparison();
+  earth.simulation.update({...earthPayload(c),scene:cue.visualScene});
+  $('#raCanvasTitle').textContent=cue.caption;
+  applyGuidedMetric(cue,c);
+}
+
+function cueAtTime(sceneIndex,time){
+  const cues=GUIDED_CUES[sceneIndex]||[];
+  let cue=cues[0]||null;
+  for(const candidate of cues){
+    if(time+0.018>=candidate.at) cue=candidate;
+    else break;
+  }
+  return cue;
+}
+
+function startGuidedCueSync(sceneIndex,runId){
+  if(guided.cueRaf) window.cancelAnimationFrame(guided.cueRaf);
+  guided.cueRaf=0;
+  guided.cueKey='';
+
+  const first=(GUIDED_CUES[sceneIndex]||[])[0];
+  if(first) applyGuidedCue(sceneIndex,first);
+
+  const tick=()=>{
+    if(runId!==guided.runId || !guided.active) return;
+    applyGuidedCue(sceneIndex,cueAtTime(sceneIndex,guidedAudio.currentTime||0));
+    guided.cueRaf=window.requestAnimationFrame(tick);
+  };
+  guided.cueRaf=window.requestAnimationFrame(tick);
+}
+
+async function runSilentCueTimeline(sceneIndex,runId){
+  const cues=GUIDED_CUES[sceneIndex]||[];
+  let previous=0;
+  for(const cue of cues){
+    const waitMs=Math.max(0,(cue.at-previous)*1000);
+    if(waitMs && !(await guidedDelay(waitMs,runId))) return false;
+    if(runId!==guided.runId) return false;
+    applyGuidedCue(sceneIndex,cue);
+    previous=cue.at;
+  }
+  const remaining=Math.max(0,GUIDED_AUDIO_TRACKS[sceneIndex].durationMs-previous*1000);
+  return guidedDelay(remaining,runId);
+}
+
 function playGuidedAudioScene(index,runId){
   if(!guided.narration) return Promise.resolve(true);
 
@@ -644,11 +808,16 @@ function playGuidedAudioScene(index,runId){
 
   const hud=$('#raGuidedHud');
   hud.classList.add('is-speaking');
+  startGuidedCueSync(index,runId);
 
   return new Promise(resolve=>{
     let settled=false;
 
     const cleanup=()=>{
+      if(guided.cueRaf){
+        window.cancelAnimationFrame(guided.cueRaf);
+        guided.cueRaf=0;
+      }
       guidedAudio.removeEventListener('ended',onEnded);
       guidedAudio.removeEventListener('error',onError);
       if(guided.audioFinish===finish) guided.audioFinish=null;
@@ -732,19 +901,15 @@ function setGuidedActive(active){
 function stopGuidedSimulation(){
   guided.runId++;
   guided.paused=false;
-  const introMount=$('#raEarthMount');
-  introMount?.classList.remove(
-    'ra-guided-intro','ra-intro-world','ra-intro-providers',
-    'ra-intro-banks','ra-intro-links','ra-intro-flow'
-  );
-  if(introMount) delete introMount.dataset.introPhase;
   earth.simulation.setPaused?.(false);
   guidedAudio.pause();
   guidedAudio.currentTime=0;
   guided.audioFinish?.(false);
   guided.audioFinish=null;
+  clearGuidedCue({restore:false});
   setGuidedActive(false);
   $('#raGuidedHud').classList.remove('is-speaking');
+  renderScene();
 }
 
 function isCompactTouchLayout(){
@@ -762,45 +927,6 @@ function focusAnimationStage(target){
   return true;
 }
 
-async function startGuidedIntro(runId){
-  const mount=$('#raEarthMount');
-  if(!mount) return false;
-
-  const phases=[
-    {className:'ra-intro-world',title:'Initializing global system map',delay:700},
-    {className:'ra-intro-providers',title:'Activating 3 shared cloud providers',delay:900},
-    {className:'ra-intro-banks',title:'Connecting 20 synthetic banks',delay:1150},
-    {className:'ra-intro-links',title:'Mapping shared dependencies',delay:1250},
-    {className:'ra-intro-flow',title:'Starting critical data flows',delay:1350}
-  ];
-
-  mount.classList.remove(
-    'ra-guided-intro','ra-intro-world','ra-intro-providers',
-    'ra-intro-banks','ra-intro-links','ra-intro-flow'
-  );
-  void mount.offsetWidth;
-  mount.classList.add('ra-guided-intro');
-  mount.dataset.introPhase='BOOTING SYSTEM';
-
-  for(const phase of phases){
-    if(runId!==guided.runId) return false;
-    mount.classList.add(phase.className);
-    mount.dataset.introPhase=phase.title.toUpperCase();
-    $('#raCanvasTitle').textContent=phase.title;
-    const continued=await guidedDelay(phase.delay,runId);
-    if(!continued) return false;
-  }
-
-  if(runId===guided.runId){
-    mount.classList.remove(
-      'ra-guided-intro','ra-intro-world','ra-intro-providers',
-      'ra-intro-banks','ra-intro-links','ra-intro-flow'
-    );
-    delete mount.dataset.introPhase;
-    if(state.scene===0) $('#raCanvasTitle').textContent=sceneTitles[0];
-  }
-  return runId===guided.runId;
-}
 
 async function runGuidedSimulation(){
   if(guided.active){
@@ -833,22 +959,26 @@ async function runGuidedSimulation(){
     state.scene=i;
     renderScene();
 
-    const story=scenePresentation(comparison())[i];
-    const introComplete=i===0 ? startGuidedIntro(runId) : Promise.resolve(true);
-    const [spoken,visualComplete,introFinished]=await Promise.all([
-      playGuidedAudioScene(i,runId),
-      guidedDelay(story.visualDuration,runId),
-      introComplete
+    const c= comparison();
+    const story=scenePresentation(c)[i];
+    const firstCue=(GUIDED_CUES[i]||[])[0];
+    if(firstCue) applyGuidedCue(i,firstCue);
+
+    const [spoken,visualComplete]=await Promise.all([
+      guided.narration ? playGuidedAudioScene(i,runId) : runSilentCueTimeline(i,runId),
+      guidedDelay(Math.max(story.visualDuration,GUIDED_AUDIO_TRACKS[i].durationMs),runId)
     ]);
 
-    if(!spoken || !visualComplete || !introFinished || runId!==guided.runId){
+    if(!spoken || !visualComplete || runId!==guided.runId){
       if(runId===guided.runId) stopGuidedSimulation();
       return;
     }
   }
 
   if(runId===guided.runId){
+    clearGuidedCue({restore:false});
     setGuidedActive(false);
+    renderScene();
     $('#raGuidedStatus').textContent='COMPLETE';
   }
 }
@@ -881,7 +1011,7 @@ function setupScenes(){
       document.body.classList.remove('ra-guided-paused');
       guidedAudio.pause();
       guidedAudio.currentTime=0;
-      guided.audioFinish?.(true);
+      guided.audioFinish?.(false);
       guided.audioFinish=null;
     }
 
