@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="CloudRescue is a systemic cloud-resilience stress lab for shared-provider shocks in banking.">
+  <meta name="color-scheme" content="dark light">
+  <script>
+    (() => {
+      const saved = localStorage.getItem('cloudrescue-theme');
+      const migrated = saved === 'dark' ? 'crisis' : saved === 'light' ? 'analysis' : saved;
+      document.documentElement.dataset.theme = ['crisis','analysis'].includes(migrated) ? migrated : 'crisis';
+    })();
+  </script>
+  <title>CloudRescue — Systemic Cloud Resilience Lab</title>
+  <meta name="theme-color" content="#0b1f31">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="CloudRescue — Systemic Cloud Resilience Lab">
+  <meta property="og:description" content="A reproducible stress lab for shared-provider shocks and coordinated recovery in banking.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rostys-fintech.github.io/cloudrescue-scfr/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CloudRescue — Systemic Cloud Resilience Lab">
+  <meta name="twitter:description" content="A reproducible stress lab for shared-provider shocks and coordinated recovery in banking.">
+  <link rel="stylesheet" href="styles.css?v=20260927-1930">
+  <link rel="stylesheet" href="styles-v2.css?v=20260927-narrated01">
+</head>
+<body>
+<div class="shell">
+  <header class="topbar cyber-topbar">
+    <div class="brand-lockup">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32">
+          <path d="M16 2.8 27 9.2v13.6L16 29.2 5 22.8V9.2Z"></path>
+          <path d="m10.2 12.1 5.8-3.3 5.8 3.3v6.8L16 22.2l-5.8-3.3Z"></path>
+          <path d="M16 8.8v6.6m-5.8-3.3 5.8 3.3 5.8-3.3M16 15.4v6.8"></path>
+        </svg>
+      </div>
+      <div>
+        <strong>Cloud<span>Rescue</span></strong>
+        <small>Systemic Cloud Resilience Lab</small>
+      </div>
+    </div>
+
+    <nav class="tabs cyber-tabs" aria-label="CloudRescue sections">
+      <button class="tab active" data-tab="story">Crisis Replay</button>
+      <button class="tab" data-tab="lab">Stress Lab</button>
+      <button class="tab" data-tab="method">Methodology</button>
+    </nav>
+
+    <div class="topbar-meta">
+      <span class="command-gear" aria-hidden="true">⌾</span>
+      <button id="themeToggle" class="theme-toggle mode-switch" type="button" aria-label="Switch between Crisis and Analysis themes" aria-pressed="false">
+        <span class="mode-name mode-crisis">CRISIS</span>
+        <span class="mode-track" aria-hidden="true"><i></i></span>
+        <span class="mode-name mode-analysis">ANALYSIS</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero hero-institutional hero-cyber-frame">
+    <div class="hero-copy">
+      <div class="eyebrow">SYSTEMIC RESILIENCE // LIVE RESEARCH PROTOTYPE</div>
+      <h1><span class="hero-cloud-word">Cloud</span><span class="hero-rescue-word">Rescue</span><span class="hero-slashes" aria-hidden="true">//</span></h1>
+      <p>Stress-test how shared cloud dependency can turn one operational outage into a system-wide recovery problem.</p>
+      <div class="hero-thesis">
+        <span>CORE HYPOTHESIS</span>
+        <b>Same shock. Same reserve budget. Better coordination?</b>
+      </div>
+      <div class="hero-actions">
+        <button id="heroDemo" class="btn primary hero-auto">▶ Run Auto-Simulation</button>
+        <button id="heroLab" class="btn secondary">Open Stress Lab →</button>
+      </div>
+    </div>
+
+    <div class="hero-system" aria-label="Shared cloud dependency illustration">
+      <div class="hero-system-head">
+        <span>LIVE SYSTEM TOPOLOGY</span>
+        <b>Shared dependency network</b>
+        <small>20 synthetic banks · deterministic model</small>
+      </div>
+      <div class="hero-shared-alert" aria-label="Shared provider failure can affect multiple banks across regions">
+        <i aria-hidden="true">△</i>
+        <div><b>SHARED PROVIDER FAILURE</b><small>CAN AFFECT MULTIPLE BANKS ACROSS REGIONS</small></div>
+      </div>
+      <div class="hero-globe-stage" aria-label="Global shared-provider dependency network">
+        <div class="hero-globe-orbit" aria-hidden="true"></div>
+        <svg class="hero-globe-svg" viewBox="0 0 760 410" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <linearGradient id="crGlobeGlow" x1="0" x2="1">
+              <stop offset="0%" stop-color="#0b61ff" stop-opacity=".05"/>
+              <stop offset="48%" stop-color="#ff1738" stop-opacity=".38"/>
+              <stop offset="100%" stop-color="#21dfaa" stop-opacity=".08"/>
+            </linearGradient>
+          </defs>
+          <g class="globe-land" aria-hidden="true">
+            <path d="M172 188c24-31 62-53 101-55 26-2 40 8 50 26 7 12 7 23-4 34-12 12-18 31-15 50 3 18-7 42-27 58-18 15-30 35-32 58-23-11-43-29-55-52-9-17-23-34-34-50-13-20-13-44-2-69 5-10 11-19 18-30Z"/>
+            <path d="M359 167c23-19 51-27 79-22 19 4 35 12 44 24 9 13 13 28 11 44-4 26-24 43-51 46-15 2-25 9-29 22-5 16-17 27-35 34-19-7-32-21-39-42-7-22-20-41-38-56-8-7-8-19 0-31 5-8 11-14 18-19Z"/>
+            <path d="M494 154c34-13 74-11 108 5 33 16 57 39 75 69 8 14 9 28 3 42-6 15-20 23-41 25-20 2-40 11-58 26-15 12-30 16-44 10-15-6-23-20-24-42-1-19-10-36-27-50-13-11-18-25-14-42 3-18 10-32 22-43Z"/>
+          </g>
+          <ellipse class="globe-ring ring-1" cx="390" cy="245" rx="310" ry="146"/>
+          <ellipse class="globe-ring ring-2" cx="390" cy="245" rx="235" ry="146"/>
+          <ellipse class="globe-ring ring-3" cx="390" cy="245" rx="145" ry="146"/>
+          <path class="globe-ring" d="M82 245H698"/>
+          <path class="globe-ring" d="M112 198C220 225 556 225 668 198"/>
+          <path class="globe-ring" d="M112 294C220 266 556 266 668 294"/>
+          <path class="globe-scan" d="M88 245C220 120 560 118 696 245"/>
+          <path class="globe-arc blue" d="M205 191C255 128 340 111 393 202"/>
+          <path class="globe-arc blue" d="M205 191C270 178 301 238 355 270"/>
+          <path class="globe-arc orange" d="M473 175C515 151 568 162 610 207"/>
+          <path class="globe-arc orange" d="M473 175C498 225 545 250 594 274"/>
+          <path class="globe-arc green" d="M607 275C649 284 680 309 704 344"/>
+          <path class="globe-arc green" d="M607 275C638 249 669 235 705 238"/>
+          <g class="globe-dots blue-dots">
+            <circle cx="205" cy="191" r="5"/><circle cx="272" cy="177" r="3"/><circle cx="322" cy="221" r="3"/><circle cx="355" cy="270" r="4"/>
+          </g>
+          <g class="globe-dots orange-dots">
+            <circle cx="473" cy="175" r="5"/><circle cx="520" cy="194" r="3"/><circle cx="565" cy="224" r="3"/><circle cx="610" cy="207" r="4"/><circle cx="594" cy="274" r="3"/>
+          </g>
+          <g class="globe-dots green-dots">
+            <circle cx="607" cy="275" r="5"/><circle cx="650" cy="287" r="3"/><circle cx="687" cy="318" r="3"/><circle cx="704" cy="344" r="4"/>
+          </g>
+        </svg>
+
+        <div class="globe-provider globe-blue">
+          <span class="globe-cloud-icon"><svg class="cloud-line-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M17 32h31c7 0 12-4.6 12-10.5S55 11 48.6 11c-1.4 0-2.8.2-4 .7C42 5.9 36.8 2 30.6 2 22.9 2 16.5 8 15.9 15.5 8.3 15.8 3 20.4 3 26.1 3 29.5 8.9 32 17 32Z"/></svg></span>
+          <div><b>Blue Cloud</b><small>8 BANKS</small></div>
+        </div>
+        <div class="globe-provider globe-orange">
+          <span class="globe-cloud-icon"><svg class="cloud-line-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M17 32h31c7 0 12-4.6 12-10.5S55 11 48.6 11c-1.4 0-2.8.2-4 .7C42 5.9 36.8 2 30.6 2 22.9 2 16.5 8 15.9 15.5 8.3 15.8 3 20.4 3 26.1 3 29.5 8.9 32 17 32Z"/></svg></span>
+          <div><b>Orange Cloud</b><small>7 BANKS</small></div>
+        </div>
+        <div class="globe-provider globe-green">
+          <span class="globe-cloud-icon"><svg class="cloud-line-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M17 32h31c7 0 12-4.6 12-10.5S55 11 48.6 11c-1.4 0-2.8.2-4 .7C42 5.9 36.8 2 30.6 2 22.9 2 16.5 8 15.9 15.5 8.3 15.8 3 20.4 3 26.1 3 29.5 8.9 32 17 32Z"/></svg></span>
+          <div><b>Green Cloud</b><small>5 BANKS</small></div>
+        </div>
+
+        <div class="hero-risk-note">
+          <span>SYSTEMIC EXPOSURE</span>
+          <b>One provider failure can create simultaneous recovery demand.</b>
+        </div>
+      </div>
+
+      <div class="mobile-system-map" aria-label="Three shared cloud providers serve twenty synthetic banks. One provider outage can affect eight banks at once.">
+        <div class="mobile-map-title">
+          <span>SHARED DEPENDENCY MAP</span>
+          <b>3 providers → 20 banks</b>
+        </div>
+        <div class="mobile-provider-row">
+          <div class="mobile-provider risk"><span>BLUE CLOUD</span><b>8</b><small>banks</small></div>
+          <div class="mobile-provider"><span>ORANGE CLOUD</span><b>7</b><small>banks</small></div>
+          <div class="mobile-provider"><span>GREEN CLOUD</span><b>5</b><small>banks</small></div>
+        </div>
+        <div class="mobile-map-arrow" aria-hidden="true">
+          <i></i><i></i><i></i>
+        </div>
+        <div class="mobile-bank-field">
+          <div class="mobile-bank-group risk" aria-label="Eight banks depend on Cloud A">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="mobile-bank-group" aria-label="Seven banks depend on Cloud B">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="mobile-bank-group" aria-label="Five banks depend on Cloud C">
+            <i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+        <div class="mobile-risk-strip">
+          <span>IF CLOUD A FAILS</span>
+          <b>8 banks need backup at the same time</b>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <main>
+    <section id="story" class="panel active">
+      <div class="story-layout">
+        <article class="card narrative" data-frame-label="CRISIS REPLAY">
+          <div class="scene-label">SCENE <span id="sceneNo">1</span> / 6</div>
+          <h2 id="sceneTitle">Shared dependency</h2>
+          <p id="sceneText"></p>
+          <div id="sceneStat" class="scene-stat"></div>
+          <div class="concept-scene-metrics" aria-hidden="true">
+            <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>20</b><small>synthetic banks</small></div>
+            <div><span>⌘</span><b>3</b><small>cloud providers</small></div>
+          </div>
+          <div class="story-actions">
+            <button id="autoScene" class="btn primary story-play">▶ Auto-Simulation</button>
+            <div class="story-nav" aria-label="Scene navigation">
+              <button id="backScene" class="btn secondary">Previous</button>
+              <button id="nextScene" class="btn secondary">Next</button>
+            </div>
+            <div class="story-utils">
+              <button id="narrationToggle" class="utility-btn" aria-pressed="true">Narration</button>
+              <button id="focusStory" class="utility-btn">Focus view</button>
+            </div>
+          </div>
+          <div id="sceneDots" class="dots" aria-label="Story progress"></div>
+          <div class="demo-progress" aria-label="Narrated demo progress"><i id="demoProgressBar"></i></div>
+        </article>
+
+        <article class="card stage-wrap" data-frame-label="LIVE SYSTEM VIEW">
+          <div id="stage" class="stage scene-1">
+            <svg id="networkLines" class="network-lines" aria-hidden="true"></svg>
+            <div id="motionLayer" class="motion-layer" aria-hidden="true"></div>
+            <div id="ringFence" class="ring-fence" aria-hidden="true"><span>RING-FENCED</span><i>Capacity cannot cross</i></div>
+            <div class="stage-hud">
+              <div><span>LIVE SYSTEM VIEW</span><b id="stageStatus">Shared dependency</b></div>
+              <div class="hud-metric"><span>AFFECTED</span><b id="hudAffected">0 / 20</b></div>
+              <div class="hud-metric"><span>BACKUP GAP</span><b id="hudGap">0</b></div>
+            </div>
+            <div id="conceptTopology" class="concept-topology" aria-label="Shared cloud dependency topology">
+              <svg class="concept-wires" viewBox="0 0 1000 380" preserveAspectRatio="none" aria-hidden="true">
+                <path class="cw cw-blue" d="M165 92 C165 165 112 178 95 240"/>
+                <path class="cw cw-blue" d="M165 92 C165 165 170 182 222 240"/>
+                <path class="cw cw-blue" d="M165 92 C165 165 255 182 350 240"/>
+                <path class="cw cw-orange" d="M500 92 C500 165 430 182 421 240"/>
+                <path class="cw cw-orange" d="M500 92 C500 165 500 182 548 240"/>
+                <path class="cw cw-orange" d="M500 92 C500 165 602 182 675 240"/>
+                <path class="cw cw-green" d="M835 92 C835 165 757 182 747 240"/>
+                <path class="cw cw-green" d="M835 92 C835 165 835 182 874 240"/>
+                <path class="cw cw-green" d="M835 92 C835 165 932 182 965 240"/>
+              </svg>
+              <div class="concept-provider cp-blue">
+                <span class="cp-cloud"><svg class="cloud-line-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M17 32h31c7 0 12-4.6 12-10.5S55 11 48.6 11c-1.4 0-2.8.2-4 .7C42 5.9 36.8 2 30.6 2 22.9 2 16.5 8 15.9 15.5 8.3 15.8 3 20.4 3 26.1 3 29.5 8.9 32 17 32Z"/></svg></span>
+                <div><b>Blue Cloud</b><small>8 CONNECTED BANKS</small></div>
+                <em>US</em>
+              </div>
+              <div class="concept-provider cp-orange">
+                <span class="cp-cloud"><svg class="cloud-line-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M17 32h31c7 0 12-4.6 12-10.5S55 11 48.6 11c-1.4 0-2.8.2-4 .7C42 5.9 36.8 2 30.6 2 22.9 2 16.5 8 15.9 15.5 8.3 15.8 3 20.4 3 26.1 3 29.5 8.9 32 17 32Z"/></svg></span>
+                <div><b>Orange Cloud</b><small>7 CONNECTED BANKS</small></div>
+                <em>EU</em>
+              </div>
+              <div class="concept-provider cp-green">
+                <span class="cp-cloud"><svg class="cloud-line-icon" viewBox="0 0 64 40" aria-hidden="true"><path d="M17 32h31c7 0 12-4.6 12-10.5S55 11 48.6 11c-1.4 0-2.8.2-4 .7C42 5.9 36.8 2 30.6 2 22.9 2 16.5 8 15.9 15.5 8.3 15.8 3 20.4 3 26.1 3 29.5 8.9 32 17 32Z"/></svg></span>
+                <div><b>Green Cloud</b><small>5 CONNECTED BANKS</small></div>
+                <em>APAC</em>
+              </div>
+
+              <div class="concept-bank-row cbr-blue">
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Retail</b><small>3 banks</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Corporate</b><small>2 banks</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Investment</b><small>2 banks</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Regional</b><small>1 bank</small></div>
+              </div>
+              <div class="concept-bank-row cbr-orange">
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Retail</b><small>3 banks</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Corporate</b><small>2 banks</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Investment</b><small>1 bank</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Regional</b><small>1 bank</small></div>
+              </div>
+              <div class="concept-bank-row cbr-green">
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Retail</b><small>2 banks</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Corporate</b><small>1 bank</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Investment</b><small>1 bank</small></div>
+                <div><span><svg class="bank-line-icon" viewBox="0 0 32 28" aria-hidden="true"><path d="M3 10 16 3l13 7M5 12h22M7 12v9m6-9v9m6-9v9m6-9v9M4 23h24M2 26h28"/></svg></span><b>Regional</b><small>1 bank</small></div>
+              </div>
+
+              <div class="concept-metrics">
+                <div><span class="cm-icon">●●●</span><b>20</b><small>Affected banks<br>across all providers</small></div>
+                <div><span class="cm-icon alert">▲</span><b>0 / 20</b><small>Backup gap<br>banks without independent recovery</small></div>
+                <div><span class="cm-icon bars">▂▅▇</span><b>Systemic model</b><small>Simultaneous recovery demand<br>across multiple banks</small></div>
+              </div>
+            </div>
+            <div id="shockPulse" class="shock-pulse" aria-hidden="true"></div>
+            <div id="impactOverlay" class="impact-overlay" aria-live="polite">
+              <span id="impactKicker">SHARED DEPENDENCY</span>
+              <b id="impactValue">Many banks. Same provider.</b>
+              <small id="impactLabel">A shared dependency can become a shared point of failure.</small>
+            </div>
+            <div class="provider-grid" id="providers"></div>
+            <div id="visualSignal" class="visual-signal" aria-hidden="true"></div>
+            <div class="network-grid" id="bankGroups"></div>
+
+            <div id="flowLayer" class="flow-layer" aria-hidden="true">
+              <div class="flow-box demand"><span>Affected demand</span><strong id="flowDemand">0</strong><small>capacity units</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box market"><span>Spot capacity</span><strong id="flowMarket">0</strong><small>available after shock</small></div>
+              <div class="flow-plus">+</div>
+              <div class="flow-box reserve"><span>Pre-reserved</span><strong id="flowReserve">0</strong><small>same budget in both reserve models</small></div>
+            </div>
+
+            <div id="compareOverlay" class="compare-overlay"></div>
+            <div id="storyCaption" class="story-caption narration-command sr-only" aria-live="polite">
+              <div class="narration-status">
+                <span class="narration-live-dot" aria-hidden="true"></span>
+                <span>VOICE GUIDED SIMULATION</span>
+                <b id="narrationScene">01 / 06</b>
+              </div>
+              <div class="narration-command-body">
+                <div class="narration-wave" aria-hidden="true">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <div class="narration-copy">
+                  <span id="captionKicker">NORMAL OPERATIONS</span>
+                  <strong id="captionText">Twenty banks. Three shared cloud providers.</strong>
+                </div>
+                <div id="narrationGlobe" class="narration-globe" aria-hidden="true">
+                  <svg viewBox="0 0 96 96">
+                    <circle cx="48" cy="48" r="36"></circle>
+                    <ellipse cx="48" cy="48" rx="21" ry="36"></ellipse>
+                    <path d="M12 48h72M18 34c17 8 43 8 60 0M18 62c17-8 43-8 60 0"></path>
+                    <path class="ng-route ng-route-a" d="M23 43C38 30 49 31 61 45"></path>
+                    <path class="ng-route ng-route-b" d="M38 61C52 47 65 48 75 59"></path>
+                  </svg>
+                  <span class="ng-node node-a"></span>
+                  <span class="ng-node node-b"></span>
+                  <span class="ng-node node-c"></span>
+                </div>
+              </div>
+              <div id="narrationProgress" class="narration-progress" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i><i></i>
+              </div>
+            </div>
+            <div class="scfr-reserve-layer" id="scfrReserveLayer">
+              <div class="reserve-node">
+                <span>SCFR RESERVE</span>
+                <b>Shared emergency capacity</b>
+                <small>Pre-arranged · pooled · governed</small>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+    </section>
+
+    <section id="lab" class="panel">
+      <div class="lab-layout">
+        <aside class="card controls">
+          <div class="eyebrow">SCENARIO CONTROLS</div>
+          <h2>Configure stress scenario</h2>
+          <p>Change one assumption at a time and rerun the same synthetic shock.</p>
+
+          <div class="control-section-label">STRESS ASSUMPTIONS</div>
+          <div class="presets" aria-label="Scenario presets">
+            <button class="preset active" data-preset="baseline">Baseline</button>
+            <button class="preset" data-preset="scarcity">Severe scarcity</button>
+            <button class="preset" data-preset="lean">Lean reserve</button>
+          </div>
+
+          <label>Provider outage
+            <select id="providerSelect">
+              <option value="blue">Blue Cloud</option>
+              <option value="orange">Orange Cloud</option>
+              <option value="green">Green Cloud</option>
+            </select>
+          </label>
+
+          <label>Backup capacity available after outage <b id="marketLabel">20%</b>
+            <input id="marketPct" type="range" min="0" max="50" value="20" step="5">
+            <small>Share of affected demand that can be sourced immediately after the outage.</small>
+          </label>
+
+          <label>Reserve prepared before outage <b id="reserveLabel">25%</b>
+            <input id="reservePct" type="range" min="0" max="60" value="25" step="5">
+            <small>Individual Reserves and SCFR receive the same total reserve budget.</small>
+          </label>
+
+          <label>How pooled reserve is allocated
+            <select id="ruleSelect">
+              <option value="systemic">Systemic priority</option>
+              <option value="equal">Equal allocation</option>
+              <option value="readiness">Readiness first</option>
+            </select>
+          </label>
+
+          <details class="control-disclosure reproducibility">
+            <summary><span>Reproducibility</span><b id="scenarioId">CR-BASE</b></summary>
+            <div class="disclosure-body">
+              <div class="scenario-seed-row">
+                <input id="seedInput" type="text" maxlength="24" placeholder="Scenario seed" aria-label="Scenario seed">
+                <button id="generateScenarioBtn" class="btn secondary" type="button">Generate</button>
+              </div>
+              <button id="shareScenarioBtn" class="btn secondary full" type="button">Copy scenario link</button>
+              <button id="exportBtn" class="btn secondary full">Export scenario JSON</button>
+            </div>
+          </details>
+
+          <details id="challenge" class="control-disclosure challenge">
+            <summary><span>Constraint tests</span><small>Optional</small></summary>
+            <div class="disclosure-body">
+              <div class="challenge-tabs" role="group" aria-label="Constraint test">
+                <button class="challenge-tab active" data-challenge="efficiency">Efficiency</button>
+                <button class="challenge-tab" data-challenge="scarcity">Scarcity</button>
+                <button class="challenge-tab" data-challenge="coordination">Coordination</button>
+              </div>
+              <b id="challengeTitle">Reach ≥80 resilience with ≤30% reserve.</b>
+              <p id="challengeText">Try a configuration.</p>
+              <div id="challengeMetrics" class="challenge-metrics"></div>
+            </div>
+          </details>
+        </aside>
+
+        <div class="results">
+          <div class="card shock-head">
+            <div>
+              <div class="eyebrow">SHOCK SUMMARY</div>
+              <h2 id="shockTitle">Blue Cloud outage</h2>
+              <p id="shockCopy"></p>
+            </div>
+            <div class="shock-actions">
+              <div id="affectedPill" class="pill"></div>
+              <button id="replayScenarioBtn" class="btn secondary replay-btn">Replay scenario</button>
+            </div>
+          </div>
+
+          <div id="decisionInsight" class="card decision-insight"></div>
+
+          <div id="beforeAfter" class="card before-after-card" aria-label="Individual reserves versus SCFR comparison"></div>
+
+          <div class="section-heading">
+            <div><span>All recovery options</span><h2>Three ways to respond to the same outage.</h2></div>
+            <p>The model holds the shock constant and compares how recovery capacity is allocated.</p>
+          </div>
+          <div id="strategyCards" class="strategy-grid"></div>
+
+          <details class="card analysis-disclosure">
+            <summary>
+              <div><span>Advanced analysis</span><b>Robustness & sensitivity</b></div>
+              <small>Frontier + parameter grid</small>
+            </summary>
+            <div class="analysis-body">
+              <div class="chart-head">
+                <div><div class="eyebrow">RESILIENCE FRONTIER</div><h3>How much reserve is enough?</h3></div>
+                <p>Systemic resilience as the reserve budget increases.</p>
+              </div>
+              <div id="frontier" class="chart"></div>
+
+              <div class="advanced-divider"></div>
+
+              <div class="sensitivity-head">
+                <div>
+                  <div class="eyebrow">SENSITIVITY EXPLORER</div>
+                  <h3>Where does coordination matter most?</h3>
+                  <p>Compare outcomes across different backup-market and reserve assumptions.</p>
+                </div>
+                <div class="sensitivity-switch" role="group" aria-label="Sensitivity view">
+                  <button class="sensitivity-mode active" data-mode="scfr">SCFR score</button>
+                  <button class="sensitivity-mode" data-mode="uplift">Coordination uplift</button>
+                </div>
+              </div>
+              <div id="sensitivityHeatmap" class="sensitivity-heatmap"></div>
+            </div>
+          </details>
+
+          <div class="card evidence-note">
+            <b>Research guardrail</b>
+            <span>Every result above is an illustrative output from a synthetic model — not a forecast or assessment of a real bank.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="method" class="panel">
+      <div class="method-intro">
+        <div>
+          <span>RESEARCH FRAMEWORK</span>
+          <h2>Transparent assumptions. Reproducible scenarios. Explicit guardrails.</h2>
+        </div>
+        <p>CloudRescue separates the observed concentration-risk problem from the synthetic mechanism used to explore it.</p>
+      </div>
+      <div class="method-grid">
+        <article class="card prose">
+          <div class="eyebrow">MODEL LOGIC</div>
+          <h2>Transparent by design</h2>
+          <ol>
+            <li>One synthetic provider fails.</li>
+            <li>All banks connected to it simultaneously require backup capacity.</li>
+            <li>Spot-market capacity is scarce.</li>
+            <li>Individual reserves are ring-fenced bank by bank.</li>
+            <li>SCFR receives the same reserve budget, but pools it across affected banks.</li>
+            <li>Recovery is limited by both capacity and each bank's failover readiness.</li>
+          </ol>
+        </article>
+        <article class="card formula-card">
+          <div class="eyebrow">HEADLINE METRIC</div>
+          <h2>Systemic Resilience Score</h2>
+          <div class="formula">SRS = Σ(wᵢ × rᵢ) / Σ(wᵢ) × 100</div>
+          <p><b>wᵢ</b> combines critical workload and stylized systemic importance. <b>rᵢ</b> is the restored fraction after capacity allocation and readiness constraints.</p>
+          <div class="guardrail">v0.1 is intentionally synthetic. Empirical calibration is a future research stage.</div>
+        </article>
+        <article class="card architecture-card">
+          <div class="eyebrow">HOW IT WORKS</div>
+          <h2>From common shock to measurable recovery</h2>
+          <div class="architecture-flow">
+            <div><span>1</span><b>Synthetic bank network</b><small>20 stylized institutions linked to shared providers</small></div>
+            <i>→</i>
+            <div><span>2</span><b>Provider outage</b><small>A common operational shock hits dependent banks together</small></div>
+            <i>→</i>
+            <div><span>3</span><b>Capacity allocation</b><small>Market, individual reserves, or pooled SCFR</small></div>
+            <i>→</i>
+            <div><span>4</span><b>Recovery engine</b><small>Allocation × failover readiness determines restored workload</small></div>
+            <i>→</i>
+            <div><span>5</span><b>Systemic score</b><small>Weighted recovery becomes the Systemic Resilience Score</small></div>
+          </div>
+          <div class="architecture-tech">
+            <span>Vanilla JavaScript</span><span>Deterministic model</span><span>SVG network</span><span>Reproducible JSON</span><span>Automated model checks</span>
+          </div>
+        </article>
+
+        <article class="card evidence-card">
+          <div class="eyebrow">REAL-WORLD MOTIVATION</div>
+          <h2>The problem is observed. The numbers are synthetic.</h2>
+          <p>CloudRescue does not assume that 20 named banks literally use three named providers. The prototype uses a stylized network to stress-test a real concentration-risk mechanism documented by BIS, DORA and the EBA.</p>
+          <div class="reality-grid">
+            <div class="reality-real"><span>OBSERVED IN THE REAL WORLD</span><b>Third-party ICT concentration risk</b><b>Critical-provider dependency</b><b>Operational-resilience concern</b></div>
+            <div class="reality-synthetic"><span>SYNTHETIC IN THIS MVP</span><b>20-bank network</b><b>Provider assignments</b><b>Capacity and readiness values</b></div>
+          </div>
+          <div class="evidence-grid">
+            <a href="https://www.bis.org/publications/fsi-insight-53-managing-cloud-risk-some-considerations-oversight-critical-cloud-service-providers-financial-sector" target="_blank" rel="noopener"><span>BIS / FSI Insights 53</span><b>Cloud use for critical services is rising; disruption at a major CSP may have systemic implications.</b></a>
+            <a href="https://www.esma.europa.eu/dora-oversight" target="_blank" rel="noopener"><span>DORA Oversight</span><b>EU framework explicitly addresses systemic and concentration risks from reliance on limited ICT providers.</b></a>
+            <a href="https://www.eba.europa.eu/publications-and-media/publications/risk-assessment-report-june-2026" target="_blank" rel="noopener"><span>EBA Risk Assessment 2026</span><b>High dependency on third-party ICT providers such as cloud providers amplifies operational-resilience risks.</b></a>
+          </div>
+        </article>
+        <article class="card learning-card">
+          <div class="eyebrow">DEVELOPMENT JOURNEY · FIRSTCOMMIT</div>
+          <h2>What I learned by turning a finance question into software</h2>
+          <div class="learning-steps">
+            <div><span>01</span><b>Frame the problem</b><small>Translate third-party ICT concentration risk into a narrow, testable systemic-resilience question.</small></div>
+            <div><span>02</span><b>Model the mechanism</b><small>Define synthetic banks, capacity constraints, failover readiness and three allocation mechanisms.</small></div>
+            <div><span>03</span><b>Build the simulator</b><small>Implement a deterministic browser model and keep the reserve-budget comparison internally consistent.</small></div>
+            <div><span>04</span><b>Explain it visually</b><small>Turn abstract allocation logic into a narrated crisis story with moving capacity and visible fragmentation.</small></div>
+            <div><span>05</span><b>Make it reproducible</b><small>Add model checks, JSON export, scenario replay, deterministic seeds and shareable scenario links.</small></div>
+          </div>
+          <div class="learning-note">
+            <b>AI-assisted, human-owned.</b>
+            <span>AI tools supported brainstorming, code drafting and debugging; the research framing, assumptions, interpretation, testing decisions and final submission remain my responsibility.</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="product-footer">
+    <div><b>CloudRescue</b><span>Systemic Cloud Resilience Lab · Public research prototype</span></div>
+    <nav>
+      <a href="https://github.com/rostys-fintech/cloudrescue-scfr" target="_blank" rel="noopener">GitHub repository</a>
+      <a href="https://rostys-fintech.github.io/cloudrescue-scfr/" target="_blank" rel="noopener">Live prototype</a>
+    </nav>
+    <span>Rostyslav Honcharenko · 2026</span>
+  </footer>
+</div>
+<script type="module" src="app.js?v=20260927-mobile06"></script>
+</body>
+</html>
