@@ -588,3 +588,38 @@ html[data-theme="dark"] footer{color:#718294}
   .story-layout{min-height:640px}
   .stage-wrap{min-height:640px}
 }
+
+
+/* Presentation / judge focus view */
+body.story-focus{overflow:hidden}
+body.story-focus .topbar,
+body.story-focus .hero,
+body.story-focus .tabs,
+body.story-focus .research-question,
+body.story-focus footer{display:none}
+body.story-focus .shell{
+  width:min(1600px,98vw);
+  padding:1vh 0;
+}
+body.story-focus #story{display:block}
+body.story-focus .story-layout{
+  grid-template-columns:minmax(330px,.65fr) minmax(780px,1.65fr);
+  min-height:98vh;
+  gap:12px;
+}
+body.story-focus .stage-wrap{min-height:98vh}
+body.story-focus .narrative{padding:26px}
+body.story-focus .narrative h2{font-size:36px}
+body.story-focus .story-actions{padding-top:20px}
+body.story-focus #focusStory{
+  border-color:var(--blue);
+  color:var(--blue);
+}
+html[data-theme="dark"] body.story-focus #focusStory{
+  border-color:#6f98ff;color:#b8caff;
+}
+@media(max-width:1050px){
+  body.story-focus{overflow:auto}
+  body.story-focus .story-layout{grid-template-columns:1fr;min-height:auto}
+  body.story-focus .stage-wrap{min-height:760px}
+}
