@@ -71,6 +71,8 @@ let narrationEnabled = true;
 let audioContext = null;
 let sceneTimers = [];
 let demoRunId = 0;
+let storyArgs = {...defaults};
+let storyFromLab = false;
 
 function setupTheme(){
   const button = $('#themeToggle');
@@ -151,8 +153,63 @@ function getEnglishVoice(){
   return voices.find(v=>v.name===selected) || preferredNarrator(voices);
 }
 
+function storyPresentation(c,args){
+  const provider=providerName(args.outageProvider);
+  const affected=c.market.affectedCount;
+  const demand=num(c.market.totalDemand);
+  const available=num(c.market.allocated);
+  const gap=num(Math.max(0,c.market.totalDemand-c.market.allocated));
+  const stranded=num(c.individual.strandedReserve);
+  const reserve=num(c.scfr.totalReserve);
+  const restored=Math.round(c.scfr.criticalRestoredPct);
+
+  const dynamic=[
+    {
+      ...scenes[0],
+      stat: storyFromLab ? `Replay: ${provider} outage · ${args.marketPct}% market · ${args.reservePct}% reserve` : scenes[0].stat,
+      caption: storyFromLab ? `This replay uses your Stress Lab assumptions.` : scenes[0].caption,
+      voice: storyFromLab
+        ? `This replay uses the scenario you just designed in the Stress Lab. The outage is at ${provider}, with ${args.marketPct} percent emergency market capacity and ${args.reservePct} percent pre-reserved capacity.`
+        : scenes[0].voice
+    },
+    {
+      ...scenes[1],
+      title:`${provider} fails`,
+      text:`A severe outage at ${provider} simultaneously affects every synthetic bank whose critical workload depends on it.`,
+      stat:`${affected} banks affected at the same time`,
+      caption:`${provider} fails. ${affected} banks are disrupted at once.`,
+      voice:`Now, ${provider} goes down. ${affected} banks lose critical capacity at the same time. This is no longer one bank’s IT problem. It is a system-wide recovery problem.`
+    },
+    {
+      ...scenes[2],
+      stat:`${demand} units demanded · ${available} immediately available`,
+      caption:`${demand} units demanded. Only ${available} are immediately available.`,
+      voice:`All ${affected} affected banks reach for backup capacity at once. They need ${demand} units. The emergency market can supply only ${available}. That leaves a gap of ${gap} units.`
+    },
+    {
+      ...scenes[3],
+      stat:`${stranded} units stranded · same reserve budget`,
+      caption:`Reserve exists — but ${stranded} units are stranded by ring-fencing.`,
+      voice:`Individual reserves help, but there is a catch. Capacity is ring-fenced, bank by bank. It cannot simply move to where the shock is. In this run, ${stranded} reserve units remain stranded while affected banks are still short.`
+    },
+    {
+      ...scenes[4],
+      stat:`Same ${reserve}-unit reserve budget · pooled allocation`,
+      caption:`SCFR redirects the same ${reserve}-unit reserve budget to where it is needed.`,
+      voice:`SCFR changes the coordination rule, not the budget. The same ${reserve} reserve units are pooled in advance, then directed to the affected banks that need them most. Critical workload restoration rises to ${restored} percent in this synthetic run.`
+    },
+    {
+      ...scenes[5],
+      caption:'Same shock. Same reserve budget. Different coordination.',
+      voice:`The comparison is the point. Same shock. Same reserve budget. Different coordination. This is not a forecast, but a transparent way to test the mechanism. Now change the assumptions and replay it again.`
+    }
+  ];
+  return dynamic[scene];
+}
+
 function speakScene(runId=demoRunId){
-  const current=scenes[scene];
+  const c=compareStrategies(storyArgs);
+  const current=storyPresentation(c,storyArgs);
 
   if(!narrationEnabled || !('speechSynthesis' in window)){
     return new Promise(resolve=>{
@@ -283,7 +340,7 @@ function renderVisualSignal(c){
   } else if(scene === 1){
     el.innerHTML = `
       <div class="outage-story">
-        <div class="outage-cloud"><span>${cloudGlyph}</span><b>Blue Cloud</b><small>OUTAGE</small></div>
+        <div class="outage-cloud"><span>${cloudGlyph}</span><b>${providerName(storyArgs.outageProvider)}</b><small>OUTAGE</small></div>
         <div class="outage-wave">→</div>
         <div class="affected-visual">
           ${Array.from({length:market.affectedCount},(_,i)=>`<span class="affected-bank-icon">${bankGlyph}<b>${i+1}</b></span>`).join('')}
@@ -473,16 +530,22 @@ function setBankOutcome(el,row){
 }
 
 function positionRingFence(){
-  const blue=document.querySelector('.bank-group[data-provider="blue"]');
-  const orange=document.querySelector('.bank-group[data-provider="orange"]');
+  const affected=document.querySelector(`.bank-group[data-provider="${storyArgs.outageProvider}"]`);
+  const otherProvider=providers.find(p=>p.id!==storyArgs.outageProvider)?.id;
+  const other=document.querySelector(`.bank-group[data-provider="${otherProvider}"]`);
   const fence=$('#ringFence');
-  if(!blue || !orange || !fence) return null;
-  const a=motionPoint(blue,1,.5);
-  const b=motionPoint(orange,0,.5);
+  if(!affected || !other || !fence) return null;
+
+  const ar=affected.getBoundingClientRect();
+  const or=other.getBoundingClientRect();
+  const affectedLeft=ar.left < or.left;
+  const a=motionPoint(affected,affectedLeft?1:0,.5);
+  const b=motionPoint(other,affectedLeft?0:1,.5);
   const x=(a.x+b.x)/2;
+
   fence.style.left=`${x}px`;
-  const top=Math.min(motionPoint(blue,.5,0).y,motionPoint(orange,.5,0).y);
-  const bottom=Math.max(motionPoint(blue,.5,1).y,motionPoint(orange,.5,1).y);
+  const top=Math.min(motionPoint(affected,.5,0).y,motionPoint(other,.5,0).y);
+  const bottom=Math.max(motionPoint(affected,.5,1).y,motionPoint(other,.5,1).y);
   fence.style.top=`${top}px`;
   fence.style.height=`${Math.max(180,bottom-top)}px`;
   return x;
@@ -520,7 +583,7 @@ function runSceneMotion(c){
     const fenceX=positionRingFence();
     $('#ringFence')?.classList.add('active');
     if(fenceX==null) return;
-    const sources=banks.filter(b=>b.provider!=='blue').slice(0,7);
+    const sources=banks.filter(b=>b.provider!==storyArgs.outageProvider).slice(0,7);
     const targets=c.individual.rows;
     sources.forEach((bank,i)=>{
       const source=document.querySelector(`.bank[data-bank="${bank.id}"]`);
@@ -585,7 +648,7 @@ function drawNetworkLines(){
 
   if(scene === 4){
     const reserve = document.querySelector('.reserve-node');
-    const affected = compareStrategies(defaults).scfr.rows;
+    const affected = compareStrategies(storyArgs).scfr.rows;
     if(reserve){
       const a = localPoint(reserve,.5,0);
       affected.forEach(bank=>{
@@ -600,8 +663,8 @@ function drawNetworkLines(){
   svg.innerHTML = paths.join('');
 }
 
-function comparisonHTML(){
-  const c = compareStrategies(defaults);
+function comparisonHTML(args=storyArgs){
+  const c = compareStrategies(args);
   const rows = [
     ['Market scramble','UNCOORDINATED',c.market,'Spot capacity only.'],
     ['Individual reserves','RING-FENCED',c.individual,'Reserve stays bank-specific.'],
@@ -630,7 +693,7 @@ function renderImpact(c){
   const strandedShare=c.individual.totalReserve ? Math.round(c.individual.strandedReserve/c.individual.totalReserve*100) : 0;
   const data = [
     ['REAL-WORLD RISK','Shared dependency','Many institutions can depend on the same critical provider.'],
-    ['COMMON SHOCK','8 banks. One outage.','A single provider failure hits multiple institutions at once.'],
+    ['COMMON SHOCK',`${c.market.affectedCount} banks. One outage.`,'A single provider failure hits multiple institutions at once.'],
     ['CAPACITY SHORTAGE',`Only ${availableShare}% available`,'Most immediate backup demand cannot be met after the shock.'],
     ['FRAGMENTATION',`${strandedShare}% of reserve stranded`,'Capacity exists — but ring-fencing keeps it in the wrong places.'],
     ['COORDINATED RECOVERY','Same reserve. Better allocation.','SCFR changes where capacity can go, not how much reserve exists.'],
@@ -647,7 +710,8 @@ function clearStatuses(){
 }
 
 function applyScene(){
-  const s = scenes[scene];
+  const c = compareStrategies(storyArgs);
+  const s = storyPresentation(c,storyArgs);
   $('#sceneNo').textContent = scene+1;
   $('#sceneTitle').textContent = s.title;
   $('#sceneText').textContent = s.text;
@@ -657,8 +721,6 @@ function applyScene(){
   $('#stage').className = `stage scene-${scene+1}`;
 
   clearStatuses();
-
-  const c = compareStrategies(defaults);
   const affected = c.market.rows;
   const storyStatus = [
     'Normal operations',
@@ -672,18 +734,18 @@ function applyScene(){
   $('#hudAffected').textContent = scene === 0 ? '0 / 20' : `${c.market.affectedCount} / 20`;
   $('#hudGap').textContent = scene < 2 ? '0' : num(Math.max(0, c.market.totalDemand - c.market.allocated));
   $('#flowDemand').textContent = num(c.market.totalDemand);
-  $('#flowMarket').textContent = num(c.market.totalDemand * defaults.marketPct / 100);
+  $('#flowMarket').textContent = num(c.market.allocated);
   $('#flowReserve').textContent = num(c.scfr.totalReserve);
   renderVisualSignal(c);
   renderImpact(c);
 
   if(scene >= 1){
-    document.querySelector('.provider[data-provider="blue"]')?.classList.add('offline');
+    document.querySelector(`.provider[data-provider="${storyArgs.outageProvider}"]`)?.classList.add('offline');
     affected.forEach(b=>document.querySelector(`.bank[data-bank="${b.id}"]`)?.classList.add('affected'));
   }
 
   if(scene === 3){
-    banks.filter(b=>b.provider !== defaults.outageProvider).forEach(b=>{
+    banks.filter(b=>b.provider !== storyArgs.outageProvider).forEach(b=>{
       document.querySelector(`.bank[data-bank="${b.id}"]`)?.classList.add('stranded');
     });
     c.individual.rows.forEach(b=>{
@@ -704,7 +766,7 @@ function applyScene(){
     });
   }
 
-  $('#compareOverlay').innerHTML = scene === 5 ? comparisonHTML() : '';
+  $('#compareOverlay').innerHTML = scene === 5 ? comparisonHTML(storyArgs) : '';
   requestAnimationFrame(()=>{
     drawNetworkLines();
     runSceneMotion(c);
@@ -838,6 +900,8 @@ function switchTab(id){
 }
 $$('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
 $('#heroDemo').addEventListener('click',()=>{
+  storyArgs={...defaults};
+  storyFromLab=false;
   switchTab('story');
   setNarration(true);
   setFocusMode(true);
