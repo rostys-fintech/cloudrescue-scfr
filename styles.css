@@ -42,3 +42,20 @@ footer{display:flex;justify-content:space-between;color:#657c94;font-size:10px;p
 .presets{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0 4px}
 .preset{border:1px solid #2b4662;background:#0a1727;color:#8098b0;border-radius:999px;padding:7px 10px;font-size:9px;font-weight:850;cursor:pointer}
 .preset:hover,.preset.active{color:#eaf3fb;border-color:#5579c6;background:#152844}
+
+.stage-hud{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;margin-bottom:14px;padding:10px 12px;border:1px solid #294158;background:rgba(6,16,28,.72);border-radius:14px;backdrop-filter:blur(8px);position:relative;z-index:4}
+.stage-hud span{display:block;font-size:8px;letter-spacing:.12em;font-weight:900;color:#6f88a1}
+.stage-hud b{display:block;margin-top:3px;font-size:12px;color:#e9f2fa}
+.hud-metric{min-width:92px;border-left:1px solid #284159;padding-left:12px}
+.shock-pulse{position:absolute;top:68px;left:4%;width:28%;height:84px;border-radius:18px;pointer-events:none;opacity:0;z-index:1}
+.scene-2 .shock-pulse,.scene-3 .shock-pulse{opacity:1;animation:shockHalo 1.5s ease-in-out infinite;background:radial-gradient(circle,rgba(240,91,103,.22),rgba(240,91,103,0) 72%)}
+@keyframes shockHalo{0%,100%{transform:scale(.92);opacity:.55}50%{transform:scale(1.15);opacity:1}}
+.scene-2 .provider[data-provider="blue"],.scene-3 .provider[data-provider="blue"]{animation:providerShake .5s ease 1}
+@keyframes providerShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.scene-3 .bank.affected{animation:capacityBlink 1.3s ease-in-out infinite}
+@keyframes capacityBlink{50%{box-shadow:0 0 0 2px rgba(240,198,91,.16),0 0 24px rgba(240,198,91,.08)}}
+.scene-4 .bank.waiting{animation:waitingPulse 1.4s ease-in-out infinite}
+@keyframes waitingPulse{50%{filter:brightness(1.2)}}
+.scene-5 .compare-card.best,.scene-6 .compare-card.best{animation:bestGlow 2s ease-in-out infinite}
+@keyframes bestGlow{50%{box-shadow:0 0 0 1px rgba(79,191,143,.2),0 0 38px rgba(79,191,143,.13)}}
+@media(max-width:720px){.stage-hud{grid-template-columns:1fr 1fr}.stage-hud>div:first-child{grid-column:1/-1}.hud-metric{border-left:0;padding-left:0}}
