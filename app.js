@@ -751,7 +751,7 @@ function applyScene(){
   });
 
   $('#backScene').disabled = scene===0;
-  $('#nextScene').textContent = scene===scenes.length-1 ? 'Open Stress Lab →' : 'Next →';
+  $('#nextScene').textContent = scene===scenes.length-1 ? 'Open Stress Lab' : 'Next';
   $$('#sceneDots button').forEach((d,i)=>d.classList.toggle('active',i===scene));
   updateDemoProgress();
 }
