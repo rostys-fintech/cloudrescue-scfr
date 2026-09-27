@@ -6694,3 +6694,104 @@ body.ra-guided-running #simulation #raEarthMount{
     animation-delay:0s!important;
   }
 }
+
+
+/* =========================================================
+   GUIDED CONTINUITY ENGINE — no hard resets between cues
+   Parent-level bridge masks SVG state swaps while child nodes
+   interpolate toward their next visual state.
+   ========================================================= */
+
+#raEarthMount .ra-earth-svg{
+  transform-origin:50% 50%;
+  transition:
+    opacity .22s cubic-bezier(.22,.61,.36,1),
+    filter .22s cubic-bezier(.22,.61,.36,1),
+    transform .58s cubic-bezier(.22,.61,.36,1);
+  will-change:opacity,filter,transform;
+}
+
+#raEarthMount.ra-cue-transitioning .ra-earth-svg{
+  opacity:.82!important;
+  filter:blur(.75px) saturate(.9) brightness(.94)!important;
+  transform:scale(.997);
+}
+
+#raEarthMount.ra-guided-preroll .ra-earth-svg{
+  opacity:.76!important;
+  filter:blur(1px) saturate(.86) brightness(.9)!important;
+  transform:scale(.996);
+}
+
+#simulation .ra-video-hud .ra-guided-copy{
+  transition:
+    opacity .24s cubic-bezier(.22,.61,.36,1),
+    transform .42s cubic-bezier(.22,.61,.36,1),
+    filter .24s cubic-bezier(.22,.61,.36,1);
+}
+#simulation .ra-video-hud.is-cue-transitioning .ra-guided-copy{
+  opacity:.28!important;
+  transform:translateY(2px);
+  filter:blur(1.6px);
+}
+#raCanvasTitle{
+  transition:
+    opacity .24s cubic-bezier(.22,.61,.36,1),
+    transform .42s cubic-bezier(.22,.61,.36,1),
+    filter .24s cubic-bezier(.22,.61,.36,1);
+}
+#raCanvasTitle.is-cue-transitioning{
+  opacity:.26!important;
+  transform:translateY(2px);
+  filter:blur(1.3px);
+}
+
+/* Slow the node interpolation enough to be visibly continuous, but keep
+   failure events responsive to the narrator. */
+#raEarthMount.ra-guided-sync .ra-earth-provider,
+#raEarthMount.ra-guided-sync .ra-earth-bank,
+#raEarthMount.ra-guided-sync .ra-earth-link,
+#raEarthMount.ra-guided-sync .ra-earth-packet,
+#raEarthMount.ra-guided-sync .ra-earth-ocean,
+#raEarthMount.ra-guided-sync .ra-earth-land,
+#raEarthMount.ra-guided-sync .ra-earth-grid,
+#raEarthMount.ra-guided-sync .ra-earth-atmosphere,
+#raEarthMount.ra-guided-sync .ra-provider-halo,
+#raEarthMount.ra-guided-sync .ra-provider-core,
+#raEarthMount.ra-guided-sync .ra-provider-cloud,
+#raEarthMount.ra-guided-sync .ra-bank-halo,
+#raEarthMount.ra-guided-sync .ra-bank-node{
+  transition-duration:.88s!important;
+  transition-timing-function:cubic-bezier(.22,.61,.36,1)!important;
+}
+
+/* Remove the old Stage-1 pop. Nodes now rise from the previous visual state
+   instead of overshooting to 120% scale. */
+#raEarthMount.ra-sync-s1-providers .ra-earth-provider:nth-child(1),
+#raEarthMount.ra-sync-s1-providers .ra-earth-provider:nth-child(2),
+#raEarthMount.ra-sync-s1-providers .ra-earth-provider:nth-child(3){
+  animation-name:raStage1NodeSmooth!important;
+  animation-duration:.88s!important;
+}
+#raEarthMount.ra-sync-s1-banks .ra-earth-bank{
+  animation-name:raStage1BankSmooth!important;
+  animation-duration:.72s!important;
+}
+
+@keyframes raStage1NodeSmooth{
+  0%{opacity:0;filter:blur(2px)}
+  45%{opacity:.58;filter:blur(.7px)}
+  100%{opacity:1;filter:blur(0)}
+}
+@keyframes raStage1BankSmooth{
+  0%{opacity:0;filter:blur(1.2px)}
+  100%{opacity:1;filter:blur(0)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #raEarthMount .ra-earth-svg,
+  #simulation .ra-video-hud .ra-guided-copy,
+  #raCanvasTitle{
+    transition-duration:.12s!important;
+  }
+}
