@@ -444,3 +444,147 @@ footer{display:flex;justify-content:space-between;color:#8795a4;font-size:9px;pa
 }
 @keyframes scfrFlow{to{stroke-dashoffset:-20}}
 .scene-5 .network-line:not(.scfr-line){opacity:.18}
+
+
+/* Theme controls */
+.theme-toggle{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--line);background:var(--surface);color:var(--navy);
+  border-radius:8px;padding:6px 9px;font-size:9px;font-weight:800;
+  line-height:1;transition:.18s;
+}
+.theme-toggle:hover{border-color:var(--line-strong);box-shadow:0 3px 10px rgba(15,31,51,.05)}
+.theme-icon{font-size:12px;line-height:1}
+
+/* Smooth theme transition without affecting motion-heavy elements */
+body,.topbar,.hero-badge,.tabs,.card,.provider,.bank,.flow-box,.compare-card,
+.reserve-node,.research-question,.controls select,.preset,.challenge,.pill,
+.decision-insight,.insight-metrics>div,.evidence-note,.formula,.roadmap>div,
+.theme-toggle,.stage-hud,.bank-group{
+  transition:background-color .22s ease,border-color .22s ease,color .22s ease,box-shadow .22s ease;
+}
+
+/* Institutional dark theme */
+html[data-theme="dark"]{
+  --canvas:#0d1520;
+  --surface:#131f2c;
+  --surface-subtle:#101a25;
+  --navy:#edf3f8;
+  --navy-2:#d7e2ec;
+  --blue:#6f98ff;
+  --blue-soft:#182843;
+  --green:#55b996;
+  --green-soft:#142922;
+  --amber:#d9aa53;
+  --amber-soft:#2b2418;
+  --red:#e06b78;
+  --red-soft:#321d23;
+  --text:#e8eef4;
+  --muted:#9aaabc;
+  --muted-2:#7d8d9e;
+  --line:#263646;
+  --line-strong:#3a4c5e;
+  --shadow:0 8px 24px rgba(0,0,0,.18);
+  --shadow-lg:0 18px 44px rgba(0,0,0,.22);
+}
+html[data-theme="dark"] body{background:var(--canvas);color:var(--text)}
+html[data-theme="dark"] .topbar{border-color:var(--line)}
+html[data-theme="dark"] .brand-mark{background:#e8eef4;color:#12263a}
+html[data-theme="dark"] .brand-lockup strong,
+html[data-theme="dark"] .hero h1,
+html[data-theme="dark"] .hero-badge b,
+html[data-theme="dark"] .narrative h2,
+html[data-theme="dark"] .provider strong,
+html[data-theme="dark"] .bank b,
+html[data-theme="dark"] .shock-head h2,
+html[data-theme="dark"] .section-heading h2,
+html[data-theme="dark"] .strategy-card h3,
+html[data-theme="dark"] .score,
+html[data-theme="dark"] .decision-insight h3,
+html[data-theme="dark"] .chart-head h3,
+html[data-theme="dark"] .prose h2,
+html[data-theme="dark"] .formula-card h2,
+html[data-theme="dark"] .roadmap-card h2,
+html[data-theme="dark"] .theme-toggle{color:var(--navy)}
+html[data-theme="dark"] .hero p,
+html[data-theme="dark"] .narrative>p,
+html[data-theme="dark"] .shock-head p,
+html[data-theme="dark"] .section-heading p,
+html[data-theme="dark"] .controls>p,
+html[data-theme="dark"] .decision-insight p,
+html[data-theme="dark"] .formula-card p,
+html[data-theme="dark"] .prose li{color:#9fb0c1}
+
+html[data-theme="dark"] .hero-badge,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .provider,
+html[data-theme="dark"] .bank-group,
+html[data-theme="dark"] .flow-box,
+html[data-theme="dark"] .compare-card,
+html[data-theme="dark"] .research-question,
+html[data-theme="dark"] .theme-toggle,
+html[data-theme="dark"] .controls select,
+html[data-theme="dark"] .preset,
+html[data-theme="dark"] .insight-metrics>div{
+  background:var(--surface);
+  border-color:var(--line);
+}
+html[data-theme="dark"] .stage-wrap{background:#101923}
+html[data-theme="dark"] .stage-hud{background:rgba(19,31,44,.97);border-color:var(--line)}
+html[data-theme="dark"] .bank{background:#101b26;border-color:#263646}
+html[data-theme="dark"] .bank small,
+html[data-theme="dark"] .provider small,
+html[data-theme="dark"] .flow-box small,
+html[data-theme="dark"] .mini span,
+html[data-theme="dark"] .metric span,
+html[data-theme="dark"] .roadmap small,
+html[data-theme="dark"] .axis-label{color:#8394a5;fill:#8394a5}
+html[data-theme="dark"] .provider.offline{background:var(--red-soft);border-color:#6a3741}
+html[data-theme="dark"] .bank.affected{background:var(--red-soft);border-color:#5c333c}
+html[data-theme="dark"] .bank.restored{background:var(--green-soft);border-color:#2d5b4a}
+html[data-theme="dark"] .bank.waiting{background:var(--amber-soft);border-color:#5d4c2c}
+html[data-theme="dark"] .scene-stat{background:var(--blue-soft);color:#9db9ff}
+html[data-theme="dark"] .tab{color:#8fa0b0}
+html[data-theme="dark"] .tab:hover{background:#172331;color:#dce6ef}
+html[data-theme="dark"] .tab.active{background:#172331;color:#fff;box-shadow:0 0 0 1px var(--line)}
+html[data-theme="dark"] .tabs{
+  background:rgba(13,21,32,.95);
+  border-color:var(--line);
+}
+html[data-theme="dark"] .btn{background:#172331;border-color:var(--line-strong);color:#e9eff5}
+html[data-theme="dark"] .btn.primary{background:#4d79ef;border-color:#4d79ef;color:#fff}
+html[data-theme="dark"] .preset:hover,
+html[data-theme="dark"] .preset.active{background:#192a46;border-color:#48689d;color:#c8d7ff}
+html[data-theme="dark"] .challenge{background:#101a25;border-color:#405163}
+html[data-theme="dark"] .challenge.success{background:#13251f;border-color:#326351}
+html[data-theme="dark"] .pill{background:#101a25;border-color:var(--line);color:#a8b8c7}
+html[data-theme="dark"] .strategy-card.best{border-color:#356551}
+html[data-theme="dark"] .decision-insight{background:#102031;border-color:#294968}
+html[data-theme="dark"] .evidence-note{background:#292314;border-color:#59491f}
+html[data-theme="dark"] .formula{background:#0e1822;border-color:var(--line);color:#dce7f0}
+html[data-theme="dark"] .guardrail{background:#292314;color:#d2bc86}
+html[data-theme="dark"] .roadmap>div{background:#101a25;border-color:var(--line)}
+html[data-theme="dark"] .gridline{stroke:#233344}
+html[data-theme="dark"] .axis{stroke:#415364}
+html[data-theme="dark"] .network-line{stroke:#4c6074;opacity:.52}
+html[data-theme="dark"] .network-line[data-provider="blue"]{stroke:#6086c8}
+html[data-theme="dark"] .network-line[data-provider="orange"]{stroke:#9d714a}
+html[data-theme="dark"] .network-line[data-provider="green"]{stroke:#4d7c69}
+html[data-theme="dark"] .reserve-node{background:#132820;border-color:#316a55;box-shadow:none}
+html[data-theme="dark"] .reserve-node b{color:#8ad1b5}
+html[data-theme="dark"] .reserve-node span,
+html[data-theme="dark"] .reserve-node small{color:#6eae95}
+html[data-theme="dark"] .compare-overlay{background:rgba(16,25,35,.98);border-color:var(--line)}
+html[data-theme="dark"] .compare-card.best{background:#13251f;border-color:#356551}
+html[data-theme="dark"] .mini,
+html[data-theme="dark"] .metric{border-color:#253545}
+html[data-theme="dark"] .bar{background:#253545}
+html[data-theme="dark"] .research-question b{color:#c3d0db}
+html[data-theme="dark"] footer{color:#718294}
+
+/* Slightly more compact institutional desktop rhythm */
+@media(min-width:1100px){
+  .hero{padding-top:32px}
+  .story-layout{min-height:640px}
+  .stage-wrap{min-height:640px}
+}
