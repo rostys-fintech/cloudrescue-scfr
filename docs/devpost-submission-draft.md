@@ -30,7 +30,7 @@ The three recovery mechanisms are:
 - **Individual Reserves** — capacity is pre-reserved, but ring-fenced bank by bank.
 - **SCFR Pooled Reserve** — the same total pre-reserved capacity is pooled and reallocated across affected banks.
 
-The interface combines an animated crisis story with an interactive Stress Lab and a resilience-frontier visualization.
+The interface combines a **35-second guided audiovisual crisis story** with an interactive Stress Lab and a resilience-frontier visualization. The story uses plain-language captions, optional browser narration, incident/recovery sound cues, and a presentation focus mode so a non-specialist can understand the mechanism before touching the model controls.
 
 ## What makes the comparison fairer
 The Individual Reserves and SCFR scenarios use the **same total reserve budget**.
@@ -48,7 +48,8 @@ The project is a static browser application with:
 - explicit allocation rules;
 - automated model invariants;
 - continuous tests through GitHub Actions;
-- dynamic SVG visualization;
+- dynamic SVG provider-to-bank network visualization;
+- browser-native speech synthesis and lightweight sound cues for the guided demo;
 - downloadable scenario results for reproducibility.
 
 No external framework is required for the MVP.
@@ -67,6 +68,7 @@ I therefore added several guardrails:
 ## Accomplishments I am proud of
 - translating a finance/systemic-risk idea into explicit software logic;
 - building a visual story that explains the crisis before asking the user to change assumptions;
+- making the crisis understandable without requiring specialist knowledge through narration, subtitles and animated visual cues;
 - separating the research engine from the interface;
 - making scenarios exportable rather than leaving results trapped inside the dashboard;
 - creating a prototype that can continue beyond the hackathon as a research companion.
