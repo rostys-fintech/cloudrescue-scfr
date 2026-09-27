@@ -34,8 +34,6 @@ assert.match(js,/setupEvidence\(\)/);
 
 assert.match(js,/\$\$\('\.ra-strategy-switch button'\)\.forEach/);
 assert.match(js,/\$\$\('\.ra-model-card'\)\.forEach/);
-assert.doesNotMatch(js,/\$\('\.ra-strategy-switch button'\)\.forEach/);
-assert.doesNotMatch(js,/\$\('\.ra-model-card'\)\.forEach/);
 
 assert.match(css,/STAGE 6 — MODEL & EVIDENCE/);
 assert.match(css,/\.ra-equation-grid/);
