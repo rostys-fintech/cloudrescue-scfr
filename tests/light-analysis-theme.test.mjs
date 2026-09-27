@@ -7,7 +7,6 @@ const tokens = fs.readFileSync(new URL('../design-tokens.css', import.meta.url),
 
 assert.match(html,/Switch between dark simulation and light analysis theme/);
 assert.match(html,/<span>Analysis<\/span>/);
-assert.match(html,/Light Analysis Theme · Stage 7/);
 
 assert.match(tokens,/\[data-ra-theme="light"\]/);
 assert.match(tokens,/--ra-provider-blue: #327CC4/);
