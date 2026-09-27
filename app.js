@@ -106,12 +106,6 @@ function englishVoices(){
 }
 
 function preferredNarrator(voices=englishVoices()){
-  const saved = localStorage.getItem('cloudrescue-narrator');
-  if(saved){
-    const exact=voices.find(v=>v.name===saved);
-    if(exact) return exact;
-  }
-
   const preferences = [
     /Microsoft.*(Guy|Andrew|Ryan|Brian|Christopher|Eric).*(Natural|Online)/i,
     /Google UK English Male/i,
@@ -135,25 +129,15 @@ function preferredNarrator(voices=englishVoices()){
          voices[0] || null;
 }
 
-function populateNarratorVoices(){
-  const select=$('#voiceSelect');
-  if(!select || !('speechSynthesis' in window)) return;
+let narratorVoice = null;
 
-  const voices=englishVoices();
-  const preferred=preferredNarrator(voices);
-  const ordered = preferred ? [preferred,...voices.filter(v=>v.name!==preferred.name)] : voices;
-  select.innerHTML=ordered.map((v,i)=>`<option value="${v.name}">${i===0 && preferred ? 'Recommended · ' : ''}${v.name} · ${v.lang}</option>`).join('');
-  if(preferred) select.value=preferred.name;
-
-  select.onchange=()=>{
-    localStorage.setItem('cloudrescue-narrator',select.value);
-  };
+function refreshNarratorVoice(){
+  narratorVoice = preferredNarrator(englishVoices());
+  return narratorVoice;
 }
 
 function getEnglishVoice(){
-  const voices=englishVoices();
-  const selected=$('#voiceSelect')?.value;
-  return voices.find(v=>v.name===selected) || preferredNarrator(voices);
+  return narratorVoice || refreshNarratorVoice();
 }
 
 function storyPresentation(c,args){
@@ -282,7 +266,7 @@ function setNarration(enabled){
   const btn = $('#narrationToggle');
   if(btn){
     btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
-    btn.textContent = enabled ? 'Narration on' : 'Narration off';
+    btn.textContent = enabled ? 'Narration' : 'Narration off';
   }
   if(!enabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
 }
@@ -813,6 +797,7 @@ async function playDemoScene(runId){
 
 function startDemo({reset=true}={}){
   stopAuto();
+  refreshNarratorVoice();
   if(reset) scene=0;
 
   const runId=demoRunId;
@@ -1369,10 +1354,11 @@ $$('.sensitivity-mode').forEach(btn=>btn.addEventListener('click',()=>{
 
 renderNetwork();
 setupTheme();
-populateNarratorVoices();
+refreshNarratorVoice();
 if('speechSynthesis' in window){
-  window.speechSynthesis.addEventListener?.('voiceschanged',populateNarratorVoices);
-  window.speechSynthesis.onvoiceschanged = populateNarratorVoices;
+  const refreshVoice = ()=>{ if(!autoplay) refreshNarratorVoice(); };
+  window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoice);
+  window.speechSynthesis.onvoiceschanged = refreshVoice;
 }
 setupStory();
 const openSharedLab=loadScenarioFromURL();
