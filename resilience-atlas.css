@@ -2616,7 +2616,6 @@ body,
   }
   body.ra-mobile-sheet-open{
     overflow:hidden;
-    touch-action:none;
   }
 
   /* Compact two-row app header */
@@ -4417,6 +4416,8 @@ body.ra-guided-running .ra-guided-dot{
 
   /* The control sheet feels like a native bottom sheet rather than a desktop panel. */
   .ra-lab-console{
+    touch-action:pan-y;
+    -webkit-overflow-scrolling:touch;
     max-height:min(88svh,760px)!important;
     border-radius:20px 20px 0 0!important;
   }
