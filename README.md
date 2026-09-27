@@ -24,6 +24,7 @@ Judge-facing materials are kept in `docs/`:
 - [Technical defense / likely questions](docs/technical-defense.md)
 - [Judging criteria map](docs/judging-map.md)
 - [Final submission checklist](docs/submission-checklist.md)
+- [Development log](docs/development-log.md)
 
 ## Why this project exists
 
@@ -227,6 +228,7 @@ cloudrescue-scfr/
 │   ├── judge-pitch-card.md
 │   ├── technical-defense.md
 │   ├── judging-map.md
+│   ├── development-log.md
 │   └── submission-checklist.md
 └── README.md
 ```
