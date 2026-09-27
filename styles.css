@@ -2458,3 +2458,34 @@ html[data-theme="dark"] .reality-grid b{
   .heat-cell{min-height:34px}
   .reality-grid{grid-template-columns:1fr}
 }
+
+
+/* Replay correctness: reset the baseline Blue-specific incident styling when another provider is selected. */
+.stage[data-outage="orange"].scene-2 .provider[data-provider="blue"]:not(.offline),
+.stage[data-outage="green"].scene-2 .provider[data-provider="blue"]:not(.offline){
+  animation:none!important;
+}
+.stage[data-outage="orange"].scene-2 .network-line[data-provider="blue"],
+.stage[data-outage="orange"].scene-3 .network-line[data-provider="blue"],
+.stage[data-outage="green"].scene-2 .network-line[data-provider="blue"],
+.stage[data-outage="green"].scene-3 .network-line[data-provider="blue"]{
+  stroke:#8fb3ff;
+  stroke-width:1.4;
+  stroke-dasharray:none;
+  animation:none;
+  opacity:.22;
+}
+.stage[data-outage="blue"].scene-2 .network-line[data-provider="orange"],
+.stage[data-outage="blue"].scene-3 .network-line[data-provider="orange"],
+.stage[data-outage="blue"].scene-2 .network-line[data-provider="green"],
+.stage[data-outage="blue"].scene-3 .network-line[data-provider="green"],
+.stage[data-outage="orange"].scene-2 .network-line[data-provider="green"],
+.stage[data-outage="orange"].scene-3 .network-line[data-provider="green"],
+.stage[data-outage="orange"].scene-2 .network-line[data-provider="blue"],
+.stage[data-outage="orange"].scene-3 .network-line[data-provider="blue"],
+.stage[data-outage="green"].scene-2 .network-line[data-provider="blue"],
+.stage[data-outage="green"].scene-3 .network-line[data-provider="blue"],
+.stage[data-outage="green"].scene-2 .network-line[data-provider="orange"],
+.stage[data-outage="green"].scene-3 .network-line[data-provider="orange"]{
+  opacity:.22;
+}
