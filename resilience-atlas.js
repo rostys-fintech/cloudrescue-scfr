@@ -755,6 +755,9 @@ function applyGuidedCue(sceneIndex,cue){
   if(sceneIndex===0){
     $('#raGuidedKicker').textContent='LIVE CUE';
     $('#raGuidedCaption').textContent=cue.caption;
+  }else if(sceneIndex===1){
+    $('#raGuidedKicker').textContent='FAILURE SEQUENCE';
+    $('#raGuidedCaption').textContent=cue.caption;
   }
   applyGuidedMetric(cue,c);
 }
