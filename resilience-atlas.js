@@ -332,10 +332,10 @@ function setupEvidence(){
 
 function renderScene(){
   $('#raCanvasTitle').textContent = sceneTitles[state.scene];
-  $('.ra-scene-list button').forEach((button,index)=>{
+  $$('.ra-scene-list button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
-  $('.ra-mobile-scene-nav button').forEach((button,index)=>{
+  $$('.ra-mobile-scene-nav button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
   renderBaseline();
