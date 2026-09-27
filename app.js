@@ -203,45 +203,106 @@ function animateCounter(el,from,to,duration=650){
   requestAnimationFrame(tick);
 }
 
+function outcomeState(row){
+  if(row.restoredFraction >= .8) return 'recovered';
+  if(row.restoredFraction >= .4) return 'partial';
+  return 'critical';
+}
+
+function outcomeBanks(rows, compact=false){
+  return `<div class="outcome-banks ${compact?'compact':''}">
+    ${rows.map((r,i)=>`<div class="outcome-bank ${outcomeState(r)}" style="--restore:${Math.round(r.restoredFraction*100)}%" title="${r.label}: ${Math.round(r.restoredFraction*100)}% restored">
+      <span class="outcome-fill"></span><b>${i+1}</b>
+    </div>`).join('')}
+  </div>`;
+}
+
+function reserveTokens(total=10, stranded=0, pooled=false){
+  const strandedCount = total ? Math.round(total*stranded) : 0;
+  return `<div class="reserve-token-row ${pooled?'pooled':''}">
+    ${Array.from({length:total},(_,i)=>`<span class="reserve-token ${!pooled && i<strandedCount?'locked':'active'}">${!pooled && i<strandedCount?'×':'●'}</span>`).join('')}
+  </div>`;
+}
+
 function renderVisualSignal(c){
   const el = $('#visualSignal');
   if(!el) return;
+  const market = c.market;
   const individual = c.individual;
   const scfr = c.scfr;
 
   if(scene === 0){
     el.innerHTML = `
-      <div class="motivation-signal">
-        <div class="motivation-row"><span>REAL-WORLD ISSUE</span><b>Critical ICT concentration risk</b></div>
-        <div class="motivation-arrow">→</div>
-        <div class="motivation-row"><span>SYNTHETIC TEST BED</span><b>20 banks · 3 providers</b></div>
+      <div class="concentration-map">
+        ${providers.map(p=>{
+          const count=banks.filter(b=>b.provider===p.id).length;
+          return `<div class="concentration-provider" data-provider="${p.id}">
+            <span class="mini-cloud">${cloudGlyph}</span>
+            <b>${p.name}</b>
+            <div class="bank-dots">${Array.from({length:count},()=>'<i></i>').join('')}</div>
+            <small>${count} banks</small>
+          </div>`;
+        }).join('')}
       </div>`;
   } else if(scene === 1){
     el.innerHTML = `
-      <div class="signal-alert"><span class="signal-icon">!</span><b>1 provider outage</b><span>8 banks affected simultaneously</span></div>`;
+      <div class="outage-story">
+        <div class="outage-cloud"><span>${cloudGlyph}</span><b>Blue Cloud</b><small>OUTAGE</small></div>
+        <div class="outage-wave">→</div>
+        <div class="affected-visual">
+          ${Array.from({length:market.affectedCount},(_,i)=>`<span class="affected-bank-icon">${bankGlyph}<b>${i+1}</b></span>`).join('')}
+          <small>all affected at the same time</small>
+        </div>
+      </div>`;
   } else if(scene === 2){
-    const market = c.market;
-    const supply = market.allocated;
-    const gap = Math.max(0,market.totalDemand-supply);
+    const ratio=Math.max(0,Math.min(1,market.allocated/market.totalDemand));
+    const served=Math.max(0,Math.min(10,Math.round(ratio*10)));
     el.innerHTML = `
-      <div class="capacity-visual">
-        <div class="capacity-head"><span>Emergency backup demand</span><b>${num(market.totalDemand)} units</b></div>
-        <div class="capacity-track"><i class="capacity-supply" style="width:${Math.min(100,supply/market.totalDemand*100)}%"></i><i class="capacity-gap" style="width:${Math.max(0,100-supply/market.totalDemand*100)}%"></i></div>
-        <div class="capacity-labels"><span class="available">Available now: ${num(supply)}</span><span class="shortfall">Shortfall: ${num(gap)}</span></div>
+      <div class="capacity-story">
+        <div class="request-side">
+          <span>SIMULTANEOUS REQUESTS</span>
+          <div class="request-banks">${Array.from({length:market.affectedCount},()=>`<i>${bankGlyph}</i>`).join('')}</div>
+        </div>
+        <div class="capacity-arrow">→</div>
+        <div class="capacity-reservoir">
+          <span>EMERGENCY MARKET</span>
+          <div class="capacity-blocks">
+            ${Array.from({length:10},(_,i)=>`<i class="${i<served?'served':'missing'}"></i>`).join('')}
+          </div>
+          <div class="capacity-caption"><b>${served}/10</b><small>illustrative capacity blocks available</small></div>
+        </div>
+        <div class="queue-label"><b>${num(Math.max(0,market.totalDemand-market.allocated))}</b><span>units still waiting</span></div>
       </div>`;
   } else if(scene === 3){
+    const strandedShare=individual.totalReserve ? individual.strandedReserve/individual.totalReserve : 0;
     el.innerHTML = `
-      <div class="fragment-visual">
-        <div><b>${num(individual.totalReserve)}</b><span>Total reserve</span></div>
-        <div class="fragment-arrow">→</div>
-        <div class="warning"><b>${num(individual.strandedReserve)}</b><span>stranded / unavailable where needed</span></div>
+      <div class="reserve-mechanism">
+        <div class="reserve-source">
+          <span>SAME TOTAL RESERVE BUDGET</span>
+          ${reserveTokens(10,strandedShare,false)}
+          <small>Each block represents a share of the same reserve budget.</small>
+        </div>
+        <div class="reserve-mechanism-arrow">→</div>
+        <div class="reserve-outcome">
+          <span>RING-FENCED</span>
+          ${outcomeBanks(individual.rows,true)}
+          <small><b>${num(individual.strandedReserve)}</b> units remain stranded outside the affected banks.</small>
+        </div>
       </div>`;
   } else if(scene === 4){
     el.innerHTML = `
-      <div class="fragment-visual coordinated">
-        <div><b>${num(scfr.totalReserve)}</b><span>Same total reserve</span></div>
-        <div class="fragment-arrow">→</div>
-        <div class="good"><b>${Math.round(scfr.criticalRestoredPct)}%</b><span>critical workload restored</span></div>
+      <div class="reserve-mechanism pooled-story">
+        <div class="reserve-source">
+          <span>SAME TOTAL RESERVE BUDGET</span>
+          ${reserveTokens(10,0,true)}
+          <small>No extra reserve is added.</small>
+        </div>
+        <div class="pool-node"><span>SCFR</span><b>POOL</b><small>pre-arranged allocation</small></div>
+        <div class="reserve-outcome">
+          <span>REDIRECTED TO AFFECTED BANKS</span>
+          ${outcomeBanks(scfr.rows,true)}
+          <small><b>${Math.round(scfr.criticalRestoredPct)}%</b> of critical workload restored in this synthetic run.</small>
+        </div>
       </div>`;
   } else {
     el.innerHTML = '';
@@ -339,6 +400,8 @@ function comparisonHTML(){
       <div class="compare-score">${Math.round(r.resilience)} <small>/100</small></div>
       <div class="compare-bar"><i style="width:${Math.min(100,r.resilience)}%"></i></div>
       <p>Systemic Resilience Score</p>
+      <div class="compare-outcome-label">8 affected banks</div>
+      ${outcomeBanks(r.rows,true)}
       <div class="mini"><span>Banks recovered</span><b>${r.banksRecovered}/${r.affectedCount}</b></div>
       <div class="mini"><span>Critical workload restored</span><b>${pct(r.criticalRestoredPct)}</b></div>
       <div class="mini"><span>Unmet capacity</span><b>${pct(r.unmetPct)}</b></div>
