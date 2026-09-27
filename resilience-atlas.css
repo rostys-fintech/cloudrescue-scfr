@@ -5380,6 +5380,17 @@ body.ra-guided-running .ra-guided-actions{
 #raEarthMount.ra-guided-intro{
   overflow:hidden;
 }
+#raEarthMount.ra-guided-intro .ra-earth-atmosphere,
+#raEarthMount.ra-guided-intro .ra-earth-grid,
+#raEarthMount.ra-guided-intro .ra-earth-land,
+#raEarthMount.ra-guided-intro .ra-earth-provider,
+#raEarthMount.ra-guided-intro .ra-earth-provider .ra-provider-halo,
+#raEarthMount.ra-guided-intro .ra-earth-bank,
+#raEarthMount.ra-guided-intro .ra-earth-link,
+#raEarthMount.ra-guided-intro .ra-earth-packet,
+#raEarthMount.ra-guided-intro .ra-earth-readout{
+  animation:none!important;
+}
 #raEarthMount.ra-guided-intro::after{
   content:attr(data-intro-phase);
   position:absolute;
