@@ -461,28 +461,70 @@ function renderScene(){
   renderBaseline();
 }
 
-function switchTab(tab){
+function tabFromHash(){
+  const candidate=window.location.hash.replace(/^#/,'');
+  return ['simulation','lab','evidence'].includes(candidate) ? candidate : 'simulation';
+}
+
+function syncTabHash(tab,replace=false){
+  const next='#'+tab;
+  if(window.location.hash===next) return;
+  const method=replace ? 'replaceState' : 'pushState';
+  window.history?.[method]?.(null,'',next);
+}
+
+function switchTab(tab,{updateHash=true,replaceHash=false}={}){
+  if(!['simulation','lab','evidence'].includes(tab)) return;
   if(guided.active) stopGuidedSimulation();
   if(labRun.active) cancelLabRun();
+
   state.tab = tab;
   $$('.ra-nav-tab').forEach(button=>{
-    button.classList.toggle('is-active', button.dataset.raTab === tab);
+    const active=button.dataset.raTab === tab;
+    button.classList.toggle('is-active',active);
+    button.setAttribute('aria-selected',active ? 'true' : 'false');
+    button.tabIndex=active ? 0 : -1;
   });
   $$('.ra-view').forEach(view=>{
-    view.classList.toggle('is-active', view.dataset.raView === tab);
+    const active=view.dataset.raView === tab;
+    view.classList.toggle('is-active',active);
+    view.setAttribute('aria-hidden',active ? 'false' : 'true');
   });
+
   if(tab !== 'lab' && document.body.classList.contains('ra-mobile-sheet-open')) setLabSheet(false);
   if(tab === 'lab'){
     renderLab();
     syncLabDraftUI();
   }
   if(tab === 'evidence') renderEvidence();
+  if(updateHash) syncTabHash(tab,replaceHash);
 }
 
 function setupTabs(){
   $$('.ra-nav-tab').forEach(button=>{
     button.addEventListener('click',()=>switchTab(button.dataset.raTab));
+    button.addEventListener('keydown',event=>{
+      if(!['ArrowLeft','ArrowRight'].includes(event.key)) return;
+      event.preventDefault();
+      const tabs=$$('.ra-nav-tab');
+      const index=tabs.indexOf(button);
+      const direction=event.key==='ArrowRight' ? 1 : -1;
+      const next=tabs[(index+direction+tabs.length)%tabs.length];
+      next.focus();
+      switchTab(next.dataset.raTab);
+    });
   });
+
+  $('.ra-brand')?.addEventListener('click',event=>{
+    event.preventDefault();
+    switchTab('simulation');
+  });
+
+  window.addEventListener('hashchange',()=>{
+    switchTab(tabFromHash(),{updateHash:false});
+  });
+
+  switchTab(tabFromHash(),{updateHash:false});
 }
 
 function setupTheme(){
