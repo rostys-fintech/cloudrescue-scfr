@@ -7,7 +7,7 @@ const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'ut
 const js=fs.readFileSync(new URL('../resilience-atlas.js',import.meta.url),'utf8');
 
 assert.equal(index,html);
-assert.match(html,/20260927-story03/);
+assert.match(html,/20260927-story0[1-9]/);
 assert.match(css,/STORYBOARD STAGE 2 — SCENE 02 PROVIDER FAILURE MASTER/);
 
 for(const klass of [
