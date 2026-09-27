@@ -221,17 +221,17 @@
             </select>
           </label>
 
-          <label>Emergency market capacity <b id="marketLabel">20%</b>
+          <label>Backup capacity available after outage <b id="marketLabel">20%</b>
             <input id="marketPct" type="range" min="0" max="50" value="20" step="5">
-            <small>Share of affected critical demand sourced after the shock.</small>
+            <small>Share of affected demand that can be sourced immediately after the outage.</small>
           </label>
 
-          <label>Total pre-reserved capacity <b id="reserveLabel">25%</b>
+          <label>Reserve prepared before outage <b id="reserveLabel">25%</b>
             <input id="reservePct" type="range" min="0" max="60" value="25" step="5">
             <small>Individual Reserves and SCFR receive the same total reserve budget.</small>
           </label>
 
-          <label>SCFR allocation rule
+          <label>How pooled reserve is allocated
             <select id="ruleSelect">
               <option value="systemic">Systemic priority</option>
               <option value="equal">Equal allocation</option>
@@ -270,8 +270,8 @@
           <div id="decisionInsight" class="card decision-insight"></div>
 
           <div class="section-heading">
-            <div><span>Recovery mechanisms</span><h2>Same shock. Different coordination.</h2></div>
-            <p>Individual and SCFR scenarios use the same total reserve budget.</p>
+            <div><span>Recovery options</span><h2>Same shock. Different coordination.</h2></div>
+            <p>Individual Reserves and SCFR use the same total reserve budget.</p>
           </div>
           <div id="strategyCards" class="strategy-grid"></div>
 
