@@ -9,7 +9,7 @@ Goal: one clean take with deliberate movement and no rushed scrolling.
 - Desktop browser, 16:9.
 - Recommended: 1920×1080 recording.
 - Browser zoom: 90–100%.
-- Use the institutional v2 UI only.
+- Use the final **dual cyber-theme UI** only.
 - Start at the top of the landing page.
 - Close bookmarks bar and unrelated tabs if possible.
 - Keep cursor movement slow.
@@ -18,10 +18,17 @@ Goal: one clean take with deliberate movement and no rushed scrolling.
 
 ---
 
+## Theme choreography
+
+- Start in **CRISIS** mode.
+- Keep CRISIS mode through Crisis Replay and Controlled Comparison.
+- Switch once to **ANALYSIS** mode before Methodology / research transparency.
+- Do not repeatedly toggle themes.
+
 ## 0:00–0:18 — Product hook
 
 ### Screen
-Dark CloudRescue hero with topology preview.
+**CRISIS-mode** CloudRescue hero with black/crimson topology preview.
 
 ### Action
 No scrolling.
@@ -193,10 +200,10 @@ Switch:
 
 ---
 
-## 2:58–3:15 — Research transparency
+## 2:58–3:15 — Switch to ANALYSIS / Research transparency
 
 ### Action
-Open **Methodology**.
+Switch the top-right mode control to **ANALYSIS**, then open **Methodology**.
 
 ### Screen
 Research Framework intro + architecture.
