@@ -8,7 +8,7 @@ const js = fs.readFileSync(new URL('../resilience-atlas.js', import.meta.url), '
 for (const id of [
   'raEvidenceEarthMount','raEvidenceBanks','raEvidenceProviders','raEvidenceLoad',
   'raEvidenceDemand','raEvidenceMarketPool','raEvidenceReservePool','raEvidenceHHI',
-  'raEvidenceScenario','raExportEvidence'
+  'raEvidenceScenario','raExportEvidence','raExportJson'
 ]) {
   assert.match(html,new RegExp("id=[\\\"']"+id+"[\\\"']"),'missing '+id);
 }
@@ -25,9 +25,13 @@ assert.match(html,/eba\.europa\.eu/);
 assert.match(html,/esma\.europa\.eu/);
 
 assert.match(js,/function evidenceSnapshot\(/);
-assert.match(js,/function exportEvidence\(/);
+assert.match(js,/function exportReadableReport\(/);
+assert.match(js,/function exportJson\(/);
+assert.match(js,/function buildReadableReport\(/);
 assert.match(js,/new Blob/);
+assert.match(js,/resilience-atlas-scenario-report\.txt/);
 assert.match(js,/resilience-atlas-scenario\.json/);
+assert.match(js,/\\uFEFF/);
 assert.match(js,/systemStats\(\)/);
 assert.match(js,/earth\.evidence\.update/);
 assert.match(js,/setupEvidence\(\)/);
