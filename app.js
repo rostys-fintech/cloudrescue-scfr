@@ -212,13 +212,61 @@ function renderFrontier(args){
   </svg>`;
 }
 
-function renderLab(){
-  const args = {
+function currentArgs(){
+  return {
     outageProvider:$('#providerSelect').value,
     marketPct:Number($('#marketPct').value),
     reservePct:Number($('#reservePct').value),
     allocationRule:$('#ruleSelect').value
   };
+}
+
+function renderInsight(c,args){
+  const uplift = c.scfr.resilience - c.individual.resilience;
+  const strandedReduction = c.individual.strandedReserve - c.scfr.strandedReserve;
+  const restoredUplift = c.scfr.criticalRestoredPct - c.individual.criticalRestoredPct;
+  $('#decisionInsight').innerHTML = `
+    <div>
+      <div class="eyebrow">MECHANISM EFFECT · SAME RESERVE BUDGET</div>
+      <h3>Pooling changes where capacity can go.</h3>
+      <p>In this synthetic scenario, SCFR changes the <b>allocation mechanism</b>, not the total pre-reserved capacity.</p>
+    </div>
+    <div class="insight-metrics">
+      <div><strong>+${uplift.toFixed(1)}</strong><span>resilience points vs individual reserves</span></div>
+      <div><strong>+${restoredUplift.toFixed(1)} pp</strong><span>critical workload restored</span></div>
+      <div><strong>${num(Math.max(0,strandedReduction))}</strong><span>capacity units no longer stranded</span></div>
+    </div>
+  `;
+}
+
+function exportScenario(){
+  const args = currentArgs();
+  const results = compareStrategies(args);
+  const payload = {
+    project:'CloudRescue — SCFR Stress Lab',
+    model_version:'0.1',
+    exported_at:new Date().toISOString(),
+    warning:'Synthetic illustrative scenario; not a forecast or assessment of any real institution.',
+    assumptions:args,
+    results:{
+      market:results.market,
+      individual:results.individual,
+      scfr:results.scfr
+    }
+  };
+  const blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url;
+  a.download=`cloudrescue-${args.outageProvider}-reserve-${args.reservePct}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function renderLab(){
+  const args = currentArgs();
 
   $('#marketLabel').textContent=`${args.marketPct}%`;
   $('#reserveLabel').textContent=`${args.reservePct}%`;
@@ -237,6 +285,7 @@ function renderLab(){
   $('#strategyCards').innerHTML = list.map(([n,l,r])=>strategyCard(n,l,r,r.resilience===best)).join('');
 
   renderFrontier(args);
+  renderInsight(c,args);
 
   const success = c.scfr.resilience>=80 && args.reservePct<=30;
   $('#challenge').classList.toggle('success',success);
@@ -249,6 +298,7 @@ function renderLab(){
   $('#'+id).addEventListener('input',renderLab);
 });
 $('#runBtn').addEventListener('click',renderLab);
+$('#exportBtn').addEventListener('click',exportScenario);
 
 renderNetwork();
 setupStory();
