@@ -8,7 +8,7 @@ const earth=fs.readFileSync(new URL('../earth-system.js',import.meta.url),'utf8'
 const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'utf8');
 
 assert.equal(index,html);
-assert.match(html,/20260927-wordsync01/);
+assert.match(html,/20260927-story01/);
 
 assert.match(earth,/pathLength="1"/);
 assert.match(earth,/--ra-intro-index:/);
@@ -22,10 +22,19 @@ assert.match(js,/at:10\.197,id:'s1-cluster'/);
 assert.match(js,/at:14\.049,id:'s1-risk'/);
 assert.match(js,/function cueAtTime\(/);
 assert.match(js,/guidedAudio\.currentTime/);
+assert.match(js,/if\(sceneIndex===0\)/);
+assert.match(js,/\$\('#raGuidedKicker'\)\.textContent='LIVE CUE'/);
 assert.match(js,/function startGuidedCueSync\(/);
 assert.doesNotMatch(js,/function startGuidedIntro\(/);
 
 assert.match(css,/WORD-SYNCED GUIDED TIMELINE/);
+assert.match(css,/STORYBOARD STAGE 1 — VIDEO HUD \+ SCENE 01 MASTER/);
+assert.match(css,/#simulation \.ra-video-hud\{/);
+assert.match(css,/margin:0!important/);
+assert.match(css,/raStage1EarthBoot/);
+assert.match(css,/raStage1NodeOn/);
+assert.match(css,/raStage1ClusterPulse/);
+assert.match(css,/raStage1RiskPulse/);
 assert.match(css,/ra-sync-s1-world/);
 assert.match(css,/ra-sync-s1-providers/);
 assert.match(css,/ra-sync-s1-banks/);
