@@ -31,3 +31,10 @@ button,select,input{font:inherit}.shell{width:min(1440px,94vw);margin:auto;paddi
 footer{display:flex;justify-content:space-between;color:#657c94;font-size:10px;padding:25px 5px 0}
 @media(max-width:1050px){.story-layout,.lab-layout{grid-template-columns:1fr}.stage-wrap{min-height:750px}.controls{position:static}.strategy-grid{grid-template-columns:1fr}.method-grid{grid-template-columns:1fr}.roadmap-card{grid-column:auto}.roadmap{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.shell{width:96vw}.hero{align-items:flex-start;flex-direction:column}.hero-badge{width:100%}.story-layout{min-height:auto}.narrative{padding:23px}.narrative h2{font-size:30px}.stage-wrap{min-height:1050px}.stage{padding:15px}.provider-grid,.network-grid{grid-template-columns:1fr}.bank-group{min-height:auto}.flow-layer{grid-template-columns:1fr}.flow-arrow,.flow-plus{text-align:center;transform:rotate(90deg)}.scene-5 .compare-overlay,.scene-6 .compare-overlay{grid-template-columns:1fr;overflow:auto}.research-question{align-items:flex-start;flex-direction:column}.shock-head,.chart-head{align-items:flex-start;flex-direction:column}.roadmap{grid-template-columns:1fr}.tabs{overflow:auto}.tab{white-space:nowrap}footer{flex-direction:column;gap:7px}}
+
+.decision-insight{margin:14px 0;padding:20px 22px;display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:center;border-color:#315772;background:linear-gradient(135deg,#10263d,#0c1d30)}
+.decision-insight h3{margin:7px 0 6px;font-size:21px}.decision-insight p{margin:0;color:#8ea5bb;font-size:11px;line-height:1.55}
+.insight-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.insight-metrics>div{border:1px solid #2b4762;background:#0a1727;border-radius:13px;padding:12px}
+.insight-metrics strong{display:block;font-size:22px;color:#6ed7ae;letter-spacing:-.04em}.insight-metrics span{display:block;margin-top:4px;color:#718aa2;font-size:8.5px;line-height:1.35}
+.controls .btn+.btn{margin-top:9px}
+@media(max-width:850px){.decision-insight{grid-template-columns:1fr}.insight-metrics{grid-template-columns:1fr}}
