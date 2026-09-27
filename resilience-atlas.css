@@ -6004,3 +6004,331 @@ body.ra-guided-running .ra-guided-actions{
     animation-duration:.9s!important;
   }
 }
+
+
+/* =========================================================
+   STORYBOARD STAGE 1 — VIDEO HUD + SCENE 01 MASTER
+   Canonical final override: the HUD never covers the Earth.
+   ========================================================= */
+
+#simulation .ra-video-hud{
+  position:relative!important;
+  inset:auto!important;
+  z-index:20!important;
+  width:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+  grid-template-areas:
+    "status copy actions"
+    "progress progress progress"!important;
+  align-items:center!important;
+  gap:8px 12px!important;
+  padding:7px 12px 5px!important;
+  border:0!important;
+  border-top:1px solid var(--ra-border-strong)!important;
+  border-bottom:1px solid var(--ra-border)!important;
+  border-radius:0!important;
+  background:color-mix(in srgb,var(--ra-surface) 97%,transparent)!important;
+  box-shadow:none!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+  overflow:visible!important;
+  transform:none!important;
+}
+
+#simulation .ra-video-hud .ra-guided-status{
+  grid-area:status!important;
+  min-height:32px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  white-space:nowrap;
+}
+
+#simulation .ra-video-hud .ra-guided-status b,
+#simulation .ra-video-hud .ra-guided-status span{
+  font-size:7.5px!important;
+  letter-spacing:.08em!important;
+}
+
+#simulation .ra-video-hud .ra-guided-copy{
+  grid-area:copy!important;
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+
+#simulation .ra-video-hud .ra-guided-copy span{
+  color:var(--ra-primary)!important;
+  font-size:7px!important;
+  font-weight:850!important;
+  letter-spacing:.1em!important;
+  white-space:nowrap!important;
+}
+
+#simulation .ra-video-hud .ra-guided-copy strong{
+  min-width:0!important;
+  max-width:none!important;
+  color:var(--ra-text-2)!important;
+  font-size:9px!important;
+  line-height:1.25!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+#simulation .ra-video-hud .ra-guided-actions{
+  grid-area:actions!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:5px!important;
+}
+
+#simulation .ra-video-hud .ra-guided-actions button{
+  min-width:52px!important;
+  min-height:30px!important;
+  padding:0 9px!important;
+  border-radius:7px!important;
+  font-size:7.5px!important;
+}
+
+#simulation .ra-video-hud .ra-guided-progress{
+  grid-area:progress!important;
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  height:2px!important;
+  margin-top:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,1fr)!important;
+  gap:4px!important;
+}
+
+/* While Guided Simulation runs, the Earth keeps its full height.
+   Nothing is pulled upward over the globe. */
+body.ra-guided-running #simulation .ra-video-hud{
+  position:relative!important;
+  margin:0!important;
+  transform:none!important;
+}
+body.ra-guided-running #simulation .ra-canvas-shell{
+  min-height:0!important;
+}
+body.ra-guided-running #simulation #raEarthMount{
+  margin-bottom:0!important;
+}
+
+/* Scene 01 master choreography.
+   Cue timestamps are driven by narrator audio.currentTime. */
+#raEarthMount.ra-sync-s1-world{
+  --ra-sync-accent:var(--ra-primary);
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-ocean{
+  opacity:.56!important;
+  filter:brightness(.7) saturate(.68)!important;
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-land{
+  opacity:.2!important;
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-grid{
+  opacity:.34!important;
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-provider,
+#raEarthMount.ra-sync-s1-world .ra-earth-bank,
+#raEarthMount.ra-sync-s1-world .ra-earth-link,
+#raEarthMount.ra-sync-s1-world .ra-earth-packet{
+  opacity:0!important;
+}
+#raEarthMount.ra-sync-s1-world::before{
+  content:"";
+  position:absolute;
+  z-index:4;
+  left:50%;
+  top:50%;
+  width:min(54%,430px);
+  aspect-ratio:1;
+  border:1px solid color-mix(in srgb,var(--ra-primary) 54%,transparent);
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.62);
+  opacity:0;
+  box-shadow:0 0 36px color-mix(in srgb,var(--ra-primary) 18%,transparent);
+  animation:raStage1EarthBoot 1.55s var(--ra-ease-emphasis) both;
+  pointer-events:none;
+}
+
+#raEarthMount.ra-sync-s1-providers .ra-earth-provider{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s1-providers .ra-earth-provider:nth-child(1){
+  animation:raStage1NodeOn .72s var(--ra-ease-emphasis) both;
+}
+#raEarthMount.ra-sync-s1-providers .ra-earth-provider:nth-child(2){
+  animation:raStage1NodeOn .72s .14s var(--ra-ease-emphasis) both;
+}
+#raEarthMount.ra-sync-s1-providers .ra-earth-provider:nth-child(3){
+  animation:raStage1NodeOn .72s .28s var(--ra-ease-emphasis) both;
+}
+#raEarthMount.ra-sync-s1-providers .ra-earth-bank,
+#raEarthMount.ra-sync-s1-providers .ra-earth-link,
+#raEarthMount.ra-sync-s1-providers .ra-earth-packet{
+  opacity:0!important;
+}
+
+#raEarthMount.ra-sync-s1-banks .ra-earth-bank{
+  opacity:1!important;
+  animation:raStage1BankOn .42s var(--ra-ease-standard) both;
+  animation-delay:calc(var(--ra-intro-index,0) * .028s);
+}
+#raEarthMount.ra-sync-s1-banks .ra-earth-link,
+#raEarthMount.ra-sync-s1-banks .ra-earth-packet{
+  opacity:0!important;
+}
+
+#raEarthMount.ra-sync-s1-links .ra-earth-link{
+  opacity:.82!important;
+  stroke-dasharray:1!important;
+  stroke-dashoffset:0!important;
+  stroke-width:1.65!important;
+  transition:
+    stroke-dashoffset .72s var(--ra-ease-standard),
+    opacity .36s ease!important;
+  transition-delay:calc(var(--ra-intro-index,0) * .018s)!important;
+}
+#raEarthMount.ra-sync-s1-links .ra-earth-packet{
+  opacity:0!important;
+}
+
+#raEarthMount.ra-sync-s1-flow .ra-earth-link{
+  opacity:.3!important;
+  stroke-width:1.05!important;
+}
+#raEarthMount.ra-sync-s1-flow .ra-earth-packet{
+  opacity:.98!important;
+  filter:drop-shadow(0 0 4px currentColor);
+}
+
+#raEarthMount.ra-sync-s1-cluster .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s1-cluster .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s1-cluster .ra-earth-link:not(.provider-blue),
+#raEarthMount.ra-sync-s1-cluster .ra-earth-packet:not(.provider-blue){
+  opacity:.12!important;
+}
+#raEarthMount.ra-sync-s1-cluster .provider-blue,
+#raEarthMount.ra-sync-s1-cluster .ra-earth-bank[data-provider="blue"],
+#raEarthMount.ra-sync-s1-cluster .ra-earth-link.provider-blue,
+#raEarthMount.ra-sync-s1-cluster .ra-earth-packet.provider-blue{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s1-cluster .provider-blue .ra-provider-halo{
+  stroke-width:2!important;
+  animation:raStage1ClusterPulse 1.5s ease-in-out infinite;
+}
+
+#raEarthMount.ra-sync-s1-risk{
+  --ra-sync-accent:var(--ra-warning);
+}
+#raEarthMount.ra-sync-s1-risk .provider-blue .ra-provider-halo{
+  stroke:var(--ra-warning)!important;
+  stroke-width:2.3!important;
+  animation:raStage1RiskPulse 1.12s ease-in-out infinite;
+}
+#raEarthMount.ra-sync-s1-risk .ra-earth-bank[data-provider="blue"] .ra-bank-halo{
+  stroke:color-mix(in srgb,var(--ra-warning) 72%,transparent)!important;
+  opacity:.88!important;
+}
+#raEarthMount.ra-sync-s1-risk .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s1-risk .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s1-risk .ra-earth-link:not(.provider-blue){
+  opacity:.18!important;
+}
+
+@keyframes raStage1EarthBoot{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.58)}
+  35%{opacity:.9}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.08)}
+}
+@keyframes raStage1NodeOn{
+  0%{opacity:0;transform:scale(.48)}
+  60%{opacity:1;transform:scale(1.2)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes raStage1BankOn{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes raStage1ClusterPulse{
+  0%,100%{opacity:.48}
+  50%{opacity:1}
+}
+@keyframes raStage1RiskPulse{
+  0%,100%{opacity:.5;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.16)}
+}
+
+@media(max-width:767px), (pointer:coarse) and (max-width:1180px){
+  #simulation .ra-video-hud{
+    width:100%!important;
+    margin:0!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "status actions"
+      "copy copy"
+      "progress progress"!important;
+    gap:5px 8px!important;
+    padding:6px 8px 5px!important;
+  }
+  #simulation .ra-video-hud .ra-guided-status{
+    min-height:30px!important;
+  }
+  #simulation .ra-video-hud .ra-guided-status>#raGuidedScene{
+    display:inline!important;
+  }
+  #simulation .ra-video-hud .ra-guided-copy{
+    grid-template-columns:auto minmax(0,1fr)!important;
+  }
+  #simulation .ra-video-hud .ra-guided-copy strong{
+    font-size:8.5px!important;
+  }
+  #simulation .ra-video-hud .ra-guided-actions button{
+    min-width:50px!important;
+    min-height:32px!important;
+    touch-action:manipulation;
+  }
+  body.ra-guided-running #simulation .ra-video-hud{
+    position:relative!important;
+    margin:0!important;
+  }
+}
+
+@media(max-width:430px){
+  #simulation .ra-video-hud .ra-guided-copy span{
+    display:none!important;
+  }
+  #simulation .ra-video-hud .ra-guided-copy{
+    grid-template-columns:1fr!important;
+  }
+  #simulation .ra-video-hud .ra-guided-copy strong{
+    font-size:8px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #raEarthMount.ra-sync-s1-world::before,
+  #raEarthMount.ra-sync-s1-providers .ra-earth-provider,
+  #raEarthMount.ra-sync-s1-banks .ra-earth-bank,
+  #raEarthMount.ra-sync-s1-cluster .provider-blue .ra-provider-halo,
+  #raEarthMount.ra-sync-s1-risk .provider-blue .ra-provider-halo{
+    animation-duration:.28s!important;
+    animation-iteration-count:1!important;
+  }
+}
