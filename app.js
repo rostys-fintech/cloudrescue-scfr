@@ -689,6 +689,8 @@ function clearStatuses(){
 function applyScene(){
   const c = compareStrategies(storyArgs);
   const s = storyPresentation(c,storyArgs);
+  const narrative = document.querySelector('.narrative');
+  if(narrative) narrative.dataset.scene = String(scene + 1);
   $('#sceneNo').textContent = scene+1;
   $('#sceneTitle').textContent = s.title;
   $('#sceneText').textContent = s.text;
