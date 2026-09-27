@@ -21,9 +21,10 @@ for(const klass of ['ra-sync-s1-world','ra-sync-s1-providers','ra-sync-s1-banks'
 }
 
 assert.match(js,/if\(sceneIndex===0\)/);
-assert.match(js,/animateGuidedCueCopy/);
-assert.match(js,/kicker\.textContent='LIVE CUE'/);
-assert.match(js,/caption\.textContent=cue\.caption/);
+assert.match(js,/function guidedCueKicker\(/);
+assert.match(js,/function commitGuidedCue\(/);
+assert.match(js,/return 'LIVE CUE'/);
+assert.match(js,/\$\('#raGuidedCaption'\)\.textContent=cue\.caption/);
 
 assert.match(js,/commitGuidedCue/);
 
