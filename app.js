@@ -364,7 +364,7 @@ function renderNetwork(){
     return `<section class="bank-group" data-provider="${p.id}">
       <h4>${p.name} clients</h4>
       <div class="bank-grid">
-      ${group.map(b=>`<div class="bank" data-bank="${b.id}" data-provider="${b.provider}" title="${b.type} · load ${b.criticalLoad} · readiness ${Math.round(b.readiness*100)}%">
+      ${group.map((b,i)=>`<div class="bank" data-bank="${b.id}" data-provider="${b.provider}" style="--bank-order:${i}" title="${b.type} · load ${b.criticalLoad} · readiness ${Math.round(b.readiness*100)}%">
         <div class="bank-title"><span class="bank-glyph" aria-hidden="true">${bankGlyph}</span><div><b>${b.label}</b><small>${b.type}</small></div></div>
       </div>`).join('')}
       </div>
