@@ -2482,3 +2482,56 @@ html[data-theme="dark"] .heat-cell b{
   padding-bottom:3px;
   font-size:8px;
 }
+
+
+/* ---------- Stress Lab scenario header ---------- */
+.shock-head{
+  min-height:118px;
+  padding:22px 24px;
+  border:1px solid #173a54!important;
+  border-top:0!important;
+  background:linear-gradient(110deg,#102b42,#123650)!important;
+  color:#eef4f8;
+  box-shadow:none!important;
+}
+.shock-head .eyebrow{
+  color:#7899b0!important;
+}
+.shock-head h2{
+  color:#f2f6f9!important;
+  font-size:27px;
+  letter-spacing:-.03em;
+}
+.shock-head p{
+  color:#9eb2c1!important;
+  max-width:760px;
+}
+.shock-actions{
+  align-items:center;
+}
+.shock-head .pill{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.14);
+  color:#c8d7e1;
+}
+.shock-head .replay-btn{
+  background:transparent;
+  border-color:#496a82;
+  color:#dbe6ed;
+}
+.shock-head .replay-btn:hover{
+  background:rgba(255,255,255,.05);
+  border-color:#6f8ba0;
+  color:#fff;
+}
+.chart-card,
+.sensitivity-card{
+  border-radius:6px;
+  box-shadow:none!important;
+}
+.chart-card{
+  border-top:3px solid #71899d;
+}
+.sensitivity-card{
+  border-top:3px solid #357d63;
+}
