@@ -644,20 +644,33 @@ function populateNarratorSelect(){
   select.value=ranked.some(item=>(item.voice.voiceURI||item.voice.name)===current) ? current : '';
 }
 
-function waitForNarrator(timeoutMs=650){
+function waitForNarrator(timeoutMs=900){
+  const preferred=localStorage.getItem('resilience-atlas-narrator') || '';
   const immediate=chooseNarrator();
-  if(immediate) return Promise.resolve(immediate);
-  if(!('speechSynthesis' in window)) return Promise.resolve(null);
+
+  if(preferred && immediate) return Promise.resolve(immediate);
+  if(immediate && maleVoiceScore(immediate)>=350) return Promise.resolve(immediate);
+  if(!('speechSynthesis' in window)) return Promise.resolve(immediate || null);
 
   return new Promise(resolve=>{
     let settled=false;
     const finish=()=>{
       if(settled) return;
       settled=true;
-      window.speechSynthesis.removeEventListener?.('voiceschanged',finish);
-      resolve(chooseNarrator());
+      window.speechSynthesis.removeEventListener?.('voiceschanged',onVoices);
+      resolve(chooseNarrator() || immediate || null);
     };
-    window.speechSynthesis.addEventListener?.('voiceschanged',finish,{once:true});
+    const onVoices=()=>{
+      const candidate=chooseNarrator();
+      if(candidate && maleVoiceScore(candidate)>=350){
+        if(settled) return;
+        settled=true;
+        window.speechSynthesis.removeEventListener?.('voiceschanged',onVoices);
+        resolve(candidate);
+      }
+    };
+
+    window.speechSynthesis.addEventListener?.('voiceschanged',onVoices);
     window.setTimeout(finish,timeoutMs);
   });
 }
