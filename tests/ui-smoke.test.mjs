@@ -64,8 +64,11 @@ assert.match(css, /\.architecture-flow/, 'model architecture should be visibly e
 assert.match(css, /\.scenario-generator/, 'seeded scenario generator should be styled');
 assert.match(css, /\.challenge-tabs/, 'multi-mission challenge controls should be styled');
 assert.match(css, /\.challenge-metrics/, 'challenge criteria should be visually inspectable');
+assert.match(css, /\.learning-card/, 'FirstCommit learning journey should be visibly presented');
 assert.match(html, /WHY THIS PROBLEM IS REAL/, 'story should visibly ground the scenario in real regulatory evidence');
 assert.match(html, /OBSERVED IN THE REAL WORLD/, 'methodology should distinguish observed evidence from synthetic assumptions');
+assert.match(html, /BUILD JOURNEY · FIRSTCOMMIT/, 'submission should communicate learning and growth');
+assert.match(html, /AI-assisted, human-owned/, 'submission should disclose AI assistance and project ownership');
 
 console.log('✓ CloudRescue interface smoke checks passed');
 
