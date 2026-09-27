@@ -13,7 +13,7 @@
     })();
   </script>
   <title>CloudRescue — SCFR Stress Lab</title>
-  <link rel="stylesheet" href="styles.css?v=20260927-1308">
+  <link rel="stylesheet" href="styles.css?v=20260927-1325">
 </head>
 <body>
 <div class="shell">
@@ -44,7 +44,7 @@
       <h1>CloudRescue</h1>
       <p>Can a banking system survive a shared cloud outage?</p>
       <div class="hero-actions">
-        <button id="heroDemo" class="btn primary">▶ Watch 35s narrated demo</button>
+        <button id="heroDemo" class="btn primary">▶ Watch guided demo</button>
         <button id="heroLab" class="btn secondary">Open Stress Lab</button>
       </div>
     </div>
@@ -70,6 +70,7 @@
             <button id="nextScene" class="btn primary">Next →</button>
             <button id="autoScene" class="btn secondary">▶ Watch demo</button>
             <button id="narrationToggle" class="btn secondary" aria-pressed="true">🔊 Narration</button>
+            <label class="voice-control"><span>Narrator</span><select id="voiceSelect" aria-label="Narrator voice"><option>Loading…</option></select></label>
             <button id="focusStory" class="btn secondary">⛶ Focus view</button>
           </div>
           <div id="sceneDots" class="dots" aria-label="Story progress"></div>
@@ -268,6 +269,6 @@
 
   <footer><span>CloudRescue · SCFR Stress Lab</span><span>Rostyslav Honcharenko · 2026</span></footer>
 </div>
-<script type="module" src="app.js?v=20260927-1308"></script>
+<script type="module" src="app.js?v=20260927-1325"></script>
 </body>
 </html>
