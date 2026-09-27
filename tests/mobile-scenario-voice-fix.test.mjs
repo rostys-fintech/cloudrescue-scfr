@@ -9,6 +9,8 @@ const css = fs.readFileSync(new URL('../resilience-atlas.css', import.meta.url),
 assert.equal(index,html,'default entrypoint should remain synced');
 
 assert.equal((html.match(/class="ra-mobile-tab/g)||[]).length,3);
+assert.match(html,/id="raVoiceSelect"/);
+assert.match(html,/id="raVoiceTest"/);
 assert.match(html,/data-ra-mobile-tab="simulation"/);
 assert.match(html,/data-ra-mobile-tab="lab"/);
 assert.match(html,/data-ra-mobile-tab="evidence"/);
@@ -32,6 +34,11 @@ assert.match(js,/filter\(item=>item\.score>0\)/);
 assert.match(js,/rate:Math\.max\(\.78,Math\.min\(\.88/);
 assert.match(js,/pitch:\.96/);
 assert.match(js,/pauseMs:560/);
+assert.match(js,/function rankedMaleVoices\(/);
+assert.match(js,/function populateNarratorSelect\(/);
+assert.match(js,/resilience-atlas-narrator/);
+assert.match(js,/maleVoiceScore\(immediate\)>=350/);
+assert.match(js,/timeoutMs=900/);
 
 assert.match(css,/MOBILE INTERACTION FIX — INDEPENDENT BOTTOM NAV \+ SAFARI LAB/);
 assert.match(css,/\.ra-header \.ra-nav\{\s*display:none!important/);
@@ -39,5 +46,7 @@ assert.match(css,/\.ra-mobile-app-nav\{/);
 assert.match(css,/z-index:100/);
 assert.match(css,/body\.ra-mobile-sheet-open \.ra-mobile-app-nav/);
 assert.match(css,/\.ra-scenario-playback\{\s*z-index:24!important/);
+assert.match(css,/NARRATOR PICKER/);
+assert.match(css,/IOS-SAFE PACKET MOTION/);
 
 console.log('Mobile scenario interaction and male narration checks passed.');
