@@ -769,3 +769,12 @@ html[data-theme="dark"] .bank.stranded:after{background:#3a301f;color:#d9aa53}
 
 .provider-glyph svg{width:16px;height:16px;display:block}
 .bank-glyph svg{width:13px;height:13px;display:block}
+
+.compare-bar{height:6px;background:#edf1f5;border-radius:99px;overflow:hidden;margin:10px 0 4px}
+.compare-bar i{display:block;height:100%;background:var(--blue);border-radius:99px;animation:compareReveal .8s cubic-bezier(.2,.8,.2,1) both;transform-origin:left}
+.compare-card.best .compare-bar i{background:var(--green)}
+@keyframes compareReveal{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+html[data-theme="dark"] .compare-bar{background:#253545}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
