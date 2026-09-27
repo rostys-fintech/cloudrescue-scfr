@@ -73,6 +73,7 @@ let sceneTimers = [];
 let demoRunId = 0;
 let storyArgs = {...defaults};
 let storyFromLab = false;
+let sensitivityMode = 'scfr';
 
 function setupTheme(){
   const button = $('#themeToggle');
@@ -1042,6 +1043,39 @@ function renderBeforeAfter(c,args){
     </div>`;
 }
 
+function renderSensitivity(args){
+  const reserveValues=[0,10,20,30,40,50,60];
+  const marketValues=[50,40,30,20,10,0];
+
+  const rows=marketValues.map(marketPct=>{
+    const cells=reserveValues.map(reservePct=>{
+      const c=compareStrategies({...args,marketPct,reservePct});
+      const value=sensitivityMode==='uplift'
+        ? c.scfr.resilience-c.individual.resilience
+        : c.scfr.resilience;
+      const max=sensitivityMode==='uplift'?55:100;
+      const intensity=Math.max(.08,Math.min(.92,value/max));
+      const display=sensitivityMode==='uplift'?`+${value.toFixed(0)}`:`${Math.round(value)}`;
+      const current=marketPct===args.marketPct && reservePct===args.reservePct;
+      return `<div class="heat-cell ${current?'current':''}" style="--heat:${intensity.toFixed(2)}" title="Market ${marketPct}%, reserve ${reservePct}%: ${display}">`+
+        `<b>${display}</b></div>`;
+    }).join('');
+
+    return `<div class="heat-row"><span class="heat-y">${marketPct}%</span>${cells}</div>`;
+  }).join('');
+
+  $('#sensitivityHeatmap').innerHTML=`
+    <div class="heat-axis-title y">Emergency market capacity</div>
+    <div class="heat-grid">
+      <div class="heat-x-labels"><span></span>${reserveValues.map(v=>`<b>${v}%</b>`).join('')}</div>
+      ${rows}
+      <div class="heat-x-title">Pre-reserved capacity</div>
+    </div>
+    <div class="heat-legend">
+      <span>Lower</span><i></i><i></i><i></i><i></i><i></i><span>Higher</span>
+      <b>${sensitivityMode==='uplift'?'SCFR uplift vs individual reserves':'SCFR resilience score'}</b>
+    </div>`;
+}
 function renderInsight(c,args){
   const uplift = c.scfr.resilience - c.individual.resilience;
   const strandedReduction = c.individual.strandedReserve - c.scfr.strandedReserve;
@@ -1119,6 +1153,7 @@ function renderLab(){
   renderFrontier(args);
   renderInsight(c,args);
   renderBeforeAfter(c,args);
+  renderSensitivity(args);
 
   const success = c.scfr.resilience>=80 && args.reservePct<=30;
   $('#challenge').classList.toggle('success',success);
@@ -1134,6 +1169,11 @@ $$('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.data
 $('#runBtn').addEventListener('click',renderLab);
 $('#exportBtn').addEventListener('click',exportScenario);
 $('#replayScenarioBtn').addEventListener('click',replayCurrentScenario);
+$('.sensitivity-mode').forEach(btn=>btn.addEventListener('click',()=>{
+  sensitivityMode=btn.dataset.mode;
+  $('.sensitivity-mode').forEach(b=>b.classList.toggle('active',b===btn));
+  renderSensitivity(currentArgs());
+}));
 
 renderNetwork();
 setupTheme();
