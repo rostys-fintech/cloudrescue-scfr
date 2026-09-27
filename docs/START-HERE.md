@@ -1,5 +1,7 @@
 # CloudRescue — Judge & Submission START HERE
 
+> **Redesign target:** The approved next-generation product identity is **Resilience Atlas — Systemic Cloud Resilience Lab**. The authoritative visual/UX rules are in [resilience-atlas-design-system.md](resilience-atlas-design-system.md) and `/design-tokens.css`. Existing CloudRescue materials below remain valid historical/submission references until the migration is complete.
+
 This folder contains both development history and final submission materials.
 
 ## Current judge-facing materials
