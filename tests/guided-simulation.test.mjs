@@ -7,7 +7,7 @@ const js = fs.readFileSync(new URL('../resilience-atlas.js', import.meta.url), '
 
 for (const id of [
   'raSceneCounter','raSceneKicker','raSceneTitle','raSceneText','raSceneStatValue',
-  'raRunPreview','raNarrationToggle','raSpeechPause','raSpeechPauseLabel','raGuidedHud','raGuidedStatus',
+  'raRunPreview','raNarrationToggle','raSpeechPause','raSpeechPauseLabel','raHudPause','raHudStop','raGuidedHud','raGuidedStatus',
   'raGuidedScene','raGuidedCaption','raGuidedProgress'
 ]) {
   assert.match(html,new RegExp("id=[\\\"']"+id+"[\\\"']"),'missing '+id);
@@ -32,6 +32,12 @@ assert.match(js,/speechSynthesis\.resume\(\)/);
 assert.match(js,/Promise\.all\(/);
 assert.match(js,/guidedDelay\(story\.visualDuration,runId\)/);
 assert.match(js,/earth\.simulation\.setPaused/);
+assert.match(js,/function focusAnimationStage\(/);
+assert.match(js,/window\.scrollTo\(/);
+assert.match(js,/focusAnimationStage\(\$\('#raEarthMount'\)\)/);
+assert.match(js,/state\.scene=0;[\s\S]*renderScene\(\);[\s\S]*setGuidedActive\(true\)/);
+assert.match(js,/raHudPause/);
+assert.match(js,/raHudStop/);
 assert.doesNotMatch(html,/raVoiceSelect/);
 assert.doesNotMatch(html,/raVoiceTest/);
 
@@ -42,6 +48,8 @@ assert.match(css,/body\.ra-guided-running/);
 assert.match(css,/prefers-reduced-motion/);
 assert.match(css,/SYNCED GUIDED CONTROLS — RUN \/ NARRATION \/ PAUSE/);
 assert.match(css,/body\.ra-guided-paused/);
+assert.match(css,/MOBILE RUN FOCUS — BUTTON FIT \+ IN-ANIMATION CONTROLS/);
+assert.match(css,/\.ra-guided-actions/);
 
 assert.doesNotMatch(html,/Crisis Replay/);
 assert.doesNotMatch(html,/Stress Lab/);
