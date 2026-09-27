@@ -6552,3 +6552,145 @@ body.ra-guided-running #simulation #raEarthMount{
     animation-iteration-count:1!important;
   }
 }
+
+
+/* =========================================================
+   GUIDED CINEMATIC BLEND — continuous cue transitions
+   Every visual state now eases into the next one instead of
+   snapping on the same animation frame as the narration cue.
+   ========================================================= */
+
+#raEarthMount.ra-guided-sync .ra-earth-ocean,
+#raEarthMount.ra-guided-sync .ra-earth-land,
+#raEarthMount.ra-guided-sync .ra-earth-grid,
+#raEarthMount.ra-guided-sync .ra-earth-atmosphere,
+#raEarthMount.ra-guided-sync .ra-earth-provider,
+#raEarthMount.ra-guided-sync .ra-earth-bank,
+#raEarthMount.ra-guided-sync .ra-earth-link,
+#raEarthMount.ra-guided-sync .ra-earth-packet,
+#raEarthMount.ra-guided-sync .ra-provider-halo,
+#raEarthMount.ra-guided-sync .ra-provider-core,
+#raEarthMount.ra-guided-sync .ra-provider-cloud,
+#raEarthMount.ra-guided-sync .ra-bank-halo,
+#raEarthMount.ra-guided-sync .ra-bank-node{
+  transition:
+    opacity .72s cubic-bezier(.22,.61,.36,1),
+    filter .72s cubic-bezier(.22,.61,.36,1),
+    stroke .72s cubic-bezier(.22,.61,.36,1),
+    stroke-width .72s cubic-bezier(.22,.61,.36,1),
+    fill .72s cubic-bezier(.22,.61,.36,1)!important;
+}
+
+#simulation .ra-video-hud .ra-guided-copy,
+#raCanvasTitle{
+  will-change:opacity,transform,filter;
+}
+#simulation .ra-video-hud .ra-guided-copy.is-cue-entering,
+#raCanvasTitle.is-cue-entering{
+  animation:raGuidedCopyBlend .46s cubic-bezier(.22,.61,.36,1) both;
+}
+@keyframes raGuidedCopyBlend{
+  0%{opacity:.18;transform:translateY(4px);filter:blur(2.5px)}
+  42%{opacity:.74}
+  100%{opacity:1;transform:translateY(0);filter:blur(0)}
+}
+
+/* Richer opening: the first seconds build the system continuously. */
+#raEarthMount.ra-sync-s1-world .ra-earth-ocean{
+  animation:raStage1OceanReveal 1.45s cubic-bezier(.22,.61,.36,1) both;
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-land{
+  animation:raStage1LandReveal 1.28s .16s cubic-bezier(.22,.61,.36,1) both;
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-grid{
+  animation:raStage1GridReveal 1.18s .34s cubic-bezier(.22,.61,.36,1) both;
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-atmosphere{
+  animation:raStage1AtmosphereReveal 1.55s .08s ease-out both;
+}
+
+#raEarthMount.ra-sync-s1-providers .ra-provider-halo{
+  animation:raStage1ProviderHalo .9s cubic-bezier(.22,.61,.36,1) both;
+}
+#raEarthMount.ra-sync-s1-providers .ra-provider-label,
+#raEarthMount.ra-sync-s1-providers .ra-provider-sub{
+  animation:raStage1LabelReveal .62s .18s ease-out both;
+}
+
+#raEarthMount.ra-sync-s1-banks .ra-bank-halo{
+  animation:raStage1BankPulse .7s cubic-bezier(.22,.61,.36,1) both;
+  animation-delay:calc(var(--ra-intro-index,0) * .028s);
+}
+#raEarthMount.ra-sync-s1-banks .ra-bank-label{
+  animation:raStage1LabelReveal .52s ease-out both;
+  animation-delay:calc(.08s + var(--ra-intro-index,0) * .022s);
+}
+
+#raEarthMount.ra-sync-s1-links .ra-earth-link{
+  stroke-dasharray:1!important;
+  stroke-dashoffset:1!important;
+  animation:raStage1LinkDraw .94s cubic-bezier(.22,.61,.36,1) forwards;
+  animation-delay:calc(var(--ra-intro-index,0) * .018s);
+}
+
+#raEarthMount.ra-sync-s1-flow .ra-earth-packet{
+  animation:raStage1FlowIgnite .72s ease-out both;
+  animation-delay:calc(var(--ra-intro-index,0) * .012s);
+}
+#raEarthMount.ra-sync-s1-flow .ra-earth-link{
+  transition-duration:.82s!important;
+}
+
+@keyframes raStage1OceanReveal{
+  0%{opacity:.08;filter:brightness(.28) saturate(.35)}
+  100%{opacity:.56;filter:brightness(.7) saturate(.68)}
+}
+@keyframes raStage1LandReveal{
+  0%{opacity:0;filter:blur(4px)}
+  100%{opacity:.2;filter:blur(0)}
+}
+@keyframes raStage1GridReveal{
+  0%{opacity:0;stroke-dasharray:.03 .1;stroke-dashoffset:1}
+  100%{opacity:.34;stroke-dasharray:initial;stroke-dashoffset:0}
+}
+@keyframes raStage1AtmosphereReveal{
+  0%{opacity:0;filter:blur(7px)}
+  55%{opacity:.95}
+  100%{opacity:1;filter:blur(0)}
+}
+@keyframes raStage1ProviderHalo{
+  0%{opacity:0;stroke-width:.5}
+  55%{opacity:1;stroke-width:3.2}
+  100%{opacity:.7;stroke-width:1.5}
+}
+@keyframes raStage1LabelReveal{
+  from{opacity:0;transform:translateY(4px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes raStage1BankPulse{
+  0%{opacity:0;stroke-width:.4}
+  55%{opacity:1;stroke-width:2.3}
+  100%{opacity:.7;stroke-width:1}
+}
+@keyframes raStage1LinkDraw{
+  from{stroke-dashoffset:1;opacity:.08}
+  to{stroke-dashoffset:0;opacity:.82}
+}
+@keyframes raStage1FlowIgnite{
+  0%{opacity:0;filter:drop-shadow(0 0 0 transparent)}
+  100%{opacity:.98;filter:drop-shadow(0 0 4px currentColor)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #simulation .ra-video-hud .ra-guided-copy.is-cue-entering,
+  #raCanvasTitle.is-cue-entering,
+  #raEarthMount.ra-sync-s1-world .ra-earth-ocean,
+  #raEarthMount.ra-sync-s1-world .ra-earth-land,
+  #raEarthMount.ra-sync-s1-world .ra-earth-grid,
+  #raEarthMount.ra-sync-s1-world .ra-earth-atmosphere,
+  #raEarthMount.ra-sync-s1-links .ra-earth-link,
+  #raEarthMount.ra-sync-s1-flow .ra-earth-packet{
+    animation-duration:.2s!important;
+    animation-delay:0s!important;
+  }
+}
