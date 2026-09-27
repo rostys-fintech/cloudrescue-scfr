@@ -116,6 +116,20 @@ The real-world motivation is grounded in current BIS, EBA and EU DORA material o
 
 The evidence base supports studying the problem; it does **not** validate the synthetic v0.1 numerical outputs.
 
+## What I learned building it
+
+CloudRescue started as a finance and systemic-risk question rather than a software idea. Building the FirstCommit MVP required me to learn how to translate that question into:
+
+- a deterministic allocation model;
+- explicit model assumptions and guardrails;
+- interactive browser visualizations;
+- audiovisual explanation for non-specialists;
+- reproducible seeded scenarios and shareable links;
+- automated model and interface checks;
+- a deployable GitHub Pages research prototype.
+
+AI tools were used as a development aid for brainstorming, code drafting, debugging and documentation. The project owner remains responsible for the research framing, assumptions, interpretation, testing decisions and final submission.
+
 ## Research roadmap
 
 - **v0.1 — FirstCommit MVP:** synthetic scenario engine + guided audiovisual story + scenario replay + sensitivity explorer + reproducible seeded scenarios + challenge mode.
