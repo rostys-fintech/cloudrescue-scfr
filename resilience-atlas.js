@@ -199,6 +199,9 @@ function renderLab(){
   $('#raReserveLabel').textContent = state.reservePct+'%';
   $('#raLabTitle').textContent = (provider?.name || state.outageProvider)+' outage';
   $('#raAffectedDemand').textContent = format(c.market.totalDemand)+' units';
+  $('#raMobileProvider').textContent = provider?.name || state.outageProvider;
+  $('#raMobileMarket').textContent = state.marketPct+'%';
+  $('#raMobileReserve').textContent = state.reservePct+'%';
   $('#raLabMarketSummary').textContent = state.marketPct+'%';
   $('#raLabReserveSummary').textContent = state.reservePct+'%';
   $('#raLabRuleSummary').textContent = ruleLabel;
@@ -329,7 +332,10 @@ function setupEvidence(){
 
 function renderScene(){
   $('#raCanvasTitle').textContent = sceneTitles[state.scene];
-  $$('.ra-scene-list button').forEach((button,index)=>{
+  $('.ra-scene-list button').forEach((button,index)=>{
+    button.classList.toggle('is-active', index === state.scene);
+  });
+  $('.ra-mobile-scene-nav button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
   renderBaseline();
@@ -344,6 +350,7 @@ function switchTab(tab){
   $$('.ra-view').forEach(view=>{
     view.classList.toggle('is-active', view.dataset.raView === tab);
   });
+  if(tab !== 'lab' && document.body.classList.contains('ra-mobile-sheet-open')) setLabSheet(false);
   if(tab === 'lab') renderLab();
   if(tab === 'evidence') renderEvidence();
 }
@@ -495,10 +502,18 @@ async function runGuidedSimulation(){
 }
 
 function setupScenes(){
-  $$('.ra-scene-list button').forEach(button=>{
+  $('.ra-scene-list button').forEach(button=>{
     button.addEventListener('click',()=>{
       if(guided.active) stopGuidedSimulation();
       state.scene=Number(button.dataset.raScene);
+      renderScene();
+    });
+  });
+
+  $('.ra-mobile-scene-nav button').forEach(button=>{
+    button.addEventListener('click',()=>{
+      if(guided.active) stopGuidedSimulation();
+      state.scene=Number(button.dataset.raMobileScene);
       renderScene();
     });
   });
@@ -532,6 +547,42 @@ function resetLab(){
 
   renderLab();
   renderBaseline();
+}
+
+function setLabSheet(open){
+  const sheet=$('#raLabSheet');
+  const backdrop=$('#raLabBackdrop');
+  const trigger=$('#raOpenLabSheet');
+  if(!sheet || !backdrop || !trigger) return;
+
+  sheet.classList.toggle('is-mobile-open',open);
+  document.body.classList.toggle('ra-mobile-sheet-open',open);
+  backdrop.hidden=!open;
+  trigger.setAttribute('aria-expanded',open ? 'true' : 'false');
+
+  if(open){
+    window.setTimeout(()=>$('#raCloseLabSheet')?.focus(),20);
+  }else{
+    trigger.focus?.();
+  }
+}
+
+function setupMobileLab(){
+  $('#raOpenLabSheet')?.addEventListener('click',()=>setLabSheet(true));
+  $('#raCloseLabSheet')?.addEventListener('click',()=>setLabSheet(false));
+  $('#raLabBackdrop')?.addEventListener('click',()=>setLabSheet(false));
+
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape' && document.body.classList.contains('ra-mobile-sheet-open')){
+      setLabSheet(false);
+    }
+  });
+
+  window.addEventListener('resize',()=>{
+    if(window.innerWidth>=768 && document.body.classList.contains('ra-mobile-sheet-open')){
+      setLabSheet(false);
+    }
+  });
 }
 
 function setupLab(){
@@ -575,6 +626,7 @@ setupTabs();
 setupTheme();
 setupScenes();
 setupLab();
+setupMobileLab();
 setupEvidence();
 updateNarrationControl();
 renderScene();
