@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en" data-ra-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Resilience Atlas is a systemic cloud-resilience simulator for shared-provider shocks and coordinated recovery in banking.">
+  <meta name="color-scheme" content="dark light">
+  <title>Resilience Atlas — Systemic Cloud Resilience Lab</title>
+  <meta name="theme-color" content="#070A0F">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-ra01">
+</head>
+<body>
+  <div class="ra-app">
+    <header class="ra-header">
+      <a class="ra-brand" href="#simulation" aria-label="Resilience Atlas home">
+        <span class="ra-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="15"></circle>
+            <path d="M8 20h24M20 5c6 5 9 10 9 15s-3 10-9 15c-6-5-9-10-9-15s3-10 9-15Z"></path>
+            <path d="M12 12c5 3 11 4 16 0M12 28c5-3 11-4 16 0"></path>
+          </svg>
+        </span>
+        <span class="ra-brand-copy">
+          <strong>Resilience <em>Atlas</em></strong>
+          <small>Systemic Cloud Resilience Lab</small>
+        </span>
+      </a>
+
+      <nav class="ra-nav" aria-label="Resilience Atlas modes">
+        <button class="ra-nav-tab is-active" data-ra-tab="simulation">Simulation</button>
+        <button class="ra-nav-tab" data-ra-tab="lab">Scenario Lab</button>
+        <button class="ra-nav-tab" data-ra-tab="evidence">Model &amp; Evidence</button>
+      </nav>
+
+      <div class="ra-header-actions">
+        <span class="ra-system-label" id="raSystemStatus">SYSTEM STABLE</span>
+        <button class="ra-theme-toggle" id="raThemeToggle" type="button" aria-label="Switch visual theme" aria-pressed="false">
+          <span>Dark</span><i aria-hidden="true"></i><span>Light</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="ra-main">
+      <section class="ra-view is-active" id="simulation" data-ra-view="simulation">
+        <aside class="ra-rail">
+          <div class="ra-kicker">SIMULATION</div>
+          <h1>See systemic dependency become a recovery problem.</h1>
+          <p>One shared-provider shock. Twenty synthetic banks. Three recovery mechanisms using the same underlying model.</p>
+
+          <div class="ra-rail-metrics" aria-label="Baseline system summary">
+            <div><span>BANKS</span><b id="raBankCount">20</b></div>
+            <div><span>PROVIDERS</span><b id="raProviderCount">3</b></div>
+            <div><span>BASELINE GAP</span><b id="raBaselineGap">—</b></div>
+          </div>
+
+          <button class="ra-primary-action" id="raRunPreview" type="button">
+            <span>Run Simulation</span><b aria-hidden="true">→</b>
+          </button>
+
+          <div class="ra-scene-list" aria-label="Simulation sequence">
+            <button class="is-active" data-ra-scene="0"><span>01</span><b>Stable network</b></button>
+            <button data-ra-scene="1"><span>02</span><b>Provider failure</b></button>
+            <button data-ra-scene="2"><span>03</span><b>Capacity shortage</b></button>
+            <button data-ra-scene="3"><span>04</span><b>Stranded reserve</b></button>
+            <button data-ra-scene="4"><span>05</span><b>Pooled recovery</b></button>
+            <button data-ra-scene="5"><span>06</span><b>Stabilized comparison</b></button>
+          </div>
+        </aside>
+
+        <section class="ra-canvas-shell" aria-label="System visualization">
+          <div class="ra-canvas-toolbar">
+            <div>
+              <span>GLOBAL SYSTEM MAP</span>
+              <b id="raCanvasTitle">Stable dependency network</b>
+            </div>
+            <div class="ra-status-pills">
+              <span class="stable">Stable</span>
+              <span>20 banks</span>
+              <span>3 providers</span>
+            </div>
+          </div>
+
+          <div class="ra-earth-mount" id="raEarthMount">
+            <div class="ra-earth-placeholder" aria-hidden="true">
+              <div class="ra-orbit"></div>
+              <div class="ra-grid-globe"></div>
+              <span class="ra-provider-dot blue"></span>
+              <span class="ra-provider-dot orange"></span>
+              <span class="ra-provider-dot green"></span>
+            </div>
+            <div class="ra-earth-empty">
+              <span>EARTH SYSTEM ENGINE</span>
+              <strong>Stage 3 mount point</strong>
+              <small>The live Earth/network renderer will replace this placeholder without changing the simulation model.</small>
+            </div>
+          </div>
+
+          <div class="ra-outcome-strip">
+            <article><span>Affected banks</span><b id="raAffected">8 / 20</b><small>baseline outage</small></article>
+            <article><span>Unmet capacity</span><b id="raUnmet">—</b><small>capacity units</small></article>
+            <article><span>Workload restored</span><b id="raRestored">—</b><small>SCFR baseline</small></article>
+            <article><span>System resilience</span><b id="raResilience">—</b><small>SCFR score</small></article>
+          </div>
+        </section>
+      </section>
+
+      <section class="ra-view" id="lab" data-ra-view="lab">
+        <aside class="ra-controls">
+          <div class="ra-kicker">SCENARIO LAB</div>
+          <h2>Change assumptions. Keep the model constant.</h2>
+
+          <label>
+            <span>Provider shock</span>
+            <select id="raProviderSelect">
+              <option value="blue">Blue Cloud</option>
+              <option value="orange">Orange Cloud</option>
+              <option value="green">Green Cloud</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Immediate backup capacity <b id="raMarketLabel">20%</b></span>
+            <input id="raMarketPct" type="range" min="0" max="50" step="5" value="20">
+          </label>
+
+          <label>
+            <span>Prepared reserve <b id="raReserveLabel">25%</b></span>
+            <input id="raReservePct" type="range" min="0" max="60" step="5" value="25">
+          </label>
+
+          <label>
+            <span>Allocation rule</span>
+            <select id="raRuleSelect">
+              <option value="systemic">Systemic priority</option>
+              <option value="equal">Equal allocation</option>
+              <option value="readiness">Readiness first</option>
+            </select>
+          </label>
+
+          <div class="ra-control-note">
+            <span>MODEL SOURCE</span>
+            <b>Existing simulation engine</b>
+            <small>No formulas or bank data are changed in this redesign shell.</small>
+          </div>
+        </aside>
+
+        <section class="ra-lab-workspace">
+          <div class="ra-canvas-toolbar">
+            <div>
+              <span>LIVE PARAMETER VIEW</span>
+              <b id="raLabTitle">Blue Cloud outage</b>
+            </div>
+            <div class="ra-status-pills"><span>Model-linked</span></div>
+          </div>
+
+          <div class="ra-earth-mount ra-earth-mount-lab">
+            <div class="ra-earth-empty">
+              <span>INTERACTIVE EARTH</span>
+              <strong>Same visualization engine</strong>
+              <small>Stage 3 will bind provider, bank, dependency and recovery states to this canvas.</small>
+            </div>
+          </div>
+
+          <div class="ra-outcome-strip">
+            <article><span>Affected banks</span><b id="raLabAffected">—</b><small>of 20</small></article>
+            <article><span>Unmet capacity</span><b id="raLabUnmet">—</b><small>units</small></article>
+            <article><span>Workload restored</span><b id="raLabRestored">—</b><small>SCFR</small></article>
+            <article><span>System resilience</span><b id="raLabResilience">—</b><small>/ 100</small></article>
+          </div>
+
+          <div class="ra-compare-strip" aria-label="Recovery model comparison">
+            <article><span>Post-shock market</span><b id="raMarketScore">—</b></article>
+            <article><span>Individual reserves</span><b id="raIndividualScore">—</b></article>
+            <article class="is-accent"><span>SCFR pooled reserve</span><b id="raScfrScore">—</b></article>
+          </div>
+        </section>
+      </section>
+
+      <section class="ra-view" id="evidence" data-ra-view="evidence">
+        <header class="ra-evidence-head">
+          <div class="ra-kicker">MODEL &amp; EVIDENCE</div>
+          <h2>Understand what the simulator is doing.</h2>
+          <p>The redesign reuses the existing deterministic synthetic-bank model. This mode will explain assumptions, network structure, reserve logic and outputs without changing the underlying calculations.</p>
+        </header>
+
+        <div class="ra-evidence-grid">
+          <section class="ra-evidence-map">
+            <div class="ra-earth-mount ra-earth-mount-evidence">
+              <div class="ra-earth-empty">
+                <span>ANNOTATED EARTH</span>
+                <strong>One model, explained visually</strong>
+                <small>Stage 3 supplies the shared network renderer; later stages add methodology annotations.</small>
+              </div>
+            </div>
+          </section>
+
+          <aside class="ra-model-facts">
+            <article><span>Network</span><b>20 synthetic banks / 3 providers</b></article>
+            <article><span>Shock</span><b>One shared-provider outage</b></article>
+            <article><span>Constraint</span><b>Immediate backup capacity</b></article>
+            <article><span>Mechanisms</span><b>Market / Individual / SCFR</b></article>
+            <article><span>Outcome</span><b>Restored critical workload &amp; resilience</b></article>
+          </aside>
+        </div>
+
+        <div class="ra-causal-chain" aria-label="Model flow">
+          <span>Shock</span><i>→</i><span>Simultaneous demand</span><i>→</i><span>Available capacity</span><i>→</i><span>Reserve allocation</span><i>→</i><span>Recovery</span><i>→</i><span>Outcome</span>
+        </div>
+      </section>
+    </main>
+
+    <footer class="ra-footer">
+      <span>Resilience Atlas migration shell · Stage 2</span>
+      <span>Same model · clean interface boundary</span>
+    </footer>
+  </div>
+
+  <script type="module" src="resilience-atlas.js?v=20260927-ra01"></script>
+</body>
+</html>
