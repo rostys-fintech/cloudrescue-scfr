@@ -312,8 +312,8 @@ function comparisonHTML(){
 }
 
 function clearStatuses(){
-  $('.provider').forEach(el=>el.classList.remove('offline'));
-  $('.bank').forEach(el=>el.classList.remove('affected','restored','waiting','stranded'));
+  $$('.provider').forEach(el=>el.classList.remove('offline'));
+  $$('.bank').forEach(el=>el.classList.remove('affected','restored','waiting','stranded'));
 }
 
 function applyScene(){
@@ -377,7 +377,7 @@ function applyScene(){
 
   $('#backScene').disabled = scene===0;
   $('#nextScene').textContent = scene===scenes.length-1 ? 'Open Stress Lab →' : 'Next →';
-  $('#sceneDots button').forEach((d,i)=>d.classList.toggle('active',i===scene));
+  $$('#sceneDots button').forEach((d,i)=>d.classList.toggle('active',i===scene));
   updateDemoProgress();
 }
 
@@ -433,7 +433,7 @@ function setupStory(){
     narrationBtn.textContent='CC Captions only';
   }
   $('#sceneDots').innerHTML = scenes.map((_,i)=>`<button data-scene="${i}" aria-label="Scene ${i+1}"></button>`).join('');
-  $$('#sceneDots button').forEach(btn=>btn.addEventListener('click',()=>{
+  $$$('#sceneDots button').forEach(btn=>btn.addEventListener('click',()=>{
     scene=Number(btn.dataset.scene); stopAuto(); applyScene();
   }));
 
@@ -481,12 +481,12 @@ function setupStory(){
 }
 
 function switchTab(id){
-  $$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+  $$$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
   $$('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
   if(id==='lab') renderLab();
   window.scrollTo({top:0,behavior:'smooth'});
 }
-$('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+$$('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
 $('#heroDemo').addEventListener('click',()=>{
   switchTab('story');
   setNarration(true);
