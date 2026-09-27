@@ -10,7 +10,7 @@
   <link rel="icon" href="resilience-atlas-mark.svg?v=20260927-polish01" type="image/svg+xml">
   <link rel="mask-icon" href="resilience-atlas-mark.svg?v=20260927-polish01" color="#246FBF">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-polish01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-mobilefix01">
 </head>
 <body>
   <div class="ra-app">
@@ -38,6 +38,18 @@
         </button>
       </div>
     </header>
+
+    <nav class="ra-mobile-app-nav" aria-label="Resilience Atlas mobile modes">
+      <button class="ra-mobile-tab is-active" data-ra-mobile-tab="simulation" type="button" aria-pressed="true">
+        <span>01</span><b>Simulation</b>
+      </button>
+      <button class="ra-mobile-tab" data-ra-mobile-tab="lab" type="button" aria-pressed="false">
+        <span>02</span><b>Scenario Lab</b>
+      </button>
+      <button class="ra-mobile-tab" data-ra-mobile-tab="evidence" type="button" aria-pressed="false">
+        <span>03</span><b>Evidence</b>
+      </button>
+    </nav>
 
     <main class="ra-main">
       <section class="ra-view is-active" id="simulation" data-ra-view="simulation">
@@ -661,6 +673,6 @@
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-polish01"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-mobilefix01"></script>
 </body>
 </html>
