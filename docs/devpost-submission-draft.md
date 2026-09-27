@@ -40,7 +40,7 @@ A user can:
 
 ## The three recovery mechanisms
 
-### 1. Market Scramble
+### 1. Post-shock Market Sourcing
 Affected banks source emergency capacity only after the outage. When many institutions need capacity at the same time, the immediately available market may be insufficient.
 
 ### 2. Individual Reserves
