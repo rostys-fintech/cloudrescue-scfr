@@ -225,7 +225,7 @@ function applyPreset(name){
   $('#marketPct').value=p.marketPct;
   $('#reservePct').value=p.reservePct;
   $('#ruleSelect').value=p.allocationRule;
-  $('.preset').forEach(b=>b.classList.toggle('active',b.dataset.preset===name));
+  $$('.preset').forEach(b=>b.classList.toggle('active',b.dataset.preset===name));
   renderLab();
 }
 
@@ -314,7 +314,7 @@ function renderLab(){
 ['providerSelect','marketPct','reservePct','ruleSelect'].forEach(id=>{
   $('#'+id).addEventListener('input',renderLab);
 });
-$('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.dataset.preset)));
+$$('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.dataset.preset)));
 $('#runBtn').addEventListener('click',renderLab);
 $('#exportBtn').addEventListener('click',exportScenario);
 
