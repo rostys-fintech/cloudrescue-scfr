@@ -4961,3 +4961,242 @@ body.ra-guided-running .ra-guided-actions{
     font-size:8px!important;
   }
 }
+
+
+/* =========================================================
+   TOUCH / LANDSCAPE PHONE FIX
+   Mobile behavior follows interaction mode, not only 767px width.
+   ========================================================= */
+
+/* Prevent the primary run action from being squeezed at tablet / narrow desktop widths. */
+@media(max-width:1180px){
+  .ra-sim-controls{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    gap:8px!important;
+  }
+  .ra-sim-controls>#raRunPreview{
+    width:100%!important;
+    min-width:100%!important;
+    max-width:none!important;
+    min-height:58px!important;
+    padding:10px 16px!important;
+    justify-content:space-between!important;
+  }
+  .ra-sim-controls>#raRunPreview>span{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    line-height:1.15!important;
+    text-align:left!important;
+  }
+  .ra-sim-secondary{
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+  }
+  .ra-sim-secondary .ra-quiet-action,
+  .ra-sim-secondary .ra-pause-action{
+    width:100%!important;
+    min-width:0!important;
+  }
+}
+
+/* Phone portrait, phone landscape and compact touch browsers. */
+@media (max-width:960px), (pointer:coarse) and (max-width:1180px){
+  html,body{
+    min-width:320px;
+    overflow-x:hidden!important;
+  }
+
+  .ra-header .ra-nav{
+    display:none!important;
+  }
+  .ra-mobile-app-nav{
+    position:fixed!important;
+    z-index:100!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:max(8px,env(safe-area-inset-bottom,0px))!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:4px!important;
+    padding:4px!important;
+    border:1px solid var(--ra-border-strong)!important;
+    border-radius:15px!important;
+    background:color-mix(in srgb,var(--ra-surface) 95%,transparent)!important;
+    box-shadow:0 14px 38px rgba(0,0,0,.25)!important;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+
+  .ra-main{
+    padding:8px 0 calc(92px + env(safe-area-inset-bottom,0px))!important;
+  }
+
+  /* Earth first, regardless of iPhone orientation. */
+  #simulation.is-active{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+  }
+  #simulation .ra-canvas-shell{
+    order:1!important;
+    width:100%!important;
+    border-left:0!important;
+    border-right:0!important;
+    border-radius:0!important;
+  }
+  #simulation .ra-story-rail{
+    order:2!important;
+    width:auto!important;
+    margin:0 8px!important;
+  }
+  #simulation .ra-earth-mount{
+    min-height:max(390px,62svh)!important;
+    scroll-margin-top:68px!important;
+  }
+  #simulation .ra-earth-svg{
+    transform:scale(1.13)!important;
+    transform-origin:50% 49%!important;
+  }
+  .ra-mobile-scene-nav{
+    display:grid!important;
+  }
+  .ra-scene-list{
+    display:none!important;
+  }
+
+  /* Once the run starts, make the animation the actual screen. */
+  body.ra-guided-running #simulation .ra-story-rail{
+    display:none!important;
+  }
+  body.ra-guided-running #simulation .ra-canvas-shell{
+    min-height:calc(100svh - 72px)!important;
+  }
+  body.ra-guided-running #raEarthMount{
+    min-height:calc(100svh - 150px)!important;
+  }
+  body.ra-guided-running .ra-guided-hud{
+    position:relative!important;
+    z-index:30!important;
+    width:calc(100% - 16px)!important;
+    margin:-96px 8px 8px!important;
+  }
+
+  /* Scenario Lab becomes a true touch workspace. */
+  #lab.is-active{
+    display:flex!important;
+    flex-direction:column!important;
+  }
+  .ra-lab-workspace{
+    width:100%!important;
+  }
+  .ra-mobile-lab-bar{
+    display:grid!important;
+  }
+  .ra-mobile-sheet-head{
+    display:grid!important;
+  }
+  .ra-lab-earth-stage,
+  #raLabEarthMount{
+    scroll-margin-top:68px!important;
+  }
+
+  .ra-lab-console{
+    position:fixed!important;
+    z-index:120!important;
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+    width:100%!important;
+    max-height:min(88svh,760px)!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0 14px calc(16px + env(safe-area-inset-bottom,0px))!important;
+    display:block!important;
+    overflow-y:auto!important;
+    overscroll-behavior:contain!important;
+    touch-action:pan-y!important;
+    -webkit-overflow-scrolling:touch;
+    border:1px solid var(--ra-border-strong)!important;
+    border-bottom:0!important;
+    border-radius:18px 18px 0 0!important;
+    background:var(--ra-surface)!important;
+    box-shadow:0 -18px 50px rgba(0,0,0,.26)!important;
+    transform:translateY(110%)!important;
+    visibility:hidden!important;
+    transition:transform 260ms var(--ra-ease-standard),visibility 260ms!important;
+  }
+  .ra-lab-console.is-mobile-open{
+    transform:translateY(0)!important;
+    visibility:visible!important;
+  }
+  .ra-mobile-sheet-backdrop{
+    position:fixed!important;
+    z-index:110!important;
+    inset:0!important;
+    display:block!important;
+    background:rgba(0,0,0,.48)!important;
+    backdrop-filter:blur(2px);
+  }
+  .ra-mobile-sheet-backdrop[hidden]{
+    display:none!important;
+  }
+
+  #raRunScenario{
+    width:100%!important;
+    min-width:100%!important;
+    max-width:none!important;
+    min-height:58px!important;
+    padding:10px 16px!important;
+    justify-content:space-between!important;
+  }
+  #raRunScenario>span{
+    flex:1 1 auto!important;
+    white-space:normal!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    line-height:1.15!important;
+    text-align:left!important;
+  }
+
+  #lab.is-scenario-running .ra-lab-console{
+    transform:translateY(110%)!important;
+    visibility:hidden!important;
+  }
+  #lab.is-scenario-running .ra-lab-workspace{
+    width:100%!important;
+  }
+  #lab.is-scenario-running .ra-scenario-playback{
+    z-index:30!important;
+    pointer-events:none!important;
+  }
+
+  .ra-earth-packet{
+    opacity:.66!important;
+  }
+  .ra-request-packet.is-visible{
+    opacity:.82!important;
+  }
+  .ra-recovery-packet.is-visible{
+    opacity:.84!important;
+  }
+}
+
+@media (pointer:coarse) and (orientation:landscape) and (max-height:720px){
+  #simulation .ra-earth-mount,
+  #raLabEarthMount{
+    min-height:calc(100svh - 92px)!important;
+  }
+  body.ra-guided-running #raEarthMount{
+    min-height:calc(100svh - 80px)!important;
+  }
+  .ra-guided-hud{
+    margin-top:-88px!important;
+  }
+}

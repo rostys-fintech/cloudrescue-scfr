@@ -9,11 +9,13 @@ const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'ut
 assert.equal(index,html);
 assert.match(html,/id="raHudPause"/);
 assert.match(html,/id="raHudStop"/);
-assert.match(html,/20260927-neural01/);
+assert.match(html,/20260927-touchdeep01/);
 
 assert.match(js,/function focusAnimationStage\(/);
-assert.match(js,/window\.scrollTo\(\{/);
-assert.match(js,/headerOffset=68/);
+assert.match(js,/scrollIntoView\(\{block:'start',behavior:'auto'\}\)/);
+assert.match(js,/function isCompactTouchLayout\(/);
+assert.match(js,/pointer: coarse/);
+assert.match(js,/window\.innerWidth<=960/);
 assert.match(js,/focusAnimationStage\(\$\('#raEarthMount'\)\)/);
 assert.match(js,/focusAnimationStage\(\$\('#raLabEarthMount'\)\)/);
 assert.match(js,/\$\('#raHudPause'\)\?\.addEventListener/);
@@ -26,5 +28,8 @@ assert.match(css,/\.ra-sim-controls>#raRunPreview/);
 assert.match(css,/min-height:56px!important/);
 assert.match(css,/white-space:normal!important/);
 assert.match(css,/body\.ra-guided-running \.ra-guided-actions/);
+assert.match(css,/TOUCH \/ LANDSCAPE PHONE FIX/);
+assert.match(css,/@media\(max-width:1180px\)/);
+assert.match(css,/pointer:coarse/);
 
 console.log('Mobile run-focus checks passed.');

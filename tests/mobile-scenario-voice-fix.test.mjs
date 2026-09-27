@@ -27,7 +27,8 @@ assert.match(js,/finally\{[\s\S]*?setLabRunActive\(false\)/);
 assert.match(js,/requestAnimationFrame\(\(\)=>window\.requestAnimationFrame/);
 assert.match(js,/function focusAnimationStage\(/);
 assert.match(js,/focusAnimationStage\(\$\('#raLabEarthMount'\)\)/);
-assert.match(js,/window\.scrollTo\(/);
+assert.match(js,/scrollIntoView\(/);
+assert.match(js,/function isCompactTouchLayout\(/);
 assert.match(js,/Math\.max\(620,Math\.round\(ms\*\.5\)\)/);
 
 assert.match(js,/const GUIDED_AUDIO_TRACKS = \[/);
@@ -50,5 +51,7 @@ assert.match(css,/NEURAL VOICEOVER \+ ROBUST MOBILE CONTROL STACK/);
 assert.match(css,/\.ra-sim-secondary/);
 assert.match(css,/\.ra-sim-controls>#raRunPreview/);
 assert.match(css,/#raRunScenario/);
+assert.match(css,/TOUCH \/ LANDSCAPE PHONE FIX/);
+assert.match(css,/max-width:1180px/);
 
 console.log('Mobile scenario interaction and male narration checks passed.');

@@ -9,12 +9,12 @@ const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'ut
 assert.equal(index,html,'default entrypoint should stay synced');
 assert.match(html,/preconnect" href="https:\/\/resource2\.heygen\.ai"/);
 assert.match(html,/class="ra-sim-secondary"/);
-assert.match(html,/20260927-neural01/);
+assert.match(html,/20260927-touchdeep01/);
 
 assert.match(js,/const GUIDED_AUDIO_TRACKS = \[/);
 assert.equal((js.match(/resource2\.heygen\.ai\/text_to_speech/g)||[]).length,6);
-assert.match(js,/durationMs:18965/);
-assert.match(js,/durationMs:23876/);
+assert.match(js,/durationMs:17842/);
+assert.match(js,/durationMs:24137/);
 assert.match(js,/const guidedAudio = new Audio\(\)/);
 assert.match(js,/guidedAudio\.preload='auto'/);
 assert.match(js,/guidedAudio\.setAttribute\('playsinline',''\)/);
@@ -24,7 +24,7 @@ assert.match(js,/guidedAudio\.addEventListener\('ended'/);
 assert.match(js,/guidedAudio\.addEventListener\('error'/);
 assert.match(js,/guidedAudio\.play\(\)/);
 assert.match(js,/guidedAudio\.pause\(\)/);
-assert.match(js,/HeyGen neural narrator · Orson — Firm & Measured/);
+assert.match(js,/HeyGen neural narrator · Viktor — Serious & Composed/);
 assert.doesNotMatch(js,/speechSynthesis/);
 assert.doesNotMatch(js,/SpeechSynthesisUtterance/);
 assert.doesNotMatch(js,/maleVoiceScore/);
