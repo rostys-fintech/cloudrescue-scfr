@@ -1462,3 +1462,72 @@ html[data-theme="dark"] .queue-label.pulse{background:#321d23}
 @keyframes compareCardIn{
   to{opacity:1;transform:none}
 }
+
+
+/* Six-stage story journey */
+.dots{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:5px;
+  margin-top:12px;
+}
+.dots button{
+  width:auto;height:auto;
+  min-height:34px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--surface);
+  padding:5px 4px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  color:#8a99a8;
+  transition:.18s;
+}
+.dots button span{
+  width:15px;height:15px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:#edf2f6;
+  color:#788a9a;
+  font-size:6px;
+  font-weight:900;
+}
+.dots button b{
+  font-size:6.5px;
+  line-height:1;
+  font-weight:850;
+  white-space:nowrap;
+}
+.dots button.active{
+  background:var(--blue-soft);
+  border-color:#a9bffc;
+  box-shadow:none;
+  color:#315dba;
+}
+.dots button.active span{
+  background:var(--blue);
+  color:#fff;
+}
+.dots button:hover{border-color:#aebdcb}
+html[data-theme="dark"] .dots button{
+  background:#111c27;
+  border-color:#293b4d;
+  color:#8192a3;
+}
+html[data-theme="dark"] .dots button span{
+  background:#223140;color:#a4b4c3
+}
+html[data-theme="dark"] .dots button.active{
+  background:#182843;
+  border-color:#4e6fa8;
+  color:#c1d0ff;
+}
+html[data-theme="dark"] .dots button.active span{
+  background:#5c83ef;color:#fff
+}
+@media(max-width:720px){
+  .dots{grid-template-columns:repeat(3,1fr)}
+}
