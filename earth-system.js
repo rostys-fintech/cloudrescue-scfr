@@ -263,6 +263,7 @@ export function createEarthSystem(mount,options){
   let previousSignature='';
   let rafId=0;
   let destroyed=false;
+  let motionPaused=false;
   const reduceMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)') || null;
 
   function packetTrack(packet){
@@ -318,7 +319,7 @@ export function createEarthSystem(mount,options){
     }
 
     const visible=mount.getClientRects().length>0;
-    if(!visible){
+    if(!visible || motionPaused){
       rafId=window.requestAnimationFrame(animatePackets);
       return;
     }
@@ -490,6 +491,11 @@ export function createEarthSystem(mount,options){
     refreshPacketGeometry();
   }
 
+  function setPaused(paused){
+    motionPaused=!!paused;
+    mount.dataset.motionPaused=motionPaused ? 'true' : 'false';
+  }
+
   function destroy(){
     destroyed=true;
     if(rafId) window.cancelAnimationFrame(rafId);
@@ -498,5 +504,5 @@ export function createEarthSystem(mount,options){
   }
 
   update();
-  return {update:update,destroy:destroy};
+  return {update:update,setPaused:setPaused,destroy:destroy};
 }
