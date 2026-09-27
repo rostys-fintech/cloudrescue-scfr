@@ -7,16 +7,17 @@
   <meta name="color-scheme" content="dark light">
   <title>Resilience Atlas — Systemic Cloud Resilience Lab</title>
   <meta name="theme-color" content="#070A0F">
-  <link rel="icon" href="resilience-atlas-mark.svg?v=20260927-earth02" type="image/svg+xml">\n  <link rel="mask-icon" href="resilience-atlas-mark.svg?v=20260927-earth02" color="#246FBF">
+  <link rel="icon" href="resilience-atlas-mark.svg?v=20260927-polish01" type="image/svg+xml">
+  <link rel="mask-icon" href="resilience-atlas-mark.svg?v=20260927-polish01" color="#246FBF">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-earth02">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-polish01">
 </head>
 <body>
   <div class="ra-app">
     <header class="ra-header">
       <a class="ra-brand" href="#simulation" aria-label="Resilience Atlas home">
         <span class="ra-brand-mark" aria-hidden="true">
-          <img class="ra-brand-icon" src="resilience-atlas-mark.svg?v=20260927-earth02" alt="">
+          <img class="ra-brand-icon" src="resilience-atlas-mark.svg?v=20260927-polish01" alt="">
         </span>
         <span class="ra-brand-copy">
           <strong>Resilience <em>Atlas</em></strong>
@@ -24,10 +25,10 @@
         </span>
       </a>
 
-      <nav class="ra-nav" aria-label="Resilience Atlas modes">
-        <button class="ra-nav-tab is-active" data-ra-tab="simulation">Simulation</button>
-        <button class="ra-nav-tab" data-ra-tab="lab">Scenario Lab</button>
-        <button class="ra-nav-tab" data-ra-tab="evidence">Model &amp; Evidence</button>
+      <nav class="ra-nav" aria-label="Resilience Atlas modes" role="tablist">
+        <button class="ra-nav-tab is-active" data-ra-tab="simulation" role="tab" aria-selected="true" aria-controls="simulation">Simulation</button>
+        <button class="ra-nav-tab" data-ra-tab="lab" role="tab" aria-selected="false" aria-controls="lab">Scenario Lab</button>
+        <button class="ra-nav-tab" data-ra-tab="evidence" role="tab" aria-selected="false" aria-controls="evidence">Model &amp; Evidence</button>
       </nav>
 
       <div class="ra-header-actions">
@@ -660,6 +661,6 @@
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-earth02"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-polish01"></script>
 </body>
 </html>

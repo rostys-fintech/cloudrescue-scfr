@@ -97,6 +97,8 @@ function buildSvg(mode){
   const idSuffix=String(mode||'system').replace(/[^a-z0-9_-]/gi,'-');
   const oceanGradientId='raOceanGlow-'+idSuffix;
   const sphereLightId='raSphereLight-'+idSuffix;
+  const nightGradientId='raNightShade-'+idSuffix;
+  const glossGradientId='raOceanGloss-'+idSuffix;
   const globeClipId='raGlobeClip-'+idSuffix;
   const providerLinks=banks.map(function(bank,index){
     const pos=BANK_POSITIONS[bank.id];
@@ -178,10 +180,21 @@ function buildSvg(mode){
         '<stop offset="73%" stop-color="var(--ra-earth-ocean)"></stop>'+
         '<stop offset="100%" stop-color="var(--ra-earth-rim)"></stop>'+
       '</radialGradient>'+
-      '<radialGradient id="'+sphereLightId+'" cx="34%" cy="27%" r="72%">'+
-        '<stop offset="0%" stop-color="#ffffff" stop-opacity=".12"></stop>'+
-        '<stop offset="48%" stop-color="#ffffff" stop-opacity=".025"></stop>'+
-        '<stop offset="100%" stop-color="#000000" stop-opacity=".13"></stop>'+
+      '<radialGradient id="'+sphereLightId+'" cx="31%" cy="24%" r="76%">'+
+        '<stop offset="0%" stop-color="#ffffff" stop-opacity=".16"></stop>'+
+        '<stop offset="42%" stop-color="#ffffff" stop-opacity=".035"></stop>'+
+        '<stop offset="100%" stop-color="#000000" stop-opacity=".14"></stop>'+
+      '</radialGradient>'+
+      '<linearGradient id="'+nightGradientId+'" x1="0%" y1="0%" x2="100%" y2="0%">'+
+        '<stop offset="0%" stop-color="#000000" stop-opacity="0"></stop>'+
+        '<stop offset="54%" stop-color="#000000" stop-opacity=".035"></stop>'+
+        '<stop offset="78%" stop-color="#000000" stop-opacity=".16"></stop>'+
+        '<stop offset="100%" stop-color="#000000" stop-opacity=".42"></stop>'+
+      '</linearGradient>'+
+      '<radialGradient id="'+glossGradientId+'" cx="34%" cy="24%" r="48%">'+
+        '<stop offset="0%" stop-color="#ffffff" stop-opacity=".14"></stop>'+
+        '<stop offset="54%" stop-color="#ffffff" stop-opacity=".028"></stop>'+
+        '<stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>'+
       '</radialGradient>'+
       '<clipPath id="'+globeClipId+'"><circle cx="500" cy="310" r="252"></circle></clipPath>'+
     '</defs>'+
@@ -197,6 +210,8 @@ function buildSvg(mode){
         '<path d="M248 310H752"></path>'+
       '</g>'+
       '<g class="ra-earth-land">'+lands+'</g>'+
+      '<circle class="ra-earth-gloss" cx="500" cy="310" r="252" fill="url(#'+glossGradientId+')"></circle>'+
+      '<circle class="ra-earth-night-shade" cx="500" cy="310" r="252" fill="url(#'+nightGradientId+')"></circle>'+
       '<circle class="ra-earth-sphere-light" cx="500" cy="310" r="252" fill="url(#'+sphereLightId+')"></circle>'+
       '<g class="ra-earth-network">'+providerLinks+'</g>'+
       '<g class="ra-earth-packets">'+dataPackets+'</g>'+
