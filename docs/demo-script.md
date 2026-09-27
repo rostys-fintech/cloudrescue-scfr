@@ -24,7 +24,7 @@ Then:
 
 > The real-world motivation is third-party ICT concentration risk. The numbers in this prototype are deliberately synthetic.
 
-Click **Watch guided demo**.
+Click **Run guided replay**.
 
 ---
 
@@ -80,7 +80,7 @@ Say:
 
 > Every set of assumptions gets a reproducible Scenario ID.
 
-Click **Replay this crisis**.
+Click **Replay scenario**.
 
 Let one or two scenes run, then stop.
 
@@ -94,7 +94,7 @@ Return to **Stress Lab**.
 
 ## 2:15–2:45 — Show the central experimental result
 
-Scroll to **Before / After**.
+Scroll to **Controlled Comparison**.
 
 Say:
 
@@ -145,11 +145,11 @@ Say:
 
 Click **Copy scenario link**.
 
-Then show **Challenge Mode** briefly.
+Then show **Constraint Tests** briefly.
 
 Say:
 
-> Challenge Mode turns the stress lab into an experiment: can I achieve resilience under explicit resource constraints?
+> Constraint Tests turn the stress lab into an experiment: can I achieve resilience under explicit resource constraints?
 
 No need to solve every challenge in the video.
 
@@ -175,7 +175,7 @@ Say:
 
 ## 3:55–4:15 — Learning & Growth close
 
-Show **Build Journey · FirstCommit**.
+Show **Development Journey · FirstCommit**.
 
 Say:
 
@@ -188,13 +188,13 @@ Final line:
 End on either:
 
 - the CloudRescue landing page, or
-- the Before / After comparison.
+- the Controlled Comparison screen.
 
 ---
 
 # Recording guidance
 
-Use **dark theme** if it looks cleaner on your monitor.
+Use the **default light application theme** unless the full dark theme looks clearly better on the recording machine. The hero, live-system canvas, control rail and Controlled Comparison are already dark by design.
 
 Before recording:
 
