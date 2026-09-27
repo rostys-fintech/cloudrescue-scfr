@@ -2,7 +2,7 @@
 
 Updated: 27 Sep 2026
 
-**Current release candidate:** `submission-freeze-clean-final-2026-09-27` @ `5805435`
+**Current visual candidate:** `design-cyber-dual-theme-2026-09-27` @ `8a6c935`
 
 FirstCommit deadline: **30 Sep 2026, 5:00 PM EDT**
 For Germany on that date: **23:00 CEST**.
@@ -10,7 +10,7 @@ For Germany on that date: **23:00 CEST**.
 ## Product
 
 - [x] Working public web prototype
-- [x] Institutional v2 clean redesign
+- [x] Dual CRISIS / ANALYSIS cyber redesign
 - [x] Guided Crisis Replay
 - [x] Automatic preferred narrator + narration toggle
 - [x] Dark live-system monitoring canvas
