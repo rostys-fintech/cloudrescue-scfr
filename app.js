@@ -15,9 +15,8 @@ const scenes = [
     stat:'Real concentration risk · synthetic 20-bank illustration',
     kicker:'REAL-WORLD MOTIVATION',
     caption:'A common provider can become a common point of operational stress.',
-    voice:'Financial institutions increasingly depend on a limited set of critical technology and cloud providers. CloudRescue models that real concentration risk with a transparent synthetic banking network.',
-    duration:5200,
-    cue:'normal'
+    voice:'This risk is real. Financial institutions increasingly rely on a limited set of critical technology and cloud providers. CloudRescue turns that concentration risk into a transparent stress test.',
+    rate:.94,pitch:.91,duration:6500,cue:'normal'
   },
   {
     title:'One shared provider fails',
@@ -25,9 +24,8 @@ const scenes = [
     stat:'8 banks affected at the same time',
     kicker:'COMMON SHOCK',
     caption:'Blue Cloud fails. 8 banks are disrupted at once.',
-    voice:'Now one shared provider fails, and eight banks are disrupted at the same time.',
-    duration:5200,
-    cue:'alert'
+    voice:'Now imagine one shared provider fails. Eight banks are hit at the same moment. What looked like a local outage becomes a system-wide recovery problem.',
+    rate:.89,pitch:.86,duration:6500,cue:'alert'
   },
   {
     title:'Everyone needs Plan B at once',
@@ -35,9 +33,8 @@ const scenes = [
     stat:'Emergency demand exceeds immediate supply',
     kicker:'CAPACITY SCRAMBLE',
     caption:'608 units demanded. Only 122 are immediately available.',
-    voice:'All affected banks now need backup capacity. Demand reaches six hundred eight units, but only one hundred twenty two are immediately available.',
-    duration:6000,
-    cue:'shortage'
+    voice:'Every affected bank reaches for Plan B. But they all need backup capacity at once. Demand is six hundred eight units. Only one hundred twenty two are available immediately.',
+    rate:.90,pitch:.87,duration:7000,cue:'shortage'
   },
   {
     title:'Individual reserves can still fragment',
@@ -45,9 +42,8 @@ const scenes = [
     stat:'Same reserve budget · ring-fenced allocation',
     kicker:'FRAGMENTED RESERVES',
     caption:'Some reserve exists — but it is locked in the wrong places.',
-    voice:'Individual reserves help, but capacity stays ring fenced. Some reserve remains unused while affected banks still face shortages.',
-    duration:6000,
-    cue:'fragment'
+    voice:'Individual reserves help, but there is a catch. Capacity is locked bank by bank. Two hundred fifty seven units remain stranded while affected banks still face shortages.',
+    rate:.90,pitch:.88,duration:7000,cue:'fragment'
   },
   {
     title:'SCFR pools the reserve before the crisis',
@@ -55,9 +51,8 @@ const scenes = [
     stat:'Same reserve · different allocation mechanism',
     kicker:'COORDINATED RECOVERY',
     caption:'SCFR redirects the same reserve budget to where it is needed.',
-    voice:'SCFR does not create a bigger reserve. It pools the same reserve budget and reallocates capacity to the affected banks that need it.',
-    duration:6200,
-    cue:'recovery'
+    voice:'SCFR changes one thing: coordination. The same reserve budget is pooled before the crisis, then redirected to the affected banks that need it most.',
+    rate:.94,pitch:.91,duration:6500,cue:'recovery'
   },
   {
     title:'Now test the system yourself',
@@ -65,9 +60,8 @@ const scenes = [
     stat:'Animated story → interactive research prototype',
     kicker:'RESULT',
     caption:'Same shock. Same reserve budget. Different coordination.',
-    voice:'In this illustrative scenario, coordinated pooling restores more critical workload with the same total reserve budget. Now test the assumptions yourself.',
-    duration:6000,
-    cue:'result'
+    voice:'The model is illustrative, not a forecast. But the mechanism is clear. Same shock. Same reserve budget. Different coordination. Now test the assumptions yourself.',
+    rate:.93,pitch:.91,duration:6500,cue:'result'
   }
 ];
 
@@ -99,25 +93,67 @@ function setupTheme(){
   sync();
 }
 
-function getEnglishVoice(){
-  if(!('speechSynthesis' in window)) return null;
-  const voices = window.speechSynthesis.getVoices();
+function englishVoices(){
+  if(!('speechSynthesis' in window)) return [];
+  return window.speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+}
+
+function preferredNarrator(voices=englishVoices()){
+  const saved = localStorage.getItem('cloudrescue-narrator');
+  if(saved){
+    const exact=voices.find(v=>v.name===saved);
+    if(exact) return exact;
+  }
+
+  const preferences = [
+    /Google UK English Male/i,
+    /^Daniel$/i,
+    /^Alex$/i,
+    /^Aaron$/i,
+    /Microsoft.*(Guy|Andrew|Ryan|Brian|Christopher|Eric)/i,
+    /English.*Male/i
+  ];
+  for(const pattern of preferences){
+    const match=voices.find(v=>pattern.test(v.name));
+    if(match) return match;
+  }
   return voices.find(v=>/^en-GB/i.test(v.lang)) ||
          voices.find(v=>/^en-US/i.test(v.lang)) ||
-         voices.find(v=>/^en/i.test(v.lang)) ||
-         null;
+         voices[0] || null;
+}
+
+function populateNarratorVoices(){
+  const select=$('#voiceSelect');
+  if(!select || !('speechSynthesis' in window)) return;
+
+  const voices=englishVoices();
+  const preferred=preferredNarrator(voices);
+  select.innerHTML=voices.map(v=>`<option value="${v.name}">${v.name} · ${v.lang}</option>`).join('');
+  if(preferred) select.value=preferred.name;
+
+  select.addEventListener('change',()=>{
+    localStorage.setItem('cloudrescue-narrator',select.value);
+    if(autoplay && narrationEnabled) speakScene();
+  });
+}
+
+function getEnglishVoice(){
+  const voices=englishVoices();
+  const selected=$('#voiceSelect')?.value;
+  return voices.find(v=>v.name===selected) || preferredNarrator(voices);
 }
 
 function speakScene(){
   if(!narrationEnabled || !('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(scenes[scene].voice);
+  const current=scenes[scene];
+  const utterance = new SpeechSynthesisUtterance(current.voice);
   const voice = getEnglishVoice();
   if(voice) utterance.voice = voice;
-  utterance.lang = voice?.lang || 'en-US';
-  utterance.rate = 1.01;
-  utterance.pitch = 1;
-  utterance.volume = .88;
+  utterance.lang = voice?.lang || 'en-GB';
+  utterance.rate = current.rate || .93;
+  utterance.pitch = current.pitch || .9;
+  utterance.volume = .95;
   window.speechSynthesis.speak(utterance);
 }
 
@@ -659,6 +695,11 @@ $('#exportBtn').addEventListener('click',exportScenario);
 
 renderNetwork();
 setupTheme();
+populateNarratorVoices();
+if('speechSynthesis' in window){
+  window.speechSynthesis.addEventListener?.('voiceschanged',populateNarratorVoices);
+  window.speechSynthesis.onvoiceschanged = populateNarratorVoices;
+}
 setupStory();
 renderLab();
 requestAnimationFrame(drawNetworkLines);
