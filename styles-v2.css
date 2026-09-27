@@ -2345,3 +2345,74 @@ html[data-theme="dark"] .stage-wrap{
   background:#091924!important;
   border-color:#213b4e!important;
 }
+
+
+/* ---------- Research-chart treatment ---------- */
+.chart svg{
+  overflow:visible;
+}
+.gridline{
+  stroke:#dfe5ea!important;
+  stroke-width:1!important;
+}
+html[data-theme="dark"] .gridline{
+  stroke:#273845!important;
+}
+.axis{
+  stroke:#9aabb9!important;
+  stroke-width:1!important;
+}
+.axis-label{
+  fill:#74889a!important;
+  font-size:9px!important;
+  font-variant-numeric:tabular-nums;
+}
+.legend{
+  font-size:9px!important;
+  font-weight:750;
+}
+.frontier-current{
+  stroke:#95a6b4;
+  stroke-width:1;
+  stroke-dasharray:4 5;
+  opacity:.7;
+}
+.frontier-current-label{
+  fill:#6f8293;
+  font-size:8px;
+  font-weight:700;
+}
+.frontier-point{
+  filter:none!important;
+}
+.heat-cell{
+  background:rgba(45,121,91,var(--heat));
+  border-color:rgba(35,97,75,.14);
+}
+.heat-cell b{
+  color:#173f33;
+  font-variant-numeric:tabular-nums;
+}
+html[data-theme="dark"] .heat-cell b{
+  color:#e0eee8;
+}
+.heat-cell.current{
+  outline:2px solid #315f87;
+  outline-offset:1px;
+}
+.heat-legend i:nth-of-type(1){background:rgba(45,121,91,.10)}
+.heat-legend i:nth-of-type(2){background:rgba(45,121,91,.24)}
+.heat-legend i:nth-of-type(3){background:rgba(45,121,91,.42)}
+.heat-legend i:nth-of-type(4){background:rgba(45,121,91,.62)}
+.heat-legend i:nth-of-type(5){background:rgba(45,121,91,.84)}
+
+.score,
+.insight-metrics strong,
+.mechanism-score b,
+.mechanism-foot b,
+.comparison-context b,
+.hero-cloud b,
+.hud-metric b,
+.stage-hud b{
+  font-variant-numeric:tabular-nums;
+}
