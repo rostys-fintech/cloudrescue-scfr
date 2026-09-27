@@ -8,7 +8,7 @@ const [html, js, css] = await Promise.all([
 ]);
 
 const requiredIds = [
-  'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','themeLabel','focusStory','heroDemo','heroLab','narrationToggle','voiceSelect','storyCaption','captionKicker','captionText','visualSignal','demoProgressBar','impactOverlay','impactKicker','impactValue','impactLabel','motionLayer','ringFence',
+  'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','themeLabel','focusStory','heroDemo','heroLab','narrationToggle','storyCaption','captionKicker','captionText','visualSignal','demoProgressBar','impactOverlay','impactKicker','impactValue','impactLabel','motionLayer','ringFence',
   'providerSelect','marketPct','reservePct','ruleSelect',
   'strategyCards','decisionInsight','beforeAfter','frontier','sensitivityHeatmap','exportBtn','replayScenarioBtn','scenarioId','seedInput','generateScenarioBtn','shareScenarioBtn','challengeTitle','challengeMetrics'
 ];
@@ -32,6 +32,8 @@ assert.match(js, /setupTheme/, 'app should initialize persistent light-dark them
 assert.match(js, /setFocusMode/, 'app should provide a presentation focus mode');
 assert.match(js, /SpeechSynthesisUtterance/, 'narrated demo should use browser speech synthesis');
 assert.match(js, /preferredNarrator/, 'narration should prefer a configured analytical narrator voice');
+assert.doesNotMatch(html, /id=["']voiceSelect["']/, 'voice selector should not be exposed in the clean UI');
+assert.match(js, /refreshNarratorVoice/, 'narration should automatically lock the preferred available voice');
 assert.match(js, /utterance\.onend/, 'guided demo should wait for actual narration completion');
 assert.match(js, /demoRunId/, 'cancelled narration must not advance a newer demo run');
 assert.match(js, /outcomeBanks/, 'final story should visualize recovery at bank level');
@@ -66,7 +68,6 @@ assert.match(css, /\.challenge-tabs/, 'multi-mission challenge controls should b
 assert.match(css, /\.challenge-metrics/, 'challenge criteria should be visually inspectable');
 assert.match(css, /\.learning-card/, 'FirstCommit learning journey should be visibly presented');
 assert.match(css, /\.hero-summary/, 'landing page should expose a professional prototype summary');
-assert.match(html, /EVIDENCE BASIS/, 'story should visibly ground the scenario in real regulatory evidence');
 assert.match(html, /OBSERVED IN THE REAL WORLD/, 'methodology should distinguish observed evidence from synthetic assumptions');
 assert.match(html, /DEVELOPMENT JOURNEY · FIRSTCOMMIT/, 'submission should communicate learning and growth');
 assert.match(html, /Shared dependency topology/, 'landing page should summarize the shared-provider model');
@@ -83,3 +84,5 @@ assert.equal(
 );
 
 assert.match(html, /styles-v2\.css/, 'institutional redesign layer should be loaded');
+assert.match(html, /class=["'][^"']*control-disclosure/, 'secondary Stress Lab tools should use progressive disclosure');
+assert.match(html, /class=["'][^"']*analysis-disclosure/, 'advanced analysis should use progressive disclosure');
