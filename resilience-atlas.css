@@ -6332,3 +6332,223 @@ body.ra-guided-running #simulation #raEarthMount{
     animation-iteration-count:1!important;
   }
 }
+
+
+/* =========================================================
+   STORYBOARD STAGE 2 — SCENE 02 PROVIDER FAILURE MASTER
+   Narration drives every failure beat through word-level cues.
+   ========================================================= */
+
+#raEarthMount.ra-sync-s2-stable{
+  --ra-sync-accent:var(--ra-primary);
+}
+#raEarthMount.ra-sync-s2-stable .ra-earth-provider,
+#raEarthMount.ra-sync-s2-stable .ra-earth-bank,
+#raEarthMount.ra-sync-s2-stable .ra-earth-link,
+#raEarthMount.ra-sync-s2-stable .ra-earth-packet{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s2-stable .ra-earth-link{
+  opacity:.34!important;
+}
+#raEarthMount.ra-sync-s2-stable .ra-earth-packet{
+  opacity:.9!important;
+}
+
+#raEarthMount.ra-sync-s2-target .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s2-target .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s2-target .ra-earth-link:not(.provider-blue),
+#raEarthMount.ra-sync-s2-target .ra-earth-packet:not(.provider-blue){
+  opacity:.14!important;
+}
+#raEarthMount.ra-sync-s2-target .ra-earth-provider.provider-blue,
+#raEarthMount.ra-sync-s2-target .ra-earth-bank[data-provider="blue"],
+#raEarthMount.ra-sync-s2-target .ra-earth-link.provider-blue,
+#raEarthMount.ra-sync-s2-target .ra-earth-packet.provider-blue{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s2-target .ra-earth-provider.provider-blue .ra-provider-halo{
+  stroke:var(--ra-warning)!important;
+  stroke-width:2.4!important;
+  animation:raStage2Target 1.1s ease-in-out infinite;
+}
+
+#raEarthMount.ra-sync-s2-fail{
+  --ra-sync-accent:var(--ra-danger,#ff3d4f);
+}
+#raEarthMount.ra-sync-s2-fail .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s2-fail .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s2-fail .ra-earth-link:not(.provider-blue){
+  opacity:.18!important;
+}
+#raEarthMount.ra-sync-s2-fail .ra-earth-provider.provider-blue{
+  opacity:1!important;
+  animation:raStage2ProviderDrop .78s var(--ra-ease-emphasis) both;
+}
+#raEarthMount.ra-sync-s2-fail .ra-earth-provider.provider-blue .ra-provider-halo,
+#raEarthMount.ra-sync-s2-fail .ra-earth-provider.provider-blue .ra-provider-core,
+#raEarthMount.ra-sync-s2-fail .ra-earth-provider.provider-blue .ra-provider-cloud{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  fill:color-mix(in srgb,var(--ra-danger,#ff3d4f) 26%,transparent)!important;
+}
+#raEarthMount.ra-sync-s2-fail .ra-earth-link.provider-blue{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  stroke-width:2!important;
+  stroke-dasharray:.07 .035!important;
+  animation:raStage2LinkBreak .86s var(--ra-ease-emphasis) both;
+}
+#raEarthMount.ra-sync-s2-fail .ra-earth-packet.provider-blue{
+  opacity:0!important;
+}
+#raEarthMount.ra-sync-s2-fail::after{
+  content:"";
+  position:absolute;
+  z-index:5;
+  left:35.2%;
+  top:33.1%;
+  width:90px;
+  aspect-ratio:1;
+  border:1px solid color-mix(in srgb,var(--ra-danger,#ff3d4f) 72%,transparent);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  box-shadow:0 0 34px color-mix(in srgb,var(--ra-danger,#ff3d4f) 24%,transparent);
+  animation:raStage2Shockwave 1.05s var(--ra-ease-emphasis) both;
+  pointer-events:none;
+}
+
+#raEarthMount.ra-sync-s2-affected .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s2-affected .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s2-affected .ra-earth-link:not(.provider-blue){
+  opacity:.12!important;
+}
+#raEarthMount.ra-sync-s2-affected .ra-earth-provider.provider-blue{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s2-affected .ra-earth-bank[data-provider="blue"]{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s2-affected .ra-earth-bank[data-provider="blue"] .ra-bank-halo{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  stroke-width:1.8!important;
+  opacity:1!important;
+  animation:raStage2AffectedBanks 1s ease-in-out infinite;
+}
+#raEarthMount.ra-sync-s2-affected .ra-earth-link.provider-blue{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  opacity:.34!important;
+}
+
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-link:not(.provider-blue){
+  opacity:.08!important;
+}
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-provider.provider-blue,
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-bank[data-provider="blue"]{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-link.provider-blue{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  opacity:.12!important;
+  stroke-dasharray:.035 .055!important;
+}
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-packet.provider-blue{
+  opacity:0!important;
+}
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-bank[data-provider="blue"] .ra-bank-node{
+  fill:var(--ra-danger,#ff3d4f)!important;
+  filter:drop-shadow(0 0 5px color-mix(in srgb,var(--ra-danger,#ff3d4f) 72%,transparent));
+}
+
+#raEarthMount.ra-sync-s2-shared .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s2-shared .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s2-shared .ra-earth-link:not(.provider-blue){
+  opacity:.1!important;
+}
+#raEarthMount.ra-sync-s2-shared .ra-earth-provider.provider-blue,
+#raEarthMount.ra-sync-s2-shared .ra-earth-bank[data-provider="blue"]{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s2-shared .ra-earth-bank[data-provider="blue"]{
+  animation:raStage2SharedShock 1.15s ease-in-out infinite;
+}
+#raEarthMount.ra-sync-s2-shared .ra-earth-bank[data-provider="blue"] .ra-bank-halo{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  opacity:.95!important;
+}
+#raEarthMount.ra-sync-s2-shared .ra-earth-provider.provider-blue .ra-provider-halo{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  animation:raStage2SharedShock 1.15s ease-in-out infinite;
+}
+
+#raEarthMount.ra-sync-s2-systemic{
+  --ra-sync-accent:var(--ra-danger,#ff3d4f);
+}
+#raEarthMount.ra-sync-s2-systemic .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s2-systemic .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s2-systemic .ra-earth-link:not(.provider-blue){
+  opacity:.2!important;
+}
+#raEarthMount.ra-sync-s2-systemic .ra-earth-provider.provider-blue,
+#raEarthMount.ra-sync-s2-systemic .ra-earth-bank[data-provider="blue"]{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s2-systemic .ra-earth-atmosphere{
+  stroke:color-mix(in srgb,var(--ra-danger,#ff3d4f) 70%,transparent)!important;
+  filter:drop-shadow(0 0 12px color-mix(in srgb,var(--ra-danger,#ff3d4f) 32%,transparent));
+  animation:raStage2SystemicRing 1.4s ease-in-out infinite;
+}
+#raEarthMount.ra-sync-s2-systemic .ra-earth-bank[data-provider="blue"] .ra-bank-halo,
+#raEarthMount.ra-sync-s2-systemic .ra-earth-provider.provider-blue .ra-provider-halo{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s2-systemic .ra-earth-link.provider-blue{
+  stroke:var(--ra-danger,#ff3d4f)!important;
+  opacity:.3!important;
+}
+
+@keyframes raStage2Target{
+  0%,100%{opacity:.48;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.14)}
+}
+@keyframes raStage2ProviderDrop{
+  0%{opacity:1;filter:none}
+  38%{opacity:.3;filter:brightness(2.1)}
+  54%{opacity:1;filter:brightness(.65)}
+  72%{opacity:.34}
+  100%{opacity:1;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--ra-danger,#ff3d4f) 65%,transparent))}
+}
+@keyframes raStage2LinkBreak{
+  from{opacity:.85;stroke-dashoffset:0}
+  to{opacity:.16;stroke-dashoffset:1}
+}
+@keyframes raStage2Shockwave{
+  0%{opacity:.95;transform:translate(-50%,-50%) scale(.38)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(2.5)}
+}
+@keyframes raStage2AffectedBanks{
+  0%,100%{opacity:.48;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.22)}
+}
+@keyframes raStage2SharedShock{
+  0%,100%{opacity:.62}
+  50%{opacity:1}
+}
+@keyframes raStage2SystemicRing{
+  0%,100%{opacity:.44}
+  50%{opacity:1}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #raEarthMount.ra-sync-s2-target .ra-earth-provider.provider-blue .ra-provider-halo,
+  #raEarthMount.ra-sync-s2-fail .ra-earth-provider.provider-blue,
+  #raEarthMount.ra-sync-s2-fail::after,
+  #raEarthMount.ra-sync-s2-affected .ra-earth-bank[data-provider="blue"] .ra-bank-halo,
+  #raEarthMount.ra-sync-s2-shared .ra-earth-bank[data-provider="blue"],
+  #raEarthMount.ra-sync-s2-systemic .ra-earth-atmosphere{
+    animation-duration:.28s!important;
+    animation-iteration-count:1!important;
+  }
+}
