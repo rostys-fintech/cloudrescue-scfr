@@ -7526,3 +7526,112 @@ html[data-theme="analysis"] .globe-green{color:#18a978}
     animation:none!important;
   }
 }
+
+
+/* Approved header details */
+.brand-mark svg path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.55;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.command-gear{
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  margin-right:10px;
+  border:1px solid var(--v2-line);
+  color:var(--v2-ink-2);
+  font-size:23px;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+}
+.command-gear:after{
+  content:"";
+  width:6px;
+  height:6px;
+  position:absolute;
+  border-radius:50%;
+  background:var(--v2-primary);
+  opacity:.85;
+  box-shadow:0 0 9px var(--v2-primary);
+}
+.topbar-meta{position:relative}
+
+/* Approved scene-1 metrics block */
+.concept-scene-metrics{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--v2-line);
+  border-bottom:1px solid var(--v2-line);
+  margin:13px 0 11px;
+}
+.concept-scene-metrics>div{
+  display:grid;
+  grid-template-columns:auto auto 1fr;
+  align-items:center;
+  gap:8px;
+  padding:10px 9px;
+}
+.concept-scene-metrics>div:first-child{
+  border-right:1px solid var(--v2-line);
+}
+.concept-scene-metrics span{
+  color:var(--v2-primary);
+  font-size:19px;
+}
+.concept-scene-metrics b{
+  color:var(--v2-ink);
+  font-size:22px;
+  line-height:1;
+}
+.concept-scene-metrics small{
+  color:var(--v2-muted);
+  font-size:7.5px;
+  line-height:1.3;
+}
+.narrative[data-scene]:not([data-scene="1"]) .concept-scene-metrics{
+  display:none;
+}
+
+/* Stronger cinematic beat when provider failure starts */
+body.demo-playing .stage.scene-2 .provider[data-provider="blue"],
+body.demo-playing .stage.scene-2 .provider.offline{
+  animation:apProviderFailure .78s cubic-bezier(.2,.8,.2,1) both!important;
+}
+@keyframes apProviderFailure{
+  0%{filter:brightness(1);transform:scale(1)}
+  32%{filter:brightness(2.1) saturate(1.6);transform:scale(1.035)}
+  55%{filter:brightness(.38) saturate(.5);transform:scale(.99)}
+  100%{filter:brightness(.56) saturate(.65);transform:scale(1)}
+}
+body.demo-playing .stage.scene-2 .network-line[data-provider="blue"]{
+  stroke-dasharray:9 7!important;
+  animation:apCutLine 1.1s ease forwards!important;
+}
+@keyframes apCutLine{
+  0%{opacity:1;stroke-dashoffset:0}
+  45%{opacity:1;stroke-dashoffset:-30}
+  100%{opacity:.12;stroke-dashoffset:-75}
+}
+
+/* Motion tokens become brighter, like the approved neon concept */
+.motion-token.capacity,
+.motion-token.pooled{
+  box-shadow:0 0 9px currentColor,0 0 22px color-mix(in srgb,currentColor 42%,transparent)!important;
+}
+.motion-token.request{
+  box-shadow:0 0 8px var(--v2-danger)!important;
+}
+.shock-pulse{
+  filter:drop-shadow(0 0 12px var(--v2-danger));
+}
+
+/* Small-screen header refinement */
+@media(max-width:900px){
+  .command-gear{display:none}
+  .concept-scene-metrics{
+    grid-template-columns:1fr 1fr!important;
+  }
+}
