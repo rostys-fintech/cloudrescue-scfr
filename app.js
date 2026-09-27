@@ -730,7 +730,8 @@ function setupStory(){
     narrationBtn.disabled=true;
     narrationBtn.textContent='CC Captions only';
   }
-  $('#sceneDots').innerHTML = scenes.map((_,i)=>`<button data-scene="${i}" aria-label="Scene ${i+1}"></button>`).join('');
+  const stepLabels=['Risk','Outage','Shortage','Fragmentation','SCFR','Result'];
+  $('#sceneDots').innerHTML = scenes.map((_,i)=>`<button data-scene="${i}" aria-label="Scene ${i+1}: ${stepLabels[i]}"><span>${i+1}</span><b>${stepLabels[i]}</b></button>`).join('');
   $$('#sceneDots button').forEach(btn=>btn.addEventListener('click',()=>{
     scene=Number(btn.dataset.scene); stopAuto(); applyScene();
   }));
