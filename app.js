@@ -212,6 +212,23 @@ function renderFrontier(args){
   </svg>`;
 }
 
+const PRESETS = {
+  baseline:{outageProvider:'blue',marketPct:20,reservePct:25,allocationRule:'systemic'},
+  scarcity:{outageProvider:'blue',marketPct:5,reservePct:30,allocationRule:'systemic'},
+  lean:{outageProvider:'orange',marketPct:15,reservePct:20,allocationRule:'systemic'}
+};
+
+function applyPreset(name){
+  const p = PRESETS[name];
+  if(!p) return;
+  $('#providerSelect').value=p.outageProvider;
+  $('#marketPct').value=p.marketPct;
+  $('#reservePct').value=p.reservePct;
+  $('#ruleSelect').value=p.allocationRule;
+  $('.preset').forEach(b=>b.classList.toggle('active',b.dataset.preset===name));
+  renderLab();
+}
+
 function currentArgs(){
   return {
     outageProvider:$('#providerSelect').value,
@@ -297,6 +314,7 @@ function renderLab(){
 ['providerSelect','marketPct','reservePct','ruleSelect'].forEach(id=>{
   $('#'+id).addEventListener('input',renderLab);
 });
+$('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.dataset.preset)));
 $('#runBtn').addEventListener('click',renderLab);
 $('#exportBtn').addEventListener('click',exportScenario);
 
