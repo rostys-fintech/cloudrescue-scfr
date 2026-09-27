@@ -12,32 +12,62 @@ const scenes = [
   {
     title:'Meet the system',
     text:'Twenty stylized banks rely on three synthetic cloud providers for critical workloads. Everything is operating normally.',
-    stat:'20 banks · 3 providers · normal operations'
+    stat:'20 banks · 3 providers · normal operations',
+    kicker:'NORMAL OPERATIONS',
+    caption:'20 banks depend on 3 shared cloud providers.',
+    voice:'This synthetic banking system has twenty banks using three shared cloud providers for critical workloads.',
+    duration:5200,
+    cue:'normal'
   },
   {
     title:'One shared provider fails',
     text:'A severe outage at Blue Cloud instantly affects every bank whose critical workloads depend on it. A local incident becomes a system-wide coordination problem.',
-    stat:'8 banks affected at the same time'
+    stat:'8 banks affected at the same time',
+    kicker:'COMMON SHOCK',
+    caption:'Blue Cloud fails. 8 banks are disrupted at once.',
+    voice:'Now one shared provider fails, and eight banks are disrupted at the same time.',
+    duration:5200,
+    cue:'alert'
   },
   {
     title:'Everyone needs Plan B at once',
     text:'Affected banks request emergency backup capacity simultaneously. Spot capacity exists, but aggregate demand is much larger than what can be sourced after the shock.',
-    stat:'Emergency demand exceeds immediate supply'
+    stat:'Emergency demand exceeds immediate supply',
+    kicker:'CAPACITY SCRAMBLE',
+    caption:'608 units demanded. Only 122 are immediately available.',
+    voice:'All affected banks now need backup capacity. Demand reaches six hundred eight units, but only one hundred twenty two are immediately available.',
+    duration:6000,
+    cue:'shortage'
   },
   {
     title:'Individual reserves can still fragment',
     text:'Each bank has its own reserve, but reserve belonging to unaffected banks cannot move. Capacity may sit unused while affected banks still face shortages.',
-    stat:'Same reserve budget · ring-fenced allocation'
+    stat:'Same reserve budget · ring-fenced allocation',
+    kicker:'FRAGMENTED RESERVES',
+    caption:'Some reserve exists — but it is locked in the wrong places.',
+    voice:'Individual reserves help, but capacity stays ring fenced. Some reserve remains unused while affected banks still face shortages.',
+    duration:6000,
+    cue:'fragment'
   },
   {
     title:'SCFR pools the reserve before the crisis',
     text:'The same total reserve is pooled and reallocated across affected banks using a transparent rule. The difference is coordination, not a larger reserve budget.',
-    stat:'Same reserve · different allocation mechanism'
+    stat:'Same reserve · different allocation mechanism',
+    kicker:'COORDINATED RECOVERY',
+    caption:'SCFR redirects the same reserve budget to where it is needed.',
+    voice:'SCFR does not create a bigger reserve. It pools the same reserve budget and reallocates capacity to the affected banks that need it.',
+    duration:6200,
+    cue:'recovery'
   },
   {
     title:'Now test the system yourself',
     text:'The explainer becomes an experiment. Change reserve size, spot capacity and allocation rules in the Stress Lab and see how the synthetic system responds.',
-    stat:'Animated story → interactive research prototype'
+    stat:'Animated story → interactive research prototype',
+    kicker:'RESULT',
+    caption:'Same shock. Same reserve budget. Different coordination.',
+    voice:'In this illustrative scenario, coordinated pooling restores more critical workload with the same total reserve budget. Now test the assumptions yourself.',
+    duration:6000,
+    cue:'result'
   }
 ];
 
