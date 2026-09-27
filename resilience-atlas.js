@@ -732,6 +732,7 @@ function setGuidedActive(active){
 function stopGuidedSimulation(){
   guided.runId++;
   guided.paused=false;
+  $('#raEarthMount')?.classList.remove('ra-guided-intro');
   earth.simulation.setPaused?.(false);
   guidedAudio.pause();
   guidedAudio.currentTime=0;
@@ -754,6 +755,24 @@ function focusAnimationStage(target){
   target.style.scrollMarginTop='68px';
   target.scrollIntoView({block:'start',behavior:'auto'});
   return true;
+}
+
+function startGuidedIntro(runId){
+  const mount=$('#raEarthMount');
+  if(!mount) return Promise.resolve(false);
+
+  mount.classList.remove('ra-guided-intro');
+  void mount.offsetWidth;
+  mount.classList.add('ra-guided-intro');
+  $('#raCanvasTitle').textContent='Mapping shared dependencies';
+
+  return guidedDelay(4300,runId).then(continued=>{
+    if(runId===guided.runId){
+      mount.classList.remove('ra-guided-intro');
+      if(state.scene===0) $('#raCanvasTitle').textContent=sceneTitles[0];
+    }
+    return continued;
+  });
 }
 
 async function runGuidedSimulation(){
@@ -788,12 +807,14 @@ async function runGuidedSimulation(){
     renderScene();
 
     const story=scenePresentation(comparison())[i];
-    const [spoken,visualComplete]=await Promise.all([
+    const introComplete=i===0 ? startGuidedIntro(runId) : Promise.resolve(true);
+    const [spoken,visualComplete,introFinished]=await Promise.all([
       playGuidedAudioScene(i,runId),
-      guidedDelay(story.visualDuration,runId)
+      guidedDelay(story.visualDuration,runId),
+      introComplete
     ]);
 
-    if(!spoken || !visualComplete || runId!==guided.runId){
+    if(!spoken || !visualComplete || !introFinished || runId!==guided.runId){
       if(runId===guided.runId) stopGuidedSimulation();
       return;
     }
