@@ -8,7 +8,7 @@ const [html, js, css] = await Promise.all([
 ]);
 
 const requiredIds = [
-  'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','themeLabel','focusStory','heroDemo','heroLab','narrationToggle','storyCaption','captionKicker','captionText','visualSignal','demoProgressBar','impactOverlay','impactKicker','impactValue','impactLabel','motionLayer','ringFence',
+  'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','focusStory','heroDemo','heroLab','narrationToggle','storyCaption','captionKicker','captionText','visualSignal','demoProgressBar','impactOverlay','impactKicker','impactValue','impactLabel','motionLayer','ringFence',
   'providerSelect','marketPct','reservePct','ruleSelect',
   'strategyCards','decisionInsight','beforeAfter','frontier','sensitivityHeatmap','exportBtn','replayScenarioBtn','scenarioId','seedInput','generateScenarioBtn','shareScenarioBtn','challengeTitle','challengeMetrics'
 ];
@@ -28,7 +28,7 @@ assert.match(js, /scenarioShareURL/, 'app should create reproducible scenario li
 assert.match(js, /loadScenarioFromURL/, 'shared scenario links should restore assumptions');
 assert.match(js, /challengeEvaluation/, 'challenge mode should evaluate multiple mission constraints');
 assert.match(js, /drawNetworkLines/, 'app should render provider-to-bank network connections');
-assert.match(js, /setupTheme/, 'app should initialize persistent light-dark theme switching');
+assert.match(js, /setupTheme/, 'app should initialize persistent Crisis-Analysis theme switching');
 assert.match(js, /setFocusMode/, 'app should provide a presentation focus mode');
 assert.match(js, /SpeechSynthesisUtterance/, 'narrated demo should use browser speech synthesis');
 assert.match(js, /preferredNarrator/, 'narration should prefer a configured analytical narrator voice');
@@ -46,6 +46,9 @@ assert.match(js, /renderImpact/, 'story should expose a high-signal outcome for 
 assert.match(js, /startDemo/, 'story should support timed narrated autoplay');
 assert.match(js, /ArrowRight/, 'story should support keyboard scene navigation');
 assert.match(js, /cloudrescue-theme/, 'theme choice should be persisted locally');
+assert.match(html, /mode-crisis/, 'theme switch should expose Crisis mode');
+assert.match(html, /mode-analysis/, 'theme switch should expose Analysis mode');
+assert.match(js, /'crisis'\s*\?\s*'analysis'\s*:\s*'crisis'/, 'theme toggle should switch between Crisis and Analysis modes');
 assert.match(js, /scfr-line/, 'app should render SCFR pooled-capacity connections');
 assert.match(js, /\$\$\('\.preset'\)/, 'preset controls should use the multi-element selector helper');
 assert.match(css, /\.stage\.scene-2/, 'story should include scene-specific visual transitions');
