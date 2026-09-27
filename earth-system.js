@@ -104,7 +104,7 @@ function buildSvg(mode){
     const pos=BANK_POSITIONS[bank.id];
     const p=PROVIDER_META[bank.provider];
     const d=curvePath(p.x,p.y,pos[0],pos[1],index);
-    return '<path class="ra-earth-link provider-'+bank.provider+'" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" d="'+d+'"></path>';
+    return '<path class="ra-earth-link provider-'+bank.provider+'" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" pathLength="1" style="--ra-intro-index:'+index+'" d="'+d+'"></path>';
   }).join('');
 
   const dataPackets=banks.map(function(bank,index){
@@ -113,12 +113,12 @@ function buildSvg(mode){
     const d=curvePath(p.x,p.y,pos[0],pos[1],index);
     const dur=(11+(index%5)*1.8).toFixed(2);
     const begin=(-index*.43).toFixed(2);
-    return '<circle class="ra-earth-packet provider-'+bank.provider+'" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" data-duration="'+dur+'" data-phase="'+begin+'" r="2.25"></circle>';
+    return '<circle class="ra-earth-packet provider-'+bank.provider+'" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" data-duration="'+dur+'" data-phase="'+begin+'" style="--ra-intro-index:'+index+'" r="2.25"></circle>';
   }).join('');
 
-  const bankNodes=banks.map(function(bank){
+  const bankNodes=banks.map(function(bank,index){
     const pos=BANK_POSITIONS[bank.id];
-    return '<g class="ra-earth-bank" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" transform="translate('+pos[0]+' '+pos[1]+')">'+
+    return '<g class="ra-earth-bank" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" style="--ra-intro-index:'+index+'" transform="translate('+pos[0]+' '+pos[1]+')">'+
       '<circle class="ra-bank-halo" r="11"></circle>'+
       '<circle class="ra-bank-node" r="4.6"></circle>'+
       '<circle class="ra-bank-reserve" r="8"></circle>'+
@@ -126,9 +126,9 @@ function buildSvg(mode){
     '</g>';
   }).join('');
 
-  const providerNodes=providers.map(function(provider){
+  const providerNodes=providers.map(function(provider,index){
     const m=PROVIDER_META[provider.id];
-    return '<g class="ra-earth-provider provider-'+provider.id+'" data-provider="'+provider.id+'" transform="translate('+m.x+' '+m.y+')">'+
+    return '<g class="ra-earth-provider provider-'+provider.id+'" data-provider="'+provider.id+'" style="--ra-intro-index:'+index+'" transform="translate('+m.x+' '+m.y+')">'+
       '<circle class="ra-provider-halo" r="29"></circle>'+
       '<circle class="ra-provider-core" r="8"></circle>'+
       '<path class="ra-provider-cloud" d="M-18 4 C-22 -5 -15 -13 -7 -12 C-3 -21 12 -20 15 -10 C24 -10 28 -1 22 5 C18 9 13 9 7 9 H-12 C-16 9 -19 7 -18 4Z"></path>'+
