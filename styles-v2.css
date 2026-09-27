@@ -2535,3 +2535,108 @@ html[data-theme="dark"] .heat-cell b{
 .sensitivity-card{
   border-top:3px solid #357d63;
 }
+
+
+/* ---------- Report-style development journey ---------- */
+.learning-steps{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:0;
+  border:0;
+  border-top:1px solid var(--v2-line);
+  border-bottom:1px solid var(--v2-line);
+  border-radius:0;
+  overflow:visible;
+}
+.learning-steps>div{
+  position:relative;
+  min-height:150px;
+  padding:18px 17px;
+  border:0;
+  border-right:1px solid var(--v2-line);
+  background:transparent;
+}
+.learning-steps>div:last-child{border-right:0}
+.learning-steps span{
+  display:block;
+  width:auto;height:auto;
+  margin:0 0 15px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:#6f8496;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:9px!important;
+  letter-spacing:.08em;
+}
+.learning-steps b{
+  color:var(--v2-ink);
+  font-size:11px;
+}
+.learning-steps small{
+  margin-top:9px;
+  color:var(--v2-muted);
+  font-size:9px!important;
+  line-height:1.55;
+}
+.learning-note{
+  margin-top:16px;
+  padding:12px 0 0;
+  border:0;
+  border-top:1px solid var(--v2-line);
+  border-radius:0;
+  background:transparent;
+}
+.roadmap{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  border:0;
+  border-top:1px solid var(--v2-line);
+  border-bottom:1px solid var(--v2-line);
+  border-radius:0;
+  overflow:visible;
+}
+.roadmap>div{
+  min-height:118px;
+  padding:16px;
+  border:0;
+  border-right:1px solid var(--v2-line);
+  background:transparent;
+}
+.roadmap>div:last-child{border-right:0}
+.roadmap b{
+  color:#58738a;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.roadmap span{
+  color:var(--v2-ink);
+}
+.roadmap small{
+  color:var(--v2-muted);
+  line-height:1.45;
+}
+@media(max-width:1050px){
+  .learning-steps{
+    grid-template-columns:1fr 1fr;
+  }
+  .learning-steps>div{
+    border-bottom:1px solid var(--v2-line);
+  }
+  .roadmap{
+    grid-template-columns:1fr 1fr;
+  }
+  .roadmap>div{
+    border-bottom:1px solid var(--v2-line);
+  }
+}
+@media(max-width:620px){
+  .learning-steps,
+  .roadmap{
+    grid-template-columns:1fr;
+  }
+  .learning-steps>div,
+  .roadmap>div{
+    border-right:0;
+  }
+}
