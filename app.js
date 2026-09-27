@@ -73,6 +73,8 @@ const scenes = [
 
 let scene = 0;
 let autoplay = null;
+let narrationEnabled = true;
+let audioContext = null;
 
 function setupTheme(){
   const button = $('#themeToggle');
@@ -97,13 +99,126 @@ function setupTheme(){
   sync();
 }
 
+function getEnglishVoice(){
+  if(!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  return voices.find(v=>/^en-GB/i.test(v.lang)) ||
+         voices.find(v=>/^en-US/i.test(v.lang)) ||
+         voices.find(v=>/^en/i.test(v.lang)) ||
+         null;
+}
+
+function speakScene(){
+  if(!narrationEnabled || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(scenes[scene].voice);
+  const voice = getEnglishVoice();
+  if(voice) utterance.voice = voice;
+  utterance.lang = voice?.lang || 'en-US';
+  utterance.rate = 1.01;
+  utterance.pitch = 1;
+  utterance.volume = .88;
+  window.speechSynthesis.speak(utterance);
+}
+
+function playCue(kind){
+  if(!narrationEnabled || kind === 'normal') return;
+  try{
+    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioContext;
+    const now = ctx.currentTime;
+    const gain = ctx.createGain();
+    gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.0001,now);
+    gain.gain.exponentialRampToValueAtTime(kind === 'alert' ? .045 : .026,now+.02);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+.38);
+
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    const freq = kind === 'alert' ? 360 : kind === 'recovery' || kind === 'result' ? 620 : 440;
+    osc.frequency.setValueAtTime(freq,now);
+    if(kind === 'alert') osc.frequency.exponentialRampToValueAtTime(250,now+.32);
+    if(kind === 'recovery' || kind === 'result') osc.frequency.exponentialRampToValueAtTime(freq*1.28,now+.28);
+    osc.connect(gain);
+    osc.start(now);
+    osc.stop(now+.4);
+  }catch(e){}
+}
+
+function setNarration(enabled){
+  narrationEnabled = enabled;
+  const btn = $('#narrationToggle');
+  if(btn){
+    btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+    btn.textContent = enabled ? '🔊 Narration' : '🔇 Muted';
+  }
+  if(!enabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+function animateCounter(el,from,to,duration=650){
+  if(!el) return;
+  const start=performance.now();
+  const tick=now=>{
+    const p=Math.min(1,(now-start)/duration);
+    const eased=1-Math.pow(1-p,3);
+    el.textContent=num(from+(to-from)*eased);
+    if(p<1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+function renderVisualSignal(c){
+  const el = $('#visualSignal');
+  if(!el) return;
+  const individual = c.individual;
+  const scfr = c.scfr;
+
+  if(scene === 0){
+    el.innerHTML = `
+      <div class="signal-pill"><b>20</b><span>synthetic banks</span></div>
+      <div class="signal-separator">→</div>
+      <div class="signal-pill"><b>3</b><span>shared providers</span></div>
+      <div class="signal-separator">→</div>
+      <div class="signal-pill safe"><b>100%</b><span>normal operations</span></div>`;
+  } else if(scene === 1){
+    el.innerHTML = `
+      <div class="signal-alert"><span class="signal-icon">!</span><b>1 provider outage</b><span>8 banks affected simultaneously</span></div>`;
+  } else if(scene === 2){
+    const market = c.market;
+    const supply = market.allocated;
+    const gap = Math.max(0,market.totalDemand-supply);
+    el.innerHTML = `
+      <div class="capacity-visual">
+        <div class="capacity-head"><span>Emergency backup demand</span><b>${num(market.totalDemand)} units</b></div>
+        <div class="capacity-track"><i class="capacity-supply" style="width:${Math.min(100,supply/market.totalDemand*100)}%"></i><i class="capacity-gap" style="width:${Math.max(0,100-supply/market.totalDemand*100)}%"></i></div>
+        <div class="capacity-labels"><span class="available">Available now: ${num(supply)}</span><span class="shortfall">Shortfall: ${num(gap)}</span></div>
+      </div>`;
+  } else if(scene === 3){
+    el.innerHTML = `
+      <div class="fragment-visual">
+        <div><b>${num(individual.totalReserve)}</b><span>Total reserve</span></div>
+        <div class="fragment-arrow">→</div>
+        <div class="warning"><b>${num(individual.strandedReserve)}</b><span>stranded / unavailable where needed</span></div>
+      </div>`;
+  } else if(scene === 4){
+    el.innerHTML = `
+      <div class="fragment-visual coordinated">
+        <div><b>${num(scfr.totalReserve)}</b><span>Same total reserve</span></div>
+        <div class="fragment-arrow">→</div>
+        <div class="good"><b>${Math.round(scfr.criticalRestoredPct)}%</b><span>critical workload restored</span></div>
+      </div>`;
+  } else {
+    el.innerHTML = '';
+  }
+}
+
 function providerName(id){ return providers.find(p=>p.id===id)?.name || id; }
 
 function renderNetwork(){
   $('#providers').innerHTML = providers.map(p => {
     const connected = banks.filter(b=>b.provider===p.id).length;
     return `<div class="provider" data-provider="${p.id}" style="--provider:${p.color}">
-      <small>SYNTHETIC PROVIDER</small><strong>${p.name}</strong><small>${connected} connected banks</small>
+      <div class="provider-title"><span class="provider-glyph" aria-hidden="true">☁</span><div><small>SYNTHETIC PROVIDER</small><strong>${p.name}</strong><small>${connected} connected banks</small></div></div>
     </div>`;
   }).join('');
 
@@ -113,7 +228,7 @@ function renderNetwork(){
       <h4>${p.name} clients</h4>
       <div class="bank-grid">
       ${group.map(b=>`<div class="bank" data-bank="${b.id}" data-provider="${b.provider}" title="${b.type} · load ${b.criticalLoad} · readiness ${Math.round(b.readiness*100)}%">
-        <b>${b.label}</b><small>${b.type}</small>
+        <div class="bank-title"><span class="bank-glyph" aria-hidden="true">▦</span><div><b>${b.label}</b><small>${b.type}</small></div></div>
       </div>`).join('')}
       </div>
     </section>`;
@@ -194,7 +309,7 @@ function comparisonHTML(){
 
 function clearStatuses(){
   $$('.provider').forEach(el=>el.classList.remove('offline'));
-  $$('.bank').forEach(el=>el.classList.remove('affected','restored','waiting'));
+  $('.bank').forEach(el=>el.classList.remove('affected','restored','waiting','stranded'));
 }
 
 function applyScene(){
@@ -203,6 +318,8 @@ function applyScene(){
   $('#sceneTitle').textContent = s.title;
   $('#sceneText').textContent = s.text;
   $('#sceneStat').textContent = s.stat;
+  $('#captionKicker').textContent = s.kicker;
+  $('#captionText').textContent = s.caption;
   $('#stage').className = `stage scene-${scene+1}`;
 
   clearStatuses();
@@ -223,6 +340,7 @@ function applyScene(){
   $('#flowDemand').textContent = num(c.market.totalDemand);
   $('#flowMarket').textContent = num(c.market.totalDemand * defaults.marketPct / 100);
   $('#flowReserve').textContent = num(c.scfr.totalReserve);
+  renderVisualSignal(c);
 
   if(scene >= 1){
     document.querySelector('.provider[data-provider="blue"]')?.classList.add('offline');
@@ -230,6 +348,9 @@ function applyScene(){
   }
 
   if(scene === 3){
+    banks.filter(b=>b.provider !== defaults.outageProvider).forEach(b=>{
+      document.querySelector(`.bank[data-bank="${b.id}"]`)?.classList.add('stranded');
+    });
     c.individual.rows.forEach(b=>{
       const el = document.querySelector(`.bank[data-bank="${b.id}"]`);
       if(!el) return;
@@ -255,9 +376,41 @@ function applyScene(){
   $$('#sceneDots button').forEach((d,i)=>d.classList.toggle('active',i===scene));
 }
 
+function updateDemoProgress(){
+  const bar = $('#demoProgressBar');
+  if(bar) bar.style.width = `${((scene+1)/scenes.length)*100}%`;
+}
+
 function stopAuto(){
-  if(autoplay){ clearInterval(autoplay); autoplay=null; }
-  $('#autoScene').textContent='▶ Auto-play';
+  if(autoplay){ clearTimeout(autoplay); autoplay=null; }
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  $('#autoScene').textContent='▶ Watch demo';
+}
+
+function playDemoScene(){
+  applyScene();
+  updateDemoProgress();
+  speakScene();
+  playCue(scenes[scene].cue);
+
+  if(scene >= scenes.length-1){
+    autoplay=setTimeout(()=>{
+      stopAuto();
+    },scenes[scene].duration);
+    return;
+  }
+
+  autoplay=setTimeout(()=>{
+    scene++;
+    playDemoScene();
+  },scenes[scene].duration);
+}
+
+function startDemo({reset=true}={}){
+  stopAuto();
+  if(reset) scene=0;
+  $('#autoScene').textContent='■ Stop demo';
+  playDemoScene();
 }
 
 function setFocusMode(on){
@@ -285,11 +438,12 @@ function setupStory(){
 
   $('#autoScene').addEventListener('click',()=>{
     if(autoplay){ stopAuto(); return; }
-    $('#autoScene').textContent='■ Stop';
-    autoplay=setInterval(()=>{
-      if(scene<scenes.length-1){ scene++; applyScene(); }
-      else stopAuto();
-    },2600);
+    startDemo({reset:scene===scenes.length-1});
+  });
+
+  $('#narrationToggle').addEventListener('click',()=>{
+    setNarration(!narrationEnabled);
+    if(autoplay && narrationEnabled) speakScene();
   });
 
   $('#focusStory').addEventListener('click',()=>{
@@ -312,6 +466,7 @@ function setupStory(){
   });
 
   applyScene();
+  updateDemoProgress();
 }
 
 function switchTab(id){
@@ -320,7 +475,14 @@ function switchTab(id){
   if(id==='lab') renderLab();
   window.scrollTo({top:0,behavior:'smooth'});
 }
-$$('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+$('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+$('#heroDemo').addEventListener('click',()=>{
+  switchTab('story');
+  setNarration(true);
+  scene=0;
+  startDemo({reset:false});
+});
+$('#heroLab').addEventListener('click',()=>switchTab('lab'));
 
 function strategyCard(name,label,r,best){
   return `<article class="card strategy-card ${best?'best':''}">
