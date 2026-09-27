@@ -508,36 +508,119 @@ function setupTheme(){
 
 function englishVoices(){
   if(!('speechSynthesis' in window)) return [];
-  return window.speechSynthesis.getVoices().filter(voice=>/^en/i.test(voice.lang));
+  return window.speechSynthesis.getVoices().filter(voice=>/^en(?:-|_)/i.test(voice.lang) || /^en$/i.test(voice.lang));
+}
+
+function voiceQualityScore(voice){
+  const name=(voice?.name||'').toLowerCase();
+  const lang=(voice?.lang||'').toLowerCase();
+  let score=0;
+
+  /* Explicitly prefer high-quality system voices when the OS exposes them. */
+  if(/premium/.test(name)) score+=150;
+  if(/enhanced/.test(name)) score+=135;
+  if(/natural/.test(name)) score+=125;
+  if(/online/.test(name) && /microsoft/.test(name)) score+=45;
+
+  /* Apple voices commonly available on iPhone/macOS. */
+  if(/\bava\b/.test(name)) score+=118;
+  if(/\bsamantha\b/.test(name)) score+=112;
+  if(/\bdaniel\b/.test(name)) score+=104;
+  if(/\baaron\b/.test(name)) score+=98;
+  if(/\barthur\b/.test(name)) score+=94;
+  if(/\bkaren\b/.test(name)) score+=88;
+  if(/\bmoira\b/.test(name)) score+=84;
+
+  /* Microsoft / Google natural English fallbacks. */
+  if(/microsoft/.test(name) && /(andrew|guy|brian|ryan|christopher|jenny|aria)/.test(name)) score+=105;
+  if(/google.*uk english/.test(name)) score+=82;
+  if(/google.*us english/.test(name)) score+=76;
+
+  if(/^en-gb/.test(lang)) score+=16;
+  if(/^en-us/.test(lang)) score+=14;
+  if(voice?.localService) score+=8;
+  if(voice?.default) score+=3;
+
+  /* Avoid novelty/compact/legacy voices that often sound synthetic. */
+  if(/compact|espeak|fred|zarvox|trinoids|whisper|bells|organ|bad news|good news|boing|bubbles|cellos|deranged|hysterical|pipe organ|wobble/.test(name)) score-=300;
+
+  return score;
 }
 
 function chooseNarrator(){
-  const voices=englishVoices();
-  const preferences=[
-    /Microsoft.*(Guy|Andrew|Ryan|Brian|Christopher|Eric).*(Natural|Online)/i,
-    /Google UK English Male/i,
-    /Daniel.*(Enhanced|Premium)/i,
-    /^Daniel$/i,
-    /Aaron.*(Enhanced|Premium)/i,
-    /^Aaron$/i,
-    /Arthur.*(Enhanced|Premium)/i,
-    /^Arthur$/i,
-    /Alex.*(Enhanced|Premium)/i,
-    /^Alex$/i
-  ];
-  for(const pattern of preferences){
-    const match=voices.find(voice=>pattern.test(voice.name));
-    if(match) return match;
+  return englishVoices()
+    .map(voice=>({voice,score:voiceQualityScore(voice)}))
+    .sort((a,b)=>b.score-a.score)[0]?.voice || null;
+}
+
+function waitForNarrator(timeoutMs=650){
+  const immediate=chooseNarrator();
+  if(immediate) return Promise.resolve(immediate);
+  if(!('speechSynthesis' in window)) return Promise.resolve(null);
+
+  return new Promise(resolve=>{
+    let settled=false;
+    const finish=()=>{
+      if(settled) return;
+      settled=true;
+      window.speechSynthesis.removeEventListener?.('voiceschanged',finish);
+      resolve(chooseNarrator());
+    };
+    window.speechSynthesis.addEventListener?.('voiceschanged',finish,{once:true});
+    window.setTimeout(finish,timeoutMs);
+  });
+}
+
+function narrationText(text){
+  return text
+    .replace(/\bSCFR\b/g,'S C F R')
+    .replace(/\bICT\b/g,'I C T')
+    .replace(/\bAPI\b/g,'A P I')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function narrationChunks(text){
+  const sentences=narrationText(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [narrationText(text)];
+  const chunks=[];
+  let current='';
+
+  for(const sentence of sentences){
+    const candidate=(current+' '+sentence.trim()).trim();
+    const words=candidate.split(/\s+/).length;
+    if(current && words>32){
+      chunks.push(current);
+      current=sentence.trim();
+    }else{
+      current=candidate;
+    }
   }
-  return voices.find(voice=>/^en-GB/i.test(voice.lang)) ||
-         voices.find(voice=>/^en-US/i.test(voice.lang)) ||
-         voices[0] || null;
+  if(current) chunks.push(current);
+  return chunks;
+}
+
+function narrationProfile(voice,requestedRate=.93){
+  const name=(voice?.name||'').toLowerCase();
+  const premium=/premium|enhanced|natural/.test(name);
+  const apple=/ava|samantha|daniel|aaron|arthur|karen|moira/.test(name);
+  const microsoft=/microsoft/.test(name);
+
+  return {
+    rate:Math.max(.84,Math.min(.95,premium ? requestedRate*.98 : apple ? requestedRate*.96 : microsoft ? requestedRate*.99 : requestedRate*.92)),
+    pitch:apple ? 1.01 : 1,
+    volume:.98,
+    pauseMs:premium || apple ? 105 : 135
+  };
 }
 
 function updateNarrationControl(){
   const button=$('#raNarrationToggle');
   button.setAttribute('aria-pressed',guided.narration ? 'true' : 'false');
   $('#raNarrationLabel').textContent=guided.narration ? 'Narration on' : 'Narration off';
+  if(guided.voice){
+    button.title='Narration voice: '+guided.voice.name;
+    button.dataset.voiceQuality=voiceQualityScore(guided.voice)>=110 ? 'natural' : 'standard';
+  }
 }
 
 function wait(ms,runId){
@@ -548,41 +631,73 @@ function wait(ms,runId){
   });
 }
 
-function speakCurrentScene(story,runId){
-  if(!guided.narration || !('speechSynthesis' in window)){
-    return wait(story.visualDuration,runId);
-  }
-
+function speakChunk(text,voice,profile,runId){
   return new Promise(resolve=>{
-    window.speechSynthesis.cancel();
-
-    const utterance=new SpeechSynthesisUtterance(story.voice);
-    guided.voice ||= chooseNarrator();
-    if(guided.voice) utterance.voice=guided.voice;
-    utterance.lang=guided.voice?.lang || 'en-GB';
-    utterance.rate=story.rate || .93;
-    utterance.pitch=.98;
-    utterance.volume=.96;
-
-    const hud=$('#raGuidedHud');
-    hud.classList.add('is-speaking');
+    const utterance=new SpeechSynthesisUtterance(text);
+    if(voice) utterance.voice=voice;
+    utterance.lang=voice?.lang || 'en-US';
+    utterance.rate=profile.rate;
+    utterance.pitch=profile.pitch;
+    utterance.volume=profile.volume;
 
     let settled=false;
     const finish=()=>{
       if(settled) return;
       settled=true;
-      hud.classList.remove('is-speaking');
       resolve(runId===guided.runId);
     };
 
     utterance.onend=finish;
     utterance.onerror=finish;
 
-    const words=story.voice.trim().split(/\s+/).length;
-    const safetyMs=Math.max(story.visualDuration,words/(utterance.rate*2.2)*1000+2400);
+    const words=text.trim().split(/\s+/).length;
+    const safetyMs=Math.max(2600,words/(Math.max(profile.rate,.75)*2.25)*1000+2100);
     window.setTimeout(finish,safetyMs);
     window.speechSynthesis.speak(utterance);
   });
+}
+
+async function speakCurrentScene(story,runId){
+  if(!guided.narration || !('speechSynthesis' in window)){
+    return wait(story.visualDuration,runId);
+  }
+
+  window.speechSynthesis.cancel();
+
+  /* Re-evaluate immediately before every scene so Safari can upgrade from
+     its initial fallback list once Enhanced/Premium voices have loaded. */
+  guided.voice=await waitForNarrator();
+  updateNarrationControl();
+
+  const profile=narrationProfile(guided.voice,story.rate||.93);
+  const chunks=narrationChunks(story.voice);
+  const hud=$('#raGuidedHud');
+  hud.classList.add('is-speaking');
+
+  let completed=true;
+  for(let index=0;index<chunks.length;index++){
+    if(runId!==guided.runId){
+      completed=false;
+      break;
+    }
+
+    const spoken=await speakChunk(chunks[index],guided.voice,profile,runId);
+    if(!spoken){
+      completed=false;
+      break;
+    }
+
+    if(index<chunks.length-1){
+      const continued=await wait(profile.pauseMs,runId);
+      if(!continued){
+        completed=false;
+        break;
+      }
+    }
+  }
+
+  hud.classList.remove('is-speaking');
+  return completed && runId===guided.runId;
 }
 
 function setGuidedActive(active){
@@ -1033,6 +1148,7 @@ function setupLab(){
 if('speechSynthesis' in window){
   window.speechSynthesis.addEventListener?.('voiceschanged',()=>{
     guided.voice=chooseNarrator();
+    updateNarrationControl();
   });
 }
 
