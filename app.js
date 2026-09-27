@@ -312,7 +312,7 @@ function comparisonHTML(){
 }
 
 function clearStatuses(){
-  $$('.provider').forEach(el=>el.classList.remove('offline'));
+  $('.provider').forEach(el=>el.classList.remove('offline'));
   $('.bank').forEach(el=>el.classList.remove('affected','restored','waiting','stranded'));
 }
 
