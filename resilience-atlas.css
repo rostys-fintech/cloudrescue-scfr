@@ -4492,3 +4492,124 @@ body.ra-guided-running .ra-guided-dot{
     transition:none!important;
   }
 }
+
+
+/* =========================================================
+   MOBILE INTERACTION FIX — INDEPENDENT BOTTOM NAV + SAFARI LAB
+   ========================================================= */
+
+.ra-mobile-app-nav{
+  display:none;
+}
+
+@media(max-width:767px){
+  /* Do not keep the fixed mobile nav inside the sticky/backdrop-filter header.
+     Safari can create an unexpected containing/hit-test layer there. */
+  .ra-header .ra-nav{
+    display:none!important;
+  }
+
+  .ra-mobile-app-nav{
+    position:fixed;
+    z-index:100;
+    left:8px;
+    right:8px;
+    bottom:max(8px,env(safe-area-inset-bottom,0px));
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:4px;
+    padding:4px;
+    border:1px solid var(--ra-border-strong);
+    border-radius:15px;
+    background:color-mix(in srgb,var(--ra-surface) 95%,transparent);
+    box-shadow:0 14px 38px rgba(0,0,0,.25);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    transition:
+      opacity 180ms var(--ra-ease-standard),
+      transform 180ms var(--ra-ease-standard);
+  }
+
+  .ra-mobile-tab{
+    min-width:0;
+    min-height:50px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    padding:5px 4px;
+    border:0;
+    border-radius:11px;
+    background:transparent;
+    color:var(--ra-text-3);
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .ra-mobile-tab span{
+    font-size:6.5px;
+    font-weight:850;
+    letter-spacing:.08em;
+  }
+  .ra-mobile-tab b{
+    font-size:9px;
+    font-weight:780;
+    white-space:nowrap;
+  }
+  .ra-mobile-tab.is-active{
+    color:var(--ra-text-1);
+    background:color-mix(in srgb,var(--ra-primary) 13%,var(--ra-surface));
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ra-primary) 26%,transparent);
+  }
+  .ra-mobile-tab.is-active span{
+    color:var(--ra-primary);
+  }
+
+  body.ra-mobile-sheet-open .ra-mobile-app-nav{
+    opacity:0;
+    transform:translateY(8px);
+    pointer-events:none;
+  }
+
+  /* Strategy controls must remain real touch targets after scenario playback. */
+  .ra-strategy-switch button,
+  .ra-model-card,
+  #raRunScenario,
+  #raOpenLabSheet,
+  #raResetLab{
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  #lab:not(.is-scenario-running) .ra-strategy-switch button:not(:disabled),
+  #lab:not(.is-scenario-running) .ra-model-card:not(:disabled){
+    pointer-events:auto;
+  }
+
+  /* Give Safari room to paint playback after the controls sheet closes. */
+  .ra-lab-earth-stage{
+    isolation:isolate;
+    contain:paint;
+  }
+  .ra-scenario-playback{
+    z-index:24!important;
+    pointer-events:none;
+  }
+
+  .ra-main{
+    padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .ra-footer{
+    padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;
+  }
+}
+
+@media(max-width:429px){
+  .ra-mobile-app-nav{
+    left:6px;
+    right:6px;
+    bottom:max(6px,env(safe-area-inset-bottom,0px));
+  }
+  .ra-mobile-tab b{
+    font-size:8.5px;
+  }
+}

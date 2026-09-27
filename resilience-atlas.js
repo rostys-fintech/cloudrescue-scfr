@@ -120,70 +120,70 @@ function scenePresentation(c){
 
   return [
     {
-      kicker:'SHARED DEPENDENCY',
-      title:'One network. Shared dependencies.',
-      text:'Twenty synthetic banks depend on three shared providers. In the stable state, critical capacity moves normally through the network.',
-      statLabel:'SYSTEM STATE',
-      statValue:'20 banks · 3 providers',
-      caption:'Shared providers can become shared points of failure.',
-      voice:'Start with the system in a stable state. Twenty synthetic banks rely on three shared cloud providers. This looks diversified at the institution level, but several banks still depend on the same underlying infrastructure.',
-      rate:.96,
-      visualDuration:4800
+      kicker:'HOW THE SYSTEM WORKS',
+      title:'Banks depend on shared cloud providers.',
+      text:'In this simulation, we see how twenty synthetic banks depend on three shared cloud providers for critical digital capacity. Several banks use the same provider, so one technical failure can affect many institutions at the same time.',
+      statLabel:'SYSTEM STRUCTURE',
+      statValue:'20 banks · 3 shared providers',
+      caption:'Banks are connected to shared infrastructure, not isolated technology stacks.',
+      voice:'In this simulation, we can see how banks depend on shared cloud providers. Twenty synthetic banks use three providers for critical digital capacity. Several banks depend on the same provider. This means that one provider failure can affect many banks at the same time.',
+      rate:.86,
+      visualDuration:6200
     },
     {
-      kicker:'PROVIDER FAILURE',
-      title:provider+(multiple ? ' go offline.' : ' goes offline.'),
-      text:'Every synthetic bank connected to the failed '+(multiple ? 'providers loses' : 'provider loses')+' critical capacity at the same time. The problem becomes systemic because the dependency is shared.',
-      statLabel:'AFFECTED',
-      statValue:affected+' banks at once',
-      caption:provider+(multiple ? ' fail. ' : ' fails. ')+affected+' banks are disrupted simultaneously.',
-      voice:'Now '+provider+(multiple ? ' go offline. ' : ' goes offline. ')+affected+' banks lose critical capacity at the same time. The important point is simultaneity. Shared dependencies can turn provider outages into a system wide recovery event.',
-      rate:.92,
-      visualDuration:5200
+      kicker:'SHARED PROVIDER FAILURE',
+      title:provider+(multiple ? ' fail at the same time.' : ' fails.'),
+      text:'The banks connected to the failed '+(multiple ? 'providers lose' : 'provider loses')+' access to critical capacity together. A technical problem at one shared dependency therefore becomes a system-wide recovery problem.',
+      statLabel:'AFFECTED BANKS',
+      statValue:affected+' of '+banks.length,
+      caption:affected+' banks become affected because they share the same failed infrastructure.',
+      voice:'Now, '+provider+(multiple ? ' fail at the same time.' : ' fails.')+' The banks connected to '+(multiple ? 'these providers' : 'this provider')+' lose critical capacity together. In this scenario, '+affected+' banks are affected. The important point is that the shock is shared.',
+      rate:.84,
+      visualDuration:6500
     },
     {
-      kicker:'CAPACITY SHORTAGE',
-      title:'Recovery demand arrives at once.',
-      text:'Affected banks seek backup capacity simultaneously. Immediate market supply is smaller than total recovery demand.',
+      kicker:'RECOVERY DEMAND',
+      title:'Many banks need backup capacity together.',
+      text:'Affected banks try to recover at the same time. Their combined demand for backup capacity can be larger than the capacity immediately available in the market.',
       statLabel:'CAPACITY GAP',
       statValue:format(gap)+' units',
-      caption:format(demand)+' units demanded. '+format(available)+' are immediately available.',
-      voice:'The affected banks now request backup capacity together. They need '+format(demand)+' units, while the immediate market can provide '+format(available)+'. That leaves a capacity gap of '+format(gap)+' units.',
-      rate:.91,
-      visualDuration:5400
+      caption:format(demand)+' units are requested, but only '+format(available)+' are immediately available.',
+      voice:'Next, the affected banks try to recover at the same time. Together, they need '+format(demand)+' units of backup capacity. The market can immediately provide '+format(available)+' units. So, the remaining capacity gap is '+format(gap)+' units.',
+      rate:.83,
+      visualDuration:6800
     },
     {
-      kicker:'STRANDED RESERVE',
-      title:'Reserve exists, but cannot move.',
-      text:'Individual reserves improve preparedness, yet unused capacity at unaffected banks remains ring fenced instead of reaching the institutions under stress.',
+      kicker:'INDIVIDUAL RESERVES',
+      title:'Some reserve exists, but it cannot move freely.',
+      text:'With individual reserves, each bank keeps its own prepared capacity. Unused reserve at one institution cannot automatically be transferred to another bank that is under stress.',
       statLabel:'STRANDED RESERVE',
       statValue:format(stranded)+' units',
-      caption:'Capacity exists elsewhere in the system, but ring-fencing prevents redistribution.',
-      voice:'Individual reserves help, but they are assigned bank by bank. In this scenario, '+format(stranded)+' reserve units remain stranded outside the affected institutions while recovery demand is still unmet.',
-      rate:.91,
-      visualDuration:5600
+      caption:'Reserve can remain unused in one place while another bank still needs capacity.',
+      voice:'Now we add individual reserves. Each bank has its own prepared capacity. This improves recovery. But the reserve is ring fenced. Capacity that is unused by one bank cannot automatically move to another bank that needs it. In this run, '+format(stranded)+' reserve units remain stranded.',
+      rate:.82,
+      visualDuration:7200
     },
     {
-      kicker:'POOLED RECOVERY',
-      title:'The same reserve is coordinated.',
-      text:'SCFR changes the allocation rule rather than adding a larger budget. Pre-arranged pooled capacity can be redirected toward affected banks.',
+      kicker:'SHARED CLOUD FAILOVER RESERVE',
+      title:'The same reserve can be pooled and redirected.',
+      text:'SCFR keeps the same total reserve budget but changes how it is coordinated. Unused prepared capacity can be redirected toward the affected banks that need it most.',
       statLabel:'WORKLOAD RESTORED',
       statValue:restored+'%',
-      caption:'The same '+format(reserve)+' reserve units can move toward the banks that need them.',
-      voice:'SCFR does not add a new reserve budget. It changes coordination. The same '+format(reserve)+' reserve units are pooled in advance and directed toward the affected banks. Critical workload restoration rises to '+restored+' percent in this synthetic run.',
-      rate:.94,
-      visualDuration:5600
+      caption:'Pooling changes allocation, not the size of the total reserve budget.',
+      voice:'Now we test S C F R, the Shared Cloud Failover Reserve. The total reserve budget does not increase. The difference is coordination. Unused capacity can be pooled and redirected to the affected banks. In this synthetic run, '+restored+' percent of critical workload is restored.',
+      rate:.82,
+      visualDuration:7600
     },
     {
-      kicker:'OUTCOME',
-      title:'Same shock. Different coordination.',
-      text:'The comparison isolates the mechanism: the shock and assumptions stay fixed while the recovery rule changes.',
+      kicker:'COMPARISON',
+      title:'The same shock produces different recovery outcomes.',
+      text:'The failed provider, bank network and total reserve budget stay fixed. What changes is the recovery mechanism: market capacity only, individual reserves, or pooled SCFR coordination.',
       statLabel:'RESILIENCE SCORE',
       statValue:'Market '+marketScore+' · Individual '+individualScore+' · SCFR '+scfrScore,
-      caption:'Same shock. Same reserve budget. Different coordination.',
-      voice:'The final comparison isolates the coordination effect. The market score is '+marketScore+', individual reserves score '+individualScore+', and the pooled SCFR mechanism scores '+scfrScore+'. This is a synthetic mechanism test, not a forecast. You can now change the assumptions in Scenario Lab.',
-      rate:.93,
-      visualDuration:6200
+      caption:'The comparison isolates how reserve coordination changes the modeled recovery outcome.',
+      voice:'Finally, we compare the three recovery mechanisms under the same shock. The market-only resilience score is '+marketScore+'. Individual reserves produce a score of '+individualScore+'. The pooled S C F R mechanism produces a score of '+scfrScore+'. The simulation shows how coordination can change recovery when banks depend on shared infrastructure. These results are synthetic, not a forecast for real banks.',
+      rate:.82,
+      visualDuration:8000
     }
   ];
 }
@@ -479,12 +479,20 @@ function switchTab(tab,{updateHash=true,replaceHash=false}={}){
   if(labRun.active) cancelLabRun();
 
   state.tab = tab;
+
   $$('.ra-nav-tab').forEach(button=>{
     const active=button.dataset.raTab === tab;
     button.classList.toggle('is-active',active);
     button.setAttribute('aria-selected',active ? 'true' : 'false');
     button.tabIndex=active ? 0 : -1;
   });
+
+  $$('.ra-mobile-tab').forEach(button=>{
+    const active=button.dataset.raMobileTab === tab;
+    button.classList.toggle('is-active',active);
+    button.setAttribute('aria-pressed',active ? 'true' : 'false');
+  });
+
   $$('.ra-view').forEach(view=>{
     const active=view.dataset.raView === tab;
     view.classList.toggle('is-active',active);
@@ -512,6 +520,13 @@ function setupTabs(){
       const next=tabs[(index+direction+tabs.length)%tabs.length];
       next.focus();
       switchTab(next.dataset.raTab);
+    });
+  });
+
+  $$('.ra-mobile-tab').forEach(button=>{
+    button.addEventListener('click',event=>{
+      event.preventDefault();
+      switchTab(button.dataset.raMobileTab);
     });
   });
 
@@ -553,46 +568,54 @@ function englishVoices(){
   return window.speechSynthesis.getVoices().filter(voice=>/^en(?:-|_)/i.test(voice.lang) || /^en$/i.test(voice.lang));
 }
 
-function voiceQualityScore(voice){
+function maleVoiceScore(voice){
   const name=(voice?.name||'').toLowerCase();
   const lang=(voice?.lang||'').toLowerCase();
-  let score=0;
 
-  /* Explicitly prefer high-quality system voices when the OS exposes them. */
-  if(/premium/.test(name)) score+=150;
-  if(/enhanced/.test(name)) score+=135;
-  if(/natural/.test(name)) score+=125;
-  if(/online/.test(name) && /microsoft/.test(name)) score+=45;
+  const maleNames=/\b(daniel|aaron|arthur|alex|andrew|guy|brian|ryan|christopher|eric|oliver|tom|nathan|evan|reed|eddy|rishi|ralph|bruce|david|mark|james|george|richard|lee)\b/;
+  const explicitlyFemale=/\b(ava|samantha|karen|moira|jenny|aria|victoria|tessa|allison|susan|zira)\b/;
 
-  /* Apple voices commonly available on iPhone/macOS. */
-  if(/\bava\b/.test(name)) score+=118;
-  if(/\bsamantha\b/.test(name)) score+=112;
-  if(/\bdaniel\b/.test(name)) score+=104;
-  if(/\baaron\b/.test(name)) score+=98;
-  if(/\barthur\b/.test(name)) score+=94;
-  if(/\bkaren\b/.test(name)) score+=88;
-  if(/\bmoira\b/.test(name)) score+=84;
+  if(explicitlyFemale.test(name)) return -1000;
 
-  /* Microsoft / Google natural English fallbacks. */
-  if(/microsoft/.test(name) && /(andrew|guy|brian|ryan|christopher|jenny|aria)/.test(name)) score+=105;
-  if(/google.*uk english/.test(name)) score+=82;
-  if(/google.*us english/.test(name)) score+=76;
+  let score=maleNames.test(name) ? 220 : -120;
 
-  if(/^en-gb/.test(lang)) score+=16;
-  if(/^en-us/.test(lang)) score+=14;
-  if(voice?.localService) score+=8;
-  if(voice?.default) score+=3;
+  if(/premium/.test(name)) score+=180;
+  if(/enhanced/.test(name)) score+=165;
+  if(/natural/.test(name)) score+=150;
+  if(/online/.test(name) && /microsoft/.test(name)) score+=60;
 
-  /* Avoid novelty/compact/legacy voices that often sound synthetic. */
-  if(/compact|espeak|fred|zarvox|trinoids|whisper|bells|organ|bad news|good news|boing|bubbles|cellos|deranged|hysterical|pipe organ|wobble/.test(name)) score-=300;
+  if(/\bdaniel\b/.test(name)) score+=145;
+  if(/\bandrew\b/.test(name)) score+=140;
+  if(/\bguy\b/.test(name)) score+=136;
+  if(/\bbrian\b/.test(name)) score+=132;
+  if(/\bryan\b/.test(name)) score+=128;
+  if(/\bchristopher\b/.test(name)) score+=124;
+  if(/\bdavid\b/.test(name)) score+=122;
+  if(/\bjames\b/.test(name)) score+=121;
+  if(/\bgeorge\b/.test(name)) score+=120;
+  if(/\baaron\b/.test(name)) score+=120;
+  if(/\barthur\b/.test(name)) score+=116;
+  if(/\balex\b/.test(name)) score+=112;
+
+  if(/google uk english male/.test(name)) score+=155;
+  if(/google us english male/.test(name)) score+=145;
+
+  if(/^en-gb/.test(lang)) score+=24;
+  if(/^en-us/.test(lang)) score+=20;
+  if(voice?.localService) score+=10;
+
+  if(/compact|espeak|fred|zarvox|trinoids|whisper|bells|organ|bad news|good news|boing|bubbles|cellos|deranged|hysterical|pipe organ|wobble/.test(name)) score-=400;
 
   return score;
 }
 
 function chooseNarrator(){
-  return englishVoices()
-    .map(voice=>({voice,score:voiceQualityScore(voice)}))
-    .sort((a,b)=>b.score-a.score)[0]?.voice || null;
+  const ranked=englishVoices()
+    .map(voice=>({voice,score:maleVoiceScore(voice)}))
+    .filter(item=>item.score>0)
+    .sort((a,b)=>b.score-a.score);
+
+  return ranked[0]?.voice || null;
 }
 
 function waitForNarrator(timeoutMs=650){
@@ -623,35 +646,22 @@ function narrationText(text){
 }
 
 function narrationChunks(text){
-  const sentences=narrationText(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [narrationText(text)];
-  const chunks=[];
-  let current='';
-
-  for(const sentence of sentences){
-    const candidate=(current+' '+sentence.trim()).trim();
-    const words=candidate.split(/\s+/).length;
-    if(current && words>32){
-      chunks.push(current);
-      current=sentence.trim();
-    }else{
-      current=candidate;
-    }
-  }
-  if(current) chunks.push(current);
-  return chunks;
+  return (narrationText(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [narrationText(text)])
+    .map(part=>part.trim())
+    .filter(Boolean);
 }
 
-function narrationProfile(voice,requestedRate=.93){
+function narrationProfile(voice,requestedRate=.84){
   const name=(voice?.name||'').toLowerCase();
   const premium=/premium|enhanced|natural/.test(name);
-  const apple=/ava|samantha|daniel|aaron|arthur|karen|moira/.test(name);
   const microsoft=/microsoft/.test(name);
 
   return {
-    rate:Math.max(.84,Math.min(.95,premium ? requestedRate*.98 : apple ? requestedRate*.96 : microsoft ? requestedRate*.99 : requestedRate*.92)),
-    pitch:apple ? 1.01 : 1,
-    volume:.98,
-    pauseMs:premium || apple ? 105 : 135
+    rate:Math.max(.78,Math.min(.88,premium ? requestedRate : microsoft ? requestedRate*.99 : requestedRate*.96)),
+    pitch:.96,
+    volume:1,
+    pauseMs:560,
+    longPauseMs:760
   };
 }
 
@@ -661,7 +671,7 @@ function updateNarrationControl(){
   $('#raNarrationLabel').textContent=guided.narration ? 'Narration on' : 'Narration off';
   if(guided.voice){
     button.title='Narration voice: '+guided.voice.name;
-    button.dataset.voiceQuality=voiceQualityScore(guided.voice)>=110 ? 'natural' : 'standard';
+    button.dataset.voiceQuality=maleVoiceScore(guided.voice)>=250 ? 'natural' : 'standard';
   }
 }
 
@@ -706,12 +716,18 @@ async function speakCurrentScene(story,runId){
 
   window.speechSynthesis.cancel();
 
-  /* Re-evaluate immediately before every scene so Safari can upgrade from
-     its initial fallback list once Enhanced/Premium voices have loaded. */
   guided.voice=await waitForNarrator();
   updateNarrationControl();
 
-  const profile=narrationProfile(guided.voice,story.rate||.93);
+  /* Web Speech exposes names, not gender metadata. We deliberately select
+     only known male English system voices. If none is available, narration
+     falls back to timing-only rather than switching to a female voice. */
+  if(!guided.voice){
+    $('#raGuidedStatus').textContent='VOICE UNAVAILABLE';
+    return wait(story.visualDuration,runId);
+  }
+
+  const profile=narrationProfile(guided.voice,story.rate||.84);
   const chunks=narrationChunks(story.voice);
   const hud=$('#raGuidedHud');
   hud.classList.add('is-speaking');
@@ -730,7 +746,11 @@ async function speakCurrentScene(story,runId){
     }
 
     if(index<chunks.length-1){
-      const continued=await wait(profile.pauseMs,runId);
+      const sentence=chunks[index];
+      const pause=/\b(finally|now we test|next|the important point)\b/i.test(sentence)
+        ? profile.longPauseMs
+        : profile.pauseMs;
+      const continued=await wait(pause,runId);
       if(!continued){
         completed=false;
         break;
@@ -876,7 +896,7 @@ function setLabRunActive(active){
 
 function labRunWait(ms,runId){
   const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  const delay=reduced ? Math.max(90,Math.round(ms*.14)) : ms;
+  const delay=reduced ? Math.max(620,Math.round(ms*.5)) : ms;
   return new Promise(resolve=>{
     window.setTimeout(()=>resolve(runId===labRun.runId),delay);
   });
@@ -1066,33 +1086,60 @@ async function runLabScenario(){
   conclusionPanel.hidden=true;
   conclusionPanel.classList.remove('is-visible');
 
-  if(document.body.classList.contains('ra-mobile-sheet-open')) setLabSheet(false);
-
   labRun.runId++;
   const runId=labRun.runId;
+  let completed=false;
   setLabRunActive(true);
 
-  const phases=scenarioPlaybackPhases(c);
-  for(let index=0;index<phases.length;index++){
+  try{
+    if(document.body.classList.contains('ra-mobile-sheet-open')){
+      setLabSheet(false,{restoreFocus:false});
+      await labRunWait(310,runId);
+    }
+
+    if(window.innerWidth<768){
+      $('#raLabEarthMount')?.scrollIntoView({block:'center',behavior:'auto'});
+      await labRunWait(90,runId);
+    }
+
+    const phases=scenarioPlaybackPhases(c);
+    for(let index=0;index<phases.length;index++){
+      if(runId!==labRun.runId) return;
+      renderPlaybackPhase(phases[index],index,c);
+
+      /* Force Safari to paint each state before waiting for the next phase. */
+      await new Promise(resolve=>window.requestAnimationFrame(()=>window.requestAnimationFrame(resolve)));
+      const continued=await labRunWait(phases[index].duration,runId);
+      if(!continued || runId!==labRun.runId) return;
+    }
+
+    const playback=$('#raScenarioPlayback');
+    playback.classList.add('is-finishing');
+    await labRunWait(320,runId);
     if(runId!==labRun.runId) return;
-    renderPlaybackPhase(phases[index],index,c);
-    const continued=await labRunWait(phases[index].duration,runId);
-    if(!continued || runId!==labRun.runId) return;
+
+    playback.hidden=true;
+    playback.classList.remove('is-finishing');
+    earth.lab.update(earthPayload(c));
+    renderScenarioConclusion(c);
+    completed=true;
+  }catch(error){
+    console.error('Scenario playback failed',error);
+    earth.lab.update(earthPayload(c));
+  }finally{
+    if(runId===labRun.runId){
+      setLabRunActive(false);
+      syncLabDraftUI();
+
+      if(!completed){
+        const playback=$('#raScenarioPlayback');
+        if(playback){
+          playback.hidden=true;
+          playback.classList.remove('is-finishing');
+        }
+      }
+    }
   }
-
-  if(runId!==labRun.runId) return;
-
-  const playback=$('#raScenarioPlayback');
-  playback.classList.add('is-finishing');
-  await labRunWait(320,runId);
-  if(runId!==labRun.runId) return;
-
-  playback.hidden=true;
-  playback.classList.remove('is-finishing');
-  earth.lab.update(earthPayload(c));
-  setLabRunActive(false);
-  renderScenarioConclusion(c);
-  syncLabDraftUI();
 }
 
 function resetLab(){
@@ -1119,7 +1166,7 @@ function resetLab(){
   renderEvidence();
 }
 
-function setLabSheet(open){
+function setLabSheet(open,{restoreFocus=true}={}){
   const sheet=$('#raLabSheet');
   const backdrop=$('#raLabBackdrop');
   const trigger=$('#raOpenLabSheet');
@@ -1132,7 +1179,7 @@ function setLabSheet(open){
 
   if(open){
     window.setTimeout(()=>$('#raCloseLabSheet')?.focus(),20);
-  }else{
+  }else if(restoreFocus){
     trigger.focus?.();
   }
 }
