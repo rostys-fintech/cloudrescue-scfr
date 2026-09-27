@@ -212,13 +212,16 @@ function renderVisualSignal(c){
   }
 }
 
+const cloudGlyph = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 18.2h9.4a4 4 0 0 0 .5-8A5.6 5.6 0 0 0 6.6 8.9a4.7 4.7 0 0 0 .8 9.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const bankGlyph = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.1 12 4l8.5 5.1M5.5 10.5v6.8m4-6.8v6.8m5-6.8v6.8m4-6.8v6.8M3.5 19.2h17" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
 function providerName(id){ return providers.find(p=>p.id===id)?.name || id; }
 
 function renderNetwork(){
   $('#providers').innerHTML = providers.map(p => {
     const connected = banks.filter(b=>b.provider===p.id).length;
     return `<div class="provider" data-provider="${p.id}" style="--provider:${p.color}">
-      <div class="provider-title"><span class="provider-glyph" aria-hidden="true">☁</span><div><small>SYNTHETIC PROVIDER</small><strong>${p.name}</strong><small>${connected} connected banks</small></div></div>
+      <div class="provider-title"><span class="provider-glyph" aria-hidden="true">${cloudGlyph}</span><div><small>SYNTHETIC PROVIDER</small><strong>${p.name}</strong><small>${connected} connected banks</small></div></div>
     </div>`;
   }).join('');
 
@@ -228,7 +231,7 @@ function renderNetwork(){
       <h4>${p.name} clients</h4>
       <div class="bank-grid">
       ${group.map(b=>`<div class="bank" data-bank="${b.id}" data-provider="${b.provider}" title="${b.type} · load ${b.criticalLoad} · readiness ${Math.round(b.readiness*100)}%">
-        <div class="bank-title"><span class="bank-glyph" aria-hidden="true">▦</span><div><b>${b.label}</b><small>${b.type}</small></div></div>
+        <div class="bank-title"><span class="bank-glyph" aria-hidden="true">${bankGlyph}</span><div><b>${b.label}</b><small>${b.type}</small></div></div>
       </div>`).join('')}
       </div>
     </section>`;
