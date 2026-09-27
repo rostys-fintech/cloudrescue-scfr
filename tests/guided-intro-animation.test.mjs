@@ -8,7 +8,7 @@ const earth=fs.readFileSync(new URL('../earth-system.js',import.meta.url),'utf8'
 const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'utf8');
 
 assert.equal(index,html);
-assert.match(html,/20260927-story0(?:1|2)/);
+assert.match(html,/20260927-story0[1-9]/);
 
 assert.match(earth,/pathLength="1"/);
 assert.match(earth,/--ra-intro-index:/);
