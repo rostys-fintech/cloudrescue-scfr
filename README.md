@@ -79,8 +79,8 @@ The app recalculates:
 
 The Stress Lab also includes:
 
-- **Replay this crisis** — any live Stress Lab configuration can be handed back to the guided audiovisual story;
-- a **Before / After** comparison that holds the reserve budget constant and changes only the allocation mechanism;
+- **Replay scenario** — any live Stress Lab configuration can be handed back to the guided audiovisual story;
+- a **Controlled Comparison** comparison that holds the reserve budget constant and changes only the allocation mechanism;
 - a **Sensitivity Explorer** for SCFR resilience and uplift across reserve and emergency-market assumptions;
 - a **seeded scenario generator** that deterministically creates a provider shock, market-capacity level, reserve budget and allocation rule;
 - **shareable scenario links** that reconstruct the same assumptions for another user;
