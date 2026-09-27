@@ -932,13 +932,15 @@ function renderFrontier(args){
     ${grid}
     <line class="axis" x1="${p.l}" y1="${H-p.b}" x2="${W-p.r}" y2="${H-p.b}"/>
     ${ticks}
-    <polyline points="${points('market')}" fill="none" stroke="#f05b67" stroke-width="3"/>
-    <polyline points="${points('individual')}" fill="none" stroke="#f0c65b" stroke-width="3"/>
-    <polyline points="${points('scfr')}" fill="none" stroke="#4fbf8f" stroke-width="4"/>
-    <circle class="frontier-point" cx="${x(args.reservePct)}" cy="${y(current.scfr)}" r="6" fill="#fff" stroke="#4fbf8f" stroke-width="3"/>
-    <text class="legend" x="${p.l}" y="14" fill="#f05b67">— Market</text>
-    <text class="legend" x="${p.l+90}" y="14" fill="#f0c65b">— Individual</text>
-    <text class="legend" x="${p.l+205}" y="14" fill="#4fbf8f">— SCFR</text>
+    <line class="frontier-current" x1="${x(args.reservePct)}" y1="${p.t}" x2="${x(args.reservePct)}" y2="${H-p.b}"/>
+    <text class="frontier-current-label" x="${x(args.reservePct)+7}" y="${p.t+10}">Current scenario</text>
+    <polyline points="${points('market')}" fill="none" stroke="#b94f5a" stroke-width="2.4"/>
+    <polyline points="${points('individual')}" fill="none" stroke="#a47b36" stroke-width="2.4"/>
+    <polyline points="${points('scfr')}" fill="none" stroke="#357d63" stroke-width="3.2"/>
+    <circle class="frontier-point" cx="${x(args.reservePct)}" cy="${y(current.scfr)}" r="5" fill="#357d63" stroke="#ffffff" stroke-width="2"/>
+    <text class="legend" x="${p.l}" y="14" fill="#b94f5a">Market</text>
+    <text class="legend" x="${p.l+72}" y="14" fill="#a47b36">Individual</text>
+    <text class="legend" x="${p.l+157}" y="14" fill="#357d63">SCFR</text>
     <text class="axis-label" x="${W/2-95}" y="${H}">Pre-reserved capacity (% of system critical load)</text>
   </svg>`;
 }
