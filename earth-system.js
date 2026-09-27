@@ -219,13 +219,17 @@ export function createEarthSystem(mount,options){
     input=input||{};
     const scene=input.scene||0;
     const outageProvider=input.outageProvider||'blue';
+    const outageProviders=Array.isArray(input.outageProviders) && input.outageProviders.length
+      ? [...new Set(input.outageProviders)]
+      : [outageProvider];
+    const failedProviders=new Set(outageProviders);
     const comparison=input.comparison||null;
     const reservePct=input.reservePct==null ? 25 : input.reservePct;
     const marketPct=input.marketPct==null ? 20 : input.marketPct;
     const labStrategy=input.labStrategy||'market';
     const labScene=labStrategy==='market' ? 2 : labStrategy==='individual' ? 3 : 4;
     const effectiveScene = mode==='evidence' ? 0 : mode==='lab' ? labScene : scene;
-    const signature=[effectiveScene,outageProvider,labStrategy,marketPct,reservePct].join('|');
+    const signature=[effectiveScene,outageProviders.join(','),labStrategy,marketPct,reservePct].join('|');
 
     if(previousSignature && signature!==previousSignature){
       mount.classList.remove('ra-state-changing');
@@ -236,12 +240,13 @@ export function createEarthSystem(mount,options){
     previousSignature=signature;
 
     mount.dataset.scene=String(effectiveScene);
-    mount.dataset.outageProvider=outageProvider;
+    mount.dataset.outageProvider=outageProviders[0] || outageProvider;
+    mount.dataset.outageProviders=outageProviders.join(',');
     mount.style.setProperty('--ra-reserve-strength',clamp(reservePct/60).toFixed(3));
     mount.style.setProperty('--ra-market-strength',clamp(marketPct/50).toFixed(3));
     stateLabel.textContent=sceneLabel(effectiveScene,mode);
 
-    const affectedBanks=banks.filter(function(bank){ return bank.provider===outageProvider; });
+    const affectedBanks=banks.filter(function(bank){ return failedProviders.has(bank.provider); });
     const affectedSet=new Set(affectedBanks.map(function(bank){ return bank.id; }));
     const selectedModel = comparison && (mode==='lab' ? comparison[labStrategy] : comparison.scfr);
     const market = comparison && comparison.market;
@@ -254,19 +259,19 @@ export function createEarthSystem(mount,options){
 
     svg.querySelectorAll('.ra-earth-provider').forEach(function(node){
       const id=node.dataset.provider;
-      const outage = id===outageProvider && effectiveScene>=1 && mode!=='evidence';
+      const outage = failedProviders.has(id) && effectiveScene>=1 && mode!=='evidence';
       node.classList.toggle('is-outage',outage);
-      node.classList.toggle('is-focus',mode==='lab' && id===outageProvider);
+      node.classList.toggle('is-focus',mode==='lab' && failedProviders.has(id));
     });
 
     svg.querySelectorAll('.ra-earth-link').forEach(function(link){
-      const affected=link.dataset.provider===outageProvider;
+      const affected=failedProviders.has(link.dataset.provider);
       link.classList.toggle('is-disrupted',affected && effectiveScene>=1 && mode!=='evidence');
       link.classList.toggle('is-focus',mode==='lab' && affected);
     });
 
     svg.querySelectorAll('.ra-earth-packet').forEach(function(packet){
-      const affected=packet.dataset.provider===outageProvider;
+      const affected=failedProviders.has(packet.dataset.provider);
       packet.classList.toggle('is-hidden',affected && effectiveScene>=1 && mode!=='evidence');
     });
 
