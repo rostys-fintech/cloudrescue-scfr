@@ -301,6 +301,7 @@ function comparisonHTML(){
       <div class="eyebrow">${label}</div>
       <h3>${name}</h3>
       <div class="compare-score">${Math.round(r.resilience)} <small>/100</small></div>
+      <div class="compare-bar"><i style="width:${Math.min(100,r.resilience)}%"></i></div>
       <p>Systemic Resilience Score</p>
       <div class="mini"><span>Banks recovered</span><b>${r.banksRecovered}/${r.affectedCount}</b></div>
       <div class="mini"><span>Critical workload restored</span><b>${pct(r.criticalRestoredPct)}</b></div>
@@ -425,6 +426,12 @@ function setFocusMode(on){
 }
 
 function setupStory(){
+  if(!('speechSynthesis' in window)){
+    narrationEnabled=false;
+    const narrationBtn=$('#narrationToggle');
+    narrationBtn.disabled=true;
+    narrationBtn.textContent='CC Captions only';
+  }
   $('#sceneDots').innerHTML = scenes.map((_,i)=>`<button data-scene="${i}" aria-label="Scene ${i+1}"></button>`).join('');
   $$('#sceneDots button').forEach(btn=>btn.addEventListener('click',()=>{
     scene=Number(btn.dataset.scene); stopAuto(); applyScene();
