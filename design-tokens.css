@@ -1,0 +1,146 @@
+/* Resilience Atlas — Design Tokens v1.0
+   APPROVED TARGET STATE
+   Do not import into the legacy UI until migration phase begins.
+*/
+
+:root {
+  /* Typography */
+  --ra-font-sans: Inter, Geist, "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --ra-text-xs: 0.6875rem;
+  --ra-text-sm: 0.8125rem;
+  --ra-text-md: 0.9375rem;
+  --ra-text-lg: 1.125rem;
+  --ra-text-xl: 1.375rem;
+  --ra-h3: clamp(1.125rem, 1.6vw, 1.375rem);
+  --ra-h2: clamp(1.625rem, 2.3vw, 2.125rem);
+  --ra-h1: clamp(2.25rem, 4vw, 3rem);
+  --ra-display-l: clamp(2.75rem, 5vw, 3.75rem);
+  --ra-display-xl: clamp(4rem, 6vw, 5.5rem);
+
+  /* Geometry */
+  --ra-radius-xs: 6px;
+  --ra-radius-sm: 10px;
+  --ra-radius-md: 14px;
+  --ra-radius-lg: 20px;
+  --ra-frame-cut: 12px;
+
+  /* Spacing */
+  --ra-space-1: 4px;
+  --ra-space-2: 8px;
+  --ra-space-3: 12px;
+  --ra-space-4: 16px;
+  --ra-space-5: 20px;
+  --ra-space-6: 24px;
+  --ra-space-8: 32px;
+  --ra-space-10: 40px;
+  --ra-space-12: 48px;
+  --ra-space-16: 64px;
+
+  /* Shared semantic colors */
+  --ra-blue: #35A7FF;
+  --ra-teal: #27D3B2;
+  --ra-orange: #F6A04D;
+  --ra-green: #43D6A0;
+  --ra-warning: #F0B45A;
+  --ra-critical: #FF4D64;
+
+  /* Provider identity */
+  --ra-provider-blue: #35A7FF;
+  --ra-provider-orange: #F6A04D;
+  --ra-provider-green: #43D6A0;
+
+  /* Motion */
+  --ra-ease-standard: cubic-bezier(.2,.7,.2,1);
+  --ra-ease-emphasis: cubic-bezier(.16,.84,.22,1);
+  --ra-duration-fast: 160ms;
+  --ra-duration-base: 280ms;
+  --ra-duration-slow: 520ms;
+  --ra-duration-flow: 4200ms;
+
+  /* Layout */
+  --ra-content-max: 1640px;
+  --ra-touch-target: 44px;
+  --ra-rail-simulation: 24%;
+  --ra-rail-lab: 28%;
+}
+
+/* Dark theme — primary */
+[data-ra-theme="dark"],
+:root {
+  --ra-canvas: #070A0F;
+  --ra-surface: #0D1219;
+  --ra-surface-raised: #151C25;
+  --ra-surface-soft: #101720;
+
+  --ra-text-1: #F4F7FA;
+  --ra-text-2: #A8B4C2;
+  --ra-text-3: #738194;
+
+  --ra-border: rgba(145, 170, 195, 0.15);
+  --ra-border-strong: rgba(145, 170, 195, 0.28);
+
+  --ra-primary: #35A7FF;
+  --ra-accent: #27D3B2;
+
+  --ra-shadow-panel: 0 14px 38px rgba(0,0,0,.22);
+  --ra-shadow-focus: 0 0 24px rgba(53,167,255,.12);
+}
+
+/* Light / Analysis */
+[data-ra-theme="light"] {
+  --ra-canvas: #F5F8FC;
+  --ra-surface: #FFFFFF;
+  --ra-surface-raised: #F0F5FA;
+  --ra-surface-soft: #F8FAFD;
+
+  --ra-text-1: #122033;
+  --ra-text-2: #52647A;
+  --ra-text-3: #7E8FA3;
+
+  --ra-border: #D7E1EC;
+  --ra-border-strong: #BDCAD8;
+
+  --ra-primary: #1677E8;
+  --ra-accent: #13B89A;
+
+  --ra-orange: #E88735;
+  --ra-green: #28B889;
+  --ra-warning: #E8A335;
+  --ra-critical: #E5485B;
+
+  --ra-shadow-panel: 0 12px 32px rgba(22, 60, 100, .08);
+  --ra-shadow-focus: 0 0 22px rgba(22,119,232,.09);
+}
+
+/* Semantic state aliases */
+:root {
+  --ra-state-stable: var(--ra-blue);
+  --ra-state-active: var(--ra-blue);
+  --ra-state-affected: var(--ra-critical);
+  --ra-state-shortage: var(--ra-warning);
+  --ra-state-ringfenced: var(--ra-orange);
+  --ra-state-recovering: var(--ra-teal);
+  --ra-state-recovered: var(--ra-green);
+
+  --ra-flow-normal: var(--ra-blue);
+  --ra-flow-reserve: var(--ra-teal);
+  --ra-flow-disrupted: var(--ra-critical);
+}
+
+/* Reference breakpoints
+   Large desktop >= 1440
+   Desktop       1200–1439
+   Tablet        768–1199
+   Mobile        < 768
+   Compact       < 430
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ra-duration-fast: 0ms;
+    --ra-duration-base: 0ms;
+    --ra-duration-slow: 0ms;
+    --ra-duration-flow: 0ms;
+  }
+}
