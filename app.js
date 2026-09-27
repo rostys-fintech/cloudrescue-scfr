@@ -282,7 +282,7 @@ function setNarration(enabled){
   const btn = $('#narrationToggle');
   if(btn){
     btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
-    btn.textContent = enabled ? '🔊 Narration' : '🔇 Muted';
+    btn.textContent = enabled ? 'Narration on' : 'Narration off';
   }
   if(!enabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
 }
@@ -795,7 +795,7 @@ function stopAuto(){
   document.body.classList.remove('demo-playing');
   clearSceneMotion();
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
-  $('#autoScene').textContent='▶ Watch demo';
+  $('#autoScene').textContent='Run replay';
 }
 
 async function playDemoScene(runId){
@@ -829,7 +829,7 @@ function startDemo({reset=true}={}){
   const runId=demoRunId;
   autoplay=-1;
   document.body.classList.add('demo-playing');
-  $('#autoScene').textContent='■ Stop demo';
+  $('#autoScene').textContent='Stop replay';
   playDemoScene(runId);
 }
 
@@ -837,7 +837,7 @@ function startDemo({reset=true}={}){
 function setFocusMode(on){
   document.body.classList.toggle('story-focus', on);
   const btn = $('#focusStory');
-  if(btn) btn.textContent = on ? '✕ Exit focus' : '⛶ Focus view';
+  if(btn) btn.textContent = on ? 'Exit focus' : 'Focus view';
   requestAnimationFrame(drawNetworkLines);
 }
 
@@ -1063,7 +1063,7 @@ async function shareScenario(){
   const btn=$('#shareScenarioBtn');
   try{
     await navigator.clipboard.writeText(url);
-    btn.textContent='✓ Scenario link copied';
+    btn.textContent='Scenario link copied';
   }catch(e){
     const area=document.createElement('textarea');
     area.value=url;
@@ -1074,9 +1074,9 @@ async function shareScenario(){
     area.select();
     document.execCommand('copy');
     area.remove();
-    btn.textContent='✓ Scenario link copied';
+    btn.textContent='Scenario link copied';
   }
-  setTimeout(()=>{btn.textContent='⧉ Copy scenario link'},1500);
+  setTimeout(()=>{btn.textContent='Copy scenario link'},1500);
 }
 
 function loadScenarioFromURL(){
