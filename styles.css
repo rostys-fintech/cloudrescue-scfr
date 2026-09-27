@@ -2936,3 +2936,114 @@ html[data-theme="dark"] .hero-summary p{color:#96a7b8}
   .hero-summary{grid-template-columns:1fr}
   .hero-summary p{grid-column:auto}
 }
+
+
+/* ---------- Final readability floor ---------- */
+/* Competition build: avoid tiny labels that look like design mock-up text on a real laptop. */
+.research-question span,
+.section-heading span,
+.challenge>span,
+.scenario-generator-head span,
+.mechanism-panel-head span,
+.mechanism-reserve>span,
+.mechanism-banks>span,
+.mechanism-flow b,
+.mechanism-delta span,
+.mechanism-delta small,
+.mechanism-score small,
+.same-budget-proof span,
+.same-budget-proof small,
+.reality-grid span,
+.reality-grid b,
+.architecture-flow>div span,
+.architecture-flow>div small,
+.architecture-tech span,
+.learning-steps span,
+.learning-note b,
+.sensitivity-mode,
+.heat-axis-title.y,
+.heat-x-labels b,
+.heat-y,
+.heat-x-title,
+.heat-legend,
+.heat-legend b,
+.reserve-node span,
+.reserve-node small,
+.flow-box small,
+.story-caption span,
+.signal-pill span,
+.capacity-head span,
+.capacity-labels span,
+.fragment-visual span,
+.motivation-row span,
+.impact-overlay span,
+.impact-overlay small,
+.voice-control,
+.voice-control select,
+.concentration-provider small,
+.outage-cloud small,
+.affected-visual>small,
+.request-side>span,
+.capacity-reservoir>span,
+.capacity-caption small,
+.queue-label span,
+.reserve-source>span,
+.reserve-outcome>span,
+.reserve-source>small,
+.reserve-outcome>small,
+.pool-node span,
+.pool-node small,
+.ring-fence span,
+.ring-fence i,
+.dots button b,
+.compare-outcome-label{
+  font-size:9px!important;
+}
+
+.outcome-bank b,
+.affected-bank-icon b{
+  font-size:8px!important;
+}
+
+.bank.stranded:after{
+  font-size:8px;
+  bottom:6px;
+  left:7px;
+  padding:2px 5px;
+}
+
+.story-caption strong{
+  font-size:14px;
+}
+
+.mechanism-flow small{
+  max-width:96px;
+  line-height:1.35;
+}
+
+.mechanism-delta{
+  min-width:118px;
+}
+
+.heat-cell{
+  min-height:44px;
+}
+
+.heat-cell b{
+  font-size:11px;
+}
+
+.architecture-flow>div,
+.learning-steps>div{
+  min-height:118px;
+}
+
+.evidence-strip>div,
+.evidence-strip>a{
+  min-height:84px;
+}
+
+@media(max-width:720px){
+  .heat-cell{min-height:38px}
+  .story-caption strong{font-size:12px}
+}
