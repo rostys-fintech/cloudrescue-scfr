@@ -13,7 +13,7 @@
     })();
   </script>
   <title>CloudRescue — SCFR Stress Lab</title>
-  <link rel="stylesheet" href="styles.css?v=20260927-1215">
+  <link rel="stylesheet" href="styles.css?v=20260927-1235">
 </head>
 <body>
 <div class="shell">
@@ -116,6 +116,21 @@
       <div class="research-question">
         <span>CORE QUESTION</span>
         <b>Can pooling and pre-arranged allocation of backup cloud capacity improve systemic recovery without increasing the total reserve?</b>
+      </div>
+      <div class="evidence-strip" aria-label="Real-world evidence behind the scenario">
+        <div class="evidence-intro">
+          <span>WHY THIS PROBLEM IS REAL</span>
+          <b>Regulators already treat common ICT-provider dependency as a concentration and systemic-resilience risk.</b>
+        </div>
+        <a href="https://www.bis.org/publications/fsi-insight-53-managing-cloud-risk-some-considerations-oversight-critical-cloud-service-providers-financial-sector" target="_blank" rel="noopener">
+          <span>BIS / FSI</span><b>Major CSP disruption can have systemic implications</b>
+        </a>
+        <a href="https://www.esma.europa.eu/dora-oversight" target="_blank" rel="noopener">
+          <span>DORA</span><b>EU oversight addresses reliance on a limited number of ICT providers</b>
+        </a>
+        <a href="https://www.eba.europa.eu/publications-and-media/publications/risk-assessment-report-june-2026" target="_blank" rel="noopener">
+          <span>EBA 2026</span><b>High third-party ICT dependency amplifies operational-resilience risk</b>
+        </a>
       </div>
     </section>
 
@@ -222,6 +237,16 @@
           <p><b>wᵢ</b> combines critical workload and stylized systemic importance. <b>rᵢ</b> is the restored fraction after capacity allocation and readiness constraints.</p>
           <div class="guardrail">v0.1 is intentionally synthetic. Empirical calibration is a future research stage.</div>
         </article>
+        <article class="card evidence-card">
+          <div class="eyebrow">REAL-WORLD MOTIVATION</div>
+          <h2>The problem is observed. The numbers are synthetic.</h2>
+          <p>CloudRescue does not assume that 20 named banks literally use three named providers. The prototype uses a stylized network to stress-test a real concentration-risk mechanism documented by BIS, DORA and the EBA.</p>
+          <div class="evidence-grid">
+            <a href="https://www.bis.org/publications/fsi-insight-53-managing-cloud-risk-some-considerations-oversight-critical-cloud-service-providers-financial-sector" target="_blank" rel="noopener"><span>BIS / FSI Insights 53</span><b>Cloud use for critical services is rising; disruption at a major CSP may have systemic implications.</b></a>
+            <a href="https://www.esma.europa.eu/dora-oversight" target="_blank" rel="noopener"><span>DORA Oversight</span><b>EU framework explicitly addresses systemic and concentration risks from reliance on limited ICT providers.</b></a>
+            <a href="https://www.eba.europa.eu/publications-and-media/publications/risk-assessment-report-june-2026" target="_blank" rel="noopener"><span>EBA Risk Assessment 2026</span><b>High dependency on third-party ICT providers such as cloud providers amplifies operational-resilience risks.</b></a>
+          </div>
+        </article>
         <article class="card roadmap-card">
           <div class="eyebrow">RESEARCH ROADMAP</div>
           <h2>From hackathon MVP to research companion</h2>
@@ -238,6 +263,6 @@
 
   <footer><span>CloudRescue · SCFR Stress Lab</span><span>Rostyslav Honcharenko · 2026</span></footer>
 </div>
-<script type="module" src="app.js?v=20260927-1215"></script>
+<script type="module" src="app.js?v=20260927-1235"></script>
 </body>
 </html>
