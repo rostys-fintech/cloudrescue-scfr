@@ -230,6 +230,13 @@ function stopAuto(){
   $('#autoScene').textContent='▶ Auto-play';
 }
 
+function setFocusMode(on){
+  document.body.classList.toggle('story-focus', on);
+  const btn = $('#focusStory');
+  if(btn) btn.textContent = on ? '✕ Exit focus' : '⛶ Focus view';
+  requestAnimationFrame(drawNetworkLines);
+}
+
 function setupStory(){
   $('#sceneDots').innerHTML = scenes.map((_,i)=>`<button data-scene="${i}" aria-label="Scene ${i+1}"></button>`).join('');
   $$('#sceneDots button').forEach(btn=>btn.addEventListener('click',()=>{
@@ -253,6 +260,25 @@ function setupStory(){
       if(scene<scenes.length-1){ scene++; applyScene(); }
       else stopAuto();
     },2600);
+  });
+
+  $('#focusStory').addEventListener('click',()=>{
+    setFocusMode(!document.body.classList.contains('story-focus'));
+  });
+
+  document.addEventListener('keydown',event=>{
+    if(event.key === 'Escape' && document.body.classList.contains('story-focus')){
+      setFocusMode(false);
+      return;
+    }
+    const storyActive = $('#story').classList.contains('active');
+    if(!storyActive || ['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
+
+    if(event.key === 'ArrowRight' && scene < scenes.length-1){
+      stopAuto(); scene++; applyScene();
+    } else if(event.key === 'ArrowLeft' && scene > 0){
+      stopAuto(); scene--; applyScene();
+    }
   });
 
   applyScene();
