@@ -5269,3 +5269,104 @@ body.ra-guided-running .ra-guided-actions{
     max-width:calc(100% - 24px)!important;
   }
 }
+
+
+/* =========================================================
+   GUIDED INTRO — BUILD THE SHARED DEPENDENCY MAP ON SCENE 01
+   ========================================================= */
+
+#raEarthMount.ra-guided-intro .ra-earth-atmosphere{
+  animation:raIntroAtmosphere 1.15s var(--ra-ease-emphasis) both;
+}
+#raEarthMount.ra-guided-intro .ra-earth-grid,
+#raEarthMount.ra-guided-intro .ra-earth-land{
+  animation:raIntroWorld 1.05s var(--ra-ease-standard) both;
+}
+#raEarthMount.ra-guided-intro .ra-earth-provider{
+  opacity:0;
+  animation:raIntroProvider .72s var(--ra-ease-emphasis) both;
+  animation-delay:calc(.42s + var(--ra-intro-index,0) * .28s);
+}
+#raEarthMount.ra-guided-intro .ra-earth-provider .ra-provider-halo{
+  animation:raIntroProviderHalo 1.25s ease-out both;
+  animation-delay:calc(.58s + var(--ra-intro-index,0) * .28s);
+}
+#raEarthMount.ra-guided-intro .ra-earth-bank{
+  opacity:0;
+  animation:raIntroBank .52s var(--ra-ease-standard) both;
+  animation-delay:calc(1.18s + var(--ra-intro-index,0) * .055s);
+}
+#raEarthMount.ra-guided-intro .ra-earth-link{
+  opacity:0;
+  stroke-dasharray:1;
+  stroke-dashoffset:1;
+  animation:raIntroDependency 1.05s var(--ra-ease-standard) both;
+  animation-delay:calc(1.42s + var(--ra-intro-index,0) * .045s);
+}
+#raEarthMount.ra-guided-intro .ra-earth-packet{
+  opacity:0!important;
+  animation:raIntroPackets .48s ease-out both;
+  animation-delay:calc(2.85s + var(--ra-intro-index,0) * .018s);
+}
+#raEarthMount.ra-guided-intro .ra-earth-readout{
+  animation:raIntroReadout .55s ease-out both;
+  animation-delay:2.95s;
+}
+#raEarthMount.ra-guided-intro .ra-earth-state b::after{
+  content:" · MAPPING DEPENDENCIES";
+  color:var(--ra-primary);
+  font-size:.72em;
+  letter-spacing:.05em;
+}
+
+@keyframes raIntroAtmosphere{
+  0%{opacity:.15;stroke-width:.55}
+  55%{opacity:.72;stroke-width:2.1}
+  100%{opacity:1;stroke-width:1.35}
+}
+@keyframes raIntroWorld{
+  from{opacity:.18}
+  to{opacity:1}
+}
+@keyframes raIntroProvider{
+  0%{opacity:0}
+  55%{opacity:1}
+  100%{opacity:1}
+}
+@keyframes raIntroProviderHalo{
+  0%{opacity:0;transform:scale(.55)}
+  52%{opacity:1;transform:scale(1.22)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes raIntroBank{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes raIntroDependency{
+  0%{opacity:0;stroke-dashoffset:1}
+  20%{opacity:.12}
+  100%{opacity:.28;stroke-dashoffset:0}
+}
+@keyframes raIntroPackets{
+  from{opacity:0}
+  to{opacity:.7}
+}
+@keyframes raIntroReadout{
+  from{opacity:0;transform:translateY(-5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #raEarthMount.ra-guided-intro .ra-earth-atmosphere,
+  #raEarthMount.ra-guided-intro .ra-earth-grid,
+  #raEarthMount.ra-guided-intro .ra-earth-land,
+  #raEarthMount.ra-guided-intro .ra-earth-provider,
+  #raEarthMount.ra-guided-intro .ra-earth-provider .ra-provider-halo,
+  #raEarthMount.ra-guided-intro .ra-earth-bank,
+  #raEarthMount.ra-guided-intro .ra-earth-link,
+  #raEarthMount.ra-guided-intro .ra-earth-packet,
+  #raEarthMount.ra-guided-intro .ra-earth-readout{
+    animation-duration:.3s!important;
+    animation-delay:0s!important;
+  }
+}
