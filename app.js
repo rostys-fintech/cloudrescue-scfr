@@ -328,18 +328,7 @@ function renderVisualSignal(c){
   const scfr = c.scfr;
 
   if(scene === 0){
-    el.innerHTML = `
-      <div class="concentration-map">
-        ${providers.map(p=>{
-          const count=banks.filter(b=>b.provider===p.id).length;
-          return `<div class="concentration-provider" data-provider="${p.id}">
-            <span class="mini-cloud">${cloudGlyph}</span>
-            <b>${p.name}</b>
-            <div class="bank-dots">${Array.from({length:count},()=>'<i></i>').join('')}</div>
-            <small>${count} banks</small>
-          </div>`;
-        }).join('')}
-      </div>`;
+    el.innerHTML = '';
   } else if(scene === 1){
     el.innerHTML = `
       <div class="outage-story">
