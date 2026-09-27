@@ -99,7 +99,7 @@ The lab also includes:
 - shareable scenario links;
 - JSON export;
 - replay of the current scenario;
-- controlled Before / After comparison;
+- controlled Controlled Comparison comparison;
 - resilience frontier;
 - sensitivity explorer;
 - explicit constraint tests.
