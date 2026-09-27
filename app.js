@@ -227,7 +227,7 @@ function renderNetwork(){
 
   $('#bankGroups').innerHTML = providers.map(p => {
     const group = banks.filter(b=>b.provider===p.id);
-    return `<section class="bank-group">
+    return `<section class="bank-group" data-provider="${p.id}">
       <h4>${p.name} clients</h4>
       <div class="bank-grid">
       ${group.map(b=>`<div class="bank" data-bank="${b.id}" data-provider="${b.provider}" title="${b.type} · load ${b.criticalLoad} · readiness ${Math.round(b.readiness*100)}%">
@@ -311,6 +311,20 @@ function comparisonHTML(){
     </article>`).join('');
 }
 
+function renderImpact(c){
+  const data = [
+    ['REAL-WORLD RISK','ICT concentration','Synthetic network illustrates a documented systemic-resilience concern.'],
+    ['COMMON SHOCK',`${c.market.affectedCount} banks affected`,'One provider outage creates simultaneous recovery demand.'],
+    ['BACKUP SHORTFALL',`${num(Math.max(0,c.market.totalDemand-c.market.allocated))} units`,'Immediate emergency capacity cannot cover the shock.'],
+    ['FRAGMENTATION',`${num(c.individual.strandedReserve)} units stranded`,'Reserve exists, but ring-fencing prevents it from moving where needed.'],
+    ['COORDINATED RECOVERY',`${Math.round(c.scfr.criticalRestoredPct)}% restored`,'Same reserve budget, pooled across affected banks.'],
+    ['RESULT','17 → 34 → 77','Market scramble → individual reserves → pooled SCFR.']
+  ][scene];
+  $('#impactKicker').textContent=data[0];
+  $('#impactValue').textContent=data[1];
+  $('#impactLabel').textContent=data[2];
+}
+
 function clearStatuses(){
   $$('.provider').forEach(el=>el.classList.remove('offline'));
   $$('.bank').forEach(el=>el.classList.remove('affected','restored','waiting','stranded'));
@@ -345,6 +359,7 @@ function applyScene(){
   $('#flowMarket').textContent = num(c.market.totalDemand * defaults.marketPct / 100);
   $('#flowReserve').textContent = num(c.scfr.totalReserve);
   renderVisualSignal(c);
+  renderImpact(c);
 
   if(scene >= 1){
     document.querySelector('.provider[data-provider="blue"]')?.classList.add('offline');
