@@ -752,6 +752,10 @@ function applyGuidedCue(sceneIndex,cue){
   const c=comparison();
   earth.simulation.update({...earthPayload(c),scene:cue.visualScene});
   $('#raCanvasTitle').textContent=cue.caption;
+  if(sceneIndex===0){
+    $('#raGuidedKicker').textContent='LIVE CUE';
+    $('#raGuidedCaption').textContent=cue.caption;
+  }
   applyGuidedMetric(cue,c);
 }
 
