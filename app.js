@@ -1351,7 +1351,6 @@ function renderLab(){
   });
 });
 $$('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.dataset.preset)));
-$('#runBtn').addEventListener('click',renderLab);
 $('#exportBtn').addEventListener('click',exportScenario);
 $('#replayScenarioBtn').addEventListener('click',replayCurrentScenario);
 $('#generateScenarioBtn').addEventListener('click',generateScenario);
