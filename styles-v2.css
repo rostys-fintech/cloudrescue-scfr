@@ -5804,3 +5804,319 @@ html[data-theme="analysis"] .hero-network:before{
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* =========================================================
+   MOBILE EXPERIENCE v3 — dedicated phone map + visual-first replay
+   ========================================================= */
+
+.mobile-system-map{
+  display:none;
+}
+
+@media (max-width:600px){
+  /* On phone, replace the desktop topology canvas with one readable system map. */
+  .hero-cyber-frame .hero-system{
+    min-height:0!important;
+    padding:0 12px 14px!important;
+    border-top:1px solid var(--v2-line)!important;
+  }
+  .hero-system-head,
+  .hero-network{
+    display:none!important;
+  }
+
+  .mobile-system-map{
+    display:block;
+    position:relative;
+    margin-top:12px;
+    padding:14px 12px 12px;
+    border:1px solid var(--v2-line-strong);
+    background:
+      linear-gradient(180deg,color-mix(in srgb,var(--v2-primary) 4%,transparent),transparent 42%),
+      color-mix(in srgb,var(--v2-surface) 62%,transparent);
+    clip-path:polygon(0 9px,9px 0,calc(100% - 9px) 0,100% 9px,100% calc(100% - 9px),calc(100% - 9px) 100%,9px 100%,0 calc(100% - 9px));
+    overflow:hidden;
+  }
+  .mobile-system-map:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(var(--cyber-grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--cyber-grid) 1px,transparent 1px);
+    background-size:26px 26px;
+    opacity:.55;
+  }
+  .mobile-system-map:after{
+    content:"";
+    position:absolute;
+    left:0;top:0;
+    width:92px;height:2px;
+    background:var(--v2-primary);
+    box-shadow:0 0 14px color-mix(in srgb,var(--v2-primary) 44%,transparent);
+  }
+  .mobile-system-map>*{
+    position:relative;
+    z-index:1;
+  }
+
+  .mobile-map-title{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    gap:10px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--v2-line);
+  }
+  .mobile-map-title span{
+    color:var(--v2-primary);
+    font-size:6px;
+    font-weight:850;
+    letter-spacing:.13em;
+  }
+  .mobile-map-title b{
+    color:var(--v2-ink);
+    font-size:10px;
+    font-weight:760;
+  }
+
+  .mobile-provider-row{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+    margin-top:12px;
+  }
+  .mobile-provider{
+    position:relative;
+    min-width:0;
+    padding:9px 8px 8px;
+    border:1px solid var(--v2-line);
+    background:color-mix(in srgb,var(--v2-surface) 72%,transparent);
+  }
+  .mobile-provider:before{
+    content:"";
+    position:absolute;
+    left:-1px;top:-1px;
+    width:44%;
+    height:2px;
+    background:var(--v2-primary);
+  }
+  .mobile-provider span{
+    display:block;
+    color:var(--v2-muted);
+    font-size:5.5px;
+    font-weight:850;
+    letter-spacing:.12em;
+  }
+  .mobile-provider b{
+    display:inline-block;
+    margin-top:6px;
+    color:var(--v2-ink);
+    font-size:20px;
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .mobile-provider small{
+    margin-left:4px;
+    color:var(--v2-muted);
+    font-size:6px;
+  }
+  .mobile-provider.risk{
+    border-color:color-mix(in srgb,var(--v2-danger) 58%,transparent);
+    background:color-mix(in srgb,var(--v2-danger) 7%,var(--v2-surface));
+  }
+  .mobile-provider.risk:before{
+    width:68%;
+    background:var(--v2-danger);
+    box-shadow:0 0 12px color-mix(in srgb,var(--v2-danger) 42%,transparent);
+  }
+  .mobile-provider.risk span{
+    color:var(--v2-danger);
+  }
+
+  .mobile-map-arrow{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    height:26px;
+    margin:0 13px;
+  }
+  .mobile-map-arrow i{
+    position:relative;
+    display:block;
+  }
+  .mobile-map-arrow i:before{
+    content:"";
+    position:absolute;
+    left:50%;top:0;
+    width:1px;height:17px;
+    background:var(--v2-line-strong);
+  }
+  .mobile-map-arrow i:after{
+    content:"";
+    position:absolute;
+    left:calc(50% - 3px);
+    bottom:2px;
+    width:5px;height:5px;
+    border-right:1px solid var(--v2-line-strong);
+    border-bottom:1px solid var(--v2-line-strong);
+    transform:rotate(45deg);
+  }
+  .mobile-map-arrow i:first-child:before{
+    background:var(--v2-danger);
+    box-shadow:0 0 8px color-mix(in srgb,var(--v2-danger) 35%,transparent);
+  }
+  .mobile-map-arrow i:first-child:after{
+    border-color:var(--v2-danger);
+  }
+
+  .mobile-bank-field{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+  }
+  .mobile-bank-group{
+    min-height:55px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
+    align-content:center;
+    padding:7px;
+    border:1px solid var(--v2-line);
+    background:color-mix(in srgb,var(--v2-surface) 50%,transparent);
+  }
+  .mobile-bank-group i{
+    display:block;
+    aspect-ratio:1;
+    min-width:0;
+    border:1px solid color-mix(in srgb,var(--v2-primary) 42%,transparent);
+    background:color-mix(in srgb,var(--v2-primary) 8%,transparent);
+  }
+  .mobile-bank-group.risk{
+    border-color:color-mix(in srgb,var(--v2-danger) 48%,transparent);
+  }
+  .mobile-bank-group.risk i{
+    border-color:color-mix(in srgb,var(--v2-danger) 58%,transparent);
+    background:color-mix(in srgb,var(--v2-danger) 13%,transparent);
+    box-shadow:0 0 7px color-mix(in srgb,var(--v2-danger) 12%,transparent);
+  }
+
+  .mobile-risk-strip{
+    margin-top:10px;
+    padding:10px 10px 9px;
+    border-left:2px solid var(--v2-danger);
+    border-top:1px solid color-mix(in srgb,var(--v2-danger) 34%,transparent);
+    border-bottom:1px solid color-mix(in srgb,var(--v2-danger) 34%,transparent);
+    background:linear-gradient(90deg,color-mix(in srgb,var(--v2-danger) 9%,transparent),transparent 78%);
+  }
+  .mobile-risk-strip span{
+    display:block;
+    color:var(--v2-danger);
+    font-size:5.5px;
+    font-weight:850;
+    letter-spacing:.13em;
+  }
+  .mobile-risk-strip b{
+    display:block;
+    margin-top:4px;
+    color:var(--v2-ink);
+    font-size:11px;
+    line-height:1.35;
+  }
+
+  /* Crisis Replay is visual-first on phone. */
+  .story-layout{
+    display:flex!important;
+    flex-direction:column!important;
+  }
+  .stage-wrap{
+    order:1!important;
+  }
+  .narrative{
+    order:2!important;
+  }
+
+  /* Make the live canvas itself read as the product, not as another card. */
+  .stage-wrap{
+    border-color:var(--v2-line-strong)!important;
+    background:
+      linear-gradient(180deg,color-mix(in srgb,var(--v2-primary) 3%,transparent),transparent 36%),
+      var(--v2-surface)!important;
+  }
+  .stage-wrap:after{
+    width:72px!important;
+  }
+  .stage-hud{
+    border-bottom:1px solid var(--v2-line)!important;
+  }
+  .impact-overlay{
+    border-left:2px solid var(--v2-primary)!important;
+  }
+
+  /* Narrative becomes a compact explainer below the animation. */
+  .narrative{
+    border-left:1px solid var(--v2-line)!important;
+    border-top:1px solid var(--v2-line-strong)!important;
+    background:color-mix(in srgb,var(--v2-surface) 72%,transparent)!important;
+  }
+  .narrative .scene-label{
+    width:auto!important;
+    display:inline-flex!important;
+  }
+  .narrative h2{
+    max-width:13ch;
+  }
+  .story-actions{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+  .story-nav{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:6px!important;
+  }
+  .story-nav .btn{
+    width:100%!important;
+  }
+
+  /* When simulation starts on phone, never fall back into desktop focus styling. */
+  body.story-focus .topbar,
+  body.story-focus .hero,
+  body.story-focus footer{
+    display:initial!important;
+  }
+  body.story-focus .cyber-topbar{
+    display:grid!important;
+  }
+  body.story-focus .hero{
+    display:grid!important;
+  }
+  body.story-focus .shell{
+    width:auto!important;
+    max-width:none!important;
+  }
+}
+
+/* Extra-tight phones: preserve the full causal map without clipping. */
+@media (max-width:375px){
+  .mobile-system-map{
+    padding-left:9px;
+    padding-right:9px;
+  }
+  .mobile-provider-row,
+  .mobile-bank-field{
+    gap:5px;
+  }
+  .mobile-provider{
+    padding-left:6px;
+    padding-right:6px;
+  }
+  .mobile-provider b{
+    font-size:18px;
+  }
+  .mobile-bank-group{
+    gap:4px;
+    padding:5px;
+  }
+}
