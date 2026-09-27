@@ -5585,3 +5585,422 @@ body.ra-guided-running .ra-guided-actions{
     transition-delay:0s!important;
   }
 }
+
+
+/* =========================================================
+   WORD-SYNCED GUIDED TIMELINE
+   Visual cues are driven by guidedAudio.currentTime timestamps.
+   ========================================================= */
+
+#raEarthMount.ra-guided-sync{
+  --ra-sync-accent:var(--ra-primary);
+  overflow:hidden;
+}
+
+#raEarthMount.ra-guided-sync::after{
+  content:attr(data-guided-caption);
+  position:absolute;
+  z-index:42;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  max-width:calc(100% - 36px);
+  padding:8px 14px;
+  border:1px solid color-mix(in srgb,var(--ra-sync-accent) 48%,var(--ra-border));
+  border-radius:999px;
+  background:color-mix(in srgb,var(--ra-surface) 94%,transparent);
+  color:var(--ra-text-1);
+  box-shadow:
+    0 8px 28px rgba(0,0,0,.22),
+    0 0 24px color-mix(in srgb,var(--ra-sync-accent) 9%,transparent);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  font-size:9px;
+  font-weight:860;
+  letter-spacing:.09em;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+#raEarthMount.ra-guided-sync .ra-earth-provider,
+#raEarthMount.ra-guided-sync .ra-earth-bank,
+#raEarthMount.ra-guided-sync .ra-earth-link,
+#raEarthMount.ra-guided-sync .ra-earth-packet,
+#raEarthMount.ra-guided-sync .ra-request-flow,
+#raEarthMount.ra-guided-sync .ra-request-packet,
+#raEarthMount.ra-guided-sync .ra-recovery-flow,
+#raEarthMount.ra-guided-sync .ra-recovery-packet,
+#raEarthMount.ra-guided-sync .ra-pool-node,
+#raEarthMount.ra-guided-sync .ra-market-node{
+  transition:
+    opacity .42s var(--ra-ease-standard),
+    filter .42s var(--ra-ease-standard),
+    stroke .42s var(--ra-ease-standard),
+    fill .42s var(--ra-ease-standard),
+    stroke-width .42s var(--ra-ease-standard),
+    stroke-dashoffset .8s var(--ra-ease-standard)!important;
+}
+
+/* Scene 1 — words build the dependency network. */
+#raEarthMount.ra-sync-s1-world .ra-earth-provider,
+#raEarthMount.ra-sync-s1-world .ra-earth-bank,
+#raEarthMount.ra-sync-s1-world .ra-earth-link,
+#raEarthMount.ra-sync-s1-world .ra-earth-packet{
+  opacity:0!important;
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-ocean{
+  filter:brightness(.78) saturate(.75);
+}
+#raEarthMount.ra-sync-s1-world .ra-earth-atmosphere{
+  animation:raSyncWorldWake 1.6s var(--ra-ease-emphasis) both;
+}
+
+#raEarthMount.ra-sync-s1-providers .ra-earth-provider{
+  opacity:1!important;
+  filter:drop-shadow(0 0 12px color-mix(in srgb,var(--provider-color) 60%,transparent));
+}
+#raEarthMount.ra-sync-s1-providers .ra-earth-bank,
+#raEarthMount.ra-sync-s1-providers .ra-earth-link,
+#raEarthMount.ra-sync-s1-providers .ra-earth-packet{
+  opacity:0!important;
+}
+#raEarthMount.ra-sync-s1-providers .ra-provider-halo{
+  animation:raSyncProviderArrival 1.25s var(--ra-ease-emphasis) both;
+}
+
+#raEarthMount.ra-sync-s1-banks .ra-earth-provider,
+#raEarthMount.ra-sync-s1-banks .ra-earth-bank{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s1-banks .ra-earth-bank{
+  transition-delay:calc(var(--ra-intro-index,0) * .025s)!important;
+}
+#raEarthMount.ra-sync-s1-banks .ra-earth-link{
+  opacity:0!important;
+  stroke-dasharray:1!important;
+  stroke-dashoffset:1!important;
+}
+#raEarthMount.ra-sync-s1-banks .ra-earth-packet{
+  opacity:0!important;
+}
+
+#raEarthMount.ra-sync-s1-links .ra-earth-link{
+  opacity:.78!important;
+  stroke-dasharray:1!important;
+  stroke-dashoffset:0!important;
+  stroke-width:1.55!important;
+  transition-delay:calc(var(--ra-intro-index,0) * .022s)!important;
+}
+#raEarthMount.ra-sync-s1-links .ra-earth-packet{
+  opacity:0!important;
+}
+
+#raEarthMount.ra-sync-s1-flow .ra-earth-link{
+  opacity:.31!important;
+}
+#raEarthMount.ra-sync-s1-flow .ra-earth-packet{
+  opacity:.95!important;
+}
+
+#raEarthMount.ra-sync-s1-cluster{
+  --ra-sync-accent:var(--ra-provider-blue);
+}
+#raEarthMount.ra-sync-s1-cluster .ra-earth-provider:not(.provider-blue),
+#raEarthMount.ra-sync-s1-cluster .ra-earth-bank:not([data-provider="blue"]),
+#raEarthMount.ra-sync-s1-cluster .ra-earth-link:not(.provider-blue){
+  opacity:.22!important;
+}
+#raEarthMount.ra-sync-s1-cluster .provider-blue,
+#raEarthMount.ra-sync-s1-cluster .ra-earth-bank[data-provider="blue"]{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s1-cluster .ra-earth-bank[data-provider="blue"] .ra-bank-halo{
+  stroke:color-mix(in srgb,var(--ra-provider-blue) 55%,transparent);
+  fill:color-mix(in srgb,var(--ra-provider-blue) 13%,transparent);
+}
+
+#raEarthMount.ra-sync-s1-risk{
+  --ra-sync-accent:var(--ra-warning);
+}
+#raEarthMount.ra-sync-s1-risk .provider-blue .ra-provider-halo{
+  stroke:var(--ra-warning)!important;
+  fill:color-mix(in srgb,var(--ra-warning) 13%,transparent)!important;
+  animation:raSyncRiskPulse 1.4s ease-in-out infinite;
+}
+#raEarthMount.ra-sync-s1-risk .ra-earth-bank[data-provider="blue"] .ra-bank-halo{
+  stroke:color-mix(in srgb,var(--ra-warning) 58%,transparent)!important;
+  fill:color-mix(in srgb,var(--ra-warning) 10%,transparent)!important;
+}
+
+/* Scene 2 — failure happens on the spoken word "fails". */
+#raEarthMount.ra-sync-s2-target{
+  --ra-sync-accent:var(--ra-warning);
+}
+#raEarthMount.ra-sync-s2-target .provider-blue .ra-provider-halo{
+  stroke:var(--ra-warning)!important;
+  stroke-width:2!important;
+  animation:raSyncRiskPulse 1.05s ease-in-out infinite;
+}
+#raEarthMount.ra-sync-s2-target .ra-earth-provider:not(.provider-blue){
+  opacity:.48!important;
+}
+
+#raEarthMount.ra-sync-s2-fail,
+#raEarthMount.ra-sync-s2-affected,
+#raEarthMount.ra-sync-s2-capacity-lost,
+#raEarthMount.ra-sync-s2-shared,
+#raEarthMount.ra-sync-s2-systemic{
+  --ra-sync-accent:var(--ra-critical);
+}
+#raEarthMount.ra-sync-s2-fail .provider-blue .ra-provider-halo{
+  animation:raSyncFailureRing .9s var(--ra-ease-emphasis) both;
+}
+#raEarthMount.ra-sync-s2-affected .ra-earth-bank[data-provider="blue"] .ra-bank-halo,
+#raEarthMount.ra-sync-s2-shared .ra-earth-bank[data-provider="blue"] .ra-bank-halo{
+  stroke:color-mix(in srgb,var(--ra-critical) 70%,transparent)!important;
+  stroke-width:1.8!important;
+  animation:raSyncAffectedPulse 1.4s ease-in-out infinite;
+}
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-link.provider-blue{
+  opacity:.58!important;
+  stroke-width:1.8!important;
+}
+#raEarthMount.ra-sync-s2-capacity-lost .ra-earth-packet.provider-blue{
+  opacity:0!important;
+}
+#raEarthMount.ra-sync-s2-systemic{
+  background:
+    radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--ra-critical) 11%,transparent),transparent 34%),
+    var(--ra-surface-soft)!important;
+}
+
+/* Scene 3 — requests start exactly when narrator says "request backup capacity". */
+#raEarthMount.ra-sync-s3-recover{
+  --ra-sync-accent:var(--ra-warning);
+}
+#raEarthMount.ra-sync-s3-recover .ra-earth-bank[data-provider="blue"] .ra-bank-halo{
+  animation:raSyncDemandPulse 1.15s ease-in-out infinite;
+  stroke:color-mix(in srgb,var(--ra-warning) 58%,transparent)!important;
+}
+#raEarthMount.ra-sync-s3-request,
+#raEarthMount.ra-sync-s3-market,
+#raEarthMount.ra-sync-s3-queue,
+#raEarthMount.ra-sync-s3-gap{
+  --ra-sync-accent:var(--ra-warning);
+}
+#raEarthMount.ra-sync-s3-request .ra-request-flow.is-visible,
+#raEarthMount.ra-sync-s3-market .ra-request-flow.is-visible,
+#raEarthMount.ra-sync-s3-queue .ra-request-flow.is-visible,
+#raEarthMount.ra-sync-s3-gap .ra-request-flow.is-visible{
+  opacity:.72!important;
+  stroke-width:1.6!important;
+}
+#raEarthMount.ra-sync-s3-request .ra-request-packet.is-visible,
+#raEarthMount.ra-sync-s3-market .ra-request-packet.is-visible,
+#raEarthMount.ra-sync-s3-queue .ra-request-packet.is-visible,
+#raEarthMount.ra-sync-s3-gap .ra-request-packet.is-visible{
+  opacity:1!important;
+  filter:drop-shadow(0 0 5px var(--ra-warning));
+}
+#raEarthMount.ra-sync-s3-market .ra-market-ring,
+#raEarthMount.ra-sync-s3-queue .ra-market-ring{
+  stroke-width:2!important;
+  animation:raSyncMarketPulse 1.25s ease-in-out infinite!important;
+}
+#raEarthMount.ra-sync-s3-queue .ra-market-core{
+  filter:drop-shadow(0 0 10px var(--ra-warning));
+}
+#raEarthMount.ra-sync-s3-gap .ra-earth-readout>div:nth-child(2){
+  background:color-mix(in srgb,var(--ra-warning) 14%,transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ra-warning) 45%,transparent);
+}
+#raEarthMount.ra-sync-s3-gap .ra-earth-readout>div:nth-child(2) b{
+  color:var(--ra-warning);
+  transform:scale(1.08);
+}
+
+/* Scene 4 — local reserves appear, then the ring-fence becomes obvious. */
+#raEarthMount.ra-sync-s4-reserves,
+#raEarthMount.ra-sync-s4-ringfenced,
+#raEarthMount.ra-sync-s4-unused,
+#raEarthMount.ra-sync-s4-blocked,
+#raEarthMount.ra-sync-s4-stranded,
+#raEarthMount.ra-sync-s4-shortage{
+  --ra-sync-accent:var(--ra-orange);
+}
+#raEarthMount.ra-sync-s4-reserves .ra-bank-reserve,
+#raEarthMount.ra-sync-s4-ringfenced .ra-bank-reserve,
+#raEarthMount.ra-sync-s4-unused .ra-bank-reserve,
+#raEarthMount.ra-sync-s4-blocked .ra-bank-reserve,
+#raEarthMount.ra-sync-s4-stranded .ra-bank-reserve,
+#raEarthMount.ra-sync-s4-shortage .ra-bank-reserve{
+  opacity:.82!important;
+}
+#raEarthMount.ra-sync-s4-ringfenced .ra-bank-reserve{
+  stroke:var(--ra-orange)!important;
+  stroke-width:1.7!important;
+  animation:raSyncReserveLock 1.4s ease-in-out infinite;
+}
+#raEarthMount.ra-sync-s4-unused .ra-earth-bank:not([data-provider="blue"]) .ra-bank-reserve{
+  stroke:var(--ra-teal)!important;
+  filter:drop-shadow(0 0 5px color-mix(in srgb,var(--ra-teal) 55%,transparent));
+}
+#raEarthMount.ra-sync-s4-blocked .ra-earth-bank[data-provider="blue"]{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s4-blocked .ra-earth-bank:not([data-provider="blue"]) .ra-bank-reserve{
+  stroke:var(--ra-teal)!important;
+}
+#raEarthMount.ra-sync-s4-stranded .ra-earth-bank[data-provider="blue"] .ra-bank-halo,
+#raEarthMount.ra-sync-s4-shortage .ra-earth-bank[data-provider="blue"] .ra-bank-halo{
+  stroke:color-mix(in srgb,var(--ra-warning) 70%,transparent)!important;
+  animation:raSyncAffectedPulse 1.5s ease-in-out infinite;
+}
+
+/* Scene 5 — pool appears before routing; routing only starts on "pooled and redirected". */
+#raEarthMount.ra-sync-s5-pool,
+#raEarthMount.ra-sync-s5-samebudget,
+#raEarthMount.ra-sync-s5-coordinate,
+#raEarthMount.ra-sync-s5-ready,
+#raEarthMount.ra-sync-s5-redirect,
+#raEarthMount.ra-sync-s5-recover{
+  --ra-sync-accent:var(--ra-teal);
+}
+#raEarthMount.ra-sync-s5-pool .ra-pool-node,
+#raEarthMount.ra-sync-s5-samebudget .ra-pool-node,
+#raEarthMount.ra-sync-s5-coordinate .ra-pool-node{
+  opacity:1!important;
+}
+#raEarthMount.ra-sync-s5-pool .ra-pool-ring{
+  animation:raSyncPoolArrive 1.25s var(--ra-ease-emphasis) both!important;
+}
+#raEarthMount.ra-sync-s5-samebudget .ra-bank-reserve{
+  opacity:.72!important;
+}
+#raEarthMount.ra-sync-s5-coordinate .ra-pool-ring{
+  stroke-width:2!important;
+  animation:raPoolSignal 2s ease-in-out infinite!important;
+}
+#raEarthMount.ra-sync-s5-ready .ra-recovery-flow.is-visible{
+  opacity:.2!important;
+  stroke-width:1.2!important;
+}
+#raEarthMount.ra-sync-s5-ready .ra-recovery-packet.is-visible{
+  opacity:0!important;
+}
+#raEarthMount.ra-sync-s5-ready .ra-earth-bank.is-recovered .ra-bank-node,
+#raEarthMount.ra-sync-s5-ready .ra-earth-bank.is-partial .ra-bank-node{
+  fill:var(--ra-warning)!important;
+  stroke:var(--ra-warning)!important;
+  filter:none!important;
+}
+#raEarthMount.ra-sync-s5-redirect .ra-recovery-flow.is-visible{
+  opacity:.9!important;
+  stroke-width:2.2!important;
+}
+#raEarthMount.ra-sync-s5-redirect .ra-recovery-packet.is-visible{
+  opacity:1!important;
+  filter:drop-shadow(0 0 6px var(--ra-teal));
+}
+#raEarthMount.ra-sync-s5-redirect .ra-earth-bank.is-recovered .ra-bank-node,
+#raEarthMount.ra-sync-s5-redirect .ra-earth-bank.is-partial .ra-bank-node{
+  fill:var(--ra-teal)!important;
+  stroke:var(--ra-teal)!important;
+}
+#raEarthMount.ra-sync-s5-recover .ra-earth-bank.is-recovered .ra-bank-halo,
+#raEarthMount.ra-sync-s5-recover .ra-earth-bank.is-partial .ra-bank-halo{
+  animation:raSyncRecoverySettle 1.45s ease-in-out infinite;
+}
+
+/* Scene 6 — each mechanism gets its own spoken beat. */
+#raEarthMount.ra-sync-s6-market{
+  --ra-sync-accent:var(--ra-warning);
+}
+#raEarthMount.ra-sync-s6-individual{
+  --ra-sync-accent:var(--ra-orange);
+}
+#raEarthMount.ra-sync-s6-scfr,
+#raEarthMount.ra-sync-s6-outcome{
+  --ra-sync-accent:var(--ra-teal);
+}
+#raEarthMount.ra-sync-s6-boundary{
+  --ra-sync-accent:var(--ra-text-3);
+}
+#raEarthMount.ra-sync-s6-market .ra-earth-readout,
+#raEarthMount.ra-sync-s6-individual .ra-earth-readout,
+#raEarthMount.ra-sync-s6-scfr .ra-earth-readout{
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--ra-sync-accent) 45%,transparent);
+}
+#raEarthMount.ra-sync-s6-scfr .ra-earth-bank.is-recovered .ra-bank-node{
+  filter:drop-shadow(0 0 8px color-mix(in srgb,var(--ra-teal) 72%,transparent));
+}
+#raEarthMount.ra-sync-s6-boundary .ra-earth-svg{
+  opacity:.72;
+  filter:saturate(.68);
+}
+
+/* Phrase-level motion grammar. */
+@keyframes raSyncWorldWake{
+  0%{opacity:.28;stroke-width:.5}
+  55%{opacity:1;stroke-width:2.2}
+  100%{opacity:1;stroke-width:1.35}
+}
+@keyframes raSyncProviderArrival{
+  0%{opacity:.1;transform:scale(.45)}
+  60%{opacity:1;transform:scale(1.22)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes raSyncRiskPulse{
+  0%,100%{opacity:.55;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.18)}
+}
+@keyframes raSyncFailureRing{
+  0%{opacity:1;transform:scale(.75)}
+  42%{opacity:1;transform:scale(1.35)}
+  100%{opacity:.5;transform:scale(1)}
+}
+@keyframes raSyncAffectedPulse{
+  0%,100%{opacity:.45}
+  50%{opacity:1}
+}
+@keyframes raSyncDemandPulse{
+  0%,100%{opacity:.35;transform:scale(.92)}
+  50%{opacity:1;transform:scale(1.12)}
+}
+@keyframes raSyncMarketPulse{
+  0%,100%{opacity:.45}
+  50%{opacity:1}
+}
+@keyframes raSyncReserveLock{
+  0%,100%{stroke-dashoffset:0;opacity:.58}
+  50%{stroke-dashoffset:5;opacity:1}
+}
+@keyframes raSyncPoolArrive{
+  0%{opacity:0;transform:scale(.55)}
+  58%{opacity:1;transform:scale(1.2)}
+  100%{opacity:1;transform:scale(1)}
+}
+@keyframes raSyncRecoverySettle{
+  0%,100%{opacity:.35}
+  50%{opacity:.95}
+}
+
+@media(max-width:767px), (pointer:coarse) and (max-width:1180px){
+  #raEarthMount.ra-guided-sync::after{
+    bottom:74px;
+    max-width:calc(100% - 24px);
+    padding:7px 10px;
+    font-size:7.4px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  #raEarthMount.ra-guided-sync .ra-provider-halo,
+  #raEarthMount.ra-guided-sync .ra-bank-halo,
+  #raEarthMount.ra-guided-sync .ra-market-ring,
+  #raEarthMount.ra-guided-sync .ra-pool-ring{
+    animation-duration:.9s!important;
+  }
+}
