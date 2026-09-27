@@ -34,3 +34,11 @@ assert.match(css, /\.stage\.scene-2/, 'story should include scene-specific visua
 assert.match(css, /\.decision-insight/, 'research insight panel should be styled');
 
 console.log('✓ CloudRescue interface smoke checks passed');
+
+
+const invalidSingleSelectorForEach = /(?<!\$)\$\([^\n]+\)\.forEach/g;
+assert.equal(
+  invalidSingleSelectorForEach.test(js),
+  false,
+  'multi-element DOM operations must use $$ helper rather than $'
+);
