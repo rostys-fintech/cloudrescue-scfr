@@ -112,7 +112,9 @@ const guided = {
   runId: 0,
   audioFinish: null,
   cueRaf: 0,
-  cueKey: ''
+  cueKey: '',
+  cueTransitionTimer: 0,
+  cueTransitionToken: 0
 };
 
 const labRun = {
@@ -530,13 +532,45 @@ function setupEvidence(){
 
 function renderScene(){
   $('#raCanvasTitle').textContent = sceneTitles[state.scene];
-  $$('.ra-scene-list button').forEach((button,index)=>{
+  $('.ra-scene-list button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
-  $$('.ra-mobile-scene-nav button').forEach((button,index)=>{
+  $('.ra-mobile-scene-nav button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
   renderBaseline();
+}
+
+function renderGuidedShell(c){
+  $('.ra-scene-list button').forEach((button,index)=>{
+    button.classList.toggle('is-active', index === state.scene);
+  });
+  $('.ra-mobile-scene-nav button').forEach((button,index)=>{
+    button.classList.toggle('is-active', index === state.scene);
+  });
+
+  $('#raAffected').textContent = state.scene === 0 ? '0 / '+banks.length : c.market.affectedCount+' / '+banks.length;
+  $('#raUnmet').textContent = state.scene < 2 ? '0' : format(Math.max(0,c.market.totalDemand-c.market.allocated));
+  $('#raRestored').textContent = state.scene < 4 ? '—' : Math.round(c.scfr.criticalRestoredPct)+'%';
+  $('#raResilience').textContent = state.scene < 5 ? '—' : Math.round(c.scfr.resilience);
+  $('#raSystemStatus').textContent = state.scene === 0 ? 'SYSTEM STABLE' : state.scene < 4 ? 'SYSTEM UNDER STRESS' : 'RECOVERY ACTIVE';
+
+  renderStory(c);
+}
+
+async function prepareGuidedOpening(runId){
+  const mount=$('#raEarthMount');
+  const hud=$('#raGuidedHud');
+  const canvasTitle=$('#raCanvasTitle');
+  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+  if(!mount || reduced) return true;
+
+  mount.classList.add('ra-guided-preroll','ra-cue-transitioning');
+  hud?.classList.add('is-cue-transitioning');
+  canvasTitle?.classList.add('is-cue-transitioning');
+
+  return guidedDelay(240,runId);
 }
 
 function tabFromHash(){
@@ -699,13 +733,21 @@ function clearGuidedCue({restore=true}={}){
     window.cancelAnimationFrame(guided.cueRaf);
     guided.cueRaf=0;
   }
+  if(guided.cueTransitionTimer){
+    window.clearTimeout(guided.cueTransitionTimer);
+    guided.cueTransitionTimer=0;
+  }
+  guided.cueTransitionToken++;
 
   const mount=$('#raEarthMount');
   if(mount){
-    mount.classList.remove('ra-guided-sync',...GUIDED_CUE_CLASSES);
+    mount.classList.remove('ra-guided-sync','ra-cue-transitioning','ra-guided-preroll',...GUIDED_CUE_CLASSES);
     delete mount.dataset.guidedCaption;
     delete mount.dataset.guidedCue;
+    delete mount.dataset.previousCue;
   }
+  $('#raGuidedHud')?.classList.remove('is-cue-transitioning');
+  $('#raCanvasTitle')?.classList.remove('is-cue-transitioning','is-cue-entering');
   guided.cueKey='';
 
   if(restore && state.scene>=0){
@@ -735,22 +777,47 @@ function applyGuidedMetric(cue,c){
   }
 }
 
-function animateGuidedCueCopy(sceneIndex,cue){
-  const kicker=$('#raGuidedKicker');
-  const caption=$('#raGuidedCaption');
+function guidedCueKicker(sceneIndex){
+  if(sceneIndex===0) return 'LIVE CUE';
+  if(sceneIndex===1) return 'FAILURE SEQUENCE';
+  return scenePresentation(comparison())[sceneIndex]?.kicker || 'LIVE CUE';
+}
+
+function commitGuidedCue(sceneIndex,cue){
+  const mount=$('#raEarthMount');
+  if(!mount) return;
+
+  const previous=GUIDED_CUE_CLASSES.find(klass=>mount.classList.contains(klass));
+  if(previous) mount.dataset.previousCue=previous.replace('ra-sync-','');
+
+  mount.classList.remove(...GUIDED_CUE_CLASSES);
+  mount.classList.add('ra-guided-sync','ra-sync-'+cue.id);
+  mount.dataset.guidedCaption=cue.caption;
+  mount.dataset.guidedCue=cue.id;
+
+  const c=comparison();
+  earth.simulation.update({...earthPayload(c),scene:cue.visualScene});
+
+  $('#raGuidedKicker').textContent=guidedCueKicker(sceneIndex);
+  $('#raGuidedCaption').textContent=cue.caption;
+  $('#raCanvasTitle').textContent=cue.caption;
+  applyGuidedMetric(cue,c);
+}
+
+function releaseGuidedCueBridge(){
+  const mount=$('#raEarthMount');
+  const hud=$('#raGuidedHud');
   const canvasTitle=$('#raCanvasTitle');
-  const copy=$('#raGuidedHud .ra-guided-copy');
 
-  if(sceneIndex===0) kicker.textContent='LIVE CUE';
-  else if(sceneIndex===1) kicker.textContent='FAILURE SEQUENCE';
-
-  caption.textContent=cue.caption;
-  canvasTitle.textContent=cue.caption;
-
-  [copy,canvasTitle].filter(Boolean).forEach(node=>{
-    node.classList.remove('is-cue-entering');
-    void node.offsetWidth;
-    node.classList.add('is-cue-entering');
+  window.requestAnimationFrame(()=>{
+    window.requestAnimationFrame(()=>{
+      mount?.classList.remove('ra-cue-transitioning','ra-guided-preroll');
+      hud?.classList.remove('is-cue-transitioning');
+      canvasTitle?.classList.remove('is-cue-transitioning');
+      canvasTitle?.classList.remove('is-cue-entering');
+      void canvasTitle?.offsetWidth;
+      canvasTitle?.classList.add('is-cue-entering');
+    });
   });
 }
 
@@ -760,21 +827,39 @@ function applyGuidedCue(sceneIndex,cue){
   if(guided.cueKey===key) return;
 
   const mount=$('#raEarthMount');
+  const hud=$('#raGuidedHud');
+  const canvasTitle=$('#raCanvasTitle');
   if(!mount) return;
 
-  mount.classList.add('ra-guided-sync','ra-cue-blend');
-  const previous=GUIDED_CUE_CLASSES.find(klass=>mount.classList.contains(klass));
-  if(previous) mount.dataset.previousCue=previous.replace('ra-sync-','');
-  mount.classList.remove(...GUIDED_CUE_CLASSES);
-  mount.classList.add('ra-sync-'+cue.id);
-  mount.dataset.guidedCaption=cue.caption;
-  mount.dataset.guidedCue=cue.id;
   guided.cueKey=key;
+  const token=++guided.cueTransitionToken;
+  const previous=GUIDED_CUE_CLASSES.find(klass=>mount.classList.contains(klass));
+  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-  const c=comparison();
-  earth.simulation.update({...earthPayload(c),scene:cue.visualScene});
-  animateGuidedCueCopy(sceneIndex,cue);
-  applyGuidedMetric(cue,c);
+  if(guided.cueTransitionTimer){
+    window.clearTimeout(guided.cueTransitionTimer);
+    guided.cueTransitionTimer=0;
+  }
+
+  /* First cue is committed while the pre-roll is already visually subdued.
+     Later cues use a short bridge: old state eases down, state swaps under
+     the blur, then the new state eases up. This prevents SVG class snapping. */
+  if(!previous || reduced){
+    commitGuidedCue(sceneIndex,cue);
+    releaseGuidedCueBridge();
+    return;
+  }
+
+  mount.classList.add('ra-cue-transitioning');
+  hud?.classList.add('is-cue-transitioning');
+  canvasTitle?.classList.add('is-cue-transitioning');
+
+  guided.cueTransitionTimer=window.setTimeout(()=>{
+    if(token!==guided.cueTransitionToken || !guided.active) return;
+    commitGuidedCue(sceneIndex,cue);
+    releaseGuidedCueBridge();
+    guided.cueTransitionTimer=0;
+  },135);
 }
 
 function cueAtTime(sceneIndex,time){
@@ -975,16 +1060,17 @@ async function runGuidedSimulation(){
     focusAnimationStage($('#raEarthMount'));
   }
 
+  /* Fade the static preview into the cinematic timeline before narration.
+     This removes the abrupt full-network -> empty-intro reset on Run. */
+  if(!(await prepareGuidedOpening(runId)) || runId!==guided.runId) return;
+
   for(let i=0;i<6;i++){
     if(runId!==guided.runId) return;
 
     state.scene=i;
-    renderScene();
-
-    const c= comparison();
+    const c=comparison();
+    renderGuidedShell(c);
     const story=scenePresentation(c)[i];
-    const firstCue=(GUIDED_CUES[i]||[])[0];
-    if(firstCue) applyGuidedCue(i,firstCue);
 
     const [spoken,visualComplete]=await Promise.all([
       guided.narration ? playGuidedAudioScene(i,runId) : runSilentCueTimeline(i,runId),
