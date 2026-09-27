@@ -2489,3 +2489,205 @@ html[data-theme="dark"] .reality-grid b{
 .stage[data-outage="green"].scene-3 .network-line[data-provider="orange"]{
   opacity:.22;
 }
+
+
+/* ---------- Reproducible scenario generator ---------- */
+.scenario-generator{
+  margin:14px 0 12px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#f8fafc;
+}
+.scenario-generator-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+.scenario-generator-head span{
+  color:#778a9d;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+.scenario-generator-head b{
+  font-size:9px;
+  color:#315b84;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.04em;
+}
+.scenario-seed-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:6px;
+  margin-bottom:6px;
+}
+.scenario-seed-row input{
+  min-width:0;
+  border:1px solid var(--line);
+  background:var(--surface);
+  color:var(--navy);
+  border-radius:8px;
+  padding:9px 10px;
+  font-size:8px;
+  outline:none;
+}
+.scenario-seed-row input:focus{
+  border-color:#8caee1;
+  box-shadow:0 0 0 3px rgba(73,121,255,.09);
+}
+.scenario-seed-row .btn{
+  padding:8px 10px;
+  font-size:8px;
+}
+
+/* ---------- Challenge mode ---------- */
+.challenge-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:4px;
+  margin:8px 0 10px;
+  padding:3px;
+  border-radius:8px;
+  background:#eef2f5;
+}
+.challenge-tab{
+  border:0;
+  border-radius:6px;
+  background:transparent;
+  color:#718396;
+  padding:6px 5px;
+  font-size:7px;
+  font-weight:850;
+}
+.challenge-tab.active{
+  background:#fff;
+  color:#2f5e88;
+  box-shadow:0 1px 5px rgba(20,36,54,.08);
+}
+.challenge>span{
+  display:block;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+.challenge>b{
+  display:block;
+  margin-top:2px;
+  font-size:10px;
+  line-height:1.3;
+}
+.challenge>p{
+  margin:5px 0 0;
+  font-size:8px;
+  line-height:1.4;
+}
+.challenge-metrics{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  margin-top:9px;
+}
+.challenge-metrics>div{
+  min-width:0;
+  border:1px solid rgba(112,132,151,.22);
+  background:rgba(255,255,255,.68);
+  border-radius:7px;
+  padding:7px 6px;
+}
+.challenge-metrics span{
+  display:block;
+  color:#7f8f9e;
+  font-size:6.5px;
+  line-height:1.15;
+}
+.challenge-metrics b{
+  display:block;
+  margin:3px 0 1px;
+  color:#455a6e;
+  font-size:11px;
+  letter-spacing:-.02em;
+}
+.challenge-metrics small{
+  display:block;
+  color:#9aa7b2;
+  font-size:6px;
+}
+.challenge-metrics>div.ok{
+  border-color:#a8d5c4;
+  background:#eff8f4;
+}
+.challenge-metrics>div.ok b{color:#27785d}
+.challenge.success{
+  border-color:#85c7ae;
+  box-shadow:0 0 0 1px rgba(71,164,128,.08);
+}
+.challenge.success>span,
+.challenge.success>b{color:#256e56}
+
+/* ---------- Final visual cleanup / hierarchy ---------- */
+.controls{
+  position:sticky;
+  top:12px;
+  align-self:start;
+}
+.results{
+  min-width:0;
+}
+.shock-head{
+  gap:16px;
+}
+.shock-head>div:first-child{
+  min-width:0;
+}
+.shock-head h2{
+  max-width:22ch;
+}
+.strategy-grid{
+  align-items:stretch;
+}
+.strategy-card{
+  min-width:0;
+}
+.strategy-card .score{
+  font-variant-numeric:tabular-nums;
+}
+.before-after-card,
+.sensitivity-card,
+.chart-card,
+.decision-insight{
+  scroll-margin-top:16px;
+}
+.evidence-note{
+  margin-bottom:4px;
+}
+
+/* dark */
+html[data-theme="dark"] .scenario-generator{
+  background:#101a25;
+}
+html[data-theme="dark"] .scenario-generator-head b{color:#bdd2e6}
+html[data-theme="dark"] .challenge-tabs{background:#0f1822}
+html[data-theme="dark"] .challenge-tab.active{
+  background:#1a2938;color:#c1d4e5;
+}
+html[data-theme="dark"] .challenge-metrics>div{
+  background:rgba(13,22,31,.55);
+  border-color:#324252;
+}
+html[data-theme="dark"] .challenge-metrics b{color:#d7e1e9}
+html[data-theme="dark"] .challenge-metrics>div.ok{
+  background:#13271f;border-color:#35634f;
+}
+html[data-theme="dark"] .challenge-metrics>div.ok b{color:#8ed1b5}
+
+@media(max-width:1100px){
+  .controls{position:relative;top:auto}
+}
+@media(max-width:620px){
+  .scenario-seed-row{grid-template-columns:1fr}
+  .challenge-tabs{grid-template-columns:1fr}
+  .challenge-metrics{grid-template-columns:1fr}
+}
