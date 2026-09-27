@@ -19,12 +19,14 @@ assert.match(css,/IOS-SAFE PACKET MOTION/);
 assert.match(css,/raReducedEssentialState/);
 assert.doesNotMatch(css,/\.ra-earth-packet,[\s\S]{0,120}display:none!important/);
 
-assert.match(html,/id="raVoiceSelect"/);
-assert.match(html,/id="raVoiceTest"/);
+assert.match(html,/id="raSpeechPause"/);
+assert.doesNotMatch(html,/raVoiceSelect/);
+assert.doesNotMatch(html,/raVoiceTest/);
 assert.match(js,/function rankedMaleVoices\(/);
-assert.match(js,/function populateNarratorSelect\(/);
-assert.match(js,/function setupNarratorControls\(/);
-assert.match(js,/Auto — best available male voice/);
+assert.match(js,/function setupNarrationEngine\(/);
 assert.match(js,/await waitForNarrator\(\)/);
+assert.match(js,/earth\.simulation\.setPaused/);
+assert.match(earth,/function setPaused\(paused\)/);
+assert.match(earth,/motionPaused/);
 
 console.log('iOS animation engine and narrator controls checks passed.');

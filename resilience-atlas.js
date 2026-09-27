@@ -33,6 +33,7 @@ const labDraft = {
 const guided = {
   active: false,
   narration: true,
+  paused: false,
   runId: 0,
   voice: null
 };
@@ -201,7 +202,7 @@ function renderStory(c){
   $('#raGuidedScene').textContent = 'SCENE '+String(state.scene+1).padStart(2,'0')+' / 06';
   $('#raGuidedKicker').textContent = story.kicker;
   $('#raGuidedCaption').textContent = story.caption;
-  $('#raGuidedStatus').textContent = guided.active ? 'RUNNING' : 'READY';
+  $('#raGuidedStatus').textContent = guided.paused ? 'PAUSED' : guided.active ? 'RUNNING' : 'READY';
 
   $$('#raGuidedProgress i').forEach((node,index)=>{
     node.classList.toggle('is-done', index < state.scene);
@@ -617,38 +618,11 @@ function rankedMaleVoices(){
 }
 
 function chooseNarrator(){
-  const ranked=rankedMaleVoices();
-  const preferred=localStorage.getItem('resilience-atlas-narrator') || '';
-  if(preferred){
-    const match=ranked.find(item=>item.voice.voiceURI===preferred || item.voice.name===preferred);
-    if(match) return match.voice;
-  }
-  return ranked[0]?.voice || null;
-}
-
-function populateNarratorSelect(){
-  const select=$('#raVoiceSelect');
-  if(!select) return;
-
-  const current=localStorage.getItem('resilience-atlas-narrator') || '';
-  const ranked=rankedMaleVoices();
-
-  select.innerHTML='<option value="">Auto — best available male voice</option>';
-  ranked.forEach(({voice,score})=>{
-    const option=document.createElement('option');
-    option.value=voice.voiceURI || voice.name;
-    option.textContent=voice.name+(score>=350 ? ' · high quality' : '');
-    select.appendChild(option);
-  });
-
-  select.value=ranked.some(item=>(item.voice.voiceURI||item.voice.name)===current) ? current : '';
+  return rankedMaleVoices()[0]?.voice || null;
 }
 
 function waitForNarrator(timeoutMs=900){
-  const preferred=localStorage.getItem('resilience-atlas-narrator') || '';
   const immediate=chooseNarrator();
-
-  if(preferred && immediate) return Promise.resolve(immediate);
   if(immediate && maleVoiceScore(immediate)>=350) return Promise.resolve(immediate);
   if(!('speechSynthesis' in window)) return Promise.resolve(immediate || null);
 
@@ -708,17 +682,36 @@ function updateNarrationControl(){
   const button=$('#raNarrationToggle');
   button.setAttribute('aria-pressed',guided.narration ? 'true' : 'false');
   $('#raNarrationLabel').textContent=guided.narration ? 'Narration on' : 'Narration off';
+
+  const pauseButton=$('#raSpeechPause');
+  const canPause=guided.active && guided.narration;
+  pauseButton.disabled=!canPause;
+  pauseButton.setAttribute('aria-pressed',guided.paused ? 'true' : 'false');
+  $('#raSpeechPauseLabel').textContent=guided.paused ? 'Resume speech' : 'Pause speech';
+
   if(guided.voice){
-    button.title='Narration voice: '+guided.voice.name;
+    button.title='Automatic male narrator: '+guided.voice.name;
     button.dataset.voiceQuality=maleVoiceScore(guided.voice)>=250 ? 'natural' : 'standard';
   }
 }
 
-function wait(ms,runId){
+function guidedDelay(ms,runId){
   return new Promise(resolve=>{
-    window.setTimeout(()=>{
-      resolve(runId===guided.runId);
-    },ms);
+    let remaining=ms;
+    let last=performance.now();
+
+    const tick=()=>{
+      if(runId!==guided.runId) return resolve(false);
+
+      const now=performance.now();
+      if(!guided.paused) remaining-=Math.max(0,now-last);
+      last=now;
+
+      if(remaining<=0) return resolve(true);
+      window.setTimeout(tick,Math.min(110,Math.max(24,remaining)));
+    };
+
+    tick();
   });
 }
 
@@ -742,28 +735,22 @@ function speakChunk(text,voice,profile,runId){
     utterance.onerror=finish;
 
     const words=text.trim().split(/\s+/).length;
-    const safetyMs=Math.max(2600,words/(Math.max(profile.rate,.75)*2.25)*1000+2100);
-    window.setTimeout(finish,safetyMs);
+    const safetyMs=Math.max(3200,words/(Math.max(profile.rate,.75)*2.1)*1000+2600);
+    guidedDelay(safetyMs,runId).then(()=>finish());
     window.speechSynthesis.speak(utterance);
   });
 }
 
 async function speakCurrentScene(story,runId){
-  if(!guided.narration || !('speechSynthesis' in window)){
-    return wait(story.visualDuration,runId);
-  }
+  if(!guided.narration || !('speechSynthesis' in window)) return true;
 
   window.speechSynthesis.cancel();
-
   guided.voice=await waitForNarrator();
   updateNarrationControl();
 
-  /* Web Speech exposes names, not gender metadata. We deliberately select
-     only known male English system voices. If none is available, narration
-     falls back to timing-only rather than switching to a female voice. */
   if(!guided.voice){
     $('#raGuidedStatus').textContent='VOICE UNAVAILABLE';
-    return wait(story.visualDuration,runId);
+    return true;
   }
 
   const profile=narrationProfile(guided.voice,story.rate||.84);
@@ -789,7 +776,7 @@ async function speakCurrentScene(story,runId){
       const pause=/\b(finally|now we test|next|the important point)\b/i.test(sentence)
         ? profile.longPauseMs
         : profile.pauseMs;
-      const continued=await wait(pause,runId);
+      const continued=await guidedDelay(pause,runId);
       if(!continued){
         completed=false;
         break;
@@ -801,55 +788,54 @@ async function speakCurrentScene(story,runId){
   return completed && runId===guided.runId;
 }
 
-function setupNarratorControls(){
-  populateNarratorSelect();
+function setGuidedPaused(paused){
+  if(!guided.active || !guided.narration) return;
+  guided.paused=paused;
+  document.body.classList.toggle('ra-guided-paused',paused);
+  earth.simulation.setPaused?.(paused);
 
-  $('#raVoiceSelect')?.addEventListener('change',event=>{
-    const value=event.target.value;
-    if(value) localStorage.setItem('resilience-atlas-narrator',value);
-    else localStorage.removeItem('resilience-atlas-narrator');
-    guided.voice=chooseNarrator();
-    updateNarrationControl();
-  });
+  if('speechSynthesis' in window){
+    if(paused) window.speechSynthesis.pause();
+    else window.speechSynthesis.resume();
+  }
 
-  $('#raVoiceTest')?.addEventListener('click',async()=>{
-    if(!('speechSynthesis' in window)) return;
-    if(guided.active) stopGuidedSimulation();
+  $('#raGuidedStatus').textContent=paused ? 'PAUSED' : 'RUNNING';
+  updateNarrationControl();
+}
 
-    window.speechSynthesis.cancel();
-    guided.voice=await waitForNarrator();
-    updateNarrationControl();
-    if(!guided.voice){
-      $('#raGuidedStatus').textContent='VOICE UNAVAILABLE';
-      return;
-    }
+function setupNarrationEngine(){
+  guided.voice=chooseNarrator();
+  updateNarrationControl();
 
-    const profile=narrationProfile(guided.voice,.82);
-    $('#raGuidedStatus').textContent='VOICE TEST';
-    $('#raGuidedHud').classList.add('is-speaking');
-    await speakChunk(
-      'In this simulation, we see how banks depend on shared cloud providers.',
-      guided.voice,
-      profile,
-      guided.runId
-    );
-    $('#raGuidedHud').classList.remove('is-speaking');
-    $('#raGuidedStatus').textContent='READY';
+  $('#raSpeechPause')?.addEventListener('click',()=>{
+    if(!guided.active || !guided.narration) return;
+    setGuidedPaused(!guided.paused);
   });
 }
 
 function setGuidedActive(active){
   guided.active=active;
+  if(!active) guided.paused=false;
+
   document.body.classList.toggle('ra-guided-running',active);
+  document.body.classList.toggle('ra-guided-paused',guided.paused);
+  earth.simulation.setPaused?.(guided.paused);
+
   $('#raRunLabel').textContent=active ? 'Stop Simulation' : state.scene===5 ? 'Replay Guided Simulation' : 'Run Guided Simulation';
-  $('#raGuidedStatus').textContent=active ? 'RUNNING' : state.scene===5 ? 'COMPLETE' : 'READY';
+  $('#raGuidedStatus').textContent=guided.paused ? 'PAUSED' : active ? 'RUNNING' : state.scene===5 ? 'COMPLETE' : 'READY';
+  updateNarrationControl();
 }
 
 function stopGuidedSimulation(){
   guided.runId++;
+  guided.paused=false;
+  earth.simulation.setPaused?.(false);
   setGuidedActive(false);
   $('#raGuidedHud').classList.remove('is-speaking');
-  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.resume();
+    window.speechSynthesis.cancel();
+  }
 }
 
 async function runGuidedSimulation(){
@@ -860,16 +846,25 @@ async function runGuidedSimulation(){
 
   guided.runId++;
   const runId=guided.runId;
+  guided.paused=false;
+  earth.simulation.setPaused?.(false);
   setGuidedActive(true);
 
   for(let i=0;i<6;i++){
     if(runId!==guided.runId) return;
+
     state.scene=i;
     renderScene();
 
+    /* Speech and visual state share one scene clock. The next scene starts
+       only after both narration and the minimum visual phase have completed. */
     const story=scenePresentation(comparison())[i];
-    const continued=await speakCurrentScene(story,runId);
-    if(!continued || runId!==guided.runId) return;
+    const [spoken,visualComplete]=await Promise.all([
+      speakCurrentScene(story,runId),
+      guidedDelay(story.visualDuration,runId)
+    ]);
+
+    if(!spoken || !visualComplete || runId!==guided.runId) return;
   }
 
   if(runId===guided.runId){
@@ -899,8 +894,18 @@ function setupScenes(){
 
   $('#raNarrationToggle').addEventListener('click',()=>{
     guided.narration=!guided.narration;
+
+    if(!guided.narration){
+      guided.paused=false;
+      earth.simulation.setPaused?.(false);
+      document.body.classList.remove('ra-guided-paused');
+      if('speechSynthesis' in window){
+        window.speechSynthesis.resume();
+        window.speechSynthesis.cancel();
+      }
+    }
+
     updateNarrationControl();
-    if(!guided.narration && 'speechSynthesis' in window) window.speechSynthesis.cancel();
   });
 }
 
@@ -1313,14 +1318,13 @@ function setupLab(){
 if('speechSynthesis' in window){
   window.speechSynthesis.addEventListener?.('voiceschanged',()=>{
     guided.voice=chooseNarrator();
-    populateNarratorSelect();
     updateNarrationControl();
   });
 }
 
 setupTabs();
 setupTheme();
-setupNarratorControls();
+setupNarrationEngine();
 setupScenes();
 setupLab();
 setupMobileLab();
