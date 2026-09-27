@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://resource2.heygen.ai" crossorigin>
   <link rel="mask-icon" href="resilience-atlas-mark.svg?v=20260927-polish01" color="#246FBF">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-wordsync01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-story01">
 </head>
 <body>
   <div class="ra-app">
@@ -117,24 +117,19 @@
 
           <div class="ra-earth-mount" id="raEarthMount" data-earth-mode="simulation"></div>
 
-          <div class="ra-guided-hud" id="raGuidedHud" aria-live="polite">
+          <div class="ra-guided-hud ra-video-hud" id="raGuidedHud" aria-live="polite">
             <div class="ra-guided-status">
               <span class="ra-guided-dot" aria-hidden="true"></span>
               <b id="raGuidedStatus">READY</b>
               <span id="raGuidedScene">SCENE 01 / 06</span>
-              <div class="ra-guided-actions" aria-label="Guided simulation controls">
-                <button id="raHudPause" type="button" aria-pressed="false" disabled>Pause</button>
-                <button id="raHudStop" type="button">Stop</button>
-              </div>
             </div>
-            <div class="ra-guided-main">
-              <div class="ra-waveform" id="raWaveform" aria-hidden="true">
-                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-              </div>
-              <div class="ra-guided-copy">
-                <span id="raGuidedKicker">HOW THE SYSTEM WORKS</span>
-                <strong id="raGuidedCaption">Banks are connected to shared infrastructure, not isolated technology stacks.</strong>
-              </div>
+            <div class="ra-guided-copy">
+              <span id="raGuidedKicker">HOW THE SYSTEM WORKS</span>
+              <strong id="raGuidedCaption">Banks are connected to shared infrastructure, not isolated technology stacks.</strong>
+            </div>
+            <div class="ra-guided-actions" aria-label="Guided simulation controls">
+              <button id="raHudPause" type="button" aria-pressed="false" disabled>Pause</button>
+              <button id="raHudStop" type="button">Stop</button>
             </div>
             <div class="ra-guided-progress" id="raGuidedProgress" aria-hidden="true">
               <i class="is-active"></i><i></i><i></i><i></i><i></i><i></i>
@@ -684,6 +679,6 @@
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-wordsync01"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-story01"></script>
 </body>
 </html>
