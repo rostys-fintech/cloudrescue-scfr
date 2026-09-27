@@ -29,7 +29,8 @@ assert.match(js,/earth\.lab\.update/);
 assert.match(js,/raMechanismInsight/);
 
 assert.match(earth,/const labStrategy=input\.labStrategy\|\|'market'/);
-assert.match(earth,/comparison\[labStrategy\]/);
+assert.match(earth,/comparison\[visualStrategy\]/);
+assert.match(earth,/const labPhase=input\.labPhase\|\|null/);
 assert.match(earth,/dataset\.labStrategy=labStrategy/);
 
 assert.match(css,/STAGE 5 — SCENARIO LAB/);
