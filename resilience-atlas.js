@@ -37,6 +37,11 @@ const guided = {
   voice: null
 };
 
+const labRun = {
+  active: false,
+  runId: 0
+};
+
 const sceneTitles = [
   'Stable dependency network',
   'Shared-provider failure',
@@ -226,7 +231,7 @@ function ruleLabel(value){
   return value === 'systemic' ? 'Systemic' : value === 'equal' ? 'Equal' : 'Readiness';
 }
 
-function renderLab(){
+function renderLab({skipEarth=false}={}){
   const c = comparison();
   const selected = c[state.labStrategy];
   const selectedGap = Math.max(0, selected.totalDemand-selected.allocated);
@@ -287,7 +292,7 @@ function renderLab(){
     button.classList.toggle('is-active',button.dataset.raCompare===state.labStrategy);
   });
 
-  earth.lab.update(earthPayload(c));
+  if(!skipEarth) earth.lab.update(earthPayload(c));
 }
 
 function summarizeOutcome(result){
@@ -458,6 +463,7 @@ function renderScene(){
 
 function switchTab(tab){
   if(guided.active) stopGuidedSimulation();
+  if(labRun.active) cancelLabRun();
   state.tab = tab;
   $$('.ra-nav-tab').forEach(button=>{
     button.classList.toggle('is-active', button.dataset.raTab === tab);
@@ -646,7 +652,7 @@ function setupScenes(){
 }
 
 function setLabStrategy(strategy){
-  if(!['market','individual','scfr'].includes(strategy)) return;
+  if(labRun.active || !['market','individual','scfr'].includes(strategy)) return;
   state.labStrategy=strategy;
   renderLab();
 }
@@ -679,16 +685,213 @@ function syncLabDraftUI(){
 
   const valid=selected.length>0;
   const dirty=!draftMatchesApplied();
-  $('#raRunScenario').disabled=!valid;
+  const runButton=$('#raRunScenario');
+  runButton.disabled=!valid || labRun.active;
+  runButton.querySelector('span').textContent=labRun.active ? 'Running Scenario…' : 'Run Scenario';
+
   $('#raProviderValidation').classList.toggle('is-error',!valid);
   $('#raProviderValidation').textContent=valid
     ? 'Select one or more providers. Multiple providers can fail simultaneously.'
     : 'Select at least one provider before running the scenario.';
-  $('#raDraftState').textContent=!valid ? 'SELECT A PROVIDER' : dirty ? 'PENDING CHANGES' : 'SCENARIO APPLIED';
-  $('.ra-lab-run-block')?.classList.toggle('has-pending',valid && dirty);
+  $('#raDraftState').textContent=labRun.active
+    ? 'RUNNING MODEL'
+    : !valid ? 'SELECT A PROVIDER'
+    : dirty ? 'PENDING CHANGES'
+    : 'SCENARIO APPLIED';
+  $('.ra-lab-run-block')?.classList.toggle('has-pending',valid && dirty && !labRun.active);
 }
 
-function runLabScenario(){
+function setLabRunActive(active){
+  labRun.active=active;
+  $('#lab').classList.toggle('is-scenario-running',active);
+
+  $$('#raProviderToggles input, #raMarketPct, #raReservePct, #raRuleSelect, #raResetLab').forEach(control=>{
+    control.disabled=active;
+  });
+  $$('.ra-strategy-switch button, .ra-model-card').forEach(button=>{
+    button.disabled=active;
+  });
+  const openSheet=$('#raOpenLabSheet');
+  if(openSheet) openSheet.disabled=active;
+
+  syncLabDraftUI();
+}
+
+function labRunWait(ms,runId){
+  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const delay=reduced ? Math.max(90,Math.round(ms*.14)) : ms;
+  return new Promise(resolve=>{
+    window.setTimeout(()=>resolve(runId===labRun.runId),delay);
+  });
+}
+
+function scenarioPlaybackPhases(c){
+  const marketGap=Math.max(0,c.market.totalDemand-c.market.allocated);
+  const individualGap=Math.max(0,c.individual.totalDemand-c.individual.allocated);
+  return [
+    {
+      phase:'shock',
+      kicker:'SHOCK DETECTED',
+      title:providerLabel(state.outageProviders)+(state.outageProviders.length>1 ? ' fail together.' : ' fails.'),
+      metricLabel:'AFFECTED BANKS',
+      metricValue:c.market.affectedCount+' / '+banks.length,
+      duration:1050
+    },
+    {
+      phase:'demand',
+      kicker:'SIMULTANEOUS DEMAND',
+      title:'Dependent banks request recovery capacity at the same time.',
+      metricLabel:'RECOVERY DEMAND',
+      metricValue:format(c.market.totalDemand)+' units',
+      duration:1150
+    },
+    {
+      phase:'market',
+      kicker:'IMMEDIATE MARKET',
+      title:'Available backup capacity is allocated first.',
+      metricLabel:'CAPACITY GAP',
+      metricValue:format(marketGap)+' units',
+      duration:1250
+    },
+    {
+      phase:'individual',
+      kicker:'INDIVIDUAL RESERVE',
+      title:'Bank-specific reserve is applied but cannot move between institutions.',
+      metricLabel:individualGap>0 ? 'REMAINING GAP' : 'STRANDED RESERVE',
+      metricValue:individualGap>0 ? format(individualGap)+' units' : format(c.individual.strandedReserve)+' units',
+      duration:1300
+    },
+    {
+      phase:'scfr',
+      kicker:'POOLED SCFR',
+      title:'The same aggregate reserve budget is reallocated across affected banks.',
+      metricLabel:'WORKLOAD RESTORED',
+      metricValue:Math.round(c.scfr.criticalRestoredPct)+'%',
+      duration:1450
+    },
+    {
+      phase:'outcome',
+      kicker:'OUTCOME',
+      title:'The three recovery mechanisms are compared under the same shock.',
+      metricLabel:'SCFR RESILIENCE',
+      metricValue:Math.round(c.scfr.resilience)+' / 100',
+      duration:1100
+    }
+  ];
+}
+
+function renderPlaybackPhase(phase,index,c){
+  const playback=$('#raScenarioPlayback');
+  playback.hidden=false;
+  playback.dataset.phase=phase.phase;
+  $('#raPlaybackStep').textContent=String(index+1).padStart(2,'0')+' / 06 · '+phase.kicker;
+  $('#raPlaybackKicker').textContent=phase.kicker;
+  $('#raPlaybackTitle').textContent=phase.title;
+  $('#raPlaybackMetricLabel').textContent=phase.metricLabel;
+  $('#raPlaybackMetricValue').textContent=phase.metricValue;
+
+  $$('#raPlaybackProgress i').forEach((node,nodeIndex)=>{
+    node.classList.toggle('is-done',nodeIndex<index);
+    node.classList.toggle('is-active',nodeIndex===index);
+  });
+
+  earth.lab.update({...earthPayload(c),labPhase:phase.phase});
+}
+
+function signedPoints(value){
+  const rounded=Math.abs(value)<.05 ? 0 : value;
+  return (rounded>0 ? '+' : '')+rounded.toFixed(1)+' pp';
+}
+
+function buildScenarioConclusion(c){
+  const affected=c.market.affectedCount;
+  const marketGap=Math.max(0,c.market.totalDemand-c.market.allocated);
+  const individualGap=Math.max(0,c.individual.totalDemand-c.individual.allocated);
+  const scfrGap=Math.max(0,c.scfr.totalDemand-c.scfr.allocated);
+  const individualRestored=c.individual.criticalRestoredPct;
+  const scfrRestored=c.scfr.criticalRestoredPct;
+  const restoredLift=scfrRestored-individualRestored;
+  const resilienceLift=c.scfr.resilience-c.individual.resilience;
+
+  let title;
+  if(marketGap<=.01){
+    title='Immediate capacity covers the modeled recovery demand.';
+  }else if(scfrGap<=.01 && individualGap>.01){
+    title='Pooling closes a capacity gap left by individual reserves.';
+  }else if(resilienceLift>.5){
+    title='Pooling improves recovery, although the modeled shock still creates scarcity.';
+  }else{
+    title='Under these assumptions, reserve coordination changes the outcome only modestly.';
+  }
+
+  const summary=
+    providerLabel(state.outageProviders)+' outage affects '+affected+' of '+banks.length+
+    ' synthetic banks and creates '+format(c.market.totalDemand)+' units of simultaneous recovery demand. '+
+    'The immediate market supplies '+format(c.market.allocated)+' units, leaving '+
+    format(marketGap)+' units unmet before prepared reserve is applied.';
+
+  let interpretation;
+  if(marketGap<=.01){
+    interpretation='The emergency market assumption already covers the modeled demand, so the reserve-allocation mechanism has little room to change recovery. The comparison is still run under the same assumptions and reserve budget.';
+  }else if(restoredLift>.05){
+    interpretation='Individual reserves leave '+format(c.individual.strandedReserve)+
+      ' units unused outside the banks that need them. With the same '+format(c.scfr.totalReserve)+
+      '-unit aggregate reserve budget, SCFR changes critical workload restored by '+signedPoints(restoredLift)+
+      ' and systemic resilience by '+signedPoints(resilienceLift)+' relative to individual reserves.';
+  }else{
+    interpretation='The current reserve level and recovery demand leave little modeled coordination uplift. SCFR uses the same aggregate reserve budget as individual reserves; the difference comes only from whether unused capacity can move between affected banks.';
+  }
+
+  if(scfrGap>.01){
+    interpretation+=' Even after pooling, '+format(scfrGap)+' units of modeled capacity demand remain unmet.';
+  }
+
+  return {
+    title,
+    summary,
+    shockValue:affected+' / '+banks.length+' banks',
+    shockNote:providerLabel(state.outageProviders)+' · '+format(c.market.totalDemand)+' units demand',
+    bottleneckValue:marketGap>.01 ? format(marketGap)+' units gap' : 'No market gap',
+    bottleneckNote:state.marketPct+'% immediate capacity · '+Math.round(c.market.criticalRestoredPct)+'% workload restored',
+    coordinationValue:signedPoints(restoredLift),
+    coordinationNote:'SCFR '+Math.round(scfrRestored)+'% vs Individual '+Math.round(individualRestored)+'% restored',
+    interpretation
+  };
+}
+
+function renderScenarioConclusion(c){
+  const conclusion=buildScenarioConclusion(c);
+  const panel=$('#raScenarioConclusion');
+
+  $('#raConclusionTitle').textContent=conclusion.title;
+  $('#raConclusionText').textContent=conclusion.summary;
+  $('#raConclusionShock').textContent=conclusion.shockValue;
+  $('#raConclusionShockNote').textContent=conclusion.shockNote;
+  $('#raConclusionBottleneck').textContent=conclusion.bottleneckValue;
+  $('#raConclusionBottleneckNote').textContent=conclusion.bottleneckNote;
+  $('#raConclusionCoordination').textContent=conclusion.coordinationValue;
+  $('#raConclusionCoordinationNote').textContent=conclusion.coordinationNote;
+  $('#raConclusionInterpretation').textContent=conclusion.interpretation;
+
+  panel.hidden=false;
+  panel.classList.remove('is-visible');
+  void panel.offsetWidth;
+  panel.classList.add('is-visible');
+}
+
+function cancelLabRun(){
+  labRun.runId++;
+  setLabRunActive(false);
+
+  const playback=$('#raScenarioPlayback');
+  playback.hidden=true;
+  playback.classList.remove('is-finishing');
+  earth.lab.update(earthPayload(comparison()));
+}
+
+async function runLabScenario(){
+  if(labRun.active) return;
+
   const selected=normalizedIds(labDraft.outageProviders);
   if(!selected.length) return;
 
@@ -697,15 +900,47 @@ function runLabScenario(){
   state.reservePct=labDraft.reservePct;
   state.allocationRule=labDraft.allocationRule;
 
-  renderLab();
+  const c=comparison();
+  renderLab({skipEarth:true});
   renderBaseline();
   renderEvidence();
-  syncLabDraftUI();
+
+  const conclusionPanel=$('#raScenarioConclusion');
+  conclusionPanel.hidden=true;
+  conclusionPanel.classList.remove('is-visible');
 
   if(document.body.classList.contains('ra-mobile-sheet-open')) setLabSheet(false);
+
+  labRun.runId++;
+  const runId=labRun.runId;
+  setLabRunActive(true);
+
+  const phases=scenarioPlaybackPhases(c);
+  for(let index=0;index<phases.length;index++){
+    if(runId!==labRun.runId) return;
+    renderPlaybackPhase(phases[index],index,c);
+    const continued=await labRunWait(phases[index].duration,runId);
+    if(!continued || runId!==labRun.runId) return;
+  }
+
+  if(runId!==labRun.runId) return;
+
+  const playback=$('#raScenarioPlayback');
+  playback.classList.add('is-finishing');
+  await labRunWait(320,runId);
+  if(runId!==labRun.runId) return;
+
+  playback.hidden=true;
+  playback.classList.remove('is-finishing');
+  earth.lab.update(earthPayload(c));
+  setLabRunActive(false);
+  renderScenarioConclusion(c);
+  syncLabDraftUI();
 }
 
 function resetLab(){
+  if(labRun.active) cancelLabRun();
+
   state.outageProviders=[...defaultScenario.outageProviders];
   state.marketPct=defaultScenario.marketPct;
   state.reservePct=defaultScenario.reservePct;
@@ -716,6 +951,10 @@ function resetLab(){
   labDraft.marketPct=defaultScenario.marketPct;
   labDraft.reservePct=defaultScenario.reservePct;
   labDraft.allocationRule=defaultScenario.allocationRule;
+
+  $('#raScenarioConclusion').hidden=true;
+  $('#raScenarioConclusion').classList.remove('is-visible');
+  $('#raScenarioPlayback').hidden=true;
 
   syncLabDraftUI();
   renderLab();
