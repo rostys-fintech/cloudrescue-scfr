@@ -12,6 +12,19 @@ CloudRescue is an interactive, browser-based systemic cloud resilience simulator
 
 **Repository:** https://github.com/rostys-fintech/cloudrescue-scfr
 
+## Submission kit
+
+Judge-facing materials are kept in `docs/`:
+
+- [Final Devpost copy](docs/devpost-final-copy.md)
+- [Devpost form map](docs/devpost-form-map.md)
+- [3–5 minute demo script](docs/demo-script.md)
+- [Screenshot plan](docs/screenshot-plan.md)
+- [Judge pitch card](docs/judge-pitch-card.md)
+- [Technical defense / likely questions](docs/technical-defense.md)
+- [Judging criteria map](docs/judging-map.md)
+- [Final submission checklist](docs/submission-checklist.md)
+
 ## Why this project exists
 
 Many banks can depend on the same small set of external cloud providers. A severe provider outage can therefore create a coordination problem: several banks may need backup infrastructure at the same time, while emergency capacity is scarce.
@@ -70,7 +83,7 @@ The Stress Lab also includes:
 - a **Sensitivity Explorer** for SCFR resilience and uplift across reserve and emergency-market assumptions;
 - a **seeded scenario generator** that deterministically creates a provider shock, market-capacity level, reserve budget and allocation rule;
 - **shareable scenario links** that reconstruct the same assumptions for another user;
-- three interactive **Challenge Mode** missions focused on efficiency, severe scarcity and coordination advantage;
+- three interactive **Constraint Tests** missions focused on efficiency, severe scarcity and coordination advantage;
 - a reproducible JSON export of the full scenario and model outputs.
 
 ## What is real — and what is synthetic
@@ -138,7 +151,7 @@ AI tools were used as a development aid for brainstorming, code drafting, debugg
 
 ## Research roadmap
 
-- **v0.1 — FirstCommit MVP:** synthetic scenario engine + guided audiovisual story + scenario replay + sensitivity explorer + reproducible seeded scenarios + challenge mode.
+- **v0.1 — FirstCommit MVP:** synthetic scenario engine + guided audiovisual story + scenario replay + sensitivity explorer + reproducible seeded scenarios + constraint tests.
 - **v0.2 — Sensitivity analysis:** more shock types, allocation rules and robustness checks.
 - **v0.3 — Empirical calibration:** public evidence on cloud concentration and operational resilience.
 - **v1.0 — Research companion:** reproducible scenario analysis to accompany the SCFR research project.
@@ -207,8 +220,13 @@ cloudrescue-scfr/
 │   └── ui-smoke.test.mjs
 ├── docs/
 │   ├── devpost-submission-draft.md
+│   ├── devpost-final-copy.md
+│   ├── devpost-form-map.md
 │   ├── demo-script.md
 │   ├── screenshot-plan.md
+│   ├── judge-pitch-card.md
+│   ├── technical-defense.md
+│   ├── judging-map.md
 │   └── submission-checklist.md
 └── README.md
 ```
