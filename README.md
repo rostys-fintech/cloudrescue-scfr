@@ -22,7 +22,7 @@ CloudRescue asks a narrow question:
 
 The prototype compares three mechanisms under the same shock:
 
-1. **Market Scramble** — affected banks source limited emergency capacity after the outage.
+1. **Post-shock Market Sourcing** — affected banks source limited emergency capacity after the outage.
 2. **Individual Reserves** — the system pre-reserves capacity, but it is ring-fenced bank by bank. Capacity reserved by unaffected banks can remain stranded.
 3. **SCFR Pooled Reserve** — the same total pre-reserved capacity is pooled and allocated across affected banks using a transparent rule.
 
