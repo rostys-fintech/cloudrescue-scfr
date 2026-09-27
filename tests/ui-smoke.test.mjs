@@ -10,7 +10,7 @@ const [html, js, css] = await Promise.all([
 const requiredIds = [
   'stage','providers','bankGroups','sceneTitle','sceneText','sceneStat','stageStatus','hudAffected','hudGap','networkLines','scfrReserveLayer','themeToggle','themeLabel','focusStory','heroDemo','heroLab','narrationToggle','voiceSelect','storyCaption','captionKicker','captionText','visualSignal','demoProgressBar','impactOverlay','impactKicker','impactValue','impactLabel','motionLayer','ringFence',
   'providerSelect','marketPct','reservePct','ruleSelect',
-  'strategyCards','decisionInsight','beforeAfter','frontier','sensitivityHeatmap','exportBtn','replayScenarioBtn'
+  'strategyCards','decisionInsight','beforeAfter','frontier','sensitivityHeatmap','exportBtn','replayScenarioBtn','scenarioId','seedInput','generateScenarioBtn','shareScenarioBtn','challengeTitle','challengeMetrics'
 ];
 
 for (const id of requiredIds) {
@@ -23,6 +23,10 @@ assert.match(js, /exportScenario/, 'app should expose reproducible scenario expo
 assert.match(js, /replayCurrentScenario/, 'Stress Lab should replay the live scenario as a guided story');
 assert.match(js, /renderBeforeAfter/, 'app should render a same-budget before-after mechanism comparison');
 assert.match(js, /renderSensitivity/, 'app should render an interactive sensitivity explorer');
+assert.match(js, /scenarioFromSeed/, 'app should generate deterministic scenarios from a seed');
+assert.match(js, /scenarioShareURL/, 'app should create reproducible scenario links');
+assert.match(js, /loadScenarioFromURL/, 'shared scenario links should restore assumptions');
+assert.match(js, /challengeEvaluation/, 'challenge mode should evaluate multiple mission constraints');
 assert.match(js, /drawNetworkLines/, 'app should render provider-to-bank network connections');
 assert.match(js, /setupTheme/, 'app should initialize persistent light-dark theme switching');
 assert.match(js, /setFocusMode/, 'app should provide a presentation focus mode');
@@ -57,6 +61,9 @@ assert.match(css, /same-budget-badge/, 'SCFR scene should visibly state that no 
 assert.match(css, /\.before-after-card/, 'same-budget before-after comparison should be styled');
 assert.match(css, /\.sensitivity-heatmap/, 'sensitivity explorer should be styled');
 assert.match(css, /\.architecture-flow/, 'model architecture should be visibly explained');
+assert.match(css, /\.scenario-generator/, 'seeded scenario generator should be styled');
+assert.match(css, /\.challenge-tabs/, 'multi-mission challenge controls should be styled');
+assert.match(css, /\.challenge-metrics/, 'challenge criteria should be visually inspectable');
 assert.match(html, /WHY THIS PROBLEM IS REAL/, 'story should visibly ground the scenario in real regulatory evidence');
 assert.match(html, /OBSERVED IN THE REAL WORLD/, 'methodology should distinguish observed evidence from synthetic assumptions');
 
