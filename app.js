@@ -433,7 +433,7 @@ function setupStory(){
     narrationBtn.textContent='CC Captions only';
   }
   $('#sceneDots').innerHTML = scenes.map((_,i)=>`<button data-scene="${i}" aria-label="Scene ${i+1}"></button>`).join('');
-  $$$('#sceneDots button').forEach(btn=>btn.addEventListener('click',()=>{
+  $('#sceneDots button').forEach(btn=>btn.addEventListener('click',()=>{
     scene=Number(btn.dataset.scene); stopAuto(); applyScene();
   }));
 
@@ -481,7 +481,7 @@ function setupStory(){
 }
 
 function switchTab(id){
-  $$$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+  $('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
   $$('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
   if(id==='lab') renderLab();
   window.scrollTo({top:0,behavior:'smooth'});
