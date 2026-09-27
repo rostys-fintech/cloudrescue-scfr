@@ -1191,14 +1191,21 @@ function renderBeforeAfter(c,args){
   $('#beforeAfter').innerHTML=`
     <div class="before-after-head">
       <div>
-        <div class="eyebrow">BEFORE / AFTER · SAME SHOCK · SAME RESERVE</div>
+        <div class="eyebrow">CONTROLLED COMPARISON · SAME SHOCK · SAME RESERVE</div>
         <h2>What changes when reserve becomes movable?</h2>
       </div>
       <div class="same-budget-proof">
         <span>Total pre-reserved capacity</span>
         <b>${num(c.scfr.totalReserve)} units</b>
-        <small>identical in both panels</small>
+        <small>identical in both mechanisms</small>
       </div>
+    </div>
+
+    <div class="comparison-context">
+      <div><span>FAILED PROVIDER</span><b>${providerName(args.outageProvider)}</b></div>
+      <div><span>AFFECTED</span><b>${c.market.affectedCount} / ${banks.length} banks</b></div>
+      <div><span>EMERGENCY MARKET</span><b>${args.marketPct}% of demand</b></div>
+      <div><span>RESERVE BUDGET</span><b>${args.reservePct}% of critical load</b></div>
     </div>
 
     <div class="before-after-grid">
