@@ -876,8 +876,8 @@ function isMobileView(){
 }
 
 function switchTab(id){
-  $('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
-  $('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
   if(id==='lab') renderLab();
 
   if(isMobileView()){
