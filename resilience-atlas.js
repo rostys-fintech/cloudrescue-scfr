@@ -684,10 +684,18 @@ function updateNarrationControl(){
   $('#raNarrationLabel').textContent=guided.narration ? 'Narration on' : 'Narration off';
 
   const pauseButton=$('#raSpeechPause');
+  const hudPause=$('#raHudPause');
   const canPause=guided.active && guided.narration;
+
   pauseButton.disabled=!canPause;
   pauseButton.setAttribute('aria-pressed',guided.paused ? 'true' : 'false');
   $('#raSpeechPauseLabel').textContent=guided.paused ? 'Resume speech' : 'Pause speech';
+
+  if(hudPause){
+    hudPause.disabled=!canPause;
+    hudPause.setAttribute('aria-pressed',guided.paused ? 'true' : 'false');
+    hudPause.textContent=guided.paused ? 'Resume' : 'Pause';
+  }
 
   if(guided.voice){
     button.title='Automatic male narrator: '+guided.voice.name;
@@ -807,10 +815,14 @@ function setupNarrationEngine(){
   guided.voice=chooseNarrator();
   updateNarrationControl();
 
-  $('#raSpeechPause')?.addEventListener('click',()=>{
+  const togglePause=()=>{
     if(!guided.active || !guided.narration) return;
     setGuidedPaused(!guided.paused);
-  });
+  };
+
+  $('#raSpeechPause')?.addEventListener('click',togglePause);
+  $('#raHudPause')?.addEventListener('click',togglePause);
+  $('#raHudStop')?.addEventListener('click',stopGuidedSimulation);
 }
 
 function setGuidedActive(active){
@@ -838,6 +850,23 @@ function stopGuidedSimulation(){
   }
 }
 
+function focusAnimationStage(target){
+  if(!target || window.innerWidth>=768) return Promise.resolve(true);
+
+  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const headerOffset=68;
+  const top=Math.max(0,target.getBoundingClientRect().top+window.scrollY-headerOffset);
+
+  window.scrollTo({
+    top,
+    behavior:reduced ? 'auto' : 'smooth'
+  });
+
+  return new Promise(resolve=>{
+    window.setTimeout(()=>resolve(true),reduced ? 80 : 460);
+  });
+}
+
 async function runGuidedSimulation(){
   if(guided.active){
     stopGuidedSimulation();
@@ -848,7 +877,17 @@ async function runGuidedSimulation(){
   const runId=guided.runId;
   guided.paused=false;
   earth.simulation.setPaused?.(false);
+
+  /* Reset to the first visual state before moving the phone viewport so the
+     user arrives at the actual animation, not the previous scene. */
+  state.scene=0;
+  renderScene();
   setGuidedActive(true);
+
+  if(window.innerWidth<768){
+    await focusAnimationStage($('#raEarthMount'));
+    if(runId!==guided.runId) return;
+  }
 
   for(let i=0;i<6;i++){
     if(runId!==guided.runId) return;
@@ -856,8 +895,6 @@ async function runGuidedSimulation(){
     state.scene=i;
     renderScene();
 
-    /* Speech and visual state share one scene clock. The next scene starts
-       only after both narration and the minimum visual phase have completed. */
     const story=scenePresentation(comparison())[i];
     const [spoken,visualComplete]=await Promise.all([
       speakCurrentScene(story,runId),
@@ -1179,8 +1216,8 @@ async function runLabScenario(){
     }
 
     if(window.innerWidth<768){
-      $('#raLabEarthMount')?.scrollIntoView({block:'center',behavior:'auto'});
-      await labRunWait(90,runId);
+      await focusAnimationStage($('#raLabEarthMount'));
+      if(runId!==labRun.runId) return;
     }
 
     const phases=scenarioPlaybackPhases(c);
