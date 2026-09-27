@@ -244,7 +244,7 @@ button{cursor:pointer}
   position:absolute;left:50%;bottom:19px;transform:translateX(-50%) translateY(15px);
   opacity:0;transition:.4s;z-index:6;pointer-events:none;
 }
-.scene-5 .scfr-reserve-layer,.scene-6 .scfr-reserve-layer{opacity:1;transform:translateX(-50%) translateY(0)}
+.scene-5 .scfr-reserve-layer{opacity:1;transform:translateX(-50%) translateY(0)}
 .reserve-node{
   min-width:290px;border:1px solid #a9d4c3;background:#f1faf6;border-radius:11px;
   padding:11px 14px;text-align:center;box-shadow:0 6px 20px rgba(21,138,103,.07);
@@ -258,7 +258,7 @@ button{cursor:pointer}
   display:none;position:absolute;inset:18px;background:rgba(247,249,251,.97);
   border:1px solid var(--line);border-radius:13px;padding:15px;z-index:8;
 }
-.scene-5 .compare-overlay,.scene-6 .compare-overlay{
+.scene-6 .compare-overlay{
   display:grid;grid-template-columns:repeat(3,1fr);gap:10px;animation:fade .3s ease;
 }
 .compare-card{
@@ -434,3 +434,13 @@ footer{display:flex;justify-content:space-between;color:#8795a4;font-size:9px;pa
   .tabs{overflow:auto}.tab{white-space:nowrap}
   footer{flex-direction:column;gap:6px}
 }
+
+.scfr-line{
+  stroke:var(--green);
+  stroke-width:1.8;
+  opacity:.72;
+  stroke-dasharray:5 5;
+  animation:scfrFlow 1.35s linear infinite;
+}
+@keyframes scfrFlow{to{stroke-dashoffset:-20}}
+.scene-5 .network-line:not(.scfr-line){opacity:.18}
