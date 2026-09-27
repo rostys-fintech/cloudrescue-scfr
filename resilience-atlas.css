@@ -4751,3 +4751,118 @@ body.ra-guided-paused .ra-guided-progress i.is-active{
     font-size:8.5px;
   }
 }
+
+
+/* =========================================================
+   MOBILE RUN FOCUS — BUTTON FIT + IN-ANIMATION CONTROLS
+   ========================================================= */
+
+.ra-guided-actions{
+  display:none;
+  align-items:center;
+  justify-content:flex-end;
+  gap:5px;
+}
+.ra-guided-actions button{
+  min-height:28px;
+  padding:0 9px;
+  border:1px solid var(--ra-border);
+  border-radius:7px;
+  background:var(--ra-surface-soft);
+  color:var(--ra-text-2);
+  font-size:8px;
+  font-weight:800;
+  cursor:pointer;
+}
+.ra-guided-actions button[aria-pressed="true"]{
+  color:var(--ra-warning);
+  border-color:color-mix(in srgb,var(--ra-warning) 38%,var(--ra-border));
+}
+.ra-guided-actions button:disabled{
+  opacity:.38;
+}
+body.ra-guided-running .ra-guided-actions{
+  display:flex;
+}
+
+@media(max-width:767px){
+  /* Primary run actions must fit without truncating on narrow iPhones. */
+  #raRunPreview,
+  #raRunScenario{
+    width:100%!important;
+    min-width:0!important;
+    min-height:56px!important;
+    padding:9px 14px!important;
+    gap:10px!important;
+    font-size:10.5px!important;
+    line-height:1.2!important;
+  }
+  #raRunPreview>span,
+  #raRunScenario>span{
+    min-width:0;
+    white-space:normal!important;
+    overflow-wrap:anywhere;
+    text-align:left;
+  }
+  #raRunPreview>b,
+  #raRunScenario>b{
+    flex:0 0 auto;
+  }
+
+  .ra-lab-run-block{
+    gap:9px!important;
+  }
+  .ra-run-scenario{
+    min-height:56px!important;
+  }
+
+  /* Once Run is tapped, controls remain available where the animation is. */
+  .ra-guided-status{
+    grid-template-columns:auto minmax(0,1fr) auto!important;
+    gap:6px!important;
+  }
+  .ra-guided-status>#raGuidedScene{
+    display:none!important;
+  }
+  .ra-guided-actions{
+    min-width:0;
+  }
+  .ra-guided-actions button{
+    min-width:54px;
+    min-height:36px;
+    padding:0 8px;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  body.ra-guided-running .ra-guided-hud{
+    position:relative;
+    z-index:30;
+  }
+
+  /* The lower rail keeps the large controls readable if the user scrolls back. */
+  .ra-sim-controls{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .ra-sim-controls .ra-primary-action{
+    grid-column:1/-1!important;
+    min-height:56px!important;
+  }
+  .ra-sim-controls .ra-quiet-action,
+  .ra-sim-controls .ra-pause-action{
+    min-height:48px!important;
+  }
+}
+
+@media(max-width:390px){
+  #raRunPreview,
+  #raRunScenario{
+    font-size:10px!important;
+    padding-inline:12px!important;
+  }
+  .ra-guided-actions button{
+    min-width:50px;
+    padding-inline:6px;
+    font-size:7.5px;
+  }
+}
