@@ -16,7 +16,7 @@ assert.doesNotMatch(mark,/#ff243d/i);
 assert.doesNotMatch(mark,/rect x="23" y="40" width="18" height="8"/);
 
 for (const doc of [html,index]) {
-  assert.match(doc,/resilience-atlas-mark\.svg\?v=20260927-earth02/);
+  assert.match(doc,/resilience-atlas-mark\.svg\?v=20260927-polish01/);
   assert.match(doc,/class="ra-brand-icon"/);
 }
 
