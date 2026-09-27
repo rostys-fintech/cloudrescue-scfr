@@ -2592,3 +2592,691 @@ body,
     transition:none!important;
   }
 }
+
+
+/* =========================================================
+   STAGE 8 — MOBILE UX
+   Earth-first mobile product, not a scaled desktop layout.
+   ========================================================= */
+
+.ra-mobile-sheet-head,
+.ra-mobile-lab-bar,
+.ra-mobile-scene-nav,
+.ra-mobile-sheet-backdrop{
+  display:none;
+}
+
+@media(max-width:767px){
+  html,body{
+    min-width:320px;
+    overflow-x:hidden;
+  }
+  body{
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  body.ra-mobile-sheet-open{
+    overflow:hidden;
+    touch-action:none;
+  }
+
+  /* Compact two-row app header */
+  .ra-app{
+    width:100%!important;
+  }
+  .ra-header{
+    position:sticky!important;
+    top:0;
+    z-index:80;
+    min-height:0;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "brand actions"
+      "nav nav"!important;
+    gap:0!important;
+    padding:
+      calc(8px + env(safe-area-inset-top,0px))
+      10px
+      0!important;
+    background:color-mix(in srgb,var(--ra-canvas) 94%,transparent);
+    backdrop-filter:blur(18px);
+  }
+  .ra-brand{
+    min-height:42px;
+  }
+  .ra-brand-mark{
+    width:29px!important;
+    height:29px!important;
+    flex:0 0 29px;
+  }
+  .ra-brand-copy strong{
+    font-size:14px!important;
+    letter-spacing:-.025em;
+  }
+  .ra-brand-copy small{
+    display:none!important;
+  }
+  .ra-header-actions{
+    min-height:42px;
+    gap:7px!important;
+  }
+  .ra-system-label{
+    display:none!important;
+  }
+  .ra-theme-toggle{
+    min-width:44px;
+    min-height:34px;
+    padding:0 6px!important;
+  }
+  .ra-theme-toggle>span{
+    display:none!important;
+  }
+
+  .ra-nav{
+    width:calc(100% + 20px);
+    margin-left:-10px;
+    display:grid!important;
+    grid-template-columns:repeat(3,1fr);
+    overflow:visible!important;
+    border-top:1px solid var(--ra-border);
+  }
+  .ra-nav-tab{
+    min-width:0!important;
+    min-height:44px!important;
+    padding:0 4px;
+    white-space:nowrap;
+    font-size:9px!important;
+  }
+
+  .ra-main{
+    padding:8px 0 20px!important;
+  }
+
+  /* Simulation: Earth before narrative */
+  #simulation.is-active{
+    display:flex!important;
+    flex-direction:column;
+    gap:8px!important;
+  }
+  #simulation .ra-canvas-shell{
+    order:1!important;
+    border-left:0!important;
+    border-right:0!important;
+    border-radius:0!important;
+  }
+  #simulation .ra-story-rail{
+    order:2!important;
+    margin:0 8px;
+    padding:18px 16px 16px!important;
+    border-radius:var(--ra-radius-sm)!important;
+  }
+  #simulation .ra-canvas-toolbar{
+    min-height:50px;
+    padding:9px 12px!important;
+  }
+  #simulation .ra-canvas-toolbar>div:first-child span{
+    font-size:7px!important;
+  }
+  #simulation .ra-canvas-toolbar>div:first-child b{
+    max-width:58vw;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:11px!important;
+  }
+  #simulation .ra-status-pills{
+    gap:4px;
+  }
+  #simulation .ra-status-pills span{
+    padding:5px 6px;
+    font-size:7px!important;
+  }
+  #simulation .ra-status-pills span:nth-child(n+2){
+    display:none;
+  }
+
+  #simulation .ra-earth-mount{
+    min-height:clamp(390px,66svh,560px)!important;
+  }
+  #simulation .ra-earth-svg{
+    transform:scale(1.16)!important;
+    transform-origin:50% 49%!important;
+  }
+
+  /* Guided HUD stays readable but leaves the map visible. */
+  .ra-guided-hud{
+    width:calc(100% - 16px)!important;
+    min-height:82px!important;
+    margin:-94px 8px 8px!important;
+    border-radius:9px!important;
+  }
+  .ra-guided-status{
+    min-height:24px!important;
+    padding:4px 9px!important;
+  }
+  .ra-guided-main{
+    grid-template-columns:38px minmax(0,1fr)!important;
+    min-height:54px!important;
+    padding:7px 9px 10px!important;
+  }
+  .ra-waveform{
+    min-height:30px!important;
+    gap:1.5px!important;
+    padding-right:7px!important;
+  }
+  .ra-waveform i:nth-child(n+7){
+    display:none;
+  }
+  .ra-guided-copy span{
+    font-size:7px!important;
+  }
+  .ra-guided-copy strong{
+    font-size:10px!important;
+    line-height:1.3!important;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+
+  /* Dedicated thumb-friendly scene rail */
+  .ra-mobile-scene-nav{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(68px,1fr));
+    gap:5px;
+    padding:8px 8px 10px;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x proximity;
+    scrollbar-width:none;
+    border-top:1px solid var(--ra-border);
+    background:var(--ra-surface);
+  }
+  .ra-mobile-scene-nav::-webkit-scrollbar{display:none}
+  .ra-mobile-scene-nav button{
+    min-height:48px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+    gap:2px;
+    padding:7px 8px;
+    scroll-snap-align:start;
+    border:1px solid var(--ra-border);
+    border-radius:8px;
+    background:var(--ra-surface-soft);
+    color:var(--ra-text-3);
+    text-align:left;
+  }
+  .ra-mobile-scene-nav button span{
+    color:var(--ra-text-3);
+    font-size:7px;
+    font-weight:850;
+    letter-spacing:.08em;
+  }
+  .ra-mobile-scene-nav button b{
+    font-size:9px;
+    font-weight:760;
+  }
+  .ra-mobile-scene-nav button.is-active{
+    color:var(--ra-text-1);
+    border-color:color-mix(in srgb,var(--ra-primary) 48%,var(--ra-border));
+    background:color-mix(in srgb,var(--ra-primary) 7%,var(--ra-surface-soft));
+  }
+  .ra-mobile-scene-nav button.is-active span{
+    color:var(--ra-primary);
+  }
+
+  .ra-outcome-strip{
+    grid-template-columns:repeat(2,1fr)!important;
+  }
+  .ra-outcome-strip article{
+    min-height:72px;
+    padding:11px 12px!important;
+  }
+  .ra-outcome-strip article:nth-child(2){
+    border-right:0!important;
+  }
+  .ra-outcome-strip article:nth-child(-n+2){
+    border-bottom:1px solid var(--ra-border);
+  }
+  .ra-outcome-strip b{
+    font-size:19px!important;
+  }
+  .ra-outcome-strip span,
+  .ra-outcome-strip small{
+    font-size:7px!important;
+  }
+
+  /* Narrative comes after the visualization, stripped to essentials. */
+  .ra-story-copy{
+    margin-top:14px!important;
+  }
+  .ra-story-copy h1{
+    margin-top:7px!important;
+    max-width:none!important;
+    font-size:29px!important;
+    line-height:1!important;
+  }
+  .ra-story-copy p{
+    font-size:12px!important;
+    line-height:1.5!important;
+  }
+  .ra-story-stat{
+    margin-top:16px!important;
+    padding:11px 0!important;
+  }
+  .ra-story-stat b{
+    font-size:15px!important;
+  }
+  .ra-sim-controls{
+    grid-template-columns:1fr auto!important;
+    gap:7px!important;
+    margin-top:14px!important;
+  }
+  .ra-sim-controls .ra-primary-action{
+    min-height:48px!important;
+  }
+  .ra-sim-controls .ra-quiet-action{
+    width:48px;
+    min-width:48px!important;
+    min-height:48px!important;
+    padding:0!important;
+  }
+  .ra-sim-controls .ra-quiet-action #raNarrationLabel{
+    display:none;
+  }
+  .ra-story-rail .ra-scene-list{
+    display:none!important;
+  }
+  .ra-story-note{
+    display:none!important;
+  }
+
+  /* Lab: the map stays on screen; controls are a sheet. */
+  #lab.is-active{
+    display:block!important;
+  }
+  #lab .ra-lab-workspace{
+    width:100%;
+    border-left:0!important;
+    border-right:0!important;
+    border-radius:0!important;
+  }
+  #lab .ra-lab-toolbar{
+    min-height:48px!important;
+    padding:8px 11px!important;
+  }
+  #lab .ra-lab-toolbar .ra-lab-scenario-summary{
+    display:none!important;
+  }
+  #lab .ra-lab-modebar{
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+    padding:9px 10px!important;
+  }
+  #lab .ra-lab-modebar>div:first-child small{
+    display:none;
+  }
+  #lab .ra-strategy-switch{
+    width:100%!important;
+    min-width:0!important;
+  }
+  #lab .ra-strategy-switch button{
+    min-height:42px!important;
+    font-size:9px!important;
+  }
+
+  .ra-mobile-lab-bar{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:8px;
+    padding:8px 10px;
+    border-bottom:1px solid var(--ra-border);
+    background:var(--ra-surface);
+  }
+  .ra-mobile-lab-summary{
+    min-width:0;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    border:1px solid var(--ra-border);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .ra-mobile-lab-summary span{
+    min-width:0;
+    padding:6px 7px;
+    border-right:1px solid var(--ra-border);
+  }
+  .ra-mobile-lab-summary span:last-child{
+    border-right:0;
+  }
+  .ra-mobile-lab-summary i,
+  .ra-mobile-lab-summary b{
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .ra-mobile-lab-summary i{
+    color:var(--ra-text-3);
+    font-style:normal;
+    font-size:6px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  .ra-mobile-lab-summary b{
+    margin-top:2px;
+    font-size:8px;
+  }
+  #raOpenLabSheet{
+    min-height:44px;
+    padding:0 11px;
+    border:1px solid color-mix(in srgb,var(--ra-primary) 34%,var(--ra-border));
+    border-radius:8px;
+    background:color-mix(in srgb,var(--ra-primary) 7%,var(--ra-surface));
+    color:var(--ra-primary);
+    font-size:9px;
+    font-weight:800;
+    white-space:nowrap;
+  }
+
+  #lab .ra-earth-mount-lab{
+    min-height:clamp(390px,58svh,520px)!important;
+  }
+  #lab .ra-earth-svg{
+    transform:scale(1.17)!important;
+  }
+
+  .ra-lab-outcomes{
+    grid-template-columns:repeat(2,1fr)!important;
+  }
+  .ra-lab-outcomes article{
+    min-height:78px;
+    padding:11px 12px!important;
+  }
+  .ra-lab-outcomes b{
+    font-size:20px!important;
+  }
+  .ra-model-compare{
+    padding:10px!important;
+  }
+  .ra-model-compare-grid{
+    grid-template-columns:1fr!important;
+  }
+  .ra-model-card{
+    min-height:112px;
+    padding:12px!important;
+  }
+  .ra-model-card>strong{
+    font-size:25px!important;
+  }
+  .ra-mechanism-insight{
+    grid-template-columns:1fr!important;
+    gap:4px!important;
+  }
+
+  /* Bottom sheet */
+  .ra-lab-console{
+    position:fixed!important;
+    z-index:120;
+    left:0;
+    right:0;
+    bottom:0;
+    width:100%!important;
+    max-height:min(82svh,720px);
+    min-height:0!important;
+    margin:0!important;
+    padding:
+      0
+      14px
+      calc(16px + env(safe-area-inset-bottom,0px))!important;
+    display:block!important;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    border:1px solid var(--ra-border-strong)!important;
+    border-bottom:0!important;
+    border-radius:18px 18px 0 0!important;
+    background:var(--ra-surface)!important;
+    box-shadow:0 -18px 50px rgba(0,0,0,.26)!important;
+    transform:translateY(110%);
+    visibility:hidden;
+    transition:
+      transform 260ms var(--ra-ease-standard),
+      visibility 260ms;
+  }
+  .ra-lab-console.is-mobile-open{
+    transform:translateY(0);
+    visibility:visible;
+  }
+  .ra-mobile-sheet-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    display:grid;
+    grid-template-columns:30px minmax(0,1fr) 44px;
+    align-items:center;
+    gap:8px;
+    min-height:62px;
+    margin:0 -14px 8px;
+    padding:8px 10px;
+    border-bottom:1px solid var(--ra-border);
+    background:color-mix(in srgb,var(--ra-surface) 96%,transparent);
+    backdrop-filter:blur(12px);
+  }
+  .ra-mobile-sheet-handle{
+    align-self:start;
+    justify-self:center;
+    grid-column:1/-1;
+    width:38px;
+    height:4px;
+    margin-bottom:-17px;
+    border-radius:99px;
+    background:var(--ra-border-strong);
+  }
+  .ra-mobile-sheet-head>div{
+    grid-column:1/3;
+    min-width:0;
+    padding-top:9px;
+  }
+  .ra-mobile-sheet-head>div span{
+    display:block;
+    color:var(--ra-primary);
+    font-size:7px;
+    font-weight:850;
+    letter-spacing:.1em;
+  }
+  .ra-mobile-sheet-head>div b{
+    display:block;
+    margin-top:2px;
+    font-size:13px;
+  }
+  .ra-mobile-sheet-head button{
+    grid-column:3;
+    min-width:44px;
+    min-height:44px;
+    border:0;
+    border-radius:50%;
+    background:var(--ra-surface-raised);
+    color:var(--ra-text-2);
+    font-size:23px;
+    line-height:1;
+  }
+  .ra-lab-console-head{
+    margin-top:4px;
+  }
+  .ra-lab-console-head h2{
+    font-size:26px!important;
+  }
+  .ra-lab-intro{
+    font-size:11px!important;
+  }
+  .ra-control-group{
+    padding-top:14px!important;
+  }
+  .ra-control-group>header{
+    margin-bottom:9px!important;
+  }
+  .ra-field select{
+    min-height:48px!important;
+  }
+  .ra-range-field input[type="range"]{
+    min-height:38px;
+  }
+  .ra-reset-action{
+    min-height:44px!important;
+  }
+
+  .ra-mobile-sheet-backdrop{
+    position:fixed;
+    z-index:110;
+    inset:0;
+    display:block;
+    background:rgba(0,0,0,.48);
+    backdrop-filter:blur(2px);
+  }
+  .ra-mobile-sheet-backdrop[hidden]{
+    display:none!important;
+  }
+
+  /* Evidence is a reading experience on mobile. */
+  #evidence.is-active{
+    display:block!important;
+  }
+  .ra-evidence-hero{
+    padding:20px 14px 14px!important;
+  }
+  .ra-evidence-hero h2{
+    font-size:29px!important;
+    line-height:1.02!important;
+  }
+  .ra-evidence-hero>div:first-child>p{
+    font-size:12px!important;
+  }
+  .ra-boundary-pair{
+    margin-top:16px;
+  }
+  .ra-evidence-map,
+  .ra-live-model{
+    margin:0 8px;
+    border-radius:10px!important;
+  }
+  .ra-earth-mount-evidence{
+    min-height:390px!important;
+  }
+  .ra-live-model article{
+    min-height:52px!important;
+  }
+  .ra-method-block{
+    margin:10px 8px!important;
+    padding:13px!important;
+  }
+  .ra-section-head h3{
+    font-size:20px!important;
+  }
+  .ra-equation-grid code{
+    white-space:normal;
+    overflow-wrap:anywhere;
+    font-size:10px!important;
+  }
+  .ra-source-grid a{
+    min-height:142px!important;
+  }
+  .ra-repro-grid a{
+    min-height:96px!important;
+  }
+
+  .ra-footer{
+    margin-top:8px;
+    padding:
+      13px 10px
+      calc(13px + env(safe-area-inset-bottom,0px))!important;
+    font-size:7px!important;
+  }
+
+  /* Touch-size contract */
+  button,
+  select,
+  input[type="range"],
+  a.ra-brand{
+    touch-action:manipulation;
+  }
+  .ra-nav-tab,
+  .ra-primary-action,
+  .ra-quiet-action,
+  .ra-reset-action,
+  .ra-strategy-switch button,
+  .ra-mobile-scene-nav button,
+  .ra-model-card,
+  #raOpenLabSheet,
+  #raCloseLabSheet{
+    min-height:44px;
+  }
+}
+
+@media(max-width:429px){
+  .ra-header{
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .ra-nav{
+    width:calc(100% + 16px);
+    margin-left:-8px;
+  }
+  .ra-brand-copy strong{
+    font-size:13px!important;
+  }
+  #simulation .ra-earth-mount{
+    min-height:430px!important;
+  }
+  #simulation .ra-earth-svg,
+  #lab .ra-earth-svg{
+    transform:scale(1.24)!important;
+  }
+  .ra-guided-hud{
+    margin-top:-91px!important;
+  }
+  .ra-mobile-scene-nav{
+    grid-template-columns:repeat(6,66px);
+  }
+  .ra-story-copy h1{
+    font-size:27px!important;
+  }
+  .ra-mobile-lab-bar{
+    grid-template-columns:1fr;
+  }
+  .ra-mobile-lab-summary{
+    grid-row:1;
+  }
+  #raOpenLabSheet{
+    width:100%;
+  }
+  #lab .ra-earth-mount-lab{
+    min-height:420px!important;
+  }
+  .ra-lab-outcomes b{
+    font-size:19px!important;
+  }
+  .ra-evidence-hero h2{
+    font-size:27px!important;
+  }
+}
+
+/* Larger phones can use the full globe comfortably. */
+@media(min-width:430px) and (max-width:767px){
+  #simulation .ra-earth-mount{
+    min-height:min(68svh,590px)!important;
+  }
+  #lab .ra-earth-mount-lab{
+    min-height:min(62svh,540px)!important;
+  }
+}
+
+/* Safe-area polish for iOS standalone/browser chrome. */
+@supports(padding:max(0px)){
+  @media(max-width:767px){
+    .ra-lab-console{
+      padding-bottom:max(16px,env(safe-area-inset-bottom))!important;
+    }
+  }
+}
