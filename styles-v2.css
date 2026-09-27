@@ -1758,3 +1758,126 @@ html[data-theme="dark"] .stage-wrap{
   font-size:11px;
   letter-spacing:.01em;
 }
+
+
+/* ---------- Institutional Stress Lab control room ---------- */
+.controls{
+  background:linear-gradient(180deg,#102b42,#0d2437)!important;
+  border-color:#173b58!important;
+  color:#eaf1f5;
+  box-shadow:0 14px 36px rgba(15,39,58,.09)!important;
+}
+.controls .eyebrow,
+.controls .control-section-label,
+.controls .scenario-generator-head span,
+.controls .challenge>span{
+  color:#7798b0!important;
+}
+.controls h2{color:#f3f7fa}
+.controls>p{color:#9fb2c1}
+.controls .scenario-generator{
+  border-color:rgba(255,255,255,.13);
+}
+.controls .scenario-generator-head b{
+  color:#dbe7ef;
+}
+.controls .scenario-seed-row input,
+.controls select{
+  border-color:#38556c;
+  background:#0b2132;
+  color:#e8f0f5;
+  box-shadow:none;
+}
+.controls .scenario-seed-row input::placeholder{
+  color:#6f899c;
+}
+.controls label{
+  color:#b9cad6;
+}
+.controls label>b{
+  color:#a9c8df;
+}
+.controls label>small{
+  color:#7892a5;
+}
+.controls input[type="range"]{
+  accent-color:#8eb0ca;
+}
+.controls .presets{
+  border-color:#38556c;
+}
+.controls .preset{
+  color:#8fa7b9;
+  border-right-color:#38556c;
+}
+.controls .preset:hover,
+.controls .preset.active{
+  background:#173850;
+  color:#edf4f8;
+}
+.controls .btn.secondary{
+  background:transparent;
+  border-color:#3c5a70;
+  color:#bdceda;
+}
+.controls .btn.secondary:hover{
+  background:#17364d;
+  border-color:#55738a;
+  color:#f0f5f8;
+}
+.controls #runBtn{
+  background:#f1f5f8;
+  border-color:#f1f5f8;
+  color:#102a40;
+}
+.controls #runBtn:hover{
+  background:#fff;
+  border-color:#fff;
+}
+.controls .control-section-label{
+  border-top-color:rgba(255,255,255,.13);
+}
+.controls .challenge{
+  border-top-color:rgba(255,255,255,.13);
+}
+.controls .challenge-tabs{
+  border-color:#38556c;
+  background:transparent;
+}
+.controls .challenge-tab{
+  color:#839db0;
+  border-right-color:#38556c;
+}
+.controls .challenge-tab.active{
+  background:#173850;
+  color:#eff5f8;
+}
+.controls .challenge>b{color:#e5eef4}
+.controls .challenge>p{color:#8099ab}
+.controls .challenge-metrics>div{
+  border-color:#304d63;
+  background:#0b2132;
+}
+.controls .challenge-metrics span,
+.controls .challenge-metrics small{
+  color:#6f899d;
+}
+.controls .challenge-metrics b{
+  color:#dce7ee;
+}
+.controls .challenge-metrics>div.ok{
+  background:#12372f;
+  border-color:#2f6c59;
+}
+.controls .challenge-metrics>div.ok b{
+  color:#85cdb2;
+}
+.controls .challenge.success>span,
+.controls .challenge.success>b{
+  color:#8dd2b8;
+}
+
+html[data-theme="dark"] .controls{
+  background:linear-gradient(180deg,#102b42,#0b2132)!important;
+  border-color:#24475f!important;
+}
