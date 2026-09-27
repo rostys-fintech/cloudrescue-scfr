@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#070A0F">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-guided01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-lab01">
 </head>
 <body>
   <div class="ra-app">
@@ -131,68 +131,173 @@
       </section>
 
       <section class="ra-view" id="lab" data-ra-view="lab">
-        <aside class="ra-controls">
-          <div class="ra-kicker">SCENARIO LAB</div>
-          <h2>Change assumptions. Keep the model constant.</h2>
+        <aside class="ra-controls ra-lab-console">
+          <div class="ra-lab-console-head">
+            <div>
+              <div class="ra-kicker">SCENARIO LAB</div>
+              <h2>Test the recovery mechanism.</h2>
+            </div>
+            <button class="ra-reset-action" id="raResetLab" type="button">Reset</button>
+          </div>
+          <p class="ra-lab-intro">Change the assumptions below. The Earth, outcomes and comparison update from the same deterministic model.</p>
 
-          <label>
-            <span>Provider shock</span>
-            <select id="raProviderSelect">
-              <option value="blue">Blue Cloud</option>
-              <option value="orange">Orange Cloud</option>
-              <option value="green">Green Cloud</option>
-            </select>
-          </label>
+          <section class="ra-control-group">
+            <header>
+              <span>01</span>
+              <div><b>Shock</b><small>Which shared dependency fails?</small></div>
+            </header>
+            <label class="ra-field">
+              <span>Provider outage</span>
+              <select id="raProviderSelect">
+                <option value="blue">Blue Cloud</option>
+                <option value="orange">Orange Cloud</option>
+                <option value="green">Green Cloud</option>
+              </select>
+            </label>
+            <div class="ra-inline-readout">
+              <span>Affected demand</span>
+              <b id="raAffectedDemand">—</b>
+            </div>
+          </section>
 
-          <label>
-            <span>Immediate backup capacity <b id="raMarketLabel">20%</b></span>
-            <input id="raMarketPct" type="range" min="0" max="50" step="5" value="20">
-          </label>
+          <section class="ra-control-group">
+            <header>
+              <span>02</span>
+              <div><b>Prepared resilience</b><small>How much capacity is available?</small></div>
+            </header>
+            <label class="ra-field ra-range-field">
+              <span>Immediate backup capacity <b id="raMarketLabel">20%</b></span>
+              <input id="raMarketPct" type="range" min="0" max="50" step="5" value="20">
+              <small><i>0%</i><i>25%</i><i>50%</i></small>
+            </label>
+            <label class="ra-field ra-range-field">
+              <span>Prepared reserve <b id="raReserveLabel">25%</b></span>
+              <input id="raReservePct" type="range" min="0" max="60" step="5" value="25">
+              <small><i>0%</i><i>30%</i><i>60%</i></small>
+            </label>
+          </section>
 
-          <label>
-            <span>Prepared reserve <b id="raReserveLabel">25%</b></span>
-            <input id="raReservePct" type="range" min="0" max="60" step="5" value="25">
-          </label>
-
-          <label>
-            <span>Allocation rule</span>
-            <select id="raRuleSelect">
-              <option value="systemic">Systemic priority</option>
-              <option value="equal">Equal allocation</option>
-              <option value="readiness">Readiness first</option>
-            </select>
-          </label>
+          <section class="ra-control-group">
+            <header>
+              <span>03</span>
+              <div><b>Coordination</b><small>How is pooled reserve allocated?</small></div>
+            </header>
+            <label class="ra-field">
+              <span>SCFR allocation rule</span>
+              <select id="raRuleSelect">
+                <option value="systemic">Systemic priority</option>
+                <option value="equal">Equal allocation</option>
+                <option value="readiness">Readiness first</option>
+              </select>
+            </label>
+          </section>
 
           <div class="ra-control-note">
-            <span>MODEL SOURCE</span>
-            <b>Existing simulation engine</b>
-            <small>No formulas or bank data are changed in this redesign shell.</small>
+            <span>WHAT STAYS FIXED</span>
+            <b>Same bank network and model equations</b>
+            <small>Only the selected scenario assumptions change. The synthetic bank sample and calculation logic remain constant.</small>
           </div>
         </aside>
 
         <section class="ra-lab-workspace">
-          <div class="ra-canvas-toolbar">
+          <div class="ra-canvas-toolbar ra-lab-toolbar">
             <div>
-              <span>LIVE PARAMETER VIEW</span>
+              <span>LIVE SCENARIO</span>
               <b id="raLabTitle">Blue Cloud outage</b>
             </div>
-            <div class="ra-status-pills"><span>Model-linked</span></div>
+            <div class="ra-lab-scenario-summary">
+              <span><i>MARKET</i><b id="raLabMarketSummary">20%</b></span>
+              <span><i>RESERVE</i><b id="raLabReserveSummary">25%</b></span>
+              <span><i>RULE</i><b id="raLabRuleSummary">Systemic</b></span>
+            </div>
+          </div>
+
+          <div class="ra-lab-modebar">
+            <div>
+              <span>VIEW RECOVERY MECHANISM</span>
+              <small>Scenario stays fixed while the allocation mechanism changes.</small>
+            </div>
+            <div class="ra-strategy-switch" role="group" aria-label="Recovery mechanism">
+              <button class="is-active" data-ra-strategy="market" type="button">Market</button>
+              <button data-ra-strategy="individual" type="button">Individual</button>
+              <button data-ra-strategy="scfr" type="button">SCFR</button>
+            </div>
           </div>
 
           <div class="ra-earth-mount ra-earth-mount-lab" id="raLabEarthMount" data-earth-mode="lab"></div>
 
-          <div class="ra-outcome-strip">
-            <article><span>Affected banks</span><b id="raLabAffected">—</b><small>of 20</small></article>
-            <article><span>Unmet capacity</span><b id="raLabUnmet">—</b><small>units</small></article>
-            <article><span>Workload restored</span><b id="raLabRestored">—</b><small>SCFR</small></article>
-            <article><span>System resilience</span><b id="raLabResilience">—</b><small>/ 100</small></article>
+          <div class="ra-lab-outcomes" aria-label="Scenario outcomes">
+            <article>
+              <span>AFFECTED BANKS</span>
+              <b id="raLabAffected">—</b>
+              <small id="raLabAffectedNote">of 20 synthetic banks</small>
+            </article>
+            <article>
+              <span>UNMET CAPACITY</span>
+              <b id="raLabUnmet">—</b>
+              <small id="raLabUnmetNote">units after selected mechanism</small>
+            </article>
+            <article>
+              <span>WORKLOAD RESTORED</span>
+              <b id="raLabRestored">—</b>
+              <small id="raLabRestoredNote">critical workload</small>
+            </article>
+            <article>
+              <span>SYSTEM RESILIENCE</span>
+              <b id="raLabResilience">—</b>
+              <small>/ 100</small>
+            </article>
           </div>
 
-          <div class="ra-compare-strip" aria-label="Recovery model comparison">
-            <article><span>Post-shock market</span><b id="raMarketScore">—</b></article>
-            <article><span>Individual reserves</span><b id="raIndividualScore">—</b></article>
-            <article class="is-accent"><span>SCFR pooled reserve</span><b id="raScfrScore">—</b></article>
-          </div>
+          <section class="ra-model-compare" aria-label="Recovery model comparison">
+            <header>
+              <div>
+                <span>COMPARE RECOVERY MODELS</span>
+                <b>Same shock. Different allocation.</b>
+              </div>
+              <small id="raCompareContext">Blue Cloud · 20% market · 25% reserve</small>
+            </header>
+
+            <div class="ra-model-compare-grid">
+              <button class="ra-model-card is-active" data-ra-compare="market" type="button">
+                <span>POST-SHOCK MARKET</span>
+                <strong id="raMarketScore">—</strong>
+                <div class="ra-score-track"><i id="raMarketBar"></i></div>
+                <dl>
+                  <div><dt>Restored</dt><dd id="raMarketRestored">—</dd></div>
+                  <div><dt>Gap</dt><dd id="raMarketGap">—</dd></div>
+                </dl>
+                <small>Immediate market capacity only</small>
+              </button>
+
+              <button class="ra-model-card" data-ra-compare="individual" type="button">
+                <span>INDIVIDUAL RESERVES</span>
+                <strong id="raIndividualScore">—</strong>
+                <div class="ra-score-track"><i id="raIndividualBar"></i></div>
+                <dl>
+                  <div><dt>Restored</dt><dd id="raIndividualRestored">—</dd></div>
+                  <div><dt>Stranded</dt><dd id="raIndividualStranded">—</dd></div>
+                </dl>
+                <small>Reserve remains institution-specific</small>
+              </button>
+
+              <button class="ra-model-card is-accent" data-ra-compare="scfr" type="button">
+                <span>SCFR POOLED RESERVE</span>
+                <strong id="raScfrScore">—</strong>
+                <div class="ra-score-track"><i id="raScfrBar"></i></div>
+                <dl>
+                  <div><dt>Restored</dt><dd id="raScfrRestored">—</dd></div>
+                  <div><dt>Reserve used</dt><dd id="raScfrUsed">—</dd></div>
+                </dl>
+                <small>Shared reserve follows the selected rule</small>
+              </button>
+            </div>
+
+            <div class="ra-mechanism-insight">
+              <span>WHY THE MAP CHANGES</span>
+              <p id="raMechanismInsight">Market view shows the capacity shortage created by simultaneous recovery demand.</p>
+            </div>
+          </section>
         </section>
       </section>
 
@@ -224,11 +329,11 @@
     </main>
 
     <footer class="ra-footer">
-      <span>Resilience Atlas · Guided Simulation · Stage 4</span>
-      <span>One Earth · six scenes · one continuous story</span>
+      <span>Resilience Atlas · Scenario Lab · Stage 5</span>
+      <span>One scenario · three recovery mechanisms · live comparison</span>
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-guided01"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-lab01"></script>
 </body>
 </html>
