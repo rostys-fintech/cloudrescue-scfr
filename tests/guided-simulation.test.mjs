@@ -7,7 +7,7 @@ const js = fs.readFileSync(new URL('../resilience-atlas.js', import.meta.url), '
 
 for (const id of [
   'raSceneCounter','raSceneKicker','raSceneTitle','raSceneText','raSceneStatValue',
-  'raRunPreview','raNarrationToggle','raGuidedHud','raGuidedStatus',
+  'raRunPreview','raNarrationToggle','raSpeechPause','raSpeechPauseLabel','raGuidedHud','raGuidedStatus',
   'raGuidedScene','raGuidedCaption','raGuidedProgress'
 ]) {
   assert.match(html,new RegExp("id=[\\\"']"+id+"[\\\"']"),'missing '+id);
@@ -25,12 +25,23 @@ assert.match(js,/speechSynthesis/);
 assert.match(js,/guided\.active/);
 assert.match(js,/state\.scene=i/);
 assert.match(js,/earth\.simulation\.update/);
+assert.match(js,/function guidedDelay\(/);
+assert.match(js,/function setGuidedPaused\(/);
+assert.match(js,/speechSynthesis\.pause\(\)/);
+assert.match(js,/speechSynthesis\.resume\(\)/);
+assert.match(js,/Promise\.all\(/);
+assert.match(js,/guidedDelay\(story\.visualDuration,runId\)/);
+assert.match(js,/earth\.simulation\.setPaused/);
+assert.doesNotMatch(html,/raVoiceSelect/);
+assert.doesNotMatch(html,/raVoiceTest/);
 
 assert.match(css,/STAGE 4 — GUIDED SIMULATION/);
 assert.match(css,/\.ra-guided-hud/);
 assert.match(css,/\.ra-waveform/);
 assert.match(css,/body\.ra-guided-running/);
 assert.match(css,/prefers-reduced-motion/);
+assert.match(css,/SYNCED GUIDED CONTROLS — RUN \/ NARRATION \/ PAUSE/);
+assert.match(css,/body\.ra-guided-paused/);
 
 assert.doesNotMatch(html,/Crisis Replay/);
 assert.doesNotMatch(html,/Stress Lab/);
