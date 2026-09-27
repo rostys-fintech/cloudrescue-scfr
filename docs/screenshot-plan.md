@@ -1,135 +1,184 @@
-# CloudRescue screenshot and thumbnail plan
+# CloudRescue screenshot and thumbnail plan — institutional v2
 
 ## Visual rule
 
-The screenshots should communicate the story even without reading the full Devpost page.
+All final screenshots should use the **same desktop viewport**, preferably 16:9, and the **institutional v2** interface.
 
-Use one consistent browser size, preferably desktop 16:9. Dark theme is preferred if contrast looks cleaner in the final capture.
+Primary visual language now:
+- dark systemic-risk hero;
+- dark live-system monitoring canvas;
+- dark Stress Lab control rail;
+- light analytical results;
+- dark controlled-comparison screen;
+- report-style Methodology.
 
-## Hero image / first screenshot
+Do not mix screenshots from the earlier white-card UI.
 
-**Goal:** identify the product in one glance.
+## Screenshot 1 — Hero / product identity
 
-Show:
-
-- CloudRescue title;
-- short product sentence;
-- prototype summary: 20 banks / 3 providers / 3 mechanisms;
-- Watch guided demo and Open Stress Lab buttons.
-
-Avoid opening any dropdown.
-
-Suggested caption:
-
-> **CloudRescue — a visual stress lab for systemic cloud-outage resilience in banking.**
-
-## Screenshot 2 — common shock
-
-Capture Scene 2.
+Capture the full dark hero.
 
 Must show:
-
-- failed provider;
-- affected-bank cascade;
-- affected-bank count;
-- common-shock message.
+- CloudRescue title;
+- core hypothesis;
+- shared dependency topology;
+- 20 banks / 3 providers / 3 mechanisms context;
+- both primary actions.
 
 Suggested caption:
 
-> **One provider outage can create simultaneous recovery demand across multiple institutions.**
+> **CloudRescue — a systemic cloud-resilience research prototype for shared-provider shocks.**
 
-## Screenshot 3 — fragmentation
+Why this is important:
+This is the first visual a judge should see. It now communicates both product identity and mechanism context without requiring any scrolling.
+
+## Screenshot 2 — Common shock / live monitoring canvas
+
+Capture Scene 2 in Crisis Replay.
+
+Must show:
+- dark live-system canvas;
+- failed provider;
+- affected-bank exposure map;
+- affected-bank count;
+- incident state in the system header.
+
+Suggested caption:
+
+> **A shared-provider outage creates correlated recovery demand across multiple institutions.**
+
+## Screenshot 3 — Reserve fragmentation
 
 Capture Scene 4.
 
 Must show:
-
-- reserve tokens;
-- ring-fence barrier;
-- blocked movement;
-- stranded-capacity message.
+- dark monitoring canvas;
+- same reserve budget;
+- visible ring-fence barrier;
+- blocked / stranded reserve;
+- affected-bank recovery state.
 
 Suggested caption:
 
-> **Individual reserves can exist and still remain stranded where the shock is not.**
+> **Capacity can exist and still be unusable when reserves are institution-specific.**
 
-## Screenshot 4 — SCFR
+## Screenshot 4 — Coordinated SCFR allocation
 
 Capture Scene 5.
 
 Must show:
-
-- same reserve tokens;
-- SCFR pool;
-- capacity moving to affected banks;
-- “No extra reserve added.”
+- SCFR reserve pool;
+- same aggregate reserve budget;
+- reserve movement to affected banks;
+- recovery-state improvement.
 
 Suggested caption:
 
-> **SCFR changes the allocation mechanism, not the reserve budget.**
+> **SCFR changes the allocation mechanism, not the quantity of reserve.**
 
-## Screenshot 5 — Before / After
+## Screenshot 5 — Controlled Comparison — primary competition visual
 
-This should be one of the strongest Devpost screenshots.
+This should be the **strongest analytical screenshot**.
 
-Show both panels fully:
+Capture the full dark Before / After view.
 
-- Individual Reserves;
-- central uplift;
-- SCFR Pooled Reserve;
-- identical reserve-budget proof.
+Must show:
+- CONTROLLED COMPARISON label;
+- failed provider;
+- affected-bank count;
+- emergency-market assumption;
+- reserve budget;
+- Individual Reserves on the left;
+- SCFR Pooled Reserve on the right;
+- central resilience uplift;
+- same-budget proof.
 
 Suggested caption:
 
 > **Same shock. Same reserve budget. Different coordination.**
 
-## Screenshot 6 — Sensitivity Explorer
+Use this screenshot prominently on Devpost.
+
+## Screenshot 6 — Stress Lab / institutional control room
 
 Show:
-
-- current scenario;
-- heatmap;
-- SCFR uplift mode.
-
-Suggested caption:
-
-> **CloudRescue tests the mechanism across a grid of market-capacity and reserve assumptions, not only one scenario.**
-
-## Screenshot 7 — reproducibility / challenge
-
-Show Stress Lab controls with:
-
-- Scenario ID;
-- seed;
-- Copy scenario link;
-- Challenge Mode metrics.
+- dark scenario-controls rail;
+- Scenario ID / seed;
+- provider, market and reserve assumptions;
+- dark Shock Summary header;
+- executive mechanism readout;
+- recovery-mechanism comparison.
 
 Suggested caption:
 
-> **Deterministic seeded scenarios make the prototype replayable and shareable.**
+> **The Stress Lab lets users change assumptions and immediately recompute the same deterministic model.**
 
-## Screenshot 8 — technical / learning
+## Screenshot 7 — Sensitivity Explorer
 
-Show either:
-
-- How it works architecture, or
-- Build Journey · FirstCommit.
+Show:
+- current scenario marker;
+- institutional research-chart styling;
+- SCFR uplift view;
+- enough surrounding UI to make clear this is part of the Stress Lab.
 
 Suggested caption:
 
-> **From a finance question to a deterministic simulation, visual story, reproducible scenarios and automated checks.**
+> **Sensitivity analysis shows where coordination matters across market-capacity and reserve assumptions.**
 
-## Thumbnail concept
+## Screenshot 8 — Methodology / research framework
 
-Keep the thumbnail extremely simple:
+Capture the Research Framework introduction plus either:
+- model architecture, or
+- Real-world motivation / synthetic boundary.
 
+Suggested caption:
+
+> **Observed concentration risk is separated from synthetic model assumptions and outputs.**
+
+## Screenshot 9 — Development Journey
+
+Optional, but useful for the Learning & Growth criterion.
+
+Capture:
+- DEVELOPMENT JOURNEY · FIRSTCOMMIT;
+- report-style timeline;
+- AI-assisted, human-owned disclosure.
+
+Suggested caption:
+
+> **From a finance question to a deterministic simulation, reproducibility, automated testing and public deployment.**
+
+# Recommended Devpost order
+
+1. Hero
+2. Controlled Comparison
+3. Common Shock
+4. Reserve Fragmentation
+5. SCFR Allocation
+6. Stress Lab
+7. Sensitivity Explorer
+8. Methodology
+9. Development Journey
+
+# Thumbnail concept
+
+Keep the thumbnail simpler than the application.
+
+Text:
 **CloudRescue**
-**Shared cloud outage → coordinated recovery**
+**Shared cloud shock → coordinated recovery**
 
-Visual:
-- one cloud node at the top;
-- several bank nodes below;
-- left side red fragmented flow;
-- right side green pooled SCFR flow.
+Visual composition:
+- deep navy background;
+- three cloud/provider nodes;
+- bank clusters beneath;
+- one provider path highlighted in muted red;
+- central reserve pool highlighted in restrained green.
 
-Do not place detailed metrics, paragraphs or small UI screenshots in the thumbnail.
+Do not use:
+- screenshots inside the thumbnail;
+- tiny metrics;
+- long descriptions;
+- bright gradients;
+- neon colors;
+- more than one line of explanatory copy.
