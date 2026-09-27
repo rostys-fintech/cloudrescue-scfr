@@ -9,7 +9,7 @@ const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'ut
 assert.equal(index,html);
 assert.match(html,/id="raHudPause"/);
 assert.match(html,/id="raHudStop"/);
-assert.match(html,/20260927-story0(?:1|2)/);
+assert.match(html,/20260927-story0[1-9]/);
 
 assert.match(js,/function focusAnimationStage\(/);
 assert.match(js,/scrollIntoView\(\{block:'start',behavior:'auto'\}\)/);
