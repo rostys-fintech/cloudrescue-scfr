@@ -41,11 +41,11 @@
 
   <section class="hero">
     <div>
-      <div class="eyebrow">FIRSTCOMMIT · SYNTHETIC RESEARCH PROTOTYPE</div>
+      <div class="eyebrow">SYSTEMIC RESILIENCE · RESEARCH PROTOTYPE</div>
       <h1>CloudRescue</h1>
       <p>Stress-test how a banking system recovers from a shared cloud outage.</p>
       <div class="hero-actions">
-        <button id="heroDemo" class="btn primary">▶ Watch guided demo</button>
+        <button id="heroDemo" class="btn primary">Run guided replay</button>
         <button id="heroLab" class="btn secondary">Open Stress Lab</button>
       </div>
     </div>
@@ -58,7 +58,7 @@
   </section>
 
   <nav class="tabs" aria-label="CloudRescue sections">
-    <button class="tab active" data-tab="story">Watch the crisis</button>
+    <button class="tab active" data-tab="story">Crisis Replay</button>
     <button class="tab" data-tab="lab">Stress Lab</button>
     <button class="tab" data-tab="method">Methodology</button>
   </nav>
@@ -72,12 +72,12 @@
           <p id="sceneText"></p>
           <div id="sceneStat" class="scene-stat"></div>
           <div class="story-actions">
-            <button id="backScene" class="btn secondary">← Back</button>
-            <button id="nextScene" class="btn primary">Next →</button>
-            <button id="autoScene" class="btn secondary">▶ Watch demo</button>
-            <button id="narrationToggle" class="btn secondary" aria-pressed="true">🔊 Narration</button>
+            <button id="backScene" class="btn secondary">Back</button>
+            <button id="nextScene" class="btn primary">Next</button>
+            <button id="autoScene" class="btn secondary">Run replay</button>
+            <button id="narrationToggle" class="btn secondary" aria-pressed="true">Narration on</button>
             <label class="voice-control"><span>Narrator</span><select id="voiceSelect" aria-label="Narrator voice"><option>Loading…</option></select></label>
-            <button id="focusStory" class="btn secondary">⛶ Focus view</button>
+            <button id="focusStory" class="btn secondary">Focus view</button>
           </div>
           <div id="sceneDots" class="dots" aria-label="Story progress"></div>
           <div class="demo-progress" aria-label="Narrated demo progress"><i id="demoProgressBar"></i></div>
@@ -151,8 +151,8 @@
     <section id="lab" class="panel">
       <div class="lab-layout">
         <aside class="card controls">
-          <div class="eyebrow">YOU ARE THE RESILIENCE COORDINATOR</div>
-          <h2>Design a stronger system</h2>
+          <div class="eyebrow">SCENARIO CONTROLS</div>
+          <h2>Configure stress scenario</h2>
           <p>Change one assumption at a time and rerun the same synthetic shock.</p>
 
           <div class="scenario-generator">
@@ -164,7 +164,7 @@
               <input id="seedInput" type="text" maxlength="24" placeholder="Enter a seed or leave blank" aria-label="Scenario seed">
               <button id="generateScenarioBtn" class="btn secondary" type="button">Generate</button>
             </div>
-            <button id="shareScenarioBtn" class="btn secondary full" type="button">⧉ Copy scenario link</button>
+            <button id="shareScenarioBtn" class="btn secondary full" type="button">Copy scenario link</button>
           </div>
 
           <div class="presets" aria-label="Scenario presets">
@@ -200,10 +200,10 @@
           </label>
 
           <button id="runBtn" class="btn primary full">Run stress test</button>
-          <button id="exportBtn" class="btn secondary full">↓ Export scenario JSON</button>
+          <button id="exportBtn" class="btn secondary full">Export scenario JSON</button>
 
           <div id="challenge" class="challenge">
-            <span>CHALLENGE MODE</span>
+            <span>CONSTRAINT TESTS</span>
             <div class="challenge-tabs" role="group" aria-label="Challenge mission">
               <button class="challenge-tab active" data-challenge="efficiency">Efficiency</button>
               <button class="challenge-tab" data-challenge="scarcity">Scarcity</button>
@@ -224,7 +224,7 @@
             </div>
             <div class="shock-actions">
               <div id="affectedPill" class="pill"></div>
-              <button id="replayScenarioBtn" class="btn secondary replay-btn">▶ Replay this crisis</button>
+              <button id="replayScenarioBtn" class="btn secondary replay-btn">Replay scenario</button>
             </div>
           </div>
 
@@ -324,7 +324,7 @@
           </div>
         </article>
         <article class="card learning-card">
-          <div class="eyebrow">BUILD JOURNEY · FIRSTCOMMIT</div>
+          <div class="eyebrow">DEVELOPMENT JOURNEY · FIRSTCOMMIT</div>
           <h2>What I learned by turning a finance question into software</h2>
           <div class="learning-steps">
             <div><span>01</span><b>Frame the problem</b><small>Translate third-party ICT concentration risk into a narrow, testable systemic-resilience question.</small></div>
