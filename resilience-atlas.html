@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#070A0F">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-ra01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-earth01">
 </head>
 <body>
   <div class="ra-app">
@@ -82,20 +82,7 @@
             </div>
           </div>
 
-          <div class="ra-earth-mount" id="raEarthMount">
-            <div class="ra-earth-placeholder" aria-hidden="true">
-              <div class="ra-orbit"></div>
-              <div class="ra-grid-globe"></div>
-              <span class="ra-provider-dot blue"></span>
-              <span class="ra-provider-dot orange"></span>
-              <span class="ra-provider-dot green"></span>
-            </div>
-            <div class="ra-earth-empty">
-              <span>EARTH SYSTEM ENGINE</span>
-              <strong>Stage 3 mount point</strong>
-              <small>The live Earth/network renderer will replace this placeholder without changing the simulation model.</small>
-            </div>
-          </div>
+          <div class="ra-earth-mount" id="raEarthMount" data-earth-mode="simulation"></div>
 
           <div class="ra-outcome-strip">
             <article><span>Affected banks</span><b id="raAffected">8 / 20</b><small>baseline outage</small></article>
@@ -155,13 +142,7 @@
             <div class="ra-status-pills"><span>Model-linked</span></div>
           </div>
 
-          <div class="ra-earth-mount ra-earth-mount-lab">
-            <div class="ra-earth-empty">
-              <span>INTERACTIVE EARTH</span>
-              <strong>Same visualization engine</strong>
-              <small>Stage 3 will bind provider, bank, dependency and recovery states to this canvas.</small>
-            </div>
-          </div>
+          <div class="ra-earth-mount ra-earth-mount-lab" id="raLabEarthMount" data-earth-mode="lab"></div>
 
           <div class="ra-outcome-strip">
             <article><span>Affected banks</span><b id="raLabAffected">—</b><small>of 20</small></article>
@@ -187,13 +168,7 @@
 
         <div class="ra-evidence-grid">
           <section class="ra-evidence-map">
-            <div class="ra-earth-mount ra-earth-mount-evidence">
-              <div class="ra-earth-empty">
-                <span>ANNOTATED EARTH</span>
-                <strong>One model, explained visually</strong>
-                <small>Stage 3 supplies the shared network renderer; later stages add methodology annotations.</small>
-              </div>
-            </div>
+            <div class="ra-earth-mount ra-earth-mount-evidence" id="raEvidenceEarthMount" data-earth-mode="evidence"></div>
           </section>
 
           <aside class="ra-model-facts">
@@ -212,11 +187,11 @@
     </main>
 
     <footer class="ra-footer">
-      <span>Resilience Atlas migration shell · Stage 2</span>
-      <span>Same model · clean interface boundary</span>
+      <span>Resilience Atlas · Earth System Engine · Stage 3</span>
+      <span>One Earth · three modes · same simulation model</span>
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-ra01"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-earth01"></script>
 </body>
 </html>
