@@ -25,7 +25,9 @@ assert.match(js,/setLabSheet\(false,\{restoreFocus:false\}\)/);
 assert.match(js,/setLabRunActive\(true\);[\s\S]*?try\{/);
 assert.match(js,/finally\{[\s\S]*?setLabRunActive\(false\)/);
 assert.match(js,/requestAnimationFrame\(\(\)=>window\.requestAnimationFrame/);
-assert.match(js,/scrollIntoView\(\{block:'center',behavior:'auto'\}\)/);
+assert.match(js,/function focusAnimationStage\(/);
+assert.match(js,/focusAnimationStage\(\$\('#raLabEarthMount'\)\)/);
+assert.match(js,/window\.scrollTo\(/);
 assert.match(js,/Math\.max\(620,Math\.round\(ms\*\.5\)\)/);
 
 assert.match(js,/function maleVoiceScore\(/);
@@ -53,5 +55,7 @@ assert.match(css,/body\.ra-mobile-sheet-open \.ra-mobile-app-nav/);
 assert.match(css,/\.ra-scenario-playback\{\s*z-index:24!important/);
 assert.match(css,/SYNCED GUIDED CONTROLS — RUN \/ NARRATION \/ PAUSE/);
 assert.match(css,/IOS-SAFE PACKET MOTION/);
+assert.match(css,/MOBILE RUN FOCUS — BUTTON FIT \+ IN-ANIMATION CONTROLS/);
+assert.match(css,/#raRunPreview,[\s\S]*#raRunScenario[\s\S]*min-height:56px!important/);
 
 console.log('Mobile scenario interaction and male narration checks passed.');
