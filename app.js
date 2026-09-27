@@ -328,6 +328,7 @@ function renderVisualSignal(c){
   } else if(scene === 4){
     el.innerHTML = `
       <div class="reserve-mechanism pooled-story">
+        <div class="same-budget-badge">NO EXTRA RESERVE ADDED</div>
         <div class="reserve-source">
           <span>SAME TOTAL RESERVE BUDGET</span>
           ${reserveTokens(10,0,true)}
@@ -443,7 +444,7 @@ function animateBlockedToken(source,target,barrierX,{delay=0,duration=1700}={}){
     const start=motionPoint(source);
     const end=motionPoint(target);
     if(!start || !end) return;
-    const token=makeMotionToken(start,{kind:'locked',label:'●',size:11});
+    const token=makeMotionToken(start,{kind:'locked',label:'●',size:14});
     if(!token) return;
     const bx=barrierX-start.x;
     const by=(end.y-start.y)*.72;
@@ -456,6 +457,8 @@ function animateBlockedToken(source,target,barrierX,{delay=0,duration=1700}={}){
     ],{duration,easing:'cubic-bezier(.2,.75,.25,1)',fill:'forwards'});
     later(()=>{
       $('#ringFence')?.classList.add('hit');
+      const impact=makeMotionToken({x:start.x+bx+4,y:start.y+by},{kind:'blocked-impact',label:'×',size:22});
+      later(()=>impact?.remove(),520);
       later(()=>$('#ringFence')?.classList.remove('hit'),260);
     },delay+duration*.5);
     anim.onfinish=()=>token.remove();
@@ -495,7 +498,7 @@ function runSceneMotion(c){
     c.market.rows.forEach((row,i)=>{
       const bank=document.querySelector(`.bank[data-bank="${row.id}"]`);
       const start=motionPoint(bank,.92,.5);
-      animateToken(start,target,{kind:'request',delay:350+i*110,duration:820,size:8});
+      animateToken(start,target,{kind:'request',delay:350+i*110,duration:820,size:11});
     });
 
     const supplied=c.market.rows.filter(r=>r.allocation>1);
@@ -506,7 +509,7 @@ function runSceneMotion(c){
         kind:'capacity',
         delay:1650+i*260,
         duration:900,
-        size:11,
+        size:14,
         onArrive:()=>bank?.classList.add('market-help')
       });
     });
@@ -538,7 +541,7 @@ function runSceneMotion(c){
         kind:'pooled',
         delay:260+i*90,
         duration:900,
-        size:9
+        size:12
       });
     });
 
@@ -549,7 +552,7 @@ function runSceneMotion(c){
         kind:'capacity',
         delay:1650+i*190,
         duration:820,
-        size:11,
+        size:15,
         onArrive:()=>setBankOutcome(bank,row)
       });
     });
@@ -623,13 +626,15 @@ function comparisonHTML(){
 }
 
 function renderImpact(c){
+  const availableShare=c.market.totalDemand ? Math.round(c.market.allocated/c.market.totalDemand*100) : 0;
+  const strandedShare=c.individual.totalReserve ? Math.round(c.individual.strandedReserve/c.individual.totalReserve*100) : 0;
   const data = [
-    ['REAL-WORLD RISK','ICT concentration','Synthetic network illustrates a documented systemic-resilience concern.'],
-    ['COMMON SHOCK',`${c.market.affectedCount} banks affected`,'One provider outage creates simultaneous recovery demand.'],
-    ['BACKUP SHORTFALL',`${num(Math.max(0,c.market.totalDemand-c.market.allocated))} units`,'Immediate emergency capacity cannot cover the shock.'],
-    ['FRAGMENTATION',`${num(c.individual.strandedReserve)} units stranded`,'Reserve exists, but ring-fencing prevents it from moving where needed.'],
-    ['COORDINATED RECOVERY',`${Math.round(c.scfr.criticalRestoredPct)}% restored`,'Same reserve budget, pooled across affected banks.'],
-    ['RESULT','17 → 34 → 77','Market scramble → individual reserves → pooled SCFR.']
+    ['REAL-WORLD RISK','Shared dependency','Many institutions can depend on the same critical provider.'],
+    ['COMMON SHOCK','8 banks. One outage.','A single provider failure hits multiple institutions at once.'],
+    ['CAPACITY SHORTAGE',`Only ${availableShare}% available`,'Most immediate backup demand cannot be met after the shock.'],
+    ['FRAGMENTATION',`${strandedShare}% of reserve stranded`,'Capacity exists — but ring-fencing keeps it in the wrong places.'],
+    ['COORDINATED RECOVERY','Same reserve. Better allocation.','SCFR changes where capacity can go, not how much reserve exists.'],
+    ['RESULT','Coordination changes the outcome','The same shock produces very different recovery paths.']
   ][scene];
   $('#impactKicker').textContent=data[0];
   $('#impactValue').textContent=data[1];
