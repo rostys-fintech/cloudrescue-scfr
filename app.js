@@ -373,7 +373,8 @@ function applyScene(){
 
   $('#backScene').disabled = scene===0;
   $('#nextScene').textContent = scene===scenes.length-1 ? 'Open Stress Lab →' : 'Next →';
-  $$('#sceneDots button').forEach((d,i)=>d.classList.toggle('active',i===scene));
+  $('#sceneDots button').forEach((d,i)=>d.classList.toggle('active',i===scene));
+  updateDemoProgress();
 }
 
 function updateDemoProgress(){
@@ -479,6 +480,7 @@ $('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
 $('#heroDemo').addEventListener('click',()=>{
   switchTab('story');
   setNarration(true);
+  setFocusMode(true);
   scene=0;
   startDemo({reset:false});
 });
