@@ -2129,3 +2129,219 @@ html[data-theme="dark"] .controls{
   }
   .insight-metrics>div:last-child{border-bottom:0}
 }
+
+
+/* ---------- Institutional dark live-system canvas ---------- */
+.stage-wrap{
+  background:#0c1d2b!important;
+  border-color:#17364c!important;
+  box-shadow:0 16px 38px rgba(14,36,54,.11)!important;
+}
+.stage{
+  color:#dfe9f0;
+}
+.stage-hud{
+  border-bottom-color:#254157;
+}
+.stage-hud span{
+  color:#7592a7!important;
+}
+.stage-hud b{
+  color:#e8f0f5!important;
+}
+.hud-metric{
+  border-left-color:#29465c;
+}
+.impact-overlay{
+  background:#10283a!important;
+  border-color:#27475f!important;
+}
+.impact-overlay span{
+  color:#7492a8!important;
+}
+.impact-overlay b{
+  color:#edf4f8!important;
+}
+.impact-overlay small{
+  color:#879eaf!important;
+  border-left-color:#29465b!important;
+}
+.provider{
+  background:#10273a!important;
+  border-color:#27445a!important;
+}
+.provider strong{
+  color:#e8f0f5!important;
+}
+.provider small{
+  color:#708da2!important;
+}
+.provider-glyph{
+  background:#0b1d2b!important;
+  color:#8ca5b7!important;
+}
+.bank-group{
+  background:#0d2232!important;
+  border-color:#254158!important;
+}
+.bank-group h4{
+  background:#10283a!important;
+  border-bottom-color:#28465d!important;
+  color:#728fa4!important;
+}
+.bank{
+  background:transparent!important;
+  border-right-color:#203a4d!important;
+  border-bottom-color:#203a4d!important;
+}
+.bank b{
+  color:#d7e4ec!important;
+}
+.bank small{
+  color:#718da1!important;
+}
+.bank-glyph{
+  background:#0a1c29!important;
+  color:#7795a9!important;
+}
+.bank.restored{
+  background:rgba(69,158,123,.08)!important;
+  box-shadow:inset 2px 0 0 #4a9c7e!important;
+}
+.bank.waiting,
+.bank.affected{
+  background:rgba(191,75,85,.08)!important;
+  box-shadow:inset 2px 0 0 #b95560!important;
+}
+.bank.stranded{
+  background:rgba(183,128,46,.08)!important;
+  box-shadow:inset 2px 0 0 #b07b2e!important;
+}
+.bank:after{
+  background:transparent!important;
+}
+.network-line{
+  stroke:#44677f!important;
+  opacity:.4!important;
+}
+.stage[data-outage="blue"].scene-2 .network-line[data-provider="blue"],
+.stage[data-outage="blue"].scene-3 .network-line[data-provider="blue"],
+.stage[data-outage="orange"].scene-2 .network-line[data-provider="orange"],
+.stage[data-outage="orange"].scene-3 .network-line[data-provider="orange"],
+.stage[data-outage="green"].scene-2 .network-line[data-provider="green"],
+.stage[data-outage="green"].scene-3 .network-line[data-provider="green"]{
+  stroke:#c65c66!important;
+  opacity:.9!important;
+}
+.story-caption{
+  background:rgba(7,20,30,.94)!important;
+  border-color:#29465d!important;
+  box-shadow:none!important;
+}
+.story-caption span{
+  color:#7391a6!important;
+}
+.story-caption strong{
+  color:#e6eef3!important;
+}
+.flow-layer{
+  border-color:#29455a!important;
+}
+.flow-box{
+  background:#10283a!important;
+  border-color:#29465d!important;
+}
+.flow-box span,
+.flow-box small{
+  color:#718fa4!important;
+}
+.flow-box strong{
+  color:#e5eef4!important;
+}
+.flow-arrow,.flow-plus{
+  color:#66879f!important;
+}
+.reserve-node{
+  background:#102e2a!important;
+  border-color:#356c5a!important;
+}
+.reserve-node span,
+.reserve-node small{
+  color:#74a995!important;
+}
+.reserve-node b{
+  color:#dff0e9!important;
+}
+.ring-fence{
+  border-left-color:#9f6f2a!important;
+  color:#d0a45c!important;
+}
+.ring-fence span,
+.ring-fence i{
+  color:#c99d55!important;
+}
+.visual-signal{
+  color:#dce7ee;
+}
+.outage-cloud,
+.capacity-reservoir,
+.reserve-source,
+.reserve-outcome,
+.pool-node,
+.queue-label{
+  background:#10283a!important;
+  border-color:#29465d!important;
+}
+.outage-cloud b,
+.capacity-reservoir b,
+.reserve-source b,
+.reserve-outcome b,
+.pool-node b,
+.queue-label b{
+  color:#e4edf3!important;
+}
+.outage-cloud small,
+.capacity-reservoir span,
+.capacity-reservoir small,
+.reserve-source span,
+.reserve-source small,
+.reserve-outcome span,
+.reserve-outcome small,
+.pool-node span,
+.pool-node small,
+.queue-label span{
+  color:#7794a8!important;
+}
+.capacity-blocks i{
+  border-color:#35536a!important;
+}
+.capacity-blocks i.served{
+  background:#4f8b76!important;
+}
+.capacity-blocks i.missing{
+  background:#283d4e!important;
+}
+.compare-overlay{
+  color:#dce7ee;
+}
+.compare-overlay .compare-card{
+  background:#10283a!important;
+  border-color:#29465d!important;
+}
+.compare-overlay .compare-card h3,
+.compare-overlay .compare-card strong{
+  color:#e7eff4!important;
+}
+.compare-overlay .compare-card p,
+.compare-overlay .compare-card span{
+  color:#7693a7!important;
+}
+.same-budget-badge{
+  background:#102e2a!important;
+  border-color:#356c5a!important;
+  color:#96cbb7!important;
+}
+html[data-theme="dark"] .stage-wrap{
+  background:#091924!important;
+  border-color:#213b4e!important;
+}
