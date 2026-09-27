@@ -13,7 +13,7 @@
     })();
   </script>
   <title>CloudRescue — SCFR Stress Lab</title>
-  <link rel="stylesheet" href="styles.css?v=20260927-1512">
+  <link rel="stylesheet" href="styles.css?v=20260927-1540">
 </head>
 <body>
 <div class="shell">
@@ -197,7 +197,10 @@
               <h2 id="shockTitle">Blue Cloud outage</h2>
               <p id="shockCopy"></p>
             </div>
-            <div id="affectedPill" class="pill"></div>
+            <div class="shock-actions">
+              <div id="affectedPill" class="pill"></div>
+              <button id="replayScenarioBtn" class="btn secondary replay-btn">▶ Replay this crisis</button>
+            </div>
           </div>
 
           <div class="section-heading">
@@ -207,6 +210,8 @@
           <div id="strategyCards" class="strategy-grid"></div>
 
           <div id="decisionInsight" class="card decision-insight"></div>
+
+          <div id="beforeAfter" class="card before-after-card" aria-label="Individual reserves versus SCFR comparison"></div>
 
           <div class="card chart-card">
             <div class="chart-head">
@@ -271,6 +276,6 @@
 
   <footer><span>CloudRescue · SCFR Stress Lab</span><span>Rostyslav Honcharenko · 2026</span></footer>
 </div>
-<script type="module" src="app.js?v=20260927-1512"></script>
+<script type="module" src="app.js?v=20260927-1540"></script>
 </body>
 </html>
