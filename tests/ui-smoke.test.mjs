@@ -81,3 +81,5 @@ assert.equal(
   false,
   'multi-element DOM operations must use $$ helper rather than $'
 );
+
+assert.match(html, /styles-v2\.css/, 'institutional redesign layer should be loaded');
