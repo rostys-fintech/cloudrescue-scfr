@@ -553,46 +553,51 @@ function englishVoices(){
   return window.speechSynthesis.getVoices().filter(voice=>/^en(?:-|_)/i.test(voice.lang) || /^en$/i.test(voice.lang));
 }
 
-function voiceQualityScore(voice){
+function maleVoiceScore(voice){
   const name=(voice?.name||'').toLowerCase();
   const lang=(voice?.lang||'').toLowerCase();
-  let score=0;
 
-  /* Explicitly prefer high-quality system voices when the OS exposes them. */
-  if(/premium/.test(name)) score+=150;
-  if(/enhanced/.test(name)) score+=135;
-  if(/natural/.test(name)) score+=125;
-  if(/online/.test(name) && /microsoft/.test(name)) score+=45;
+  const maleNames=/\b(daniel|aaron|arthur|alex|andrew|guy|brian|ryan|christopher|eric|oliver|tom|nathan|evan|reed|eddy|rishi|ralph|bruce)\b/;
+  const explicitlyFemale=/\b(ava|samantha|karen|moira|jenny|aria|victoria|tessa|allison|susan|zira)\b/;
 
-  /* Apple voices commonly available on iPhone/macOS. */
-  if(/\bava\b/.test(name)) score+=118;
-  if(/\bsamantha\b/.test(name)) score+=112;
-  if(/\bdaniel\b/.test(name)) score+=104;
-  if(/\baaron\b/.test(name)) score+=98;
-  if(/\barthur\b/.test(name)) score+=94;
-  if(/\bkaren\b/.test(name)) score+=88;
-  if(/\bmoira\b/.test(name)) score+=84;
+  if(explicitlyFemale.test(name)) return -1000;
 
-  /* Microsoft / Google natural English fallbacks. */
-  if(/microsoft/.test(name) && /(andrew|guy|brian|ryan|christopher|jenny|aria)/.test(name)) score+=105;
-  if(/google.*uk english/.test(name)) score+=82;
-  if(/google.*us english/.test(name)) score+=76;
+  let score=maleNames.test(name) ? 220 : -120;
 
-  if(/^en-gb/.test(lang)) score+=16;
-  if(/^en-us/.test(lang)) score+=14;
-  if(voice?.localService) score+=8;
-  if(voice?.default) score+=3;
+  if(/premium/.test(name)) score+=180;
+  if(/enhanced/.test(name)) score+=165;
+  if(/natural/.test(name)) score+=150;
+  if(/online/.test(name) && /microsoft/.test(name)) score+=60;
 
-  /* Avoid novelty/compact/legacy voices that often sound synthetic. */
-  if(/compact|espeak|fred|zarvox|trinoids|whisper|bells|organ|bad news|good news|boing|bubbles|cellos|deranged|hysterical|pipe organ|wobble/.test(name)) score-=300;
+  if(/\bdaniel\b/.test(name)) score+=145;
+  if(/\bandrew\b/.test(name)) score+=140;
+  if(/\bguy\b/.test(name)) score+=136;
+  if(/\bbrian\b/.test(name)) score+=132;
+  if(/\bryan\b/.test(name)) score+=128;
+  if(/\bchristopher\b/.test(name)) score+=124;
+  if(/\baaron\b/.test(name)) score+=120;
+  if(/\barthur\b/.test(name)) score+=116;
+  if(/\balex\b/.test(name)) score+=112;
+
+  if(/google uk english male/.test(name)) score+=155;
+  if(/google us english male/.test(name)) score+=145;
+
+  if(/^en-gb/.test(lang)) score+=24;
+  if(/^en-us/.test(lang)) score+=20;
+  if(voice?.localService) score+=10;
+
+  if(/compact|espeak|fred|zarvox|trinoids|whisper|bells|organ|bad news|good news|boing|bubbles|cellos|deranged|hysterical|pipe organ|wobble/.test(name)) score-=400;
 
   return score;
 }
 
 function chooseNarrator(){
-  return englishVoices()
-    .map(voice=>({voice,score:voiceQualityScore(voice)}))
-    .sort((a,b)=>b.score-a.score)[0]?.voice || null;
+  const ranked=englishVoices()
+    .map(voice=>({voice,score:maleVoiceScore(voice)}))
+    .filter(item=>item.score>0)
+    .sort((a,b)=>b.score-a.score);
+
+  return ranked[0]?.voice || null;
 }
 
 function waitForNarrator(timeoutMs=650){
@@ -623,35 +628,22 @@ function narrationText(text){
 }
 
 function narrationChunks(text){
-  const sentences=narrationText(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [narrationText(text)];
-  const chunks=[];
-  let current='';
-
-  for(const sentence of sentences){
-    const candidate=(current+' '+sentence.trim()).trim();
-    const words=candidate.split(/\s+/).length;
-    if(current && words>32){
-      chunks.push(current);
-      current=sentence.trim();
-    }else{
-      current=candidate;
-    }
-  }
-  if(current) chunks.push(current);
-  return chunks;
+  return (narrationText(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [narrationText(text)])
+    .map(part=>part.trim())
+    .filter(Boolean);
 }
 
-function narrationProfile(voice,requestedRate=.93){
+function narrationProfile(voice,requestedRate=.84){
   const name=(voice?.name||'').toLowerCase();
   const premium=/premium|enhanced|natural/.test(name);
-  const apple=/ava|samantha|daniel|aaron|arthur|karen|moira/.test(name);
   const microsoft=/microsoft/.test(name);
 
   return {
-    rate:Math.max(.84,Math.min(.95,premium ? requestedRate*.98 : apple ? requestedRate*.96 : microsoft ? requestedRate*.99 : requestedRate*.92)),
-    pitch:apple ? 1.01 : 1,
-    volume:.98,
-    pauseMs:premium || apple ? 105 : 135
+    rate:Math.max(.78,Math.min(.88,premium ? requestedRate : microsoft ? requestedRate*.99 : requestedRate*.96)),
+    pitch:.96,
+    volume:1,
+    pauseMs:560,
+    longPauseMs:760
   };
 }
 
@@ -661,7 +653,7 @@ function updateNarrationControl(){
   $('#raNarrationLabel').textContent=guided.narration ? 'Narration on' : 'Narration off';
   if(guided.voice){
     button.title='Narration voice: '+guided.voice.name;
-    button.dataset.voiceQuality=voiceQualityScore(guided.voice)>=110 ? 'natural' : 'standard';
+    button.dataset.voiceQuality=maleVoiceScore(guided.voice)>=250 ? 'natural' : 'standard';
   }
 }
 
@@ -706,12 +698,18 @@ async function speakCurrentScene(story,runId){
 
   window.speechSynthesis.cancel();
 
-  /* Re-evaluate immediately before every scene so Safari can upgrade from
-     its initial fallback list once Enhanced/Premium voices have loaded. */
   guided.voice=await waitForNarrator();
   updateNarrationControl();
 
-  const profile=narrationProfile(guided.voice,story.rate||.93);
+  /* Web Speech exposes names, not gender metadata. We deliberately select
+     only known male English system voices. If none is available, narration
+     falls back to timing-only rather than switching to a female voice. */
+  if(!guided.voice){
+    $('#raGuidedStatus').textContent='VOICE UNAVAILABLE';
+    return wait(story.visualDuration,runId);
+  }
+
+  const profile=narrationProfile(guided.voice,story.rate||.84);
   const chunks=narrationChunks(story.voice);
   const hud=$('#raGuidedHud');
   hud.classList.add('is-speaking');
@@ -730,7 +728,11 @@ async function speakCurrentScene(story,runId){
     }
 
     if(index<chunks.length-1){
-      const continued=await wait(profile.pauseMs,runId);
+      const sentence=chunks[index];
+      const pause=/\b(finally|now we test|next|the important point)\b/i.test(sentence)
+        ? profile.longPauseMs
+        : profile.pauseMs;
+      const continued=await wait(pause,runId);
       if(!continued){
         completed=false;
         break;
