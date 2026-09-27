@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Interactive systemic cloud resilience simulator for banking, powered by the SCFR concept.",
+  "description": "Resilience Atlas / CloudRescue migration: systemic cloud resilience simulator powered by the SCFR concept.",
   "scripts": {
-    "test": "node --check app.js && node tests/simulation.test.mjs && node tests/ui-smoke.test.mjs",
+    "test": "node --check app.js && node --check resilience-atlas.js && node tests/simulation.test.mjs && node tests/ui-smoke.test.mjs && node tests/resilience-atlas-shell.test.mjs",
     "serve": "python3 -m http.server 8000"
   }
 }
