@@ -479,12 +479,20 @@ function switchTab(tab,{updateHash=true,replaceHash=false}={}){
   if(labRun.active) cancelLabRun();
 
   state.tab = tab;
+
   $$('.ra-nav-tab').forEach(button=>{
     const active=button.dataset.raTab === tab;
     button.classList.toggle('is-active',active);
     button.setAttribute('aria-selected',active ? 'true' : 'false');
     button.tabIndex=active ? 0 : -1;
   });
+
+  $$('.ra-mobile-tab').forEach(button=>{
+    const active=button.dataset.raMobileTab === tab;
+    button.classList.toggle('is-active',active);
+    button.setAttribute('aria-pressed',active ? 'true' : 'false');
+  });
+
   $$('.ra-view').forEach(view=>{
     const active=view.dataset.raView === tab;
     view.classList.toggle('is-active',active);
@@ -512,6 +520,13 @@ function setupTabs(){
       const next=tabs[(index+direction+tabs.length)%tabs.length];
       next.focus();
       switchTab(next.dataset.raTab);
+    });
+  });
+
+  $$('.ra-mobile-tab').forEach(button=>{
+    button.addEventListener('click',event=>{
+      event.preventDefault();
+      switchTab(button.dataset.raMobileTab);
     });
   });
 
@@ -878,7 +893,7 @@ function setLabRunActive(active){
 
 function labRunWait(ms,runId){
   const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  const delay=reduced ? Math.max(90,Math.round(ms*.14)) : ms;
+  const delay=reduced ? Math.max(620,Math.round(ms*.5)) : ms;
   return new Promise(resolve=>{
     window.setTimeout(()=>resolve(runId===labRun.runId),delay);
   });
@@ -1068,33 +1083,61 @@ async function runLabScenario(){
   conclusionPanel.hidden=true;
   conclusionPanel.classList.remove('is-visible');
 
-  if(document.body.classList.contains('ra-mobile-sheet-open')) setLabSheet(false);
-
   labRun.runId++;
   const runId=labRun.runId;
-  setLabRunActive(true);
+  let completed=false;
 
-  const phases=scenarioPlaybackPhases(c);
-  for(let index=0;index<phases.length;index++){
+  try{
+    if(document.body.classList.contains('ra-mobile-sheet-open')){
+      setLabSheet(false,{restoreFocus:false});
+      await labRunWait(310,runId);
+    }
+
+    if(window.innerWidth<768){
+      $('#raLabEarthMount')?.scrollIntoView({block:'center',behavior:'auto'});
+      await labRunWait(90,runId);
+    }
+
+    setLabRunActive(true);
+
+    const phases=scenarioPlaybackPhases(c);
+    for(let index=0;index<phases.length;index++){
+      if(runId!==labRun.runId) return;
+      renderPlaybackPhase(phases[index],index,c);
+
+      /* Force Safari to paint each state before waiting for the next phase. */
+      await new Promise(resolve=>window.requestAnimationFrame(()=>window.requestAnimationFrame(resolve)));
+      const continued=await labRunWait(phases[index].duration,runId);
+      if(!continued || runId!==labRun.runId) return;
+    }
+
+    const playback=$('#raScenarioPlayback');
+    playback.classList.add('is-finishing');
+    await labRunWait(320,runId);
     if(runId!==labRun.runId) return;
-    renderPlaybackPhase(phases[index],index,c);
-    const continued=await labRunWait(phases[index].duration,runId);
-    if(!continued || runId!==labRun.runId) return;
+
+    playback.hidden=true;
+    playback.classList.remove('is-finishing');
+    earth.lab.update(earthPayload(c));
+    renderScenarioConclusion(c);
+    completed=true;
+  }catch(error){
+    console.error('Scenario playback failed',error);
+    earth.lab.update(earthPayload(c));
+  }finally{
+    if(runId===labRun.runId){
+      setLabRunActive(false);
+      syncLabDraftUI();
+
+      if(!completed){
+        const playback=$('#raScenarioPlayback');
+        if(playback){
+          playback.hidden=true;
+          playback.classList.remove('is-finishing');
+        }
+      }
+    }
   }
-
-  if(runId!==labRun.runId) return;
-
-  const playback=$('#raScenarioPlayback');
-  playback.classList.add('is-finishing');
-  await labRunWait(320,runId);
-  if(runId!==labRun.runId) return;
-
-  playback.hidden=true;
-  playback.classList.remove('is-finishing');
-  earth.lab.update(earthPayload(c));
-  setLabRunActive(false);
-  renderScenarioConclusion(c);
-  syncLabDraftUI();
 }
 
 function resetLab(){
@@ -1121,7 +1164,7 @@ function resetLab(){
   renderEvidence();
 }
 
-function setLabSheet(open){
+function setLabSheet(open,{restoreFocus=true}={}){
   const sheet=$('#raLabSheet');
   const backdrop=$('#raLabBackdrop');
   const trigger=$('#raOpenLabSheet');
@@ -1134,7 +1177,7 @@ function setLabSheet(open){
 
   if(open){
     window.setTimeout(()=>$('#raCloseLabSheet')?.focus(),20);
-  }else{
+  }else if(restoreFocus){
     trigger.focus?.();
   }
 }
