@@ -172,9 +172,9 @@ function renderBaseline(){
   const c = comparison();
   const stats = systemStats();
 
-  $('#raBankCount').textContent = banks.length;
-  $('#raProviderCount').textContent = providers.length;
-  $('#raBaselineGap').textContent = format(Math.max(0, c.market.totalDemand - c.market.allocated));
+  if($('#raBankCount')) $('#raBankCount').textContent = banks.length;
+  if($('#raProviderCount')) $('#raProviderCount').textContent = providers.length;
+  if($('#raBaselineGap')) $('#raBaselineGap').textContent = format(Math.max(0, c.market.totalDemand - c.market.allocated));
   $('#raAffected').textContent = state.scene === 0 ? '0 / '+banks.length : c.market.affectedCount+' / '+banks.length;
   $('#raUnmet').textContent = state.scene < 2 ? '0' : format(Math.max(0, c.market.totalDemand - c.market.allocated));
   $('#raRestored').textContent = state.scene < 4 ? '—' : Math.round(c.scfr.criticalRestoredPct)+'%';
