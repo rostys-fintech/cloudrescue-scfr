@@ -2691,3 +2691,89 @@ html[data-theme="dark"] .challenge-metrics>div.ok b{color:#8ed1b5}
   .challenge-tabs{grid-template-columns:1fr}
   .challenge-metrics{grid-template-columns:1fr}
 }
+
+
+/* ---------- Learning & Growth proof ---------- */
+.learning-card{
+  grid-column:1/-1;
+  padding:24px;
+}
+.learning-card h2{
+  margin:7px 0 16px;
+  color:var(--navy);
+  font-size:24px;
+  letter-spacing:-.025em;
+}
+.learning-steps{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+}
+.learning-steps>div{
+  min-width:0;
+  border:1px solid var(--line);
+  background:#fbfcfd;
+  border-radius:11px;
+  padding:13px;
+}
+.learning-steps span{
+  width:24px;height:24px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  margin-bottom:9px;
+  background:#edf3fb;
+  color:#3768a4;
+  font-size:7px;
+  font-weight:900;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.learning-steps b{
+  display:block;
+  color:#30495f;
+  font-size:10px;
+  line-height:1.25;
+}
+.learning-steps small{
+  display:block;
+  margin-top:6px;
+  color:#7f909f;
+  font-size:8px;
+  line-height:1.45;
+}
+.learning-note{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin-top:12px;
+  padding:10px 12px;
+  border:1px solid #d2dfec;
+  background:#f7faff;
+  border-radius:9px;
+}
+.learning-note b{
+  color:#345b7d;
+  font-size:8px;
+  white-space:nowrap;
+}
+.learning-note span{
+  color:#6d8295;
+  font-size:8px;
+  line-height:1.45;
+}
+html[data-theme="dark"] .learning-steps>div{
+  background:#101a25;
+}
+html[data-theme="dark"] .learning-steps b{color:#d7e2eb}
+html[data-theme="dark"] .learning-note{
+  background:#122033;
+  border-color:#31506c;
+}
+html[data-theme="dark"] .learning-note b{color:#bcd2e7}
+html[data-theme="dark"] .learning-note span{color:#95a9bb}
+@media(max-width:1050px){
+  .learning-steps{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:620px){
+  .learning-steps{grid-template-columns:1fr}
+  .learning-note{flex-direction:column}
+}
