@@ -4074,3 +4074,483 @@ html[data-theme="analysis"] .hero h1 .hero-cloud-word{
 html[data-theme="analysis"] .hero h1 .hero-rescue-word{
   color:#0b63e5;
 }
+
+
+/* =========================================================
+   FRAME REBUILD v4 — one cinematic shell, fewer boxes
+   ========================================================= */
+
+main,
+.page-shell,
+.app-shell{
+  max-width:1440px!important;
+}
+
+/* ---------- Integrated command bar ---------- */
+.cyber-topbar{
+  display:grid!important;
+  grid-template-columns:minmax(230px,1fr) auto minmax(230px,1fr);
+  align-items:center!important;
+  gap:24px;
+  min-height:74px!important;
+  padding:0 2px!important;
+  border-bottom:1px solid var(--v2-line)!important;
+  background:transparent!important;
+}
+.cyber-topbar:before{
+  content:"";
+  position:absolute;
+  inset:auto 0 -1px 0;
+  height:1px;
+  background:linear-gradient(90deg,var(--v2-primary),transparent 20%,transparent 80%,var(--v2-line-strong));
+  opacity:.9;
+}
+.cyber-topbar:after{
+  display:none!important;
+}
+
+.brand-lockup{
+  gap:10px!important;
+}
+.brand-lockup>div:last-child{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.brand-lockup strong{
+  color:var(--v2-ink)!important;
+  font-size:15px!important;
+  letter-spacing:-.02em!important;
+}
+.brand-lockup strong>span{
+  color:var(--v2-primary);
+}
+.brand-lockup small{
+  color:var(--v2-muted)!important;
+  font-size:7px!important;
+  font-weight:750;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.brand-mark{
+  width:36px!important;
+  height:36px!important;
+  padding:7px!important;
+  border:1px solid var(--v2-line-strong)!important;
+  clip-path:polygon(0 0,68% 0,100% 32%,100% 100%,32% 100%,0 68%)!important;
+}
+.brand-mark svg{
+  width:100%;
+  height:100%;
+}
+
+.cyber-tabs{
+  display:flex!important;
+  align-items:stretch;
+  gap:0!important;
+  padding:0!important;
+  border:1px solid var(--v2-line)!important;
+  background:color-mix(in srgb,var(--v2-surface) 72%,transparent)!important;
+  clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%,0 10px);
+}
+.cyber-tabs .tab{
+  position:relative;
+  min-width:148px;
+  height:42px;
+  padding:0 20px!important;
+  border:0!important;
+  border-right:1px solid var(--v2-line)!important;
+  background:transparent!important;
+  color:var(--v2-muted)!important;
+  font-size:10px!important;
+  letter-spacing:.035em!important;
+  text-transform:none!important;
+}
+.cyber-tabs .tab:last-child{border-right:0!important}
+.cyber-tabs .tab:after{display:none!important}
+.cyber-tabs .tab:hover{
+  color:var(--v2-ink)!important;
+  background:color-mix(in srgb,var(--v2-primary) 4%,transparent)!important;
+}
+.cyber-tabs .tab.active{
+  color:var(--v2-ink)!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--v2-primary) 14%,transparent),color-mix(in srgb,var(--v2-primary) 4%,transparent))!important;
+  box-shadow:inset 0 -2px 0 var(--v2-primary),0 0 28px color-mix(in srgb,var(--v2-primary) 8%,transparent);
+}
+
+.topbar-meta{
+  justify-self:end;
+}
+
+/* ---------- Hero: one frame, topology is part of the scene ---------- */
+.hero-cyber-frame{
+  position:relative;
+  display:grid!important;
+  grid-template-columns:minmax(430px,.92fr) minmax(560px,1.08fr)!important;
+  gap:0!important;
+  min-height:510px;
+  margin-top:22px!important;
+  padding:0!important;
+  overflow:hidden;
+  border:1px solid var(--v2-line-strong)!important;
+  background:
+    linear-gradient(90deg,color-mix(in srgb,var(--v2-primary) 8%,var(--v2-canvas)) 0%,var(--v2-canvas) 46%,var(--v2-canvas) 100%)!important;
+  clip-path:polygon(0 18px,18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px));
+}
+.hero-cyber-frame:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 49.9%,var(--v2-line) 50%,transparent 50.1%),
+    radial-gradient(circle at 74% 50%,color-mix(in srgb,var(--v2-primary) 10%,transparent),transparent 32%);
+  z-index:0;
+}
+.hero-cyber-frame:after{
+  content:"";
+  position:absolute;
+  left:0;top:0;
+  width:180px;height:3px;
+  background:var(--v2-primary);
+  box-shadow:0 0 24px color-mix(in srgb,var(--v2-primary) 55%,transparent);
+}
+.hero-cyber-frame .hero-copy{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:56px 46px 52px 48px!important;
+  min-width:0;
+}
+.hero-cyber-frame .eyebrow{
+  margin-bottom:18px!important;
+  font-size:8px!important;
+}
+.hero-cyber-frame h1{
+  margin:0!important;
+  font-size:clamp(62px,6vw,96px)!important;
+  line-height:.88!important;
+  letter-spacing:-.075em!important;
+  white-space:nowrap;
+}
+.hero-cyber-frame p{
+  max-width:560px!important;
+  margin:24px 0 0!important;
+  font-size:18px!important;
+  line-height:1.5!important;
+}
+.hero-cyber-frame .hero-thesis{
+  max-width:530px;
+  margin-top:28px!important;
+  padding:13px 0 13px 16px!important;
+  border-top:1px solid var(--v2-line)!important;
+  border-bottom:1px solid var(--v2-line)!important;
+  border-left:2px solid var(--v2-primary)!important;
+  background:transparent!important;
+}
+.hero-cyber-frame .hero-thesis b{
+  display:block;
+  margin-top:4px;
+}
+.hero-actions{
+  display:flex!important;
+  gap:12px!important;
+  margin-top:22px!important;
+}
+.hero-actions .btn{
+  min-height:48px!important;
+  padding:0 24px!important;
+}
+.hero-auto{
+  min-width:224px;
+  font-size:11px!important;
+  font-weight:850!important;
+  letter-spacing:.02em!important;
+  text-transform:none!important;
+}
+html[data-theme="crisis"] .hero-auto{
+  background:linear-gradient(180deg,#ff2b43,#e8082b)!important;
+  color:#fff!important;
+  box-shadow:0 0 34px rgba(255,20,50,.22)!important;
+}
+html[data-theme="analysis"] .hero-auto{
+  background:linear-gradient(180deg,#1778f3,#0759c9)!important;
+  color:#fff!important;
+  box-shadow:0 0 30px rgba(11,99,229,.16)!important;
+}
+
+.hero-cyber-frame .hero-system{
+  position:relative;
+  z-index:1;
+  min-height:510px;
+  border:0!important;
+  border-left:1px solid var(--v2-line)!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  clip-path:none!important;
+}
+.hero-cyber-frame .hero-system:before,
+.hero-cyber-frame .hero-system:after{
+  display:none!important;
+}
+.hero-system-head{
+  position:absolute;
+  left:34px;right:34px;top:28px;
+  z-index:3;
+  display:grid!important;
+  grid-template-columns:1fr auto!important;
+  gap:4px 18px!important;
+  align-items:end;
+  padding:0 0 12px!important;
+  border-bottom:1px solid var(--v2-line)!important;
+  background:transparent!important;
+}
+.hero-system-head span{
+  grid-column:1/2;
+  font-size:7px!important;
+}
+.hero-system-head b{
+  grid-column:1/2;
+  font-size:13px!important;
+}
+.hero-system-head small{
+  grid-column:2/3;
+  grid-row:1/3;
+  align-self:center;
+  color:var(--v2-muted)!important;
+  font-size:7px!important;
+}
+.hero-network{
+  position:absolute!important;
+  inset:78px 24px 22px 24px!important;
+  background:transparent!important;
+}
+.hero-cloud{
+  top:28px!important;
+  width:29%!important;
+  height:80px!important;
+  padding:13px 14px!important;
+  background:color-mix(in srgb,var(--v2-surface) 60%,transparent)!important;
+  border:1px solid var(--v2-line)!important;
+}
+.hero-cloud-a{left:2%!important}
+.hero-cloud-b{left:35.5%!important}
+.hero-cloud-c{right:2%!important}
+.hero-cloud span{font-size:7px!important}
+.hero-cloud b{font-size:21px!important}
+.hero-cloud small{font-size:7px!important}
+.hero-bank-cluster{
+  bottom:88px!important;
+  height:62px!important;
+  padding:10px!important;
+  border:1px solid var(--v2-line)!important;
+  background:color-mix(in srgb,var(--v2-surface) 48%,transparent)!important;
+}
+.hero-bank-cluster i{
+  height:16px!important;
+}
+.cluster-a{left:2%!important;width:29%!important}
+.cluster-b{left:35.5%!important;width:29%!important}
+.cluster-c{right:2%!important;width:29%!important}
+.hero-risk-note{
+  left:2%!important;
+  right:2%!important;
+  bottom:18px!important;
+  min-height:42px!important;
+  padding:10px 12px!important;
+  display:flex!important;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  background:transparent!important;
+  border:0!important;
+  border-top:1px solid var(--v2-line)!important;
+  clip-path:none!important;
+}
+.hero-risk-note span{font-size:7px!important}
+.hero-risk-note b{
+  max-width:330px;
+  text-align:right;
+  font-size:8px!important;
+  font-weight:650!important;
+  color:var(--v2-muted)!important;
+}
+
+/* ---------- Story: rail + one large live canvas, no card-on-card ---------- */
+#story{
+  padding-top:22px!important;
+}
+.story-layout{
+  display:grid!important;
+  grid-template-columns:280px minmax(0,1fr)!important;
+  gap:16px!important;
+  align-items:stretch;
+}
+.story-layout>.card{
+  box-shadow:none!important;
+}
+.narrative{
+  position:relative;
+  min-height:610px!important;
+  padding:26px 24px 22px 26px!important;
+  border:1px solid var(--v2-line)!important;
+  border-left:2px solid var(--v2-primary)!important;
+  background:transparent!important;
+  clip-path:polygon(0 12px,12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)!important;
+}
+.narrative:before{display:none!important}
+.scene-label{
+  display:inline-flex!important;
+  padding:4px 8px!important;
+  border:1px solid var(--v2-line)!important;
+  font-size:7px!important;
+}
+.narrative h2{
+  margin-top:24px!important;
+  font-size:31px!important;
+  line-height:1.02!important;
+  letter-spacing:-.045em!important;
+}
+.narrative>p{
+  margin-top:20px!important;
+  font-size:13px!important;
+  line-height:1.55!important;
+}
+.scene-stat{
+  margin-top:22px!important;
+  padding:11px 0 11px 13px!important;
+  font-size:9px!important;
+}
+.story-actions{
+  position:absolute;
+  left:26px;right:24px;bottom:38px;
+  max-width:none!important;
+  grid-template-columns:1fr!important;
+}
+.story-play{
+  min-height:44px!important;
+  font-size:10px!important;
+  text-transform:none!important;
+}
+.story-nav{
+  grid-row:2;
+  width:100%;
+}
+.story-utils{
+  grid-row:3;
+  justify-content:flex-start!important;
+}
+.dots{
+  position:absolute;
+  left:26px;
+  bottom:12px;
+  padding:0!important;
+  margin:0!important;
+}
+
+.stage-wrap{
+  min-height:610px!important;
+  border:1px solid var(--v2-line-strong)!important;
+  clip-path:polygon(0 14px,14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%)!important;
+}
+.stage-wrap:after{
+  width:96px!important;
+}
+.stage-hud{
+  height:54px!important;
+  padding:0 16px!important;
+}
+.stage-hud>div:first-child span{
+  font-size:7px!important;
+}
+.stage-hud>div:first-child b{
+  font-size:11px!important;
+}
+.impact-overlay{
+  margin:12px 14px 0!important;
+  min-height:48px!important;
+  grid-template-columns:120px 1fr!important;
+  padding:8px 12px!important;
+  border:1px solid var(--v2-line)!important;
+  background:transparent!important;
+}
+.impact-overlay b{
+  font-size:15px!important;
+}
+
+/* flatten inner stage modules so the canvas itself is the frame */
+.provider-grid,
+.network-grid{
+  gap:8px!important;
+}
+.provider,
+.bank-group{
+  box-shadow:none!important;
+  background:color-mix(in srgb,var(--v2-surface) 38%,transparent)!important;
+}
+.bank{
+  min-height:44px!important;
+  border-bottom:1px solid var(--v2-line)!important;
+  background:transparent!important;
+}
+.bank:last-child{border-bottom:0!important}
+
+/* ---------- reduce visual noise globally ---------- */
+.eyebrow,
+.control-section-label,
+.scene-label,
+.hero-system-head span,
+.stage-hud span{
+  font-weight:800!important;
+}
+.card{
+  box-shadow:none!important;
+}
+.section-heading{
+  padding-bottom:10px!important;
+  border-bottom:1px solid var(--v2-line)!important;
+}
+.section-heading h2{
+  font-size:22px!important;
+}
+
+/* ---------- responsive ---------- */
+@media(max-width:1100px){
+  .cyber-topbar{
+    grid-template-columns:1fr auto;
+  }
+  .cyber-tabs{
+    order:3;
+    grid-column:1/-1;
+    justify-self:stretch;
+  }
+  .cyber-tabs .tab{
+    flex:1;
+    min-width:0;
+  }
+  .hero-cyber-frame{
+    grid-template-columns:1fr!important;
+  }
+  .hero-cyber-frame:before{
+    background:none;
+  }
+  .hero-cyber-frame .hero-system{
+    min-height:430px;
+    border-left:0!important;
+    border-top:1px solid var(--v2-line)!important;
+  }
+}
+@media(max-width:820px){
+  .story-layout{
+    grid-template-columns:1fr!important;
+  }
+  .narrative{
+    min-height:auto!important;
+    padding-bottom:180px!important;
+  }
+  .stage-wrap{
+    min-height:640px!important;
+  }
+}
