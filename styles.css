@@ -623,3 +623,141 @@ html[data-theme="dark"] body.story-focus #focusStory{
   body.story-focus .story-layout{grid-template-columns:1fr;min-height:auto}
   body.story-focus .stage-wrap{min-height:760px}
 }
+
+
+/* Guided audiovisual demo */
+.hero-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.story-caption{
+  position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
+  width:min(760px,84%);z-index:9;
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:0 10px 28px rgba(15,31,51,.08);
+  padding:11px 14px;
+  text-align:center;
+  pointer-events:none;
+}
+.story-caption span{
+  display:block;font-size:8px;font-weight:900;letter-spacing:.12em;
+  color:#6f84a0;text-transform:uppercase;margin-bottom:3px;
+}
+.story-caption strong{
+  display:block;font-size:13px;line-height:1.35;color:var(--navy);
+}
+.demo-progress{
+  margin-top:12px;height:3px;background:#e8edf3;border-radius:99px;overflow:hidden
+}
+.demo-progress i{
+  display:block;height:100%;width:16.666%;
+  background:var(--blue);border-radius:99px;transition:width .35s ease;
+}
+.visual-signal{
+  position:relative;z-index:4;margin:8px 0 0;min-height:46px;
+  display:flex;align-items:center;justify-content:center;
+}
+.signal-pill{
+  min-width:112px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  padding:7px 10px;text-align:center;
+}
+.signal-pill b{display:block;font-size:15px;color:var(--navy)}
+.signal-pill span{display:block;font-size:8px;color:#8594a3;margin-top:2px}
+.signal-pill.safe{background:#f4fbf8;border-color:#cfe7dd}
+.signal-separator{padding:0 9px;color:#90a0af;font-weight:800}
+.signal-alert{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--red-soft);border:1px solid #efc4ca;border-radius:9px;padding:9px 12px;
+  color:#7f2d38;font-size:10px;
+}
+.signal-alert b{font-size:11px}
+.signal-alert .signal-icon{
+  width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+  background:var(--red);color:#fff;font-size:10px;font-weight:900;
+}
+.capacity-visual{
+  width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 10px;
+}
+.capacity-head,.capacity-labels{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.capacity-head span{font-size:8px;color:#788b9d;text-transform:uppercase;letter-spacing:.08em;font-weight:850}
+.capacity-head b{font-size:11px;color:var(--navy)}
+.capacity-track{
+  margin:6px 0;height:9px;border-radius:99px;background:#eef2f6;overflow:hidden;display:flex;
+}
+.capacity-track i{display:block;height:100%}
+.capacity-supply{background:var(--green);animation:growSupply .7s ease both}
+.capacity-gap{background:#f2b8bf;animation:growSupply .7s ease both}
+@keyframes growSupply{from{width:0}}
+.capacity-labels span{font-size:8px}
+.capacity-labels .available{color:#3d8168}
+.capacity-labels .shortfall{color:#a44350;font-weight:800}
+.fragment-visual{
+  width:100%;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;
+  border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 10px;
+}
+.fragment-visual>div:not(.fragment-arrow){
+  padding:3px 6px;text-align:center
+}
+.fragment-visual b{display:block;font-size:15px;color:var(--navy)}
+.fragment-visual span{display:block;font-size:8px;color:#8191a1;margin-top:2px}
+.fragment-arrow{color:#8b9cab;font-weight:900}
+.fragment-visual .warning{background:#fff7e8;border-radius:7px}
+.fragment-visual .warning b{color:var(--amber)}
+.fragment-visual .good{background:#eef8f3;border-radius:7px}
+.fragment-visual .good b{color:var(--green)}
+
+.provider-title,.bank-title{display:flex;align-items:flex-start;gap:7px}
+.provider-glyph{
+  width:24px;height:24px;border-radius:7px;display:grid;place-items:center;
+  background:#f1f5f9;color:#53677a;font-size:13px;flex:0 0 auto;
+}
+.bank-glyph{
+  width:18px;height:18px;border-radius:5px;display:grid;place-items:center;
+  background:#edf2f7;color:#6f8193;font-size:10px;flex:0 0 auto;margin-top:1px;
+}
+.bank.stranded{
+  position:relative;background:#fff8ea;border-color:#efd7a2;
+}
+.bank.stranded:after{
+  content:"RESERVE IDLE";
+  position:absolute;left:7px;bottom:5px;
+  font-size:6px;letter-spacing:.08em;font-weight:900;color:#a06f1e;
+  background:#fff3d7;border-radius:4px;padding:2px 4px;
+}
+.bank.stranded small{padding-bottom:11px}
+
+/* Keep captions readable in focus mode */
+body.story-focus .story-caption{bottom:24px}
+body.story-focus .visual-signal{margin-top:10px}
+
+/* Dark mode for guided demo */
+html[data-theme="dark"] .story-caption{
+  background:rgba(19,31,44,.97);border-color:var(--line);box-shadow:0 10px 28px rgba(0,0,0,.18)
+}
+html[data-theme="dark"] .story-caption strong{color:#edf3f8}
+html[data-theme="dark"] .demo-progress{background:#273747}
+html[data-theme="dark"] .signal-pill,
+html[data-theme="dark"] .capacity-visual,
+html[data-theme="dark"] .fragment-visual{
+  background:var(--surface);border-color:var(--line)
+}
+html[data-theme="dark"] .signal-pill.safe{background:#13251f;border-color:#315f4e}
+html[data-theme="dark"] .signal-pill b,
+html[data-theme="dark"] .capacity-head b,
+html[data-theme="dark"] .fragment-visual b{color:#e9eff5}
+html[data-theme="dark"] .signal-alert{background:#321d23;border-color:#693842;color:#efadb5}
+html[data-theme="dark"] .capacity-track{background:#223140}
+html[data-theme="dark"] .capacity-gap{background:#824650}
+html[data-theme="dark"] .fragment-visual .warning{background:#2b2418}
+html[data-theme="dark"] .fragment-visual .good{background:#142922}
+html[data-theme="dark"] .provider-glyph,
+html[data-theme="dark"] .bank-glyph{background:#1c2a38;color:#9fb0c1}
+html[data-theme="dark"] .bank.stranded{background:#2b2418;border-color:#5c4b2c}
+html[data-theme="dark"] .bank.stranded:after{background:#3a301f;color:#d9aa53}
+
+@media(max-width:720px){
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .story-caption{width:92%;bottom:10px;padding:9px 10px}
+  .story-caption strong{font-size:11px}
+  .visual-signal{min-height:40px}
+  .signal-pill{min-width:0;flex:1}
+}
