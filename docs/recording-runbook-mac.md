@@ -134,7 +134,7 @@ Point out:
 - stranded reserve effect.
 
 ### 2:38 — Sensitivity Explorer
-Show **SCFR uplift** mode.
+Inside **Advanced analysis**, switch to **Coordination uplift**.
 
 Do not spend time reading every cell.
 
