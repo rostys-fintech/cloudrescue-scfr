@@ -207,7 +207,9 @@ export function createEarthSystem(mount,options){
     const comparison=input.comparison||null;
     const reservePct=input.reservePct==null ? 25 : input.reservePct;
     const marketPct=input.marketPct==null ? 20 : input.marketPct;
-    const effectiveScene = mode==='evidence' ? 0 : mode==='lab' ? 4 : scene;
+    const labStrategy=input.labStrategy||'market';
+    const labScene=labStrategy==='market' ? 2 : labStrategy==='individual' ? 3 : 4;
+    const effectiveScene = mode==='evidence' ? 0 : mode==='lab' ? labScene : scene;
 
     mount.dataset.scene=String(effectiveScene);
     mount.dataset.outageProvider=outageProvider;
@@ -217,14 +219,14 @@ export function createEarthSystem(mount,options){
 
     const affectedBanks=banks.filter(function(bank){ return bank.provider===outageProvider; });
     const affectedSet=new Set(affectedBanks.map(function(bank){ return bank.id; }));
-    const model = comparison && comparison.scfr;
+    const selectedModel = comparison && (mode==='lab' ? comparison[labStrategy] : comparison.scfr);
     const market = comparison && comparison.market;
-    const byId=new Map((model && model.rows || []).map(function(row){ return [row.id,row]; }));
-    const gap=market ? Math.max(0,market.totalDemand-market.allocated) : 0;
+    const byId=new Map((selectedModel && selectedModel.rows || []).map(function(row){ return [row.id,row]; }));
+    const gap=selectedModel ? Math.max(0,selectedModel.totalDemand-selectedModel.allocated) : 0;
 
     affectedLabel.textContent = mode==='evidence' ? '— / '+banks.length : effectiveScene===0 && mode==='simulation' ? '0 / '+banks.length : affectedBanks.length+' / '+banks.length;
     gapLabel.textContent = mode==='evidence' ? '—' : effectiveScene<2 && mode==='simulation' ? '0' : fmt(gap);
-    restoredLabel.textContent = mode==='evidence' ? '—' : (effectiveScene>=4 || mode==='lab') && model ? Math.round(model.criticalRestoredPct)+'%' : '—';
+    restoredLabel.textContent = mode==='evidence' ? '—' : (effectiveScene>=4 || mode==='lab') && selectedModel ? Math.round(selectedModel.criticalRestoredPct)+'%' : '—';
 
     svg.querySelectorAll('.ra-earth-provider').forEach(function(node){
       const id=node.dataset.provider;
@@ -252,7 +254,7 @@ export function createEarthSystem(mount,options){
 
       if(mode==='evidence') return;
       if(!affected){
-        if(effectiveScene===3) node.classList.add('show-reserve');
+        if(effectiveScene===3 || (mode==='lab' && labStrategy==='individual')) node.classList.add('show-reserve');
         return;
       }
 
@@ -264,7 +266,11 @@ export function createEarthSystem(mount,options){
         if(row) node.classList.add(outcomeClass(row));
       }
       if(effectiveScene>=5 && row) node.classList.add(outcomeClass(row));
-      if(mode==='lab' && row) node.classList.add('is-recovering',outcomeClass(row));
+      if(mode==='lab' && row){
+        if(labStrategy==='market') node.classList.add('is-shortage',outcomeClass(row));
+        if(labStrategy==='individual') node.classList.add('is-stranded','show-reserve',outcomeClass(row));
+        if(labStrategy==='scfr') node.classList.add('is-recovering',outcomeClass(row));
+      }
     });
 
     svg.querySelectorAll('.ra-request-flow').forEach(function(path){
@@ -273,7 +279,7 @@ export function createEarthSystem(mount,options){
     });
 
     svg.querySelectorAll('.ra-recovery-flow').forEach(function(path){
-      const active=affectedSet.has(path.dataset.bank) && (effectiveScene>=4 || mode==='lab') && mode!=='evidence';
+      const active=affectedSet.has(path.dataset.bank) && (effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence';
       path.classList.toggle('is-visible',active);
       const row=byId.get(path.dataset.bank);
       path.style.setProperty('--ra-flow-restored',row ? clamp(row.restoredFraction).toFixed(3) : '0');
@@ -281,12 +287,13 @@ export function createEarthSystem(mount,options){
 
     const pool=svg.querySelector('.ra-pool-node');
     if(pool){
-      pool.classList.toggle('is-visible',(effectiveScene>=4 || mode==='lab') && mode!=='evidence');
-      pool.classList.toggle('is-active',effectiveScene===4 || mode==='lab');
+      pool.classList.toggle('is-visible',(effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence');
+      pool.classList.toggle('is-active',effectiveScene===4 || (mode==='lab' && labStrategy==='scfr'));
     }
 
     mount.classList.toggle('has-shock',effectiveScene>=1 && effectiveScene<=3 && mode!=='evidence');
-    mount.classList.toggle('has-recovery',(effectiveScene>=4 || mode==='lab') && mode!=='evidence');
+    mount.classList.toggle('has-recovery',(effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence');
+    mount.dataset.labStrategy=labStrategy;
   }
 
   function destroy(){
