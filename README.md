@@ -23,6 +23,8 @@ Judge-facing materials are kept in `docs/`:
 - [3–5 minute demo script](docs/demo-script.md)
 - [Screenshot plan](docs/screenshot-plan.md)
 - [Judge pitch card](docs/judge-pitch-card.md)
+- [Technical ownership pass](docs/technical-ownership-pass.md)
+- [Model walkthrough](docs/model-walkthrough.md)
 - [Technical defense / likely questions](docs/technical-defense.md)
 - [Judging criteria map](docs/judging-map.md)
 - [Final submission checklist](docs/submission-checklist.md)
@@ -229,6 +231,8 @@ cloudrescue-scfr/
 │   ├── demo-script.md
 │   ├── screenshot-plan.md
 │   ├── judge-pitch-card.md
+│   ├── technical-ownership-pass.md
+│   ├── model-walkthrough.md
 │   ├── technical-defense.md
 │   ├── judging-map.md
 │   ├── development-log.md
