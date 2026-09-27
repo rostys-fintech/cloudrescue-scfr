@@ -761,3 +761,8 @@ html[data-theme="dark"] .bank.stranded:after{background:#3a301f;color:#d9aa53}
   .visual-signal{min-height:40px}
   .signal-pill{min-width:0;flex:1}
 }
+
+/* Keep coordinated reserve and subtitle visually distinct */
+.scene-5 .scfr-reserve-layer{bottom:78px}
+.scene-5 .story-caption{bottom:14px}
+.scene-6 .story-caption{bottom:14px;width:min(700px,78%)}
