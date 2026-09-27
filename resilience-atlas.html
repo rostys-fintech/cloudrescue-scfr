@@ -8,9 +8,10 @@
   <title>Resilience Atlas — Systemic Cloud Resilience Lab</title>
   <meta name="theme-color" content="#070A0F">
   <link rel="icon" href="resilience-atlas-mark.svg?v=20260927-polish01" type="image/svg+xml">
+  <link rel="preconnect" href="https://resource2.heygen.ai" crossorigin>
   <link rel="mask-icon" href="resilience-atlas-mark.svg?v=20260927-polish01" color="#246FBF">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-runfocus01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260927-neural01">
 </head>
 <body>
   <div class="ra-app">
@@ -74,14 +75,16 @@
             <button class="ra-primary-action" id="raRunPreview" type="button">
               <span id="raRunLabel">Run Guided Simulation</span><b aria-hidden="true">→</b>
             </button>
-            <button class="ra-quiet-action" id="raNarrationToggle" type="button" aria-pressed="true">
-              <span class="ra-speaker-icon" aria-hidden="true">◖))</span>
-              <span id="raNarrationLabel">Narration on</span>
-            </button>
-            <button class="ra-pause-action" id="raSpeechPause" type="button" aria-pressed="false" disabled>
-              <span aria-hidden="true">Ⅱ</span>
-              <span id="raSpeechPauseLabel">Pause speech</span>
-            </button>
+            <div class="ra-sim-secondary">
+              <button class="ra-quiet-action" id="raNarrationToggle" type="button" aria-pressed="true">
+                <span class="ra-speaker-icon" aria-hidden="true">◖))</span>
+                <span id="raNarrationLabel">Narration on</span>
+              </button>
+              <button class="ra-pause-action" id="raSpeechPause" type="button" aria-pressed="false" disabled>
+                <span aria-hidden="true">Ⅱ</span>
+                <span id="raSpeechPauseLabel">Pause speech</span>
+              </button>
+            </div>
           </div>
 
           <div class="ra-scene-list" aria-label="Simulation sequence">
@@ -681,6 +684,6 @@
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260927-runfocus01"></script>
+  <script type="module" src="resilience-atlas.js?v=20260927-neural01"></script>
 </body>
 </html>

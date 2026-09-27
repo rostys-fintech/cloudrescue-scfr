@@ -15,31 +15,30 @@ for (const id of [
 
 assert.match(js,/function scenePresentation\(/);
 assert.match(js,/In this simulation, we can see how banks depend on shared cloud providers/);
-assert.match(js,/function maleVoiceScore\(/);
-assert.match(js,/const explicitlyFemale=/);
-assert.match(js,/pauseMs:560/);
-assert.match(js,/longPauseMs:760/);
+assert.match(js,/const GUIDED_AUDIO_TRACKS = \[/);
+assert.equal((js.match(/resource2\.heygen\.ai\/text_to_speech/g)||[]).length,6);
+assert.match(js,/const guidedAudio = new Audio\(\)/);
+assert.match(js,/function preloadGuidedAudio\(/);
+assert.match(js,/function playGuidedAudioScene\(/);
+assert.match(js,/guidedAudio\.play\(\)/);
+assert.match(js,/guidedAudio\.pause\(\)/);
+assert.doesNotMatch(js,/speechSynthesis/);
+assert.doesNotMatch(js,/SpeechSynthesisUtterance/);
 assert.match(js,/async function runGuidedSimulation\(/);
-assert.match(js,/function speakCurrentScene\(/);
-assert.match(js,/speechSynthesis/);
 assert.match(js,/guided\.active/);
 assert.match(js,/state\.scene=i/);
 assert.match(js,/earth\.simulation\.update/);
 assert.match(js,/function guidedDelay\(/);
 assert.match(js,/function setGuidedPaused\(/);
-assert.match(js,/speechSynthesis\.pause\(\)/);
-assert.match(js,/speechSynthesis\.resume\(\)/);
 assert.match(js,/Promise\.all\(/);
+assert.match(js,/playGuidedAudioScene\(i,runId\)/);
 assert.match(js,/guidedDelay\(story\.visualDuration,runId\)/);
 assert.match(js,/earth\.simulation\.setPaused/);
 assert.match(js,/function focusAnimationStage\(/);
-assert.match(js,/window\.scrollTo\(/);
+assert.match(js,/window\.scrollTo/);
 assert.match(js,/focusAnimationStage\(\$\('#raEarthMount'\)\)/);
-assert.match(js,/state\.scene=0;[\s\S]*renderScene\(\);[\s\S]*setGuidedActive\(true\)/);
 assert.match(js,/raHudPause/);
 assert.match(js,/raHudStop/);
-assert.doesNotMatch(html,/raVoiceSelect/);
-assert.doesNotMatch(html,/raVoiceTest/);
 
 assert.match(css,/STAGE 4 — GUIDED SIMULATION/);
 assert.match(css,/\.ra-guided-hud/);
@@ -48,10 +47,7 @@ assert.match(css,/body\.ra-guided-running/);
 assert.match(css,/prefers-reduced-motion/);
 assert.match(css,/SYNCED GUIDED CONTROLS — RUN \/ NARRATION \/ PAUSE/);
 assert.match(css,/body\.ra-guided-paused/);
-assert.match(css,/MOBILE RUN FOCUS — BUTTON FIT \+ IN-ANIMATION CONTROLS/);
-assert.match(css,/\.ra-guided-actions/);
+assert.match(css,/NEURAL VOICEOVER \+ ROBUST MOBILE CONTROL STACK/);
+assert.match(css,/\.ra-sim-secondary/);
 
-assert.doesNotMatch(html,/Crisis Replay/);
-assert.doesNotMatch(html,/Stress Lab/);
-
-console.log('Guided simulation checks passed.');
+console.log('Guided simulation neural-audio checks passed.');

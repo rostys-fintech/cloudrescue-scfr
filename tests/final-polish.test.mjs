@@ -14,19 +14,11 @@ assert.equal((html.match(/role="tab"/g)||[]).length,3);
 assert.match(html,/aria-selected="true"/);
 assert.match(html,/20260927-polish01/);
 
-assert.match(js,/function maleVoiceScore\(/);
-assert.match(js,/premium/);
-assert.match(js,/enhanced/);
-assert.match(js,/natural/);
-assert.match(js,/\\bdaniel\\b/);
-assert.match(js,/\\bandrew\\b/);
-assert.match(js,/explicitlyFemale/);
-assert.match(js,/function waitForNarrator\(/);
-assert.match(js,/function narrationChunks\(/);
-assert.match(js,/function narrationProfile\(/);
-assert.match(js,/function speakChunk\(/);
-assert.match(js,/guided\.voice=await waitForNarrator\(\)/);
-assert.match(js,/replace\(\/\\bSCFR\\b\/g,'S C F R'\)/);
+assert.match(js,/const GUIDED_AUDIO_TRACKS = \[/);
+assert.match(js,/resource2\.heygen\.ai\/text_to_speech/);
+assert.match(js,/function playGuidedAudioScene\(/);
+assert.match(js,/HeyGen neural narrator/);
+assert.doesNotMatch(js,/speechSynthesis/);
 
 assert.match(js,/function tabFromHash\(/);
 assert.match(js,/function syncTabHash\(/);

@@ -20,13 +20,13 @@ assert.match(css,/raReducedEssentialState/);
 assert.doesNotMatch(css,/\.ra-earth-packet,[\s\S]{0,120}display:none!important/);
 
 assert.match(html,/id="raSpeechPause"/);
-assert.doesNotMatch(html,/raVoiceSelect/);
-assert.doesNotMatch(html,/raVoiceTest/);
-assert.match(js,/function rankedMaleVoices\(/);
+assert.match(js,/const guidedAudio = new Audio\(\)/);
+assert.match(js,/guidedAudio\.setAttribute\('playsinline',''\)/);
+assert.match(js,/function playGuidedAudioScene\(/);
 assert.match(js,/function setupNarrationEngine\(/);
-assert.match(js,/await waitForNarrator\(\)/);
+assert.doesNotMatch(js,/speechSynthesis/);
 assert.match(js,/earth\.simulation\.setPaused/);
 assert.match(earth,/function setPaused\(paused\)/);
 assert.match(earth,/motionPaused/);
 
-console.log('iOS animation engine and narrator controls checks passed.');
+console.log('iOS animation engine and neural-audio checks passed.');
