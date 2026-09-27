@@ -57,6 +57,29 @@ The app recalculates:
 - unused/stranded reserve capacity;
 - a resilience frontier showing how outcomes change as reserve capacity increases.
 
+The Stress Lab also includes:
+
+- **Replay this crisis** — any live Stress Lab configuration can be handed back to the guided audiovisual story;
+- a **Before / After** comparison that holds the reserve budget constant and changes only the allocation mechanism;
+- a **Sensitivity Explorer** for SCFR resilience and uplift across reserve and emergency-market assumptions;
+- a reproducible JSON export of the full scenario and model outputs.
+
+## What is real — and what is synthetic
+
+**Observed real-world motivation**
+- third-party ICT concentration risk;
+- reliance on critical external technology and cloud providers;
+- operational-resilience concerns documented by BIS, EBA and DORA.
+
+**Synthetic in the v0.1 prototype**
+- the 20-bank network;
+- provider assignments;
+- workload and readiness values;
+- capacity units;
+- all resilience scores and scenario outputs.
+
+The distinction is shown directly in the interface so the prototype does not present synthetic results as empirical evidence.
+
 ## Model logic
 
 There are 20 synthetic banks. Each bank has:
@@ -92,7 +115,7 @@ The evidence base supports studying the problem; it does **not** validate the sy
 
 ## Research roadmap
 
-- **v0.1 — FirstCommit MVP:** synthetic scenario engine + animated visual story.
+- **v0.1 — FirstCommit MVP:** synthetic scenario engine + guided audiovisual story + scenario replay + sensitivity explorer.
 - **v0.2 — Sensitivity analysis:** more shock types, allocation rules and robustness checks.
 - **v0.3 — Empirical calibration:** public evidence on cloud concentration and operational resilience.
 - **v1.0 — Research companion:** reproducible scenario analysis to accompany the SCFR research project.
