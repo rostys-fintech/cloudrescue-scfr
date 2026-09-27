@@ -4054,3 +4054,23 @@ html[data-theme="crisis"] .stage[data-outage="green"].scene-3 .network-line[data
 .bar,.compare-bar,.capacity-blocks i,.demo-progress{
   border-radius:0!important;
 }
+
+
+/* ---------- Split high-tech wordmark ---------- */
+.hero h1 .hero-cloud-word,
+.hero h1 .hero-rescue-word{
+  display:inline;
+}
+html[data-theme="crisis"] .hero h1 .hero-cloud-word{
+  color:#f5f7f9;
+}
+html[data-theme="crisis"] .hero h1 .hero-rescue-word{
+  color:#ff243d;
+  text-shadow:0 0 24px rgba(255,36,61,.20);
+}
+html[data-theme="analysis"] .hero h1 .hero-cloud-word{
+  color:#071a33;
+}
+html[data-theme="analysis"] .hero h1 .hero-rescue-word{
+  color:#0b63e5;
+}
