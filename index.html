@@ -23,7 +23,7 @@
   <meta name="twitter:title" content="CloudRescue — Systemic Cloud Resilience Lab">
   <meta name="twitter:description" content="A reproducible stress lab for shared-provider shocks and coordinated recovery in banking.">
   <link rel="stylesheet" href="styles.css?v=20260927-1930">
-  <link rel="stylesheet" href="styles-v2.css?v=20260927-mobile03">
+  <link rel="stylesheet" href="styles-v2.css?v=20260927-mobile04">
 </head>
 <body>
 <div class="shell">
@@ -105,6 +105,36 @@
         <div class="hero-risk-note">
           <span>SYSTEMIC EXPOSURE</span>
           <b>One provider failure can create simultaneous recovery demand.</b>
+        </div>
+      </div>
+
+      <div class="mobile-system-map" aria-label="Three shared cloud providers serve twenty synthetic banks. One provider outage can affect eight banks at once.">
+        <div class="mobile-map-title">
+          <span>SHARED DEPENDENCY MAP</span>
+          <b>3 providers → 20 banks</b>
+        </div>
+        <div class="mobile-provider-row">
+          <div class="mobile-provider risk"><span>CLOUD A</span><b>8</b><small>banks</small></div>
+          <div class="mobile-provider"><span>CLOUD B</span><b>7</b><small>banks</small></div>
+          <div class="mobile-provider"><span>CLOUD C</span><b>5</b><small>banks</small></div>
+        </div>
+        <div class="mobile-map-arrow" aria-hidden="true">
+          <i></i><i></i><i></i>
+        </div>
+        <div class="mobile-bank-field">
+          <div class="mobile-bank-group risk" aria-label="Eight banks depend on Cloud A">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="mobile-bank-group" aria-label="Seven banks depend on Cloud B">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="mobile-bank-group" aria-label="Five banks depend on Cloud C">
+            <i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+        <div class="mobile-risk-strip">
+          <span>IF CLOUD A FAILS</span>
+          <b>8 banks need backup at the same time</b>
         </div>
       </div>
     </div>
@@ -398,6 +428,6 @@
     <span>Rostyslav Honcharenko · 2026</span>
   </footer>
 </div>
-<script type="module" src="app.js?v=20260927-mobile03"></script>
+<script type="module" src="app.js?v=20260927-mobile04"></script>
 </body>
 </html>
