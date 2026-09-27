@@ -6,6 +6,15 @@ CloudRescue is an interactive, browser-based systemic cloud resilience simulator
 
 > **Status:** v0.1 hackathon MVP. All banks, cloud providers, workloads and resilience outputs are synthetic and illustrative. The prototype does not assess any real institution or predict real-world recovery outcomes.
 
+## Dual visual modes
+
+CloudRescue now supports two purpose-built interface modes:
+
+- **CRISIS** — black/crimson cyber system console for outage replay and high-impact system states;
+- **ANALYSIS** — white/electric-blue research console for analytical review and methodology.
+
+The mode switch changes visual language only; the deterministic model and scenario results remain identical.
+
 ## Live demo
 
 **GitHub Pages:** https://rostys-fintech.github.io/cloudrescue-scfr/
