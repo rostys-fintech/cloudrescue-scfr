@@ -113,15 +113,15 @@ Do not spend time reading every metric.
 
 ## 2:45–3:10 — Sensitivity, not one cherry-picked result
 
-Scroll to **Sensitivity Explorer**.
+Open **Advanced analysis**, then show **Sensitivity Explorer**.
 
 Say:
 
 > One scenario is not enough to understand a mechanism, so I recalculate the model over a grid of market-capacity and reserve assumptions.
 
-Switch once:
+Open **Advanced analysis** and switch once:
 
-**SCFR resilience → SCFR uplift**
+**SCFR score → Coordination uplift**
 
 Say:
 
@@ -198,7 +198,7 @@ Use the **default light application theme** unless the full dark theme looks cle
 
 Before recording:
 
-- choose the best available male English narrator;
+- CloudRescue automatically selects the preferred available English narrator;
 - set browser zoom to 90–100%;
 - close bookmarks / unnecessary browser panels;
 - use Focus View for the guided story;
