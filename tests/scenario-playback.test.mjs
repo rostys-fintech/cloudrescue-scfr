@@ -40,6 +40,7 @@ assert.match(js,/try\{/);
 assert.match(js,/finally\{/);
 assert.match(js,/requestAnimationFrame/);
 assert.match(js,/setLabSheet\(false,\{restoreFocus:false\}\)/);
+assert.match(js,/focusAnimationStage\(\$\('#raLabEarthMount'\)\)/);
 assert.match(js,/Math\.max\(620,Math\.round\(ms\*\.5\)\)/);
 
 assert.match(earth,/const labPhase=input\.labPhase\|\|null/);
