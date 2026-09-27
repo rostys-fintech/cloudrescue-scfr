@@ -15,8 +15,8 @@ const scenes = [
     stat:'Real concentration risk · synthetic 20-bank illustration',
     kicker:'REAL-WORLD MOTIVATION',
     caption:'A common provider can become a common point of operational stress.',
-    voice:'This risk is real. Financial institutions increasingly rely on a limited set of critical technology and cloud providers. CloudRescue turns that concentration risk into a transparent stress test.',
-    rate:.94,pitch:.91,duration:6500,cue:'normal'
+    voice:'Here is the risk. Banks increasingly rely on a small number of critical technology and cloud providers. When many institutions share the same provider, one outage can become a common shock.',
+    rate:.94,pitch:.98,visualDuration:5600,cue:'normal'
   },
   {
     title:'One shared provider fails',
@@ -24,8 +24,8 @@ const scenes = [
     stat:'8 banks affected at the same time',
     kicker:'COMMON SHOCK',
     caption:'Blue Cloud fails. 8 banks are disrupted at once.',
-    voice:'Now imagine one shared provider fails. Eight banks are hit at the same moment. What looked like a local outage becomes a system-wide recovery problem.',
-    rate:.89,pitch:.86,duration:6500,cue:'alert'
+    voice:'Now, Blue Cloud goes down. Eight banks lose critical capacity at the same time. This is no longer one bank’s IT problem. It is a system-wide recovery problem.',
+    rate:.90,pitch:.96,visualDuration:6000,cue:'alert'
   },
   {
     title:'Everyone needs Plan B at once',
@@ -33,8 +33,8 @@ const scenes = [
     stat:'Emergency demand exceeds immediate supply',
     kicker:'CAPACITY SCRAMBLE',
     caption:'608 units demanded. Only 122 are immediately available.',
-    voice:'Every affected bank reaches for Plan B. But they all need backup capacity at once. Demand is six hundred eight units. Only one hundred twenty two are available immediately.',
-    rate:.90,pitch:.87,duration:7000,cue:'shortage'
+    voice:'All eight banks reach for backup capacity at once. They need six hundred and eight units. The emergency market can supply only one hundred and twenty-two. Most of the demand is still waiting.',
+    rate:.89,pitch:.96,visualDuration:6800,cue:'shortage'
   },
   {
     title:'Individual reserves can still fragment',
@@ -42,8 +42,8 @@ const scenes = [
     stat:'Same reserve budget · ring-fenced allocation',
     kicker:'FRAGMENTED RESERVES',
     caption:'Some reserve exists — but it is locked in the wrong places.',
-    voice:'Individual reserves help, but there is a catch. Capacity is locked bank by bank. Two hundred fifty seven units remain stranded while affected banks still face shortages.',
-    rate:.90,pitch:.88,duration:7000,cue:'fragment'
+    voice:'Individual reserves help, but there is a catch. Capacity is ring-fenced, bank by bank. It cannot simply move to where the shock is. Here, two hundred and fifty-seven units remain stranded while affected banks are still short.',
+    rate:.89,pitch:.96,visualDuration:7200,cue:'fragment'
   },
   {
     title:'SCFR pools the reserve before the crisis',
@@ -51,8 +51,8 @@ const scenes = [
     stat:'Same reserve · different allocation mechanism',
     kicker:'COORDINATED RECOVERY',
     caption:'SCFR redirects the same reserve budget to where it is needed.',
-    voice:'SCFR changes one thing: coordination. The same reserve budget is pooled before the crisis, then redirected to the affected banks that need it most.',
-    rate:.94,pitch:.91,duration:6500,cue:'recovery'
+    voice:'SCFR changes the coordination rule, not the budget. The same reserve is pooled in advance, then directed to the affected banks that need it most. Watch what happens to recovery.',
+    rate:.93,pitch:.98,visualDuration:6800,cue:'recovery'
   },
   {
     title:'Now test the system yourself',
@@ -60,8 +60,8 @@ const scenes = [
     stat:'Animated story → interactive research prototype',
     kicker:'RESULT',
     caption:'Same shock. Same reserve budget. Different coordination.',
-    voice:'The model is illustrative, not a forecast. But the mechanism is clear. Same shock. Same reserve budget. Different coordination. Now test the assumptions yourself.',
-    rate:.93,pitch:.91,duration:6500,cue:'result'
+    voice:'In this synthetic run, coordination materially improves recovery. This is not a forecast. It is a way to test the mechanism. Same shock. Same reserve budget. Different coordination. Now change the assumptions yourself.',
+    rate:.92,pitch:.98,visualDuration:6800,cue:'result'
   }
 ];
 
@@ -70,6 +70,7 @@ let autoplay = null;
 let narrationEnabled = true;
 let audioContext = null;
 let sceneTimers = [];
+let demoRunId = 0;
 
 function setupTheme(){
   const button = $('#themeToggle');
@@ -107,10 +108,16 @@ function preferredNarrator(voices=englishVoices()){
   }
 
   const preferences = [
+    /Microsoft.*(Guy|Andrew|Ryan|Brian|Christopher|Eric).*(Natural|Online)/i,
     /Google UK English Male/i,
+    /Daniel.*(Enhanced|Premium)/i,
     /^Daniel$/i,
-    /^Alex$/i,
+    /Aaron.*(Enhanced|Premium)/i,
     /^Aaron$/i,
+    /Arthur.*(Enhanced|Premium)/i,
+    /^Arthur$/i,
+    /Alex.*(Enhanced|Premium)/i,
+    /^Alex$/i,
     /Microsoft.*(Guy|Andrew|Ryan|Brian|Christopher|Eric)/i,
     /English.*Male/i
   ];
@@ -135,7 +142,6 @@ function populateNarratorVoices(){
 
   select.onchange=()=>{
     localStorage.setItem('cloudrescue-narrator',select.value);
-    if(autoplay && narrationEnabled) speakScene();
   };
 }
 
@@ -145,18 +151,46 @@ function getEnglishVoice(){
   return voices.find(v=>v.name===selected) || preferredNarrator(voices);
 }
 
-function speakScene(){
-  if(!narrationEnabled || !('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
+function speakScene(runId=demoRunId){
   const current=scenes[scene];
-  const utterance = new SpeechSynthesisUtterance(current.voice);
-  const voice = getEnglishVoice();
-  if(voice) utterance.voice = voice;
-  utterance.lang = voice?.lang || 'en-GB';
-  utterance.rate = current.rate || .93;
-  utterance.pitch = current.pitch || .9;
-  utterance.volume = .95;
-  window.speechSynthesis.speak(utterance);
+
+  if(!narrationEnabled || !('speechSynthesis' in window)){
+    return new Promise(resolve=>{
+      const id=setTimeout(()=>resolve({spoken:false}),current.visualDuration || 5600);
+      sceneTimers.push(id);
+    });
+  }
+
+  return new Promise(resolve=>{
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(current.voice);
+    const voice = getEnglishVoice();
+    if(voice) utterance.voice = voice;
+    utterance.lang = voice?.lang || 'en-GB';
+    utterance.rate = current.rate || .92;
+    utterance.pitch = current.pitch || .98;
+    utterance.volume = .96;
+
+    let settled=false;
+    const finish=(reason)=>{
+      if(settled) return;
+      settled=true;
+      resolve({spoken:true,reason,runId});
+    };
+
+    utterance.onend=()=>finish('end');
+    utterance.onerror=()=>finish('error');
+
+    // Chrome can occasionally drop a speech event. This is only a safety net,
+    // not the primary scene timer.
+    const words=current.voice.trim().split(/\s+/).length;
+    const safetyMs=Math.max(8500,words/(utterance.rate*2.2)*1000+3500);
+    const safety=setTimeout(()=>finish('safety'),safetyMs);
+    sceneTimers.push(safety);
+
+    window.speechSynthesis.speak(utterance);
+  });
 }
 
 function playCue(kind){
@@ -684,37 +718,50 @@ function updateDemoProgress(){
 }
 
 function stopAuto(){
-  if(autoplay){ clearTimeout(autoplay); autoplay=null; }
+  demoRunId++;
+  if(autoplay && typeof autoplay==='number') clearTimeout(autoplay);
+  autoplay=null;
+  document.body.classList.remove('demo-playing');
   clearSceneMotion();
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
   $('#autoScene').textContent='▶ Watch demo';
 }
 
-function playDemoScene(){
+async function playDemoScene(runId){
+  if(runId!==demoRunId) return;
+
   applyScene();
   updateDemoProgress();
-  speakScene();
   playCue(scenes[scene].cue);
 
-  if(scene >= scenes.length-1){
-    autoplay=setTimeout(()=>{
-      stopAuto();
-    },scenes[scene].duration);
-    return;
-  }
+  await speakScene(runId);
+  if(runId!==demoRunId) return;
+
+  // Let the last visual beat land after the narrator finishes.
+  const hold = scene===4 ? 1050 : scene===5 ? 1200 : 700;
 
   autoplay=setTimeout(()=>{
-    scene++;
-    playDemoScene();
-  },scenes[scene].duration);
+    if(runId!==demoRunId) return;
+    if(scene<scenes.length-1){
+      scene++;
+      playDemoScene(runId);
+    }else{
+      stopAuto();
+    }
+  },hold);
 }
 
 function startDemo({reset=true}={}){
   stopAuto();
   if(reset) scene=0;
+
+  const runId=demoRunId;
+  autoplay=-1;
+  document.body.classList.add('demo-playing');
   $('#autoScene').textContent='■ Stop demo';
-  playDemoScene();
+  playDemoScene(runId);
 }
+
 
 function setFocusMode(on){
   document.body.classList.toggle('story-focus', on);
@@ -753,7 +800,6 @@ function setupStory(){
 
   $('#narrationToggle').addEventListener('click',()=>{
     setNarration(!narrationEnabled);
-    if(autoplay && narrationEnabled) speakScene();
   });
 
   $('#focusStory').addEventListener('click',()=>{
