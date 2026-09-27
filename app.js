@@ -79,18 +79,19 @@ let activeSeed = '';
 
 function setupTheme(){
   const button = $('#themeToggle');
-  const label = $('#themeLabel');
-  if(!button || !label) return;
+  if(!button) return;
 
   const sync = () => {
-    const dark = document.documentElement.dataset.theme === 'dark';
-    label.textContent = dark ? 'Light' : 'Dark';
-    button.setAttribute('aria-pressed', dark ? 'true' : 'false');
-    button.setAttribute('title', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    const crisis = document.documentElement.dataset.theme === 'crisis';
+    button.setAttribute('aria-pressed', crisis ? 'false' : 'true');
+    button.setAttribute('title', crisis ? 'Switch to Analysis theme' : 'Switch to Crisis theme');
+
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute('content', crisis ? '#050608' : '#f4f8ff');
   };
 
   button.addEventListener('click',()=>{
-    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    const next = document.documentElement.dataset.theme === 'crisis' ? 'analysis' : 'crisis';
     document.documentElement.dataset.theme = next;
     localStorage.setItem('cloudrescue-theme', next);
     sync();
