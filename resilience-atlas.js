@@ -30,12 +30,26 @@ const labDraft = {
   allocationRule: defaultScenario.allocationRule
 };
 
+const GUIDED_AUDIO_TRACKS = [
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=53aba024-847e-46ca-996d-cc8b794740b9c.wav',durationMs:18965},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=1544c69a-3032-41c3-ab11-42709b8f8573.wav',durationMs:15020},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=8a9d59ed-77be-46a3-88a1-7f6280d8e24b.wav',durationMs:13087},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=1fa3f8dd-858f-4731-a834-1e0cc7537392.wav',durationMs:17528},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=f409d816-701e-4689-a87e-047159a59d0a.wav',durationMs:15882},
+  {url:'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/00e3d285aba44b27a83c47c02c9c2d9c/id=7ca4bcc0-89e4-4b44-aebf-dd36236dbee4.wav',durationMs:23876}
+];
+
+const guidedAudio = new Audio();
+guidedAudio.preload='auto';
+guidedAudio.setAttribute('playsinline','');
+guidedAudio.volume=1;
+
 const guided = {
   active: false,
   narration: true,
   paused: false,
   runId: 0,
-  voice: null
+  audioFinish: null
 };
 
 const labRun = {
@@ -564,123 +578,22 @@ function setupTheme(){
   sync();
 }
 
-function englishVoices(){
-  if(!('speechSynthesis' in window)) return [];
-  return window.speechSynthesis.getVoices().filter(voice=>/^en(?:-|_)/i.test(voice.lang) || /^en$/i.test(voice.lang));
-}
-
-function maleVoiceScore(voice){
-  const name=(voice?.name||'').toLowerCase();
-  const lang=(voice?.lang||'').toLowerCase();
-
-  const maleNames=/\b(daniel|aaron|arthur|alex|andrew|guy|brian|ryan|christopher|eric|oliver|tom|nathan|evan|reed|eddy|rishi|ralph|bruce|david|mark|james|george|richard|lee)\b/;
-  const explicitlyFemale=/\b(ava|samantha|karen|moira|jenny|aria|victoria|tessa|allison|susan|zira)\b/;
-
-  if(explicitlyFemale.test(name)) return -1000;
-
-  let score=maleNames.test(name) ? 220 : -120;
-
-  if(/premium/.test(name)) score+=180;
-  if(/enhanced/.test(name)) score+=165;
-  if(/natural/.test(name)) score+=150;
-  if(/online/.test(name) && /microsoft/.test(name)) score+=60;
-
-  if(/\bdaniel\b/.test(name)) score+=145;
-  if(/\bandrew\b/.test(name)) score+=140;
-  if(/\bguy\b/.test(name)) score+=136;
-  if(/\bbrian\b/.test(name)) score+=132;
-  if(/\bryan\b/.test(name)) score+=128;
-  if(/\bchristopher\b/.test(name)) score+=124;
-  if(/\bdavid\b/.test(name)) score+=122;
-  if(/\bjames\b/.test(name)) score+=121;
-  if(/\bgeorge\b/.test(name)) score+=120;
-  if(/\baaron\b/.test(name)) score+=120;
-  if(/\barthur\b/.test(name)) score+=116;
-  if(/\balex\b/.test(name)) score+=112;
-
-  if(/google uk english male/.test(name)) score+=155;
-  if(/google us english male/.test(name)) score+=145;
-
-  if(/^en-gb/.test(lang)) score+=24;
-  if(/^en-us/.test(lang)) score+=20;
-  if(voice?.localService) score+=10;
-
-  if(/compact|espeak|fred|zarvox|trinoids|whisper|bells|organ|bad news|good news|boing|bubbles|cellos|deranged|hysterical|pipe organ|wobble/.test(name)) score-=400;
-
-  return score;
-}
-
-function rankedMaleVoices(){
-  return englishVoices()
-    .map(voice=>({voice,score:maleVoiceScore(voice)}))
-    .filter(item=>item.score>0)
-    .sort((a,b)=>b.score-a.score);
-}
-
-function chooseNarrator(){
-  return rankedMaleVoices()[0]?.voice || null;
-}
-
-function waitForNarrator(timeoutMs=900){
-  const immediate=chooseNarrator();
-  if(immediate && maleVoiceScore(immediate)>=350) return Promise.resolve(immediate);
-  if(!('speechSynthesis' in window)) return Promise.resolve(immediate || null);
-
-  return new Promise(resolve=>{
-    let settled=false;
-    const finish=()=>{
-      if(settled) return;
-      settled=true;
-      window.speechSynthesis.removeEventListener?.('voiceschanged',onVoices);
-      resolve(chooseNarrator() || immediate || null);
-    };
-    const onVoices=()=>{
-      const candidate=chooseNarrator();
-      if(candidate && maleVoiceScore(candidate)>=350){
-        if(settled) return;
-        settled=true;
-        window.speechSynthesis.removeEventListener?.('voiceschanged',onVoices);
-        resolve(candidate);
-      }
-    };
-
-    window.speechSynthesis.addEventListener?.('voiceschanged',onVoices);
-    window.setTimeout(finish,timeoutMs);
+function preloadGuidedAudio(){
+  GUIDED_AUDIO_TRACKS.forEach((track,index)=>{
+    const preload=new Audio();
+    preload.preload=index<2 ? 'auto' : 'metadata';
+    preload.src=track.url;
   });
-}
 
-function narrationText(text){
-  return text
-    .replace(/\bSCFR\b/g,'S C F R')
-    .replace(/\bICT\b/g,'I C T')
-    .replace(/\bAPI\b/g,'A P I')
-    .replace(/\s+/g,' ')
-    .trim();
-}
-
-function narrationChunks(text){
-  return (narrationText(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [narrationText(text)])
-    .map(part=>part.trim())
-    .filter(Boolean);
-}
-
-function narrationProfile(voice,requestedRate=.84){
-  const name=(voice?.name||'').toLowerCase();
-  const premium=/premium|enhanced|natural/.test(name);
-  const microsoft=/microsoft/.test(name);
-
-  return {
-    rate:Math.max(.78,Math.min(.88,premium ? requestedRate : microsoft ? requestedRate*.99 : requestedRate*.96)),
-    pitch:.96,
-    volume:1,
-    pauseMs:560,
-    longPauseMs:760
-  };
+  guidedAudio.src=GUIDED_AUDIO_TRACKS[0].url;
+  guidedAudio.load();
 }
 
 function updateNarrationControl(){
   const button=$('#raNarrationToggle');
   button.setAttribute('aria-pressed',guided.narration ? 'true' : 'false');
+  button.dataset.voiceQuality='neural';
+  button.title='HeyGen neural narrator · Orson — Firm & Measured';
   $('#raNarrationLabel').textContent=guided.narration ? 'Narration on' : 'Narration off';
 
   const pauseButton=$('#raSpeechPause');
@@ -695,11 +608,6 @@ function updateNarrationControl(){
     hudPause.disabled=!canPause;
     hudPause.setAttribute('aria-pressed',guided.paused ? 'true' : 'false');
     hudPause.textContent=guided.paused ? 'Resume' : 'Pause';
-  }
-
-  if(guided.voice){
-    button.title='Automatic male narrator: '+guided.voice.name;
-    button.dataset.voiceQuality=maleVoiceScore(guided.voice)>=250 ? 'natural' : 'standard';
   }
 }
 
@@ -723,77 +631,55 @@ function guidedDelay(ms,runId){
   });
 }
 
-function speakChunk(text,voice,profile,runId){
-  return new Promise(resolve=>{
-    const utterance=new SpeechSynthesisUtterance(text);
-    if(voice) utterance.voice=voice;
-    utterance.lang=voice?.lang || 'en-US';
-    utterance.rate=profile.rate;
-    utterance.pitch=profile.pitch;
-    utterance.volume=profile.volume;
+function playGuidedAudioScene(index,runId){
+  if(!guided.narration) return Promise.resolve(true);
 
-    let settled=false;
-    const finish=()=>{
-      if(settled) return;
-      settled=true;
-      resolve(runId===guided.runId);
-    };
+  const track=GUIDED_AUDIO_TRACKS[index];
+  if(!track) return Promise.resolve(true);
 
-    utterance.onend=finish;
-    utterance.onerror=finish;
+  guidedAudio.pause();
+  guidedAudio.src=track.url;
+  guidedAudio.currentTime=0;
+  guidedAudio.muted=false;
 
-    const words=text.trim().split(/\s+/).length;
-    const safetyMs=Math.max(3200,words/(Math.max(profile.rate,.75)*2.1)*1000+2600);
-    guidedDelay(safetyMs,runId).then(()=>finish());
-    window.speechSynthesis.speak(utterance);
-  });
-}
-
-async function speakCurrentScene(story,runId){
-  if(!guided.narration || !('speechSynthesis' in window)) return true;
-
-  window.speechSynthesis.cancel();
-  guided.voice=await waitForNarrator();
-  updateNarrationControl();
-
-  if(!guided.voice){
-    $('#raGuidedStatus').textContent='VOICE UNAVAILABLE';
-    return true;
-  }
-
-  const profile=narrationProfile(guided.voice,story.rate||.84);
-  const chunks=narrationChunks(story.voice);
   const hud=$('#raGuidedHud');
   hud.classList.add('is-speaking');
 
-  let completed=true;
-  for(let index=0;index<chunks.length;index++){
-    if(runId!==guided.runId){
-      completed=false;
-      break;
-    }
+  return new Promise(resolve=>{
+    let settled=false;
 
-    const spoken=await speakChunk(chunks[index],guided.voice,profile,runId);
-    if(!spoken){
-      completed=false;
-      break;
-    }
+    const cleanup=()=>{
+      guidedAudio.removeEventListener('ended',onEnded);
+      guidedAudio.removeEventListener('error',onError);
+      if(guided.audioFinish===finish) guided.audioFinish=null;
+      hud.classList.remove('is-speaking');
+    };
 
-    if(index<chunks.length-1){
-      const sentence=chunks[index];
-      const pause=/\b(finally|now we test|next|the important point)\b/i.test(sentence)
-        ? profile.longPauseMs
-        : profile.pauseMs;
-      const continued=await guidedDelay(pause,runId);
-      if(!continued){
-        completed=false;
-        break;
-      }
-    }
-  }
+    const finish=(success=true)=>{
+      if(settled) return;
+      settled=true;
+      cleanup();
+      resolve(success && runId===guided.runId);
+    };
 
-  hud.classList.remove('is-speaking');
-  return completed && runId===guided.runId;
+    const onEnded=()=>finish(true);
+    const onError=()=>{
+      $('#raGuidedStatus').textContent='AUDIO UNAVAILABLE';
+      finish(false);
+    };
+
+    guided.audioFinish=finish;
+    guidedAudio.addEventListener('ended',onEnded,{once:true});
+    guidedAudio.addEventListener('error',onError,{once:true});
+
+    const playback=guidedAudio.play();
+    if(playback?.catch){
+      playback.catch(()=>{
+        $('#raGuidedStatus').textContent='TAP RUN AGAIN';
+        finish(false);
+      });
+    }
+  });
 }
 
 function setGuidedPaused(paused){
@@ -802,9 +688,14 @@ function setGuidedPaused(paused){
   document.body.classList.toggle('ra-guided-paused',paused);
   earth.simulation.setPaused?.(paused);
 
-  if('speechSynthesis' in window){
-    if(paused) window.speechSynthesis.pause();
-    else window.speechSynthesis.resume();
+  if(paused){
+    guidedAudio.pause();
+  }else{
+    const playback=guidedAudio.play();
+    playback?.catch?.(()=>{
+      $('#raGuidedStatus').textContent='AUDIO UNAVAILABLE';
+      guided.audioFinish?.(false);
+    });
   }
 
   $('#raGuidedStatus').textContent=paused ? 'PAUSED' : 'RUNNING';
@@ -812,7 +703,7 @@ function setGuidedPaused(paused){
 }
 
 function setupNarrationEngine(){
-  guided.voice=chooseNarrator();
+  preloadGuidedAudio();
   updateNarrationControl();
 
   const togglePause=()=>{
@@ -842,12 +733,12 @@ function stopGuidedSimulation(){
   guided.runId++;
   guided.paused=false;
   earth.simulation.setPaused?.(false);
+  guidedAudio.pause();
+  guidedAudio.currentTime=0;
+  guided.audioFinish?.(false);
+  guided.audioFinish=null;
   setGuidedActive(false);
   $('#raGuidedHud').classList.remove('is-speaking');
-  if('speechSynthesis' in window){
-    window.speechSynthesis.resume();
-    window.speechSynthesis.cancel();
-  }
 }
 
 function focusAnimationStage(target){
@@ -859,12 +750,10 @@ function focusAnimationStage(target){
 
   window.scrollTo({
     top,
-    behavior:reduced ? 'auto' : 'smooth'
+    behavior:'auto'
   });
 
-  return new Promise(resolve=>{
-    window.setTimeout(()=>resolve(true),reduced ? 80 : 460);
-  });
+  return Promise.resolve(true);
 }
 
 async function runGuidedSimulation(){
@@ -878,15 +767,12 @@ async function runGuidedSimulation(){
   guided.paused=false;
   earth.simulation.setPaused?.(false);
 
-  /* Reset to the first visual state before moving the phone viewport so the
-     user arrives at the actual animation, not the previous scene. */
   state.scene=0;
   renderScene();
   setGuidedActive(true);
 
   if(window.innerWidth<768){
-    await focusAnimationStage($('#raEarthMount'));
-    if(runId!==guided.runId) return;
+    focusAnimationStage($('#raEarthMount'));
   }
 
   for(let i=0;i<6;i++){
@@ -897,7 +783,7 @@ async function runGuidedSimulation(){
 
     const story=scenePresentation(comparison())[i];
     const [spoken,visualComplete]=await Promise.all([
-      speakCurrentScene(story,runId),
+      playGuidedAudioScene(i,runId),
       guidedDelay(story.visualDuration,runId)
     ]);
 
@@ -936,10 +822,10 @@ function setupScenes(){
       guided.paused=false;
       earth.simulation.setPaused?.(false);
       document.body.classList.remove('ra-guided-paused');
-      if('speechSynthesis' in window){
-        window.speechSynthesis.resume();
-        window.speechSynthesis.cancel();
-      }
+      guidedAudio.pause();
+      guidedAudio.currentTime=0;
+      guided.audioFinish?.(true);
+      guided.audioFinish=null;
     }
 
     updateNarrationControl();
@@ -1350,13 +1236,6 @@ function setupLab(){
     button.addEventListener('click',()=>setLabStrategy(button.dataset.raCompare));
   });
   $('#raResetLab').addEventListener('click',resetLab);
-}
-
-if('speechSynthesis' in window){
-  window.speechSynthesis.addEventListener?.('voiceschanged',()=>{
-    guided.voice=chooseNarrator();
-    updateNarrationControl();
-  });
 }
 
 setupTabs();
