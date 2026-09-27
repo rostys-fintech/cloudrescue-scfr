@@ -68,7 +68,7 @@ assert.match(css, /\.learning-card/, 'FirstCommit learning journey should be vis
 assert.match(css, /\.hero-summary/, 'landing page should expose a professional prototype summary');
 assert.match(html, /WHY THIS PROBLEM IS REAL/, 'story should visibly ground the scenario in real regulatory evidence');
 assert.match(html, /OBSERVED IN THE REAL WORLD/, 'methodology should distinguish observed evidence from synthetic assumptions');
-assert.match(html, /BUILD JOURNEY · FIRSTCOMMIT/, 'submission should communicate learning and growth');
+assert.match(html, /DEVELOPMENT JOURNEY · FIRSTCOMMIT/, 'submission should communicate learning and growth');
 assert.match(html, /SHARED DEPENDENCY/, 'landing page should summarize the shared-provider model');
 assert.match(html, /AI-assisted, human-owned/, 'submission should disclose AI assistance and project ownership');
 
