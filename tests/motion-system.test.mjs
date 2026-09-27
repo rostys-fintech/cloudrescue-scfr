@@ -12,7 +12,9 @@ assert.match(earth,/ra-market-node/);
 assert.match(earth,/CAPACITY MARKET/);
 assert.match(earth,/ra-state-changing/);
 assert.match(earth,/previousSignature/);
-assert.match(earth,/dur="\+'s"/);
+assert.match(earth,/animateMotion path/);
+assert.match(earth,/const dur=\(5\.8/);
+assert.match(earth,/const dur=\(6\.6/);
 
 assert.match(css,/STAGE 9 — MOTION SYSTEM/);
 assert.match(css,/\.ra-request-packet\.is-visible/);
