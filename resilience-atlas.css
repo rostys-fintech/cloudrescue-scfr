@@ -3486,10 +3486,12 @@ body.ra-guided-running .ra-guided-dot{
 }
 
 @media(prefers-reduced-motion:reduce){
+  /* Keep essential flow motion visible at reduced speed via the JS engine.
+     Decorative CSS pulses are still removed. */
   .ra-earth-packet,
   .ra-request-packet,
   .ra-recovery-packet{
-    display:none!important;
+    transition:none!important;
   }
   .ra-earth-system.ra-state-changing .ra-earth-network,
   .ra-earth-system.ra-state-changing .ra-earth-bank-layer,
@@ -4611,5 +4613,131 @@ body.ra-guided-running .ra-guided-dot{
   }
   .ra-mobile-tab b{
     font-size:8.5px;
+  }
+}
+
+
+/* =========================================================
+   IOS-SAFE PACKET MOTION
+   Packet positions are driven by requestAnimationFrame in JS.
+   ========================================================= */
+
+.ra-earth-packet,
+.ra-request-packet,
+.ra-recovery-packet{
+  will-change:transform;
+  vector-effect:non-scaling-stroke;
+}
+
+@media(max-width:767px){
+  .ra-earth-packet{
+    opacity:.66;
+  }
+  .ra-request-packet.is-visible{
+    opacity:.82;
+  }
+  .ra-recovery-packet.is-visible{
+    opacity:.84;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ra-earth-packet{
+    opacity:.34!important;
+  }
+  .ra-request-packet.is-visible,
+  .ra-recovery-packet.is-visible{
+    opacity:.46!important;
+  }
+}
+
+
+/* =========================================================
+   NARRATOR PICKER
+   ========================================================= */
+
+.ra-voice-picker{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:end;
+  gap:7px;
+  margin-top:1px;
+}
+.ra-voice-picker label{
+  min-width:0;
+}
+.ra-voice-picker label>span{
+  display:block;
+  margin-bottom:5px;
+  color:var(--ra-text-3);
+  font-size:7px;
+  font-weight:850;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.ra-voice-picker select{
+  width:100%;
+  min-height:42px;
+  padding:0 34px 0 10px;
+  border:1px solid var(--ra-border);
+  border-radius:var(--ra-radius-xs);
+  background:var(--ra-surface-soft);
+  color:var(--ra-text-2);
+  font:inherit;
+  font-size:9px;
+}
+.ra-voice-picker button{
+  min-height:42px;
+  padding:0 12px;
+  border:1px solid color-mix(in srgb,var(--ra-teal) 30%,var(--ra-border));
+  border-radius:var(--ra-radius-xs);
+  background:color-mix(in srgb,var(--ra-teal) 6%,var(--ra-surface-soft));
+  color:var(--ra-teal);
+  font-size:9px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+[data-ra-theme="light"] .ra-voice-picker select,
+[data-ra-theme="light"] .ra-voice-picker button{
+  background:#f8fbfd;
+}
+
+@media(max-width:767px){
+  .ra-voice-picker{
+    grid-template-columns:1fr auto;
+  }
+  .ra-voice-picker select,
+  .ra-voice-picker button{
+    min-height:46px;
+  }
+}
+
+@media(max-width:429px){
+  .ra-voice-picker{
+    grid-template-columns:1fr;
+  }
+  .ra-voice-picker button{
+    width:100%;
+  }
+}
+
+/* Essential state feedback remains visible when the OS requests reduced
+   motion. Movement is smaller and slower, rather than disappearing. */
+@keyframes raReducedEssentialState{
+  from{opacity:.58}
+  to{opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  .ra-earth-system.ra-state-changing .ra-earth-network,
+  .ra-earth-system.ra-state-changing .ra-earth-bank-layer,
+  .ra-earth-system.ra-state-changing .ra-earth-provider-layer,
+  .ra-earth-system.ra-state-changing .ra-earth-readout{
+    animation:raReducedEssentialState 340ms ease-out both!important;
+  }
+  .ra-earth-provider.is-outage .ra-provider-core,
+  .ra-earth-provider.is-outage .ra-provider-halo{
+    animation:raReducedEssentialState 440ms ease-out both!important;
   }
 }

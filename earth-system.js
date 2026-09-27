@@ -113,7 +113,7 @@ function buildSvg(mode){
     const d=curvePath(p.x,p.y,pos[0],pos[1],index);
     const dur=(11+(index%5)*1.8).toFixed(2);
     const begin=(-index*.43).toFixed(2);
-    return '<circle class="ra-earth-packet provider-'+bank.provider+'" data-provider="'+bank.provider+'" r="2.25"><animateMotion path="'+d+'" dur="'+dur+'s" begin="'+begin+'s" repeatCount="indefinite"></animateMotion></circle>';
+    return '<circle class="ra-earth-packet provider-'+bank.provider+'" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" data-duration="'+dur+'" data-phase="'+begin+'" r="2.25"></circle>';
   }).join('');
 
   const bankNodes=banks.map(function(bank){
@@ -143,9 +143,7 @@ function buildSvg(mode){
     const dur=(5.8+(index%4)*.8).toFixed(2);
     const begin=(-index*.31).toFixed(2);
     return '<path class="ra-request-flow" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" d="'+d+'"></path>'+
-      '<circle class="ra-request-packet" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" r="2">'+
-        '<animateMotion path="'+d+'" dur="'+dur+'s" begin="'+begin+'s" repeatCount="indefinite"></animateMotion>'+
-      '</circle>';
+      '<circle class="ra-request-packet" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" data-duration="'+dur+'" data-phase="'+begin+'" r="2"></circle>';
   }).join('');
 
   const recoveryPaths=banks.map(function(bank,index){
@@ -154,9 +152,7 @@ function buildSvg(mode){
     const dur=(6.6+(index%4)*.9).toFixed(2);
     const begin=(-index*.36).toFixed(2);
     return '<path class="ra-recovery-flow" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" d="'+d+'"></path>'+
-      '<circle class="ra-recovery-packet" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" r="2.1">'+
-        '<animateMotion path="'+d+'" dur="'+dur+'s" begin="'+begin+'s" repeatCount="indefinite"></animateMotion>'+
-      '</circle>';
+      '<circle class="ra-recovery-packet" data-bank="'+bank.id+'" data-provider="'+bank.provider+'" data-duration="'+dur+'" data-phase="'+begin+'" r="2.1"></circle>';
   }).join('');
 
   const lands=LAND_PATHS.map(function(d){ return '<path d="'+d+'"></path>'; }).join('');
@@ -265,6 +261,98 @@ export function createEarthSystem(mount,options){
   const gapLabel=mount.querySelector('[data-earth-gap]');
   const restoredLabel=mount.querySelector('[data-earth-restored]');
   let previousSignature='';
+  let rafId=0;
+  let destroyed=false;
+  const reduceMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)') || null;
+
+  function packetTrack(packet){
+    if(packet.classList.contains('ra-earth-packet')){
+      return svg.querySelector('.ra-earth-link[data-bank="'+packet.dataset.bank+'"]');
+    }
+    if(packet.classList.contains('ra-request-packet')){
+      return svg.querySelector('.ra-request-flow[data-bank="'+packet.dataset.bank+'"]');
+    }
+    return svg.querySelector('.ra-recovery-flow[data-bank="'+packet.dataset.bank+'"]');
+  }
+
+  const packetMotion=[...svg.querySelectorAll('.ra-earth-packet,.ra-request-packet,.ra-recovery-packet')]
+    .map(function(packet,index){
+      const path=packetTrack(packet);
+      if(!path || typeof path.getTotalLength!=='function') return null;
+      let length=0;
+      try{ length=path.getTotalLength(); }catch(error){ length=0; }
+      return {
+        packet:packet,
+        path:path,
+        length:length,
+        duration:Math.max(.8,Number(packet.dataset.duration)||8),
+        phase:Number(packet.dataset.phase)||(-index*.27)
+      };
+    })
+    .filter(Boolean);
+
+  function packetIsActive(node){
+    if(node.classList.contains('is-hidden')) return false;
+    if(node.classList.contains('ra-request-packet') || node.classList.contains('ra-recovery-packet')){
+      return node.classList.contains('is-visible');
+    }
+    return true;
+  }
+
+  function refreshPacketGeometry(){
+    if(!mount.isConnected || mount.getClientRects().length===0) return false;
+    packetMotion.forEach(function(item){
+      try{
+        const next=item.path.getTotalLength();
+        if(Number.isFinite(next) && next>0) item.length=next;
+      }catch(error){}
+    });
+    return packetMotion.some(function(item){ return item.length>0; });
+  }
+
+  function animatePackets(timestamp){
+    if(destroyed) return;
+    if(!mount.isConnected){
+      rafId=window.requestAnimationFrame(animatePackets);
+      return;
+    }
+
+    const visible=mount.getClientRects().length>0;
+    if(!visible){
+      rafId=window.requestAnimationFrame(animatePackets);
+      return;
+    }
+
+    if(packetMotion.some(function(item){ return item.length<=0; })) refreshPacketGeometry();
+
+    const reduced=!!reduceMotion?.matches;
+    const time=timestamp/1000;
+
+    packetMotion.forEach(function(item,index){
+      const node=item.packet;
+      if(!packetIsActive(node) || item.length<=0){
+        node.setAttribute('visibility','hidden');
+        return;
+      }
+
+      node.setAttribute('visibility','visible');
+      const speedFactor=reduced ? .42 : 1;
+      const phase=(time*speedFactor+item.phase)/item.duration;
+      const progress=((phase%1)+1)%1;
+      let point;
+      try{ point=item.path.getPointAtLength(item.length*progress); }catch(error){ return; }
+      node.setAttribute('cx',point.x.toFixed(2));
+      node.setAttribute('cy',point.y.toFixed(2));
+
+      /* Essential motion remains visible under Reduce Motion, but fewer
+         packets move and the motion is substantially slower. */
+      if(reduced && index%2===1) node.setAttribute('visibility','hidden');
+    });
+
+    rafId=window.requestAnimationFrame(animatePackets);
+  }
+
+  rafId=window.requestAnimationFrame(animatePackets);
 
   function update(input){
     input=input||{};
@@ -399,9 +487,12 @@ export function createEarthSystem(mount,options){
     mount.classList.toggle('has-recovery',(effectiveScene>=4 || (mode==='lab' && visualStrategy==='scfr')) && mode!=='evidence');
     mount.dataset.labStrategy=visualStrategy;
     mount.dataset.labPhase=labPhase||'';
+    refreshPacketGeometry();
   }
 
   function destroy(){
+    destroyed=true;
+    if(rafId) window.cancelAnimationFrame(rafId);
     mount.innerHTML='';
     mount.classList.remove('ra-earth-system');
   }

@@ -609,29 +609,68 @@ function maleVoiceScore(voice){
   return score;
 }
 
-function chooseNarrator(){
-  const ranked=englishVoices()
+function rankedMaleVoices(){
+  return englishVoices()
     .map(voice=>({voice,score:maleVoiceScore(voice)}))
     .filter(item=>item.score>0)
     .sort((a,b)=>b.score-a.score);
+}
 
+function chooseNarrator(){
+  const ranked=rankedMaleVoices();
+  const preferred=localStorage.getItem('resilience-atlas-narrator') || '';
+  if(preferred){
+    const match=ranked.find(item=>item.voice.voiceURI===preferred || item.voice.name===preferred);
+    if(match) return match.voice;
+  }
   return ranked[0]?.voice || null;
 }
 
-function waitForNarrator(timeoutMs=650){
+function populateNarratorSelect(){
+  const select=$('#raVoiceSelect');
+  if(!select) return;
+
+  const current=localStorage.getItem('resilience-atlas-narrator') || '';
+  const ranked=rankedMaleVoices();
+
+  select.innerHTML='<option value="">Auto — best available male voice</option>';
+  ranked.forEach(({voice,score})=>{
+    const option=document.createElement('option');
+    option.value=voice.voiceURI || voice.name;
+    option.textContent=voice.name+(score>=350 ? ' · high quality' : '');
+    select.appendChild(option);
+  });
+
+  select.value=ranked.some(item=>(item.voice.voiceURI||item.voice.name)===current) ? current : '';
+}
+
+function waitForNarrator(timeoutMs=900){
+  const preferred=localStorage.getItem('resilience-atlas-narrator') || '';
   const immediate=chooseNarrator();
-  if(immediate) return Promise.resolve(immediate);
-  if(!('speechSynthesis' in window)) return Promise.resolve(null);
+
+  if(preferred && immediate) return Promise.resolve(immediate);
+  if(immediate && maleVoiceScore(immediate)>=350) return Promise.resolve(immediate);
+  if(!('speechSynthesis' in window)) return Promise.resolve(immediate || null);
 
   return new Promise(resolve=>{
     let settled=false;
     const finish=()=>{
       if(settled) return;
       settled=true;
-      window.speechSynthesis.removeEventListener?.('voiceschanged',finish);
-      resolve(chooseNarrator());
+      window.speechSynthesis.removeEventListener?.('voiceschanged',onVoices);
+      resolve(chooseNarrator() || immediate || null);
     };
-    window.speechSynthesis.addEventListener?.('voiceschanged',finish,{once:true});
+    const onVoices=()=>{
+      const candidate=chooseNarrator();
+      if(candidate && maleVoiceScore(candidate)>=350){
+        if(settled) return;
+        settled=true;
+        window.speechSynthesis.removeEventListener?.('voiceschanged',onVoices);
+        resolve(candidate);
+      }
+    };
+
+    window.speechSynthesis.addEventListener?.('voiceschanged',onVoices);
     window.setTimeout(finish,timeoutMs);
   });
 }
@@ -760,6 +799,43 @@ async function speakCurrentScene(story,runId){
 
   hud.classList.remove('is-speaking');
   return completed && runId===guided.runId;
+}
+
+function setupNarratorControls(){
+  populateNarratorSelect();
+
+  $('#raVoiceSelect')?.addEventListener('change',event=>{
+    const value=event.target.value;
+    if(value) localStorage.setItem('resilience-atlas-narrator',value);
+    else localStorage.removeItem('resilience-atlas-narrator');
+    guided.voice=chooseNarrator();
+    updateNarrationControl();
+  });
+
+  $('#raVoiceTest')?.addEventListener('click',async()=>{
+    if(!('speechSynthesis' in window)) return;
+    if(guided.active) stopGuidedSimulation();
+
+    window.speechSynthesis.cancel();
+    guided.voice=await waitForNarrator();
+    updateNarrationControl();
+    if(!guided.voice){
+      $('#raGuidedStatus').textContent='VOICE UNAVAILABLE';
+      return;
+    }
+
+    const profile=narrationProfile(guided.voice,.82);
+    $('#raGuidedStatus').textContent='VOICE TEST';
+    $('#raGuidedHud').classList.add('is-speaking');
+    await speakChunk(
+      'In this simulation, we see how banks depend on shared cloud providers.',
+      guided.voice,
+      profile,
+      guided.runId
+    );
+    $('#raGuidedHud').classList.remove('is-speaking');
+    $('#raGuidedStatus').textContent='READY';
+  });
 }
 
 function setGuidedActive(active){
@@ -1237,12 +1313,14 @@ function setupLab(){
 if('speechSynthesis' in window){
   window.speechSynthesis.addEventListener?.('voiceschanged',()=>{
     guided.voice=chooseNarrator();
+    populateNarratorSelect();
     updateNarrationControl();
   });
 }
 
 setupTabs();
 setupTheme();
+setupNarratorControls();
 setupScenes();
 setupLab();
 setupMobileLab();
