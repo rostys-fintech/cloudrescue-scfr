@@ -8187,3 +8187,330 @@ html[data-theme="crisis"] .hero-auto:hover{
 .concept-metrics small{
   overflow-wrap:anywhere;
 }
+
+
+/* =========================================================
+   NARRATED COMMAND MODE — voice-guided simulation redesign
+   ========================================================= */
+
+body.demo-playing .narration-command{
+  position:absolute!important;
+  left:18px!important;
+  right:18px!important;
+  bottom:16px!important;
+  z-index:40!important;
+  width:auto!important;
+  height:auto!important;
+  min-height:92px!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+  clip:auto!important;
+  white-space:normal!important;
+  border:1px solid var(--v2-line-strong)!important;
+  background:
+    linear-gradient(90deg,color-mix(in srgb,var(--v2-primary) 10%,transparent),transparent 22%),
+    color-mix(in srgb,var(--v2-surface) 93%,transparent)!important;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb,var(--v2-primary) 10%,transparent),
+    0 14px 40px rgba(0,0,0,.34),
+    0 0 26px color-mix(in srgb,var(--v2-primary) 11%,transparent)!important;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)!important;
+}
+
+body.demo-playing .narration-command:before{
+  content:"";
+  position:absolute;
+  top:-1px;
+  left:16px;
+  width:92px;
+  height:2px;
+  background:var(--v2-primary);
+  box-shadow:0 0 14px var(--v2-primary);
+}
+
+.narration-status{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:8px;
+  min-height:26px;
+  padding:6px 12px 5px;
+  border-bottom:1px solid var(--v2-line);
+}
+.narration-status>span:nth-child(2){
+  color:var(--v2-primary)!important;
+  font-size:8px!important;
+  font-weight:900;
+  letter-spacing:.13em;
+}
+.narration-status>b{
+  color:var(--v2-muted);
+  font-size:8px;
+  letter-spacing:.08em;
+}
+.narration-live-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--v2-primary);
+  box-shadow:0 0 9px var(--v2-primary);
+  opacity:.55;
+}
+.narration-command.speaking .narration-live-dot{
+  animation:narrationLivePulse 1s ease-in-out infinite;
+}
+
+.narration-command-body{
+  display:grid;
+  grid-template-columns:86px minmax(0,1fr) 68px;
+  align-items:center;
+  gap:14px;
+  min-height:58px;
+  padding:8px 12px 10px;
+}
+.narration-wave{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  height:32px;
+  padding-right:12px;
+  border-right:1px solid var(--v2-line);
+}
+.narration-wave i{
+  display:block;
+  width:3px;
+  height:8px;
+  background:color-mix(in srgb,var(--v2-primary) 55%,var(--v2-muted));
+  box-shadow:0 0 6px color-mix(in srgb,var(--v2-primary) 26%,transparent);
+  transform-origin:center;
+}
+.narration-command.speaking .narration-wave i{
+  animation:narrationWave 820ms ease-in-out infinite alternate;
+}
+.narration-command.speaking .narration-wave i:nth-child(2){animation-delay:-.1s}
+.narration-command.speaking .narration-wave i:nth-child(3){animation-delay:-.24s}
+.narration-command.speaking .narration-wave i:nth-child(4){animation-delay:-.38s}
+.narration-command.speaking .narration-wave i:nth-child(5){animation-delay:-.19s}
+.narration-command.speaking .narration-wave i:nth-child(6){animation-delay:-.31s}
+.narration-command.speaking .narration-wave i:nth-child(7){animation-delay:-.08s}
+.narration-command.speaking .narration-wave i:nth-child(8){animation-delay:-.27s}
+
+.narration-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.narration-copy>span{
+  color:var(--v2-primary)!important;
+  font-size:8px!important;
+  font-weight:900;
+  letter-spacing:.11em;
+}
+.narration-copy>strong{
+  color:var(--v2-ink)!important;
+  font-size:13px!important;
+  line-height:1.35;
+  font-weight:720;
+  letter-spacing:-.01em;
+}
+
+.narration-globe{
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:56px;
+  height:56px;
+  color:var(--v2-primary);
+}
+.narration-globe svg{
+  width:54px;
+  height:54px;
+  overflow:visible;
+  filter:drop-shadow(0 0 8px color-mix(in srgb,var(--v2-primary) 28%,transparent));
+}
+.narration-globe svg circle,
+.narration-globe svg ellipse,
+.narration-globe svg path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.4;
+  opacity:.46;
+}
+.narration-globe .ng-route{
+  stroke-width:1.9;
+  stroke-dasharray:5 5;
+  opacity:.9;
+}
+.narration-globe .ng-route-a{stroke:#168cff}
+.narration-globe .ng-route-b{stroke:#24d9a4}
+.ng-node{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--v2-primary);
+  box-shadow:0 0 8px var(--v2-primary);
+}
+.node-a{left:15px;top:24px;background:#168cff;box-shadow:0 0 8px #168cff}
+.node-b{right:13px;top:19px;background:#ff8a3d;box-shadow:0 0 8px #ff8a3d}
+.node-c{right:8px;bottom:12px;background:#24d9a4;box-shadow:0 0 8px #24d9a4}
+
+.narration-command.speaking .narration-globe svg{
+  animation:narrationGlobeDrift 5.2s linear infinite;
+}
+.narration-command[data-scene="2"] .narration-globe{
+  color:var(--v2-danger);
+}
+.narration-command[data-scene="2"] .narration-globe:after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:1px solid var(--v2-danger);
+  border-radius:50%;
+  animation:narrationShock 1.3s ease-out infinite;
+}
+.narration-command[data-scene="3"] .narration-globe{
+  color:var(--v2-warning);
+}
+.narration-command[data-scene="4"] .narration-globe{
+  color:#ff9c47;
+}
+.narration-command[data-scene="5"] .narration-globe{
+  color:var(--v2-success);
+}
+.narration-command[data-scene="6"] .narration-globe{
+  color:#54d9ff;
+}
+
+.narration-progress{
+  position:absolute;
+  left:12px;
+  right:12px;
+  bottom:0;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:3px;
+  height:2px;
+}
+.narration-progress i{
+  background:color-mix(in srgb,var(--v2-line-strong) 65%,transparent);
+}
+.narration-progress i.done{
+  background:color-mix(in srgb,var(--v2-primary) 54%,var(--v2-line-strong));
+}
+.narration-progress i.active{
+  background:var(--v2-primary);
+  box-shadow:0 0 8px var(--v2-primary);
+}
+
+/* When voice-guided mode is running, replace old explanatory overlays with one coherent HUD. */
+body.demo-playing .impact-overlay{
+  opacity:0!important;
+  pointer-events:none!important;
+  transform:translateY(6px);
+}
+body.demo-playing .stage-hud{
+  position:relative!important;
+  z-index:30!important;
+  opacity:.72;
+}
+body.demo-playing .stage{
+  padding-bottom:118px!important;
+}
+body.demo-playing .narrative{
+  border-color:color-mix(in srgb,var(--v2-primary) 35%,var(--v2-line))!important;
+}
+body.demo-playing .narrative .scene-label{
+  color:var(--v2-primary)!important;
+}
+body.demo-playing .demo-progress{
+  opacity:.18;
+}
+
+/* Narration modes visually explain the same Earth-centric system. */
+body.demo-playing .stage.scene-2{
+  box-shadow:inset 0 0 70px rgba(255,20,53,.07);
+}
+body.demo-playing .stage.scene-3{
+  box-shadow:inset 0 0 65px rgba(255,156,71,.055);
+}
+body.demo-playing .stage.scene-4{
+  box-shadow:inset 0 0 65px rgba(255,156,71,.06);
+}
+body.demo-playing .stage.scene-5{
+  box-shadow:inset 0 0 72px rgba(36,217,164,.06);
+}
+body.demo-playing .stage.scene-6{
+  box-shadow:inset 0 0 72px rgba(84,217,255,.055);
+}
+
+@keyframes narrationWave{
+  from{height:7px;opacity:.55}
+  to{height:28px;opacity:1}
+}
+@keyframes narrationLivePulse{
+  50%{opacity:1;transform:scale(1.25)}
+}
+@keyframes narrationGlobeDrift{
+  to{transform:rotate(360deg)}
+}
+@keyframes narrationShock{
+  0%{opacity:.85;transform:scale(.7)}
+  100%{opacity:0;transform:scale(1.35)}
+}
+
+/* Analysis theme gets the same structure, lighter treatment. */
+html[data-theme="analysis"] body.demo-playing .narration-command{
+  background:
+    linear-gradient(90deg,rgba(8,104,255,.08),transparent 22%),
+    rgba(255,255,255,.94)!important;
+  box-shadow:0 12px 34px rgba(25,76,140,.13)!important;
+}
+
+/* Phone: voice HUD becomes a compact bottom command strip. */
+@media(max-width:900px){
+  body.demo-playing .narration-command{
+    left:8px!important;
+    right:8px!important;
+    bottom:8px!important;
+    min-height:86px!important;
+  }
+  .narration-command-body{
+    grid-template-columns:44px minmax(0,1fr);
+    gap:9px;
+    padding:7px 9px 10px;
+  }
+  .narration-wave{
+    gap:2px;
+    padding-right:7px;
+  }
+  .narration-wave i{
+    width:2px;
+  }
+  .narration-globe{
+    display:none;
+  }
+  .narration-copy>strong{
+    font-size:11.5px!important;
+  }
+  .narration-status{
+    padding-inline:9px;
+  }
+  body.demo-playing .stage{
+    padding-bottom:108px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .narration-command.speaking .narration-live-dot,
+  .narration-command.speaking .narration-wave i,
+  .narration-command.speaking .narration-globe svg,
+  .narration-command[data-scene="2"] .narration-globe:after{
+    animation:none!important;
+  }
+}

@@ -200,6 +200,7 @@ function speakScene(runId=demoRunId){
   const current=storyPresentation(c,storyArgs);
 
   if(!narrationEnabled || !('speechSynthesis' in window)){
+    $('#storyCaption')?.classList.remove('speaking');
     return new Promise(resolve=>{
       const id=setTimeout(()=>resolve({spoken:false}),current.visualDuration || 5600);
       sceneTimers.push(id);
@@ -210,6 +211,8 @@ function speakScene(runId=demoRunId){
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(current.voice);
+    const narrationHud = $('#storyCaption');
+    narrationHud?.classList.add('speaking');
     const voice = getEnglishVoice();
     if(voice) utterance.voice = voice;
     utterance.lang = voice?.lang || 'en-GB';
@@ -221,6 +224,7 @@ function speakScene(runId=demoRunId){
     const finish=(reason)=>{
       if(settled) return;
       settled=true;
+      $('#storyCaption')?.classList.remove('speaking');
       resolve({spoken:true,reason,runId});
     };
 
@@ -270,6 +274,7 @@ function setNarration(enabled){
     btn.textContent = enabled ? 'Narration' : 'Narration off';
   }
   if(!enabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+  if(!enabled) $('#storyCaption')?.classList.remove('speaking');
 }
 
 function animateCounter(el,from,to,duration=650){
@@ -697,6 +702,16 @@ function applyScene(){
   $('#sceneStat').textContent = s.stat;
   $('#captionKicker').textContent = s.kicker;
   $('#captionText').textContent = s.caption;
+  const narrationScene = $('#narrationScene');
+  if(narrationScene) narrationScene.textContent = `${String(scene+1).padStart(2,'0')} / 06`;
+  const narrationHud = $('#storyCaption');
+  if(narrationHud){
+    narrationHud.dataset.scene = String(scene+1);
+    narrationHud.querySelectorAll('.narration-progress i').forEach((el,i)=>{
+      el.classList.toggle('done',i<scene);
+      el.classList.toggle('active',i===scene);
+    });
+  }
   $('#stage').className = `stage scene-${scene+1}`;
   $('#stage').dataset.outage = storyArgs.outageProvider;
 
@@ -769,6 +784,7 @@ function stopAuto(){
   if(autoplay && typeof autoplay==='number') clearTimeout(autoplay);
   autoplay=null;
   document.body.classList.remove('demo-playing');
+  $('#storyCaption')?.classList.remove('speaking');
   clearSceneMotion();
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
   $('#autoScene').textContent='▶ Auto-Simulation';
