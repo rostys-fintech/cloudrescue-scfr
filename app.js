@@ -74,6 +74,8 @@ let demoRunId = 0;
 let storyArgs = {...defaults};
 let storyFromLab = false;
 let sensitivityMode = 'scfr';
+let activeChallenge = 'efficiency';
+let activeSeed = '';
 
 function setupTheme(){
   const button = $('#themeToggle');
@@ -969,6 +971,189 @@ function applyPreset(name){
   renderLab();
 }
 
+
+const CHALLENGES = {
+  efficiency:{
+    title:'Reach ≥80 resilience with ≤30% reserve.',
+    hint:'Can coordination deliver strong recovery without a large reserve budget?'
+  },
+  scarcity:{
+    title:'Survive severe scarcity with ≥80 resilience.',
+    hint:'Keep emergency market capacity at 10% or less and reserve at 35% or less.'
+  },
+  coordination:{
+    title:'Create a clear coordination advantage.',
+    hint:'Target ≥45 resilience points of uplift and ≥250 units of stranded-capacity reduction.'
+  }
+};
+
+function hashString(value=''){
+  let h=2166136261;
+  for(let i=0;i<value.length;i++){
+    h^=value.charCodeAt(i);
+    h=Math.imul(h,16777619);
+  }
+  return h>>>0;
+}
+
+function seededRandom(seed){
+  let a=hashString(seed) || 1;
+  return ()=>{
+    a+=0x6D2B79F5;
+    let t=a;
+    t=Math.imul(t^t>>>15,t|1);
+    t^=t+Math.imul(t^t>>>7,t|61);
+    return ((t^t>>>14)>>>0)/4294967296;
+  };
+}
+
+function scenarioFromSeed(seed){
+  const rng=seededRandom(seed);
+  const providerIds=providers.map(p=>p.id);
+  const markets=[0,5,10,15,20,25,30,35,40];
+  const reserves=[10,15,20,25,30,35,40];
+  const rules=['systemic','equal','readiness'];
+  return {
+    outageProvider:providerIds[Math.floor(rng()*providerIds.length)],
+    marketPct:markets[Math.floor(rng()*markets.length)],
+    reservePct:reserves[Math.floor(rng()*reserves.length)],
+    allocationRule:rules[Math.floor(rng()*rules.length)]
+  };
+}
+
+function scenarioIdFromArgs(args){
+  const raw=[args.outageProvider,args.marketPct,args.reservePct,args.allocationRule].join('|');
+  return 'CR-'+hashString(raw).toString(36).toUpperCase().padStart(6,'0').slice(-6);
+}
+
+function applyArgsToControls(args){
+  $('#providerSelect').value=args.outageProvider;
+  $('#marketPct').value=args.marketPct;
+  $('#reservePct').value=args.reservePct;
+  $('#ruleSelect').value=args.allocationRule;
+  $('.preset').forEach(b=>b.classList.remove('active'));
+}
+
+function generateScenario(){
+  let seed=$('#seedInput').value.trim();
+  if(!seed){
+    seed=(Date.now().toString(36)+Math.floor(performance.now()).toString(36)).slice(-10).toUpperCase();
+    $('#seedInput').value=seed;
+  }
+  activeSeed=seed;
+  applyArgsToControls(scenarioFromSeed(seed));
+  renderLab();
+}
+
+function scenarioShareURL(args){
+  const url=new URL(window.location.href);
+  url.search='';
+  url.hash='';
+  url.searchParams.set('p',args.outageProvider);
+  url.searchParams.set('m',String(args.marketPct));
+  url.searchParams.set('r',String(args.reservePct));
+  url.searchParams.set('a',args.allocationRule);
+  if(activeSeed) url.searchParams.set('seed',activeSeed);
+  url.searchParams.set('view','lab');
+  return url.toString();
+}
+
+async function shareScenario(){
+  const url=scenarioShareURL(currentArgs());
+  const btn=$('#shareScenarioBtn');
+  try{
+    await navigator.clipboard.writeText(url);
+    btn.textContent='✓ Scenario link copied';
+  }catch(e){
+    const area=document.createElement('textarea');
+    area.value=url;
+    area.setAttribute('readonly','');
+    area.style.position='fixed';
+    area.style.opacity='0';
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+    btn.textContent='✓ Scenario link copied';
+  }
+  setTimeout(()=>{btn.textContent='⧉ Copy scenario link'},1500);
+}
+
+function loadScenarioFromURL(){
+  const q=new URLSearchParams(window.location.search);
+  const provider=q.get('p');
+  const market=Number(q.get('m'));
+  const reserve=Number(q.get('r'));
+  const rule=q.get('a');
+  const validProvider=providers.some(p=>p.id===provider);
+  const validRule=['systemic','equal','readiness'].includes(rule);
+  if(!validProvider || !Number.isFinite(market) || !Number.isFinite(reserve) || !validRule) return false;
+
+  const args={
+    outageProvider:provider,
+    marketPct:Math.max(0,Math.min(50,Math.round(market/5)*5)),
+    reservePct:Math.max(0,Math.min(60,Math.round(reserve/5)*5)),
+    allocationRule:rule
+  };
+  activeSeed=(q.get('seed')||'').slice(0,24);
+  $('#seedInput').value=activeSeed;
+  applyArgsToControls(args);
+  return q.get('view')==='lab';
+}
+
+function updateScenarioIdentity(args){
+  $('#scenarioId').textContent=scenarioIdFromArgs(args);
+}
+
+function challengeEvaluation(c,args){
+  const uplift=c.scfr.resilience-c.individual.resilience;
+  const strandedReduction=c.individual.strandedReserve-c.scfr.strandedReserve;
+
+  if(activeChallenge==='scarcity'){
+    return {
+      success:args.marketPct<=10 && args.reservePct<=35 && c.scfr.resilience>=80,
+      metrics:[
+        ['Market scarcity',args.marketPct+'%','≤10%',args.marketPct<=10],
+        ['Reserve budget',args.reservePct+'%','≤35%',args.reservePct<=35],
+        ['SCFR resilience',Math.round(c.scfr.resilience),'≥80',c.scfr.resilience>=80]
+      ]
+    };
+  }
+
+  if(activeChallenge==='coordination'){
+    return {
+      success:uplift>=45 && strandedReduction>=250 && args.reservePct<=35,
+      metrics:[
+        ['Resilience uplift','+'+uplift.toFixed(1),'≥45',uplift>=45],
+        ['Capacity unstranded',num(Math.max(0,strandedReduction)),'≥250',strandedReduction>=250],
+        ['Reserve budget',args.reservePct+'%','≤35%',args.reservePct<=35]
+      ]
+    };
+  }
+
+  return {
+    success:c.scfr.resilience>=80 && args.reservePct<=30,
+    metrics:[
+      ['SCFR resilience',Math.round(c.scfr.resilience),'≥80',c.scfr.resilience>=80],
+      ['Reserve budget',args.reservePct+'%','≤30%',args.reservePct<=30]
+    ]
+  };
+}
+
+function renderChallenge(c,args){
+  const def=CHALLENGES[activeChallenge];
+  const result=challengeEvaluation(c,args);
+  $('#challenge').classList.toggle('success',result.success);
+  $('#challengeTitle').textContent=def.title;
+  $('#challengeText').textContent=result.success ? 'Mission complete. Try another challenge or share this scenario.' : def.hint;
+  $('#challengeMetrics').innerHTML=result.metrics.map(([label,value,target,ok])=>`
+    <div class="${ok?'ok':''}">
+      <span>${label}</span>
+      <b>${value}</b>
+      <small>${target}</small>
+    </div>`).join('');
+}
+
 function currentArgs(){
   return {
     outageProvider:$('#providerSelect').value,
@@ -1156,20 +1341,29 @@ function renderLab(){
   renderBeforeAfter(c,args);
   renderSensitivity(args);
 
-  const success = c.scfr.resilience>=80 && args.reservePct<=30;
-  $('#challenge').classList.toggle('success',success);
-  $('#challengeText').textContent = success
-    ? `Target achieved: ${Math.round(c.scfr.resilience)} resilience with ${args.reservePct}% reserve.`
-    : `Current result: ${Math.round(c.scfr.resilience)} resilience with ${args.reservePct}% reserve.`;
+  updateScenarioIdentity(args);
+  renderChallenge(c,args);
 }
 
 ['providerSelect','marketPct','reservePct','ruleSelect'].forEach(id=>{
-  $('#'+id).addEventListener('input',renderLab);
+  $('#'+id).addEventListener('input',()=>{
+    activeSeed='';
+    $('#seedInput').value='';
+    renderLab();
+  });
 });
 $$('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.dataset.preset)));
 $('#runBtn').addEventListener('click',renderLab);
 $('#exportBtn').addEventListener('click',exportScenario);
 $('#replayScenarioBtn').addEventListener('click',replayCurrentScenario);
+$('#generateScenarioBtn').addEventListener('click',generateScenario);
+$('#shareScenarioBtn').addEventListener('click',shareScenario);
+$('#seedInput').addEventListener('keydown',e=>{if(e.key==='Enter') generateScenario();});
+$('.challenge-tab').forEach(btn=>btn.addEventListener('click',()=>{
+  activeChallenge=btn.dataset.challenge;
+  $('.challenge-tab').forEach(b=>b.classList.toggle('active',b===btn));
+  renderLab();
+}));
 $$('.sensitivity-mode').forEach(btn=>btn.addEventListener('click',()=>{
   sensitivityMode=btn.dataset.mode;
   $$('.sensitivity-mode').forEach(b=>b.classList.toggle('active',b===btn));
@@ -1184,7 +1378,9 @@ if('speechSynthesis' in window){
   window.speechSynthesis.onvoiceschanged = populateNarratorVoices;
 }
 setupStory();
+const openSharedLab=loadScenarioFromURL();
 renderLab();
+if(openSharedLab) switchTab('lab');
 requestAnimationFrame(drawNetworkLines);
 let resizeTimer;
 window.addEventListener('resize',()=>{
