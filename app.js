@@ -106,6 +106,17 @@ function applyScene(){
 
   const c = compareStrategies(defaults);
   const affected = c.market.rows;
+  const storyStatus = [
+    'Normal operations',
+    'Shared provider outage',
+    'Emergency capacity scramble',
+    'Ring-fenced reserves',
+    'SCFR pooled reserve',
+    'Interactive stress test'
+  ][scene];
+  $('#stageStatus').textContent = storyStatus;
+  $('#hudAffected').textContent = scene === 0 ? '0 / 20' : `${c.market.affectedCount} / 20`;
+  $('#hudGap').textContent = scene < 2 ? '0' : num(Math.max(0, c.market.totalDemand - c.market.allocated));
   $('#flowDemand').textContent = num(c.market.totalDemand);
   $('#flowMarket').textContent = num(c.market.totalDemand * defaults.marketPct / 100);
   $('#flowReserve').textContent = num(c.scfr.totalReserve);
