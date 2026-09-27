@@ -280,7 +280,7 @@ export function createEarthSystem(mount,options){
       const path=packetTrack(packet);
       if(!path || typeof path.getTotalLength!=='function') return null;
       let length=0;
-      try{ length=path.getTotalLength(); }catch(error){ return null; }
+      try{ length=path.getTotalLength(); }catch(error){ length=0; }
       return {
         packet:packet,
         path:path,
@@ -299,14 +299,38 @@ export function createEarthSystem(mount,options){
     return true;
   }
 
+  function refreshPacketGeometry(){
+    if(!mount.isConnected || mount.getClientRects().length===0) return false;
+    packetMotion.forEach(function(item){
+      try{
+        const next=item.path.getTotalLength();
+        if(Number.isFinite(next) && next>0) item.length=next;
+      }catch(error){}
+    });
+    return packetMotion.some(function(item){ return item.length>0; });
+  }
+
   function animatePackets(timestamp){
     if(destroyed) return;
+    if(!mount.isConnected){
+      rafId=window.requestAnimationFrame(animatePackets);
+      return;
+    }
+
+    const visible=mount.getClientRects().length>0;
+    if(!visible){
+      rafId=window.requestAnimationFrame(animatePackets);
+      return;
+    }
+
+    if(packetMotion.some(function(item){ return item.length<=0; })) refreshPacketGeometry();
+
     const reduced=!!reduceMotion?.matches;
     const time=timestamp/1000;
 
     packetMotion.forEach(function(item,index){
       const node=item.packet;
-      if(!packetIsActive(node)){
+      if(!packetIsActive(node) || item.length<=0){
         node.setAttribute('visibility','hidden');
         return;
       }
@@ -463,6 +487,7 @@ export function createEarthSystem(mount,options){
     mount.classList.toggle('has-recovery',(effectiveScene>=4 || (mode==='lab' && visualStrategy==='scfr')) && mode!=='evidence');
     mount.dataset.labStrategy=visualStrategy;
     mount.dataset.labPhase=labPhase||'';
+    refreshPacketGeometry();
   }
 
   function destroy(){
