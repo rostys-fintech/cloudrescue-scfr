@@ -1170,9 +1170,9 @@ $$('.preset').forEach(btn=>btn.addEventListener('click',()=>applyPreset(btn.data
 $('#runBtn').addEventListener('click',renderLab);
 $('#exportBtn').addEventListener('click',exportScenario);
 $('#replayScenarioBtn').addEventListener('click',replayCurrentScenario);
-$('.sensitivity-mode').forEach(btn=>btn.addEventListener('click',()=>{
+$$('.sensitivity-mode').forEach(btn=>btn.addEventListener('click',()=>{
   sensitivityMode=btn.dataset.mode;
-  $('.sensitivity-mode').forEach(b=>b.classList.toggle('active',b===btn));
+  $$('.sensitivity-mode').forEach(b=>b.classList.toggle('active',b===btn));
   renderSensitivity(currentArgs());
 }));
 
