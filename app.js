@@ -871,11 +871,21 @@ function setupStory(){
   updateDemoProgress();
 }
 
+function isMobileView(){
+  return window.matchMedia('(max-width: 900px)').matches;
+}
+
 function switchTab(id){
-  $$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
-  $$('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+  $('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+  $('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
   if(id==='lab') renderLab();
-  window.scrollTo({top:0,behavior:'smooth'});
+
+  if(isMobileView()){
+    const target=document.getElementById(id);
+    requestAnimationFrame(()=>target?.scrollIntoView({behavior:'smooth',block:'start'}));
+  } else {
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 }
 $$('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
 $('#heroDemo').addEventListener('click',()=>{
@@ -883,9 +893,15 @@ $('#heroDemo').addEventListener('click',()=>{
   storyFromLab=false;
   switchTab('story');
   setNarration(true);
-  setFocusMode(true);
+  setFocusMode(!isMobileView());
   scene=0;
   startDemo({reset:false});
+
+  if(isMobileView()){
+    later(()=>{
+      document.querySelector('#story .stage-wrap')?.scrollIntoView({behavior:'smooth',block:'start'});
+    },180);
+  }
 });
 $('#heroLab').addEventListener('click',()=>switchTab('lab'));
 
