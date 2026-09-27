@@ -227,9 +227,17 @@ export function createEarthSystem(mount,options){
     const reservePct=input.reservePct==null ? 25 : input.reservePct;
     const marketPct=input.marketPct==null ? 20 : input.marketPct;
     const labStrategy=input.labStrategy||'market';
+    const labPhase=input.labPhase||null;
+    const phaseScenes={shock:1,demand:2,market:2,individual:3,scfr:4,outcome:5};
     const labScene=labStrategy==='market' ? 2 : labStrategy==='individual' ? 3 : 4;
-    const effectiveScene = mode==='evidence' ? 0 : mode==='lab' ? labScene : scene;
-    const signature=[effectiveScene,outageProviders.join(','),labStrategy,marketPct,reservePct].join('|');
+    const effectiveScene = mode==='evidence' ? 0 : mode==='lab'
+      ? (labPhase && phaseScenes[labPhase] ? phaseScenes[labPhase] : labScene)
+      : scene;
+    const visualStrategy = labPhase==='individual' ? 'individual'
+      : labPhase==='scfr' ? 'scfr'
+      : labPhase==='market' || labPhase==='demand' ? 'market'
+      : labStrategy;
+    const signature=[effectiveScene,outageProviders.join(','),visualStrategy,labPhase||'',marketPct,reservePct].join('|');
 
     if(previousSignature && signature!==previousSignature){
       mount.classList.remove('ra-state-changing');
@@ -248,7 +256,7 @@ export function createEarthSystem(mount,options){
 
     const affectedBanks=banks.filter(function(bank){ return failedProviders.has(bank.provider); });
     const affectedSet=new Set(affectedBanks.map(function(bank){ return bank.id; }));
-    const selectedModel = comparison && (mode==='lab' ? comparison[labStrategy] : comparison.scfr);
+    const selectedModel = comparison && (mode==='lab' ? comparison[visualStrategy] : comparison.scfr);
     const market = comparison && comparison.market;
     const byId=new Map((selectedModel && selectedModel.rows || []).map(function(row){ return [row.id,row]; }));
     const gap=selectedModel ? Math.max(0,selectedModel.totalDemand-selectedModel.allocated) : 0;
@@ -295,10 +303,10 @@ export function createEarthSystem(mount,options){
         if(row) node.classList.add(outcomeClass(row));
       }
       if(effectiveScene>=5 && row) node.classList.add(outcomeClass(row));
-      if(mode==='lab' && row){
-        if(labStrategy==='market') node.classList.add('is-shortage',outcomeClass(row));
-        if(labStrategy==='individual') node.classList.add('is-stranded','show-reserve',outcomeClass(row));
-        if(labStrategy==='scfr') node.classList.add('is-recovering',outcomeClass(row));
+      if(mode==='lab' && row && effectiveScene>=2 && effectiveScene<5){
+        if(visualStrategy==='market') node.classList.add('is-shortage',outcomeClass(row));
+        if(visualStrategy==='individual') node.classList.add('is-stranded','show-reserve',outcomeClass(row));
+        if(visualStrategy==='scfr') node.classList.add('is-recovering',outcomeClass(row));
       }
     });
 
@@ -312,13 +320,13 @@ export function createEarthSystem(mount,options){
     });
 
     svg.querySelectorAll('.ra-recovery-flow').forEach(function(path){
-      const active=affectedSet.has(path.dataset.bank) && (effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence';
+      const active=affectedSet.has(path.dataset.bank) && (effectiveScene>=4 || (mode==='lab' && visualStrategy==='scfr')) && mode!=='evidence';
       path.classList.toggle('is-visible',active);
       const row=byId.get(path.dataset.bank);
       path.style.setProperty('--ra-flow-restored',row ? clamp(row.restoredFraction).toFixed(3) : '0');
     });
     svg.querySelectorAll('.ra-recovery-packet').forEach(function(packet){
-      const active=affectedSet.has(packet.dataset.bank) && (effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence';
+      const active=affectedSet.has(packet.dataset.bank) && (effectiveScene>=4 || (mode==='lab' && visualStrategy==='scfr')) && mode!=='evidence';
       packet.classList.toggle('is-visible',active);
       const row=byId.get(packet.dataset.bank);
       packet.style.setProperty('--ra-flow-restored',row ? clamp(row.restoredFraction).toFixed(3) : '0');
@@ -332,13 +340,14 @@ export function createEarthSystem(mount,options){
 
     const pool=svg.querySelector('.ra-pool-node');
     if(pool){
-      pool.classList.toggle('is-visible',(effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence');
-      pool.classList.toggle('is-active',effectiveScene===4 || (mode==='lab' && labStrategy==='scfr'));
+      pool.classList.toggle('is-visible',(effectiveScene>=4 || (mode==='lab' && visualStrategy==='scfr')) && mode!=='evidence');
+      pool.classList.toggle('is-active',effectiveScene===4 || (mode==='lab' && visualStrategy==='scfr'));
     }
 
     mount.classList.toggle('has-shock',effectiveScene>=1 && effectiveScene<=3 && mode!=='evidence');
-    mount.classList.toggle('has-recovery',(effectiveScene>=4 || (mode==='lab' && labStrategy==='scfr')) && mode!=='evidence');
-    mount.dataset.labStrategy=labStrategy;
+    mount.classList.toggle('has-recovery',(effectiveScene>=4 || (mode==='lab' && visualStrategy==='scfr')) && mode!=='evidence');
+    mount.dataset.labStrategy=visualStrategy;
+    mount.dataset.labPhase=labPhase||'';
   }
 
   function destroy(){
