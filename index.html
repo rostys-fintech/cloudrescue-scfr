@@ -31,11 +31,9 @@
     <div class="brand-lockup">
       <div class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 32 32">
-          <circle cx="7" cy="8" r="2.2"></circle>
-          <circle cx="16" cy="8" r="2.2"></circle>
-          <circle cx="25" cy="8" r="2.2"></circle>
-          <path d="M7 10.5v4.5h9m9-4.5v4.5h-9m0-4.5v12"></path>
-          <rect x="11" y="22" width="10" height="4.5"></rect>
+          <path d="M16 2.8 27 9.2v13.6L16 29.2 5 22.8V9.2Z"></path>
+          <path d="m10.2 12.1 5.8-3.3 5.8 3.3v6.8L16 22.2l-5.8-3.3Z"></path>
+          <path d="M16 8.8v6.6m-5.8-3.3 5.8 3.3 5.8-3.3M16 15.4v6.8"></path>
         </svg>
       </div>
       <div>
@@ -51,6 +49,7 @@
     </nav>
 
     <div class="topbar-meta">
+      <span class="command-gear" aria-hidden="true">⌾</span>
       <button id="themeToggle" class="theme-toggle mode-switch" type="button" aria-label="Switch between Crisis and Analysis themes" aria-pressed="false">
         <span class="mode-name mode-crisis">CRISIS</span>
         <span class="mode-track" aria-hidden="true"><i></i></span>
@@ -179,6 +178,10 @@
           <h2 id="sceneTitle">Shared dependency</h2>
           <p id="sceneText"></p>
           <div id="sceneStat" class="scene-stat"></div>
+          <div class="concept-scene-metrics" aria-hidden="true">
+            <div><span>▥</span><b>20</b><small>synthetic banks</small></div>
+            <div><span>⌘</span><b>3</b><small>cloud providers</small></div>
+          </div>
           <div class="story-actions">
             <button id="autoScene" class="btn primary story-play">▶ Auto-Simulation</button>
             <div class="story-nav" aria-label="Scene navigation">
