@@ -658,7 +658,7 @@ function drawNetworkLines(){
 function comparisonHTML(args=storyArgs){
   const c = compareStrategies(args);
   const rows = [
-    ['Market scramble','UNCOORDINATED',c.market,'Spot capacity only.'],
+    ['Post-shock market sourcing','POST-SHOCK',c.market,'Emergency capacity only.'],
     ['Individual reserves','RING-FENCED',c.individual,'Reserve stays bank-specific.'],
     ['SCFR pooled reserve','COORDINATED',c.scfr,'Same reserve budget, pooled.']
   ];
@@ -1194,7 +1194,7 @@ function renderBeforeAfter(c,args){
     <div class="before-after-head">
       <div>
         <div class="eyebrow">CONTROLLED COMPARISON · SAME SHOCK · SAME RESERVE</div>
-        <h2>What changes when reserve becomes movable?</h2>
+        <h2>Allocation effect under a fixed reserve budget</h2>
       </div>
       <div class="same-budget-proof">
         <span>Total pre-reserved capacity</span>
@@ -1327,7 +1327,7 @@ function renderLab(){
   $('#affectedPill').textContent=`${c.market.affectedCount} / ${banks.length} banks affected`;
 
   const list = [
-    ['Market scramble','UNCOORDINATED',c.market],
+    ['Post-shock market sourcing','POST-SHOCK',c.market],
     ['Individual reserves','RING-FENCED',c.individual],
     ['SCFR pooled reserve','COORDINATED',c.scfr]
   ];
