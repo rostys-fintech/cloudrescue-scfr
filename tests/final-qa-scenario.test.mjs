@@ -2,11 +2,15 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
 const html = fs.readFileSync(new URL('../resilience-atlas.html', import.meta.url), 'utf8');
+const index = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const legacy = fs.readFileSync(new URL('../cloudrescue-legacy.html', import.meta.url), 'utf8');
 const js = fs.readFileSync(new URL('../resilience-atlas.js', import.meta.url), 'utf8');
 const earth = fs.readFileSync(new URL('../earth-system.js', import.meta.url), 'utf8');
 const model = fs.readFileSync(new URL('../model/simulation.js', import.meta.url), 'utf8');
 const css = fs.readFileSync(new URL('../resilience-atlas.css', import.meta.url), 'utf8');
 
+assert.equal(index,html,'default index should be the current Resilience Atlas entrypoint');
+assert.match(legacy,/CloudRescue/);
 assert.equal((html.match(/id="raProviderToggles"/g)||[]).length,1);
 assert.equal((html.match(/type="checkbox"/g)||[]).length,3);
 assert.match(html,/id="raRunScenario"/);
