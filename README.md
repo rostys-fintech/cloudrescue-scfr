@@ -76,6 +76,12 @@ The same total reserve budget is used in the **Individual Reserves** and **SCFR*
 
 See [`research/methodology.md`](research/methodology.md) for detail.
 
+## Evidence base
+
+The real-world motivation is grounded in current BIS, EBA and EU DORA material on third-party ICT concentration and operational resilience. See [`research/evidence-base.md`](research/evidence-base.md).
+
+The evidence base supports studying the problem; it does **not** validate the synthetic v0.1 numerical outputs.
+
 ## Research roadmap
 
 - **v0.1 — FirstCommit MVP:** synthetic scenario engine + animated visual story.
