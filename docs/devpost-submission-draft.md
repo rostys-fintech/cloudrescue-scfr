@@ -72,7 +72,7 @@ Individual Reserves and SCFR receive the **same total reserve budget**.
 
 The prototype therefore does not ask whether “more reserve” improves resilience. It asks whether a different allocation mechanism can use the **same aggregate reserve** more effectively.
 
-The Before / After view makes this constraint visible and shows which part of the result comes from coordination rather than quantity.
+The Controlled Comparison view makes this constraint visible and shows which part of the result comes from coordination rather than quantity.
 
 ## Reproducibility
 CloudRescue is designed so the demo is not just a hard-coded animation.
@@ -106,7 +106,7 @@ Users can switch between:
 
 This makes it easier to see where coordination matters and where it adds little value.
 
-## Challenge Mode
+## Constraint Tests
 To make experimentation more engaging, CloudRescue includes three missions:
 
 - **Efficiency** — reach high resilience while limiting the reserve budget;
