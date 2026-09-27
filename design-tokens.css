@@ -89,28 +89,33 @@
 
 /* Light / Analysis */
 [data-ra-theme="light"] {
-  --ra-canvas: #F5F8FC;
+  --ra-canvas: #F2F6FA;
   --ra-surface: #FFFFFF;
-  --ra-surface-raised: #F0F5FA;
-  --ra-surface-soft: #F8FAFD;
+  --ra-surface-raised: #EDF3F8;
+  --ra-surface-soft: #F7FAFC;
 
-  --ra-text-1: #122033;
-  --ra-text-2: #52647A;
-  --ra-text-3: #7E8FA3;
+  --ra-text-1: #16263A;
+  --ra-text-2: #52677E;
+  --ra-text-3: #7B8EA2;
 
-  --ra-border: #D7E1EC;
-  --ra-border-strong: #BDCAD8;
+  --ra-border: #D6E0E9;
+  --ra-border-strong: #B8C8D7;
 
-  --ra-primary: #1677E8;
-  --ra-accent: #13B89A;
+  /* Analysis theme uses calmer, ink-like functional colors. */
+  --ra-primary: #246FBF;
+  --ra-accent: #168F83;
+  --ra-teal: #168F83;
+  --ra-orange: #C9772E;
+  --ra-green: #269274;
+  --ra-warning: #C58A2D;
+  --ra-critical: #C94A5D;
 
-  --ra-orange: #E88735;
-  --ra-green: #28B889;
-  --ra-warning: #E8A335;
-  --ra-critical: #E5485B;
+  --ra-provider-blue: #327CC4;
+  --ra-provider-orange: #C9772E;
+  --ra-provider-green: #2D9478;
 
-  --ra-shadow-panel: 0 12px 32px rgba(22, 60, 100, .08);
-  --ra-shadow-focus: 0 0 22px rgba(22,119,232,.09);
+  --ra-shadow-panel: 0 8px 24px rgba(39, 72, 105, .07);
+  --ra-shadow-focus: 0 0 0 3px rgba(36,111,191,.08);
 }
 
 /* Semantic state aliases */

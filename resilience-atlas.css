@@ -2094,3 +2094,501 @@ body.ra-guided-running .ra-earth-system[data-earth-mode="simulation"]{
     min-height:auto;
   }
 }
+
+
+/* =========================================================
+   STAGE 7 — LIGHT / ANALYSIS THEME
+   A dedicated analytical presentation, not a dark-theme invert.
+   ========================================================= */
+
+html[data-ra-theme="light"]{
+  color-scheme:light;
+  background:var(--ra-canvas);
+}
+html[data-ra-theme="light"] body{
+  background:
+    linear-gradient(180deg,#f8fbfd 0,#f2f6fa 220px,#f2f6fa 100%);
+  color:var(--ra-text-1);
+}
+
+/* Global shell */
+[data-ra-theme="light"] .ra-header{
+  background:rgba(248,251,253,.94);
+  border-bottom-color:#d9e3eb;
+  box-shadow:0 1px 0 rgba(41,72,102,.025);
+  backdrop-filter:blur(14px);
+}
+[data-ra-theme="light"] .ra-brand-mark{
+  color:var(--ra-primary);
+}
+[data-ra-theme="light"] .ra-brand-copy em{
+  color:var(--ra-primary);
+}
+[data-ra-theme="light"] .ra-brand-copy small{
+  color:#74879a;
+}
+[data-ra-theme="light"] .ra-nav-tab{
+  color:#74879a;
+}
+[data-ra-theme="light"] .ra-nav-tab:hover{
+  color:#314b66;
+}
+[data-ra-theme="light"] .ra-nav-tab.is-active{
+  color:#183754;
+  border-bottom-color:var(--ra-primary);
+}
+[data-ra-theme="light"] .ra-system-label{
+  color:var(--ra-accent);
+}
+[data-ra-theme="light"] .ra-theme-toggle{
+  background:#fff;
+  border-color:#d0dce6;
+  color:#71869a;
+  box-shadow:0 2px 8px rgba(42,76,110,.04);
+}
+[data-ra-theme="light"] .ra-theme-toggle span:last-child{
+  color:var(--ra-primary);
+}
+[data-ra-theme="light"] .ra-theme-toggle i{
+  background:#e9f0f6;
+  box-shadow:inset 0 0 0 1px #c9d7e2;
+}
+[data-ra-theme="light"] .ra-theme-toggle i:after{
+  box-shadow:0 1px 4px rgba(31,86,137,.2);
+}
+
+[data-ra-theme="light"] .ra-rail,
+[data-ra-theme="light"] .ra-controls,
+[data-ra-theme="light"] .ra-canvas-shell,
+[data-ra-theme="light"] .ra-lab-workspace,
+[data-ra-theme="light"] .ra-evidence-map,
+[data-ra-theme="light"] .ra-model-facts,
+[data-ra-theme="light"] .ra-method-block{
+  border-color:#d7e1e9;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(44,75,105,.055);
+}
+[data-ra-theme="light"] .ra-canvas-toolbar,
+[data-ra-theme="light"] .ra-lab-modebar{
+  background:#fbfdfe;
+}
+[data-ra-theme="light"] .ra-status-pills span{
+  background:#f8fbfd;
+}
+[data-ra-theme="light"] .ra-status-pills .stable{
+  color:#177e73;
+  border-color:#bcded8;
+  background:#f0faf8;
+}
+[data-ra-theme="light"] .ra-primary-action{
+  background:#246fbf;
+  color:#fff;
+  box-shadow:0 7px 16px rgba(36,111,191,.14);
+}
+[data-ra-theme="light"] .ra-primary-action:hover{
+  background:#1f65af;
+}
+[data-ra-theme="light"] .ra-quiet-action,
+[data-ra-theme="light"] .ra-reset-action{
+  background:#f8fbfd;
+  border-color:#d2dde6;
+}
+[data-ra-theme="light"] .ra-quiet-action[aria-pressed="true"]{
+  background:#f2f7fc;
+  border-color:#adc8e0;
+}
+[data-ra-theme="light"] .ra-scene-list button{
+  color:#778a9d;
+}
+[data-ra-theme="light"] .ra-scene-list button.is-active{
+  color:#1b3550;
+  background:#f7fafc;
+}
+
+/* Earth becomes a scientific map rather than a luminous object. */
+[data-ra-theme="light"] .ra-earth-system{
+  --ra-earth-ocean-core:#edf7fb;
+  --ra-earth-ocean:#e5f1f7;
+  --ra-earth-rim:#d4e3ed;
+  background:
+    radial-gradient(circle at 50% 47%,rgba(64,132,184,.035),transparent 31%),
+    linear-gradient(rgba(112,145,171,.075) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(112,145,171,.075) 1px,transparent 1px),
+    #f8fbfd!important;
+  background-size:auto,48px 48px,48px 48px!important;
+}
+[data-ra-theme="light"] .ra-earth-atmosphere{
+  stroke:#bfd3e1;
+  filter:none;
+}
+[data-ra-theme="light"] .ra-earth-ocean{
+  stroke:#b7cedd;
+}
+[data-ra-theme="light"] .ra-earth-grid ellipse,
+[data-ra-theme="light"] .ra-earth-grid path{
+  stroke:rgba(79,119,150,.145);
+}
+[data-ra-theme="light"] .ra-earth-land path{
+  fill:#fdfefe;
+  stroke:#a9becd;
+  stroke-width:1;
+}
+[data-ra-theme="light"] .ra-earth-link{
+  opacity:.34;
+  stroke-width:1.2;
+}
+[data-ra-theme="light"] .ra-earth-link.is-focus{
+  opacity:.64;
+  stroke-width:1.5;
+}
+[data-ra-theme="light"] .ra-earth-link.is-disrupted{
+  opacity:.38;
+  stroke:var(--ra-critical);
+  stroke-dasharray:3 7;
+}
+[data-ra-theme="light"] .ra-earth-packet{
+  opacity:.64;
+  filter:none;
+}
+[data-ra-theme="light"] .ra-provider-halo{
+  fill:color-mix(in srgb,var(--provider-color) 5%,transparent);
+  stroke:color-mix(in srgb,var(--provider-color) 34%,transparent);
+}
+[data-ra-theme="light"] .ra-provider-core{
+  filter:none;
+}
+[data-ra-theme="light"] .ra-provider-cloud{
+  fill:#fff;
+  stroke-width:1.45;
+}
+[data-ra-theme="light"] .ra-provider-label{
+  fill:#21384f;
+}
+[data-ra-theme="light"] .ra-provider-sub{
+  fill:#75889a;
+}
+[data-ra-theme="light"] .ra-bank-node{
+  fill:#fff;
+  stroke-width:1.45;
+}
+[data-ra-theme="light"] .ra-bank-label{
+  fill:#6d8194;
+  opacity:.86;
+}
+[data-ra-theme="light"] .ra-bank-halo{
+  fill:color-mix(in srgb,var(--node-color) 4%,transparent);
+}
+[data-ra-theme="light"] .ra-earth-bank.is-affected .ra-bank-node,
+[data-ra-theme="light"] .ra-earth-bank.is-critical .ra-bank-node,
+[data-ra-theme="light"] .ra-earth-bank.is-recovered .ra-bank-node{
+  filter:none;
+}
+[data-ra-theme="light"] .ra-request-flow{
+  stroke-width:1.25;
+}
+[data-ra-theme="light"] .ra-recovery-flow{
+  stroke-width:calc(1.1px + var(--ra-flow-restored,.5) * 1.2px);
+}
+[data-ra-theme="light"] .ra-pool-core{
+  filter:none;
+}
+[data-ra-theme="light"] .ra-pool-ring{
+  stroke-dasharray:2 4;
+}
+[data-ra-theme="light"] .ra-earth-state span,
+[data-ra-theme="light"] .ra-earth-readout span{
+  color:#6f8497;
+}
+[data-ra-theme="light"] .ra-earth-state b{
+  color:#233b53;
+}
+[data-ra-theme="light"] .ra-earth-readout{
+  background:rgba(255,255,255,.94);
+  border-color:#d2dee7;
+  box-shadow:0 4px 14px rgba(44,77,107,.07);
+  backdrop-filter:none;
+}
+[data-ra-theme="light"] .ra-earth-readout b{
+  color:#1f3850;
+}
+[data-ra-theme="light"] .ra-earth-disclaimer{
+  color:#75889b;
+}
+[data-ra-theme="light"] .ra-earth-scale text{
+  fill:#64798d;
+}
+[data-ra-theme="light"] .ra-earth-annotations path{
+  stroke:#9fb3c3;
+}
+[data-ra-theme="light"] .ra-earth-annotations text{
+  fill:#263f57;
+}
+[data-ra-theme="light"] .ra-earth-annotations text.sub{
+  fill:#72879a;
+}
+[data-ra-theme="light"] .ra-earth-system.has-shock{
+  background:
+    radial-gradient(circle at 53% 46%,rgba(201,74,93,.045),transparent 23%),
+    linear-gradient(rgba(112,145,171,.075) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(112,145,171,.075) 1px,transparent 1px),
+    #f8fbfd!important;
+  background-size:auto,48px 48px,48px 48px!important;
+}
+[data-ra-theme="light"] .ra-earth-system.has-recovery{
+  background:
+    radial-gradient(circle at 50% 48%,rgba(22,143,131,.045),transparent 24%),
+    linear-gradient(rgba(112,145,171,.075) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(112,145,171,.075) 1px,transparent 1px),
+    #f8fbfd!important;
+  background-size:auto,48px 48px,48px 48px!important;
+}
+
+/* Guided Simulation: editorial research presentation rather than glass HUD. */
+[data-ra-theme="light"] .ra-story-rail:before{
+  background:linear-gradient(180deg,rgba(36,111,191,.035),transparent 34%);
+}
+[data-ra-theme="light"] .ra-story-stat{
+  border-color:#d8e2ea;
+}
+[data-ra-theme="light"] .ra-guided-hud{
+  background:rgba(255,255,255,.965);
+  border-color:#cfdce6;
+  box-shadow:0 7px 20px rgba(40,73,104,.09);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+[data-ra-theme="light"] .ra-guided-status{
+  background:#f8fbfd;
+}
+[data-ra-theme="light"] .ra-guided-dot{
+  background:#8da0b1;
+  box-shadow:none;
+}
+[data-ra-theme="light"] .ra-waveform{
+  border-right-color:#d7e1e9;
+}
+[data-ra-theme="light"] .ra-waveform i{
+  background:#397ebb;
+}
+[data-ra-theme="light"] .ra-guided-progress i{
+  background:#dbe4eb;
+}
+[data-ra-theme="light"] .ra-guided-progress i.is-done{
+  background:#94badb;
+}
+[data-ra-theme="light"] .ra-guided-progress i.is-active{
+  background:#246fbf;
+  box-shadow:none;
+}
+[data-ra-theme="light"] body.ra-guided-running .ra-guided-hud{
+  background:#fff;
+  border-color:#b8cfe1;
+}
+[data-ra-theme="light"] body.ra-guided-running .ra-guided-dot{
+  background:var(--ra-teal);
+  box-shadow:none;
+}
+[data-ra-theme="light"] body.ra-guided-running .ra-earth-system[data-earth-mode="simulation"]{
+  box-shadow:inset 0 0 0 1px rgba(36,111,191,.03);
+}
+
+/* Scenario Lab: denser analytical controls and clearer model comparison. */
+[data-ra-theme="light"] .ra-control-group{
+  border-top-color:#dce5ec;
+}
+[data-ra-theme="light"] .ra-control-group>header>span{
+  background:#f4f8fb;
+  border-color:#bfd3e3;
+}
+[data-ra-theme="light"] .ra-controls select{
+  background:#fff;
+  border-color:#c8d6e1;
+  color:#20394f;
+}
+[data-ra-theme="light"] .ra-controls input[type="range"]{
+  accent-color:#246fbf;
+}
+[data-ra-theme="light"] .ra-inline-readout{
+  background:#f7fafc;
+  border-color:#d6e1e9;
+}
+[data-ra-theme="light"] .ra-lab-modebar{
+  background:#f8fbfd;
+}
+[data-ra-theme="light"] .ra-strategy-switch{
+  background:#fff;
+  border-color:#cedae4;
+}
+[data-ra-theme="light"] .ra-strategy-switch button{
+  color:#677d91;
+  border-right-color:#d6e1e9;
+}
+[data-ra-theme="light"] .ra-strategy-switch button.is-active{
+  background:#327cc4;
+  color:#fff;
+}
+[data-ra-theme="light"] .ra-strategy-switch button[data-ra-strategy="individual"].is-active{
+  background:#c9772e;
+}
+[data-ra-theme="light"] .ra-strategy-switch button[data-ra-strategy="scfr"].is-active{
+  background:#2d9478;
+}
+[data-ra-theme="light"] .ra-lab-outcomes{
+  background:#fbfdfe;
+}
+[data-ra-theme="light"] .ra-lab-outcomes b{
+  color:#183650;
+}
+[data-ra-theme="light"] .ra-model-compare{
+  background:#f5f8fb;
+}
+[data-ra-theme="light"] .ra-model-card{
+  background:#fff;
+  border-color:#d5e0e8;
+  box-shadow:0 2px 8px rgba(48,78,106,.035);
+}
+[data-ra-theme="light"] .ra-model-card:hover{
+  border-color:#bdcedc;
+  box-shadow:0 5px 14px rgba(48,78,106,.055);
+}
+[data-ra-theme="light"] .ra-model-card.is-active{
+  background:#f2f7fc;
+  border-color:#8fb7d8;
+}
+[data-ra-theme="light"] .ra-model-card[data-ra-compare="individual"].is-active{
+  background:#fcf6ef;
+  border-color:#dcb183;
+}
+[data-ra-theme="light"] .ra-model-card[data-ra-compare="scfr"].is-active{
+  background:#f0f8f6;
+  border-color:#94c6ba;
+}
+[data-ra-theme="light"] .ra-score-track{
+  background:#e1e8ee;
+}
+[data-ra-theme="light"] .ra-mechanism-insight{
+  background:#fff;
+  border-color:#d7e1e9;
+}
+
+/* Model & Evidence: paper-like hierarchy, no dark code cards. */
+[data-ra-theme="light"] .ra-evidence-hero{
+  color:#16263a;
+}
+[data-ra-theme="light"] .ra-boundary-pair article{
+  background:#fff;
+}
+[data-ra-theme="light"] .ra-boundary-pair article:first-child{
+  border-color:#b8dbd3;
+}
+[data-ra-theme="light"] .ra-boundary-pair article:last-child{
+  border-color:#bdd3e5;
+}
+[data-ra-theme="light"] .ra-evidence-map-head,
+[data-ra-theme="light"] .ra-live-model>header{
+  background:#f8fbfd;
+}
+[data-ra-theme="light"] .ra-causal-chain-rich article,
+[data-ra-theme="light"] .ra-equation-grid article,
+[data-ra-theme="light"] .ra-experiment-grid article,
+[data-ra-theme="light"] .ra-source-grid a,
+[data-ra-theme="light"] .ra-repro-grid a,
+[data-ra-theme="light"] .ra-repro-actions{
+  background:#fbfdfe;
+  border-color:#d8e2ea;
+}
+[data-ra-theme="light"] .ra-causal-chain-rich article{
+  box-shadow:inset 0 2px 0 rgba(36,111,191,.08);
+}
+[data-ra-theme="light"] .ra-equation-grid code{
+  background:#f2f6f9;
+  border-color:#d4e0e8;
+  color:#20374d;
+}
+[data-ra-theme="light"] .ra-source-grid a:hover,
+[data-ra-theme="light"] .ra-repro-grid a:hover{
+  background:#f5f9fc;
+  border-color:#b9ccdc;
+}
+[data-ra-theme="light"] .ra-evidence-boundary{
+  background:#fffaf1;
+  border-color:#e7d2a4;
+}
+[data-ra-theme="light"] .ra-evidence-boundary b{
+  color:#9d6a18;
+}
+[data-ra-theme="light"] .ra-limit-grid span{
+  background:#f7fafc;
+  border-color:#d9e3ea;
+}
+[data-ra-theme="light"] .ra-disclosure{
+  background:#f7fafc;
+  border-left-color:#b9c9d6;
+}
+
+/* Semantic colors remain local and readable in Analysis mode. */
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="1"]) .ra-story-kicker,
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="1"]) .ra-guided-copy span{
+  color:#b94558;
+}
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="2"]) .ra-story-kicker,
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="2"]) .ra-guided-copy span,
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="3"]) .ra-story-kicker,
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="3"]) .ra-guided-copy span{
+  color:#a66e19;
+}
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="4"]) .ra-story-kicker,
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="4"]) .ra-guided-copy span,
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="5"]) .ra-story-kicker,
+[data-ra-theme="light"] #simulation:has(#raEarthMount[data-scene="5"]) .ra-guided-copy span{
+  color:#147d72;
+}
+
+/* Theme changes should feel deliberate but never distract. */
+body,
+.ra-header,
+.ra-rail,
+.ra-controls,
+.ra-canvas-shell,
+.ra-lab-workspace,
+.ra-evidence-map,
+.ra-model-facts,
+.ra-method-block,
+.ra-earth-system,
+.ra-guided-hud{
+  transition:
+    background-color var(--ra-duration-base) var(--ra-ease-standard),
+    border-color var(--ra-duration-base) var(--ra-ease-standard),
+    color var(--ra-duration-base) var(--ra-ease-standard),
+    box-shadow var(--ra-duration-base) var(--ra-ease-standard);
+}
+
+@media(max-width:767px){
+  [data-ra-theme="light"] .ra-header{
+    background:#f8fbfd;
+  }
+  [data-ra-theme="light"] .ra-guided-hud{
+    box-shadow:0 4px 12px rgba(40,73,104,.075);
+  }
+  [data-ra-theme="light"] .ra-earth-system{
+    background:
+      radial-gradient(circle at 50% 47%,rgba(64,132,184,.03),transparent 31%),
+      #f8fbfd!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  body,
+  .ra-header,
+  .ra-rail,
+  .ra-controls,
+  .ra-canvas-shell,
+  .ra-lab-workspace,
+  .ra-evidence-map,
+  .ra-model-facts,
+  .ra-method-block,
+  .ra-earth-system,
+  .ra-guided-hud{
+    transition:none!important;
+  }
+}
