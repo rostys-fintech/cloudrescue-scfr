@@ -222,9 +222,9 @@ export function createEarthSystem(mount,options){
     const byId=new Map((model && model.rows || []).map(function(row){ return [row.id,row]; }));
     const gap=market ? Math.max(0,market.totalDemand-market.allocated) : 0;
 
-    affectedLabel.textContent = mode==='evidence' ? '— / '+banks.length : affectedBanks.length+' / '+banks.length;
-    gapLabel.textContent = mode==='evidence' ? '—' : fmt(gap);
-    restoredLabel.textContent = model ? Math.round(model.criticalRestoredPct)+'%' : '—';
+    affectedLabel.textContent = mode==='evidence' ? '— / '+banks.length : effectiveScene===0 && mode==='simulation' ? '0 / '+banks.length : affectedBanks.length+' / '+banks.length;
+    gapLabel.textContent = mode==='evidence' ? '—' : effectiveScene<2 && mode==='simulation' ? '0' : fmt(gap);
+    restoredLabel.textContent = mode==='evidence' ? '—' : (effectiveScene>=4 || mode==='lab') && model ? Math.round(model.criticalRestoredPct)+'%' : '—';
 
     svg.querySelectorAll('.ra-earth-provider').forEach(function(node){
       const id=node.dataset.provider;
