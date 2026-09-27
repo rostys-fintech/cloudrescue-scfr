@@ -1531,3 +1531,251 @@ html[data-theme="dark"] .dots button.active span{
 @media(max-width:720px){
   .dots{grid-template-columns:repeat(3,1fr)}
 }
+
+
+/* Demo directing: one visual idea per scene */
+body.demo-playing .story-layout{
+  grid-template-columns:minmax(260px,.5fr) minmax(880px,1.9fr);
+}
+body.demo-playing .narrative{
+  padding:26px 24px;
+}
+body.demo-playing .narrative h2{
+  font-size:31px;
+  line-height:1.03;
+}
+body.demo-playing .narrative>p{
+  font-size:11.5px;
+  line-height:1.55;
+  max-width:29ch;
+}
+body.demo-playing .scene-stat{
+  font-size:10px;
+  line-height:1.35;
+  padding:11px 12px;
+}
+body.demo-playing .stage{
+  min-height:92vh;
+  overflow:hidden;
+  transform-origin:center center;
+}
+body.demo-playing .stage-hud{
+  z-index:10;
+}
+body.demo-playing .impact-overlay{
+  z-index:14;
+  width:285px;
+}
+body.demo-playing .impact-overlay b{
+  font-size:25px;
+  line-height:1.04;
+}
+body.demo-playing .story-caption{
+  z-index:15;
+  width:min(760px,78%);
+  padding:12px 16px;
+}
+body.demo-playing .story-caption strong{
+  font-size:14px;
+}
+
+/* Shortage / fragmentation / SCFR become the dominant visual, while the network remains context. */
+body.demo-playing .scene-3 .provider-grid,
+body.demo-playing .scene-3 .network-grid,
+body.demo-playing .scene-4 .provider-grid,
+body.demo-playing .scene-4 .network-grid{
+  opacity:.16;
+  filter:saturate(.45);
+}
+body.demo-playing .scene-5 .provider-grid,
+body.demo-playing .scene-5 .network-grid{
+  opacity:.30;
+  filter:saturate(.65);
+}
+body.demo-playing .scene-3 .visual-signal,
+body.demo-playing .scene-4 .visual-signal,
+body.demo-playing .scene-5 .visual-signal{
+  position:absolute;
+  left:50%;
+  top:31%;
+  transform:translateX(-50%);
+  width:min(860px,82%);
+  min-height:0;
+  z-index:9;
+}
+body.demo-playing .scene-4 .visual-signal{top:30%}
+body.demo-playing .scene-5 .visual-signal{top:28%}
+
+body.demo-playing .scene-3 .capacity-story,
+body.demo-playing .scene-4 .reserve-mechanism,
+body.demo-playing .scene-5 .reserve-mechanism{
+  padding:18px 20px;
+  border-radius:14px;
+  box-shadow:0 18px 38px rgba(15,31,51,.11);
+  backdrop-filter:blur(9px);
+}
+body.demo-playing .scene-3 .capacity-story{
+  grid-template-columns:1fr 42px 1.2fr 150px;
+}
+body.demo-playing .scene-3 .request-banks i{
+  width:34px;height:34px;border-radius:8px;
+}
+body.demo-playing .scene-3 .request-banks svg{width:17px;height:17px}
+body.demo-playing .scene-3 .capacity-blocks{gap:5px}
+body.demo-playing .scene-3 .capacity-blocks i{height:48px;border-radius:6px}
+body.demo-playing .scene-3 .capacity-caption b{font-size:15px}
+body.demo-playing .scene-3 .capacity-caption small,
+body.demo-playing .scene-3 .queue-label span{font-size:9px}
+body.demo-playing .scene-3 .queue-label b{font-size:26px}
+
+body.demo-playing .scene-4 .reserve-token,
+body.demo-playing .scene-5 .reserve-token{
+  width:36px;height:36px;border-radius:9px;font-size:11px;
+}
+body.demo-playing .scene-4 .reserve-token-row,
+body.demo-playing .scene-5 .reserve-token-row{
+  gap:7px;
+}
+body.demo-playing .scene-4 .outcome-bank,
+body.demo-playing .scene-5 .outcome-bank{
+  height:46px;
+  border-radius:8px;
+}
+body.demo-playing .scene-4 .reserve-source>span,
+body.demo-playing .scene-4 .reserve-outcome>span,
+body.demo-playing .scene-5 .reserve-source>span,
+body.demo-playing .scene-5 .reserve-outcome>span{
+  font-size:9px;
+}
+body.demo-playing .scene-4 .reserve-source>small,
+body.demo-playing .scene-4 .reserve-outcome>small,
+body.demo-playing .scene-5 .reserve-source>small,
+body.demo-playing .scene-5 .reserve-outcome>small{
+  font-size:9px;
+}
+body.demo-playing .scene-5 .pool-node{
+  width:112px;height:112px;
+}
+body.demo-playing .scene-5 .pool-node span{font-size:9px}
+body.demo-playing .scene-5 .pool-node b{font-size:20px}
+body.demo-playing .scene-5 .pool-node small{font-size:8px;max-width:82px}
+body.demo-playing .scene-5 .pooled-story{
+  grid-template-columns:1fr 128px 1fr;
+  position:relative;
+  padding-top:34px;
+}
+.same-budget-badge{
+  display:none;
+}
+body.demo-playing .same-budget-badge{
+  display:block;
+  position:absolute;
+  top:9px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:5px 9px;
+  border-radius:999px;
+  background:#edf8f3;
+  border:1px solid #bcddcf;
+  color:#28775d;
+  font-size:7.5px;
+  font-weight:900;
+  letter-spacing:.1em;
+  white-space:nowrap;
+}
+
+/* Final result: outcomes first, secondary metrics disappear in guided mode. */
+body.demo-playing .scene-6 .provider-grid,
+body.demo-playing .scene-6 .network-grid,
+body.demo-playing .scene-6 .visual-signal,
+body.demo-playing .scene-6 .impact-overlay{
+  display:none;
+}
+body.demo-playing .scene-6 .compare-overlay{
+  inset:76px 18px 76px;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  padding:0;
+  background:transparent;
+  border:0;
+}
+body.demo-playing .scene-6 .compare-card{
+  padding:24px 20px;
+  box-shadow:0 14px 34px rgba(15,31,51,.08);
+}
+body.demo-playing .scene-6 .compare-card h3{font-size:18px}
+body.demo-playing .scene-6 .compare-score{font-size:58px}
+body.demo-playing .scene-6 .compare-card>p:last-child,
+body.demo-playing .scene-6 .mini{
+  display:none;
+}
+body.demo-playing .scene-6 .compare-outcome-label{
+  margin-top:16px;
+  font-size:8px;
+}
+body.demo-playing .scene-6 .outcome-bank{
+  height:72px;
+  border-radius:9px;
+}
+body.demo-playing .scene-6 .outcome-bank b{
+  font-size:8px;
+  margin-top:6px;
+}
+body.demo-playing .scene-6 .compare-bar{
+  height:8px;
+  margin:12px 0 6px;
+}
+
+/* More legible movement */
+.motion-token.blocked-impact{
+  background:#d84f5f;
+  color:#fff;
+  border:2px solid #fff;
+  font-size:15px;
+  box-shadow:0 0 0 5px rgba(216,79,95,.12);
+  animation:blockedPop .5s ease both;
+}
+@keyframes blockedPop{
+  0%{transform:scale(.3);opacity:0}
+  45%{transform:scale(1.25);opacity:1}
+  100%{transform:scale(.85);opacity:0}
+}
+body.demo-playing .motion-token.request,
+body.demo-playing .motion-token.capacity,
+body.demo-playing .motion-token.locked,
+body.demo-playing .motion-token.pooled{
+  box-shadow:0 4px 12px rgba(15,31,51,.22);
+}
+
+/* Dark guided mode */
+html[data-theme="dark"] body.demo-playing .scene-3 .capacity-story,
+html[data-theme="dark"] body.demo-playing .scene-4 .reserve-mechanism,
+html[data-theme="dark"] body.demo-playing .scene-5 .reserve-mechanism{
+  box-shadow:0 18px 42px rgba(0,0,0,.28);
+}
+html[data-theme="dark"] body.demo-playing .same-budget-badge{
+  background:#153027;
+  border-color:#396c59;
+  color:#85ccb0;
+}
+html[data-theme="dark"] body.demo-playing .scene-6 .compare-card{
+  box-shadow:0 16px 38px rgba(0,0,0,.22);
+}
+
+/* Keep narration controls readable, but visually secondary during playback. */
+body.demo-playing .voice-control{
+  opacity:.72;
+}
+body.demo-playing #focusStory{
+  opacity:.6;
+}
+
+@media(max-width:1100px){
+  body.demo-playing .story-layout{grid-template-columns:1fr}
+  body.demo-playing .stage{min-height:780px}
+  body.demo-playing .scene-3 .visual-signal,
+  body.demo-playing .scene-4 .visual-signal,
+  body.demo-playing .scene-5 .visual-signal{
+    position:relative;left:auto;top:auto;transform:none;width:100%;
+  }
+}
