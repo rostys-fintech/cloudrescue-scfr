@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="CloudRescue is a systemic cloud-resilience stress lab for shared-provider shocks in banking.">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="dark light">
   <script>
     (() => {
       const saved = localStorage.getItem('cloudrescue-theme');
-      const systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.dataset.theme = saved || (systemDark ? 'dark' : 'light');
+      const migrated = saved === 'dark' ? 'crisis' : saved === 'light' ? 'analysis' : saved;
+      document.documentElement.dataset.theme = ['crisis','analysis'].includes(migrated) ? migrated : 'crisis';
     })();
   </script>
   <title>CloudRescue — Systemic Cloud Resilience Lab</title>
@@ -23,7 +23,7 @@
   <meta name="twitter:title" content="CloudRescue — Systemic Cloud Resilience Lab">
   <meta name="twitter:description" content="A reproducible stress lab for shared-provider shocks and coordinated recovery in banking.">
   <link rel="stylesheet" href="styles.css?v=20260927-1930">
-  <link rel="stylesheet" href="styles-v2.css?v=20260927-3245">
+  <link rel="stylesheet" href="styles-v2.css?v=20260927-cyber01">
 </head>
 <body>
 <div class="shell">
@@ -44,16 +44,17 @@
       </div>
     </div>
     <div class="topbar-meta">
-      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
-        <span class="theme-icon" aria-hidden="true">◐</span>
-        <span id="themeLabel">Dark</span>
+      <button id="themeToggle" class="theme-toggle mode-switch" type="button" aria-label="Switch between Crisis and Analysis themes" aria-pressed="false">
+        <span class="mode-name mode-crisis">CRISIS</span>
+        <span class="mode-track" aria-hidden="true"><i></i></span>
+        <span class="mode-name mode-analysis">ANALYSIS</span>
       </button>
     </div>
   </header>
 
   <section class="hero hero-institutional">
     <div class="hero-copy">
-      <div class="eyebrow">SYSTEMIC RESILIENCE · RESEARCH PROTOTYPE</div>
+      <div class="eyebrow">SYSTEMIC RESILIENCE // LIVE RESEARCH PROTOTYPE</div>
       <h1>CloudRescue</h1>
       <p>Stress-test how shared cloud dependency can turn one operational outage into a system-wide recovery problem.</p>
       <div class="hero-thesis">
@@ -68,7 +69,7 @@
 
     <div class="hero-system" aria-label="Shared cloud dependency illustration">
       <div class="hero-system-head">
-        <span>LIVE MODEL PREVIEW</span>
+        <span>SYSTEM TOPOLOGY // LIVE MODEL</span>
         <b>Shared dependency topology</b>
         <small>Synthetic network · deterministic engine</small>
       </div>
@@ -95,7 +96,7 @@
         </div>
 
         <div class="hero-risk-note">
-          <span>CONCENTRATION RISK</span>
+          <span>SYSTEMIC EXPOSURE</span>
           <b>One provider failure can create simultaneous recovery demand.</b>
         </div>
       </div>
@@ -394,6 +395,6 @@
     <span>Rostyslav Honcharenko · 2026</span>
   </footer>
 </div>
-<script type="module" src="app.js?v=20260927-3245"></script>
+<script type="module" src="app.js?v=20260927-cyber01"></script>
 </body>
 </html>
