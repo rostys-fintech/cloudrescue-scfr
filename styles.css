@@ -1270,3 +1270,195 @@ html[data-theme="dark"] .outcome-bank b{color:#c5d0da}
   .queue-label{border-left:0;border-top:2px solid #d76e7a;padding:7px 0 0}
   .pool-node{margin:0 auto}
 }
+
+
+/* Capacity choreography layer */
+.motion-layer{
+  position:absolute;
+  inset:0;
+  z-index:12;
+  pointer-events:none;
+  overflow:hidden;
+}
+.motion-token{
+  position:absolute;
+  display:grid;
+  place-items:center;
+  margin-left:-5px;
+  margin-top:-5px;
+  border-radius:999px;
+  font-size:6px;
+  font-weight:900;
+  box-shadow:0 3px 10px rgba(15,31,51,.15);
+  will-change:transform,opacity;
+}
+.motion-token.request{
+  background:#d86070;
+  border:2px solid #fff;
+  box-shadow:0 0 0 2px rgba(216,96,112,.16),0 3px 9px rgba(120,40,50,.18);
+}
+.motion-token.capacity{
+  background:#46a983;
+  border:2px solid #fff;
+  box-shadow:0 0 0 2px rgba(70,169,131,.16),0 3px 9px rgba(34,105,80,.18);
+}
+.motion-token.locked{
+  background:#e4b75a;
+  border:2px solid #fff;
+  color:#7d5511;
+  box-shadow:0 0 0 2px rgba(228,183,90,.18);
+}
+.motion-token.pooled{
+  background:#4b87e8;
+  border:2px solid #fff;
+  box-shadow:0 0 0 2px rgba(75,135,232,.17);
+}
+.bank.market-help{
+  animation:marketHelp .8s ease both;
+}
+@keyframes marketHelp{
+  0%{box-shadow:0 0 0 0 rgba(70,169,131,0)}
+  45%{box-shadow:0 0 0 5px rgba(70,169,131,.14)}
+  100%{box-shadow:none}
+}
+.queue-label.pulse{
+  animation:queuePulse 1s ease-in-out 2;
+}
+@keyframes queuePulse{
+  50%{background:rgba(198,59,75,.08);transform:translateX(3px)}
+}
+
+/* Ring-fence barrier: resource exists but cannot be reallocated */
+.ring-fence{
+  display:none;
+  position:absolute;
+  z-index:11;
+  width:0;
+  border-left:2px dashed #c5943f;
+  pointer-events:none;
+}
+.ring-fence.active{display:block}
+.ring-fence span{
+  position:absolute;
+  left:8px;
+  top:46%;
+  transform:translateY(-50%);
+  padding:5px 7px;
+  border-radius:6px;
+  background:#fff7e7;
+  border:1px solid #e5cb95;
+  color:#9a6817;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.1em;
+  white-space:nowrap;
+}
+.ring-fence i{
+  position:absolute;
+  left:8px;
+  top:calc(46% + 24px);
+  width:90px;
+  color:#927d56;
+  font-size:7px;
+  font-style:normal;
+  line-height:1.25;
+}
+.ring-fence.hit{
+  animation:fenceHit .28s ease;
+}
+@keyframes fenceHit{
+  0%,100%{border-left-color:#c5943f;transform:translateX(0)}
+  35%{border-left-color:#d84f5f;transform:translateX(-3px)}
+  70%{border-left-color:#d84f5f;transform:translateX(3px)}
+}
+
+/* Camera choreography: subtle product-demo motion, not cinematic gimmicks */
+.stage.scene-1.scene-enter{animation:cameraOverview .75s cubic-bezier(.2,.8,.2,1)}
+.stage.scene-2.scene-enter{animation:cameraIncident .85s cubic-bezier(.2,.8,.2,1)}
+.stage.scene-3.scene-enter{animation:cameraShortage .85s cubic-bezier(.2,.8,.2,1)}
+.stage.scene-4.scene-enter{animation:cameraFragment .85s cubic-bezier(.2,.8,.2,1)}
+.stage.scene-5.scene-enter{animation:cameraPool .95s cubic-bezier(.2,.8,.2,1)}
+.stage.scene-6.scene-enter{animation:cameraResult .75s cubic-bezier(.2,.8,.2,1)}
+@keyframes cameraOverview{
+  from{transform:scale(.97);opacity:.82}
+  to{transform:scale(1);opacity:1}
+}
+@keyframes cameraIncident{
+  from{transform:scale(1) translate(0,0)}
+  to{transform:scale(1.035) translate(1.1%,.5%)}
+}
+@keyframes cameraShortage{
+  from{transform:scale(1.035) translate(1.1%,.5%)}
+  to{transform:scale(1.018) translate(.5%,0)}
+}
+@keyframes cameraFragment{
+  from{transform:scale(1.018)}
+  to{transform:scale(.985)}
+}
+@keyframes cameraPool{
+  0%{transform:scale(.985) translateY(0)}
+  55%{transform:scale(.97) translateY(-.8%)}
+  100%{transform:scale(.985) translateY(0)}
+}
+@keyframes cameraResult{
+  from{transform:scale(.97);opacity:.88}
+  to{transform:scale(.985);opacity:1}
+}
+
+/* Make pooled recovery visually read from reserve -> pool -> banks */
+.scene-5 .pool-node{
+  position:relative;
+}
+.scene-5 .pool-node:before,
+.scene-5 .pool-node:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  width:1px;
+  height:26px;
+  background:linear-gradient(to bottom,transparent,#5bad8e);
+}
+.scene-5 .pool-node:before{bottom:100%}
+.scene-5 .pool-node:after{top:100%;transform:rotate(180deg)}
+.scene-5 .reserve-source,
+.scene-5 .reserve-outcome{
+  transition:opacity .3s ease,transform .3s ease;
+}
+.scene-5 .reserve-source{animation:sourceEmphasis 2.1s ease both}
+.scene-5 .reserve-outcome{animation:outcomeEmphasis 2.1s .9s ease both}
+@keyframes sourceEmphasis{
+  0%{opacity:.5;transform:translateX(-4px)}
+  30%,100%{opacity:1;transform:none}
+}
+@keyframes outcomeEmphasis{
+  0%{opacity:.45;transform:translateX(4px)}
+  45%,100%{opacity:1;transform:none}
+}
+
+/* Dark theme choreography */
+html[data-theme="dark"] .motion-token.request,
+html[data-theme="dark"] .motion-token.capacity,
+html[data-theme="dark"] .motion-token.locked,
+html[data-theme="dark"] .motion-token.pooled{border-color:#101923}
+html[data-theme="dark"] .ring-fence span{
+  background:#2b2418;border-color:#68532d;color:#e1b862
+}
+html[data-theme="dark"] .ring-fence i{color:#ad9a72}
+html[data-theme="dark"] .queue-label.pulse{background:#321d23}
+
+@media(max-width:900px){
+  .ring-fence{display:none!important}
+  .motion-layer{display:none}
+}
+
+/* Final comparison arrives in sequence */
+.scene-6 .compare-card{
+  opacity:0;
+  transform:translateY(8px);
+  animation:compareCardIn .55s ease forwards;
+}
+.scene-6 .compare-card:nth-child(2){animation-delay:.18s}
+.scene-6 .compare-card:nth-child(3){animation-delay:.36s}
+@keyframes compareCardIn{
+  to{opacity:1;transform:none}
+}
