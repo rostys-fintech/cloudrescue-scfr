@@ -766,3 +766,6 @@ html[data-theme="dark"] .bank.stranded:after{background:#3a301f;color:#d9aa53}
 .scene-5 .scfr-reserve-layer{bottom:78px}
 .scene-5 .story-caption{bottom:14px}
 .scene-6 .story-caption{bottom:14px;width:min(700px,78%)}
+
+.provider-glyph svg{width:16px;height:16px;display:block}
+.bank-glyph svg{width:13px;height:13px;display:block}
