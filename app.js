@@ -720,6 +720,7 @@ function applyScene(){
   $('#captionKicker').textContent = s.kicker;
   $('#captionText').textContent = s.caption;
   $('#stage').className = `stage scene-${scene+1}`;
+  $('#stage').dataset.outage = storyArgs.outageProvider;
 
   clearStatuses();
   const affected = c.market.rows;
