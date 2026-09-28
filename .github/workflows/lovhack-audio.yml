@@ -22,7 +22,11 @@ jobs:
         run: |
           npm install --no-save playwright@1.55.0
           npx playwright install ffmpeg
-          echo "$(find $HOME/.cache/ms-playwright -type f -name ffmpeg | head -n 1 | xargs dirname)" >> $GITHUB_PATH
+          FFMPEG="$(find "$HOME/.cache/ms-playwright" -type f -name 'ffmpeg-linux' | head -n 1)"
+          test -n "$FFMPEG"
+          test -x "$FFMPEG"
+          echo "FFMPEG=$FFMPEG" >> "$GITHUB_ENV"
+          "$FFMPEG" -version | head -n 2
 
       - name: Download Viktor narration clips
         run: |
@@ -46,7 +50,7 @@ jobs:
           set -e
           for f in artifacts/lovhack-audio/raw/*.wav; do
             name="$(basename "$f")"
-            ffmpeg -loglevel error -y -i "$f" -ar 48000 -ac 2 -c:a pcm_s16le "artifacts/lovhack-audio/normalized/$name"
+            "$FFMPEG" -loglevel error -y -i "$f" -ar 48000 -ac 2 -c:a pcm_s16le "artifacts/lovhack-audio/normalized/$name"
           done
 
           : > artifacts/lovhack-audio/concat.txt
@@ -54,10 +58,16 @@ jobs:
             echo "file '$PWD/$f'" >> artifacts/lovhack-audio/concat.txt
           done
 
-          ffmpeg -loglevel error -y -f concat -safe 0 -i artifacts/lovhack-audio/concat.txt -c copy artifacts/lovhack-audio/resilience-atlas-demo-narration.wav
-          ffmpeg -loglevel error -y -i artifacts/lovhack-audio/resilience-atlas-demo-narration.wav -c:a libmp3lame -b:a 192k artifacts/lovhack-audio/resilience-atlas-demo-narration.mp3
-
-          ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 artifacts/lovhack-audio/resilience-atlas-demo-narration.wav > artifacts/lovhack-audio/duration-seconds.txt
+          "$FFMPEG" -loglevel error -y -f concat -safe 0 -i artifacts/lovhack-audio/concat.txt -c copy artifacts/lovhack-audio/resilience-atlas-demo-narration.wav
+          python3 - <<'PY'
+          import wave
+          p='artifacts/lovhack-audio/resilience-atlas-demo-narration.wav'
+          with wave.open(p,'rb') as w:
+              duration=w.getnframes()/w.getframerate()
+          with open('artifacts/lovhack-audio/duration-seconds.txt','w') as f:
+              f.write(f'{duration:.6f}\n')
+          print(f'Final narration: {duration:.3f}s')
+          PY
 
       - name: Upload narration
         uses: actions/upload-artifact@v4
@@ -65,7 +75,6 @@ jobs:
           name: resilience-atlas-lovhack-demo-narration
           path: |
             artifacts/lovhack-audio/resilience-atlas-demo-narration.wav
-            artifacts/lovhack-audio/resilience-atlas-demo-narration.mp3
             artifacts/lovhack-audio/duration-seconds.txt
           if-no-files-found: error
           retention-days: 14
