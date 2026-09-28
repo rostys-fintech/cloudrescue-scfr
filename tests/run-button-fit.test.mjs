@@ -6,7 +6,7 @@ const index=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'utf8');
 
 assert.equal(index,html);
-assert.match(html,/20260927-story0[1-9]/);
+assert.match(html,/202609(?:27-story0[1-9]|28-mobile0[1-9])/);
 assert.match(html,/id="raRunPreview"/);
 assert.match(html,/id="raRunLabel"/);
 
