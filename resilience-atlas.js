@@ -558,19 +558,25 @@ function renderGuidedShell(c){
   renderStory(c);
 }
 
-async function prepareGuidedOpening(runId){
+function prepareGuidedOpening(runId){
   const mount=$('#raEarthMount');
   const hud=$('#raGuidedHud');
   const canvasTitle=$('#raCanvasTitle');
   const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-  if(!mount || reduced) return true;
+  if(!mount || reduced) return;
 
   mount.classList.add('ra-guided-preroll','ra-cue-transitioning');
   hud?.classList.add('is-cue-transitioning');
   canvasTitle?.classList.add('is-cue-transitioning');
 
-  return guidedDelay(240,runId);
+  /* Do not await here. iOS Safari requires the first audio.play() call to
+     remain in the original tap gesture. The cue bridge removes this state
+     as the first narrated visual frame commits. */
+  window.setTimeout(()=>{
+    if(runId!==guided.runId || !guided.active) return;
+    mount.classList.remove('ra-guided-preroll');
+  },240);
 }
 
 function tabFromHash(){
@@ -620,13 +626,29 @@ function switchTab(tab,{updateHash=true,replaceHash=false}={}){
   if(updateHash) syncTabHash(tab,replaceHash);
 }
 
+function bindTapTarget(node,handler){
+  if(!node) return;
+
+  let lastTouch=0;
+  node.addEventListener('touchend',event=>{
+    lastTouch=performance.now();
+    event.preventDefault();
+    handler(event);
+  },{passive:false});
+
+  node.addEventListener('click',event=>{
+    if(performance.now()-lastTouch<700) return;
+    handler(event);
+  });
+}
+
 function setupTabs(){
-  $$('.ra-nav-tab').forEach(button=>{
+  $('.ra-nav-tab').forEach(button=>{
     button.addEventListener('click',()=>switchTab(button.dataset.raTab));
     button.addEventListener('keydown',event=>{
       if(!['ArrowLeft','ArrowRight'].includes(event.key)) return;
       event.preventDefault();
-      const tabs=$$('.ra-nav-tab');
+      const tabs=$('.ra-nav-tab');
       const index=tabs.indexOf(button);
       const direction=event.key==='ArrowRight' ? 1 : -1;
       const next=tabs[(index+direction+tabs.length)%tabs.length];
@@ -635,8 +657,8 @@ function setupTabs(){
     });
   });
 
-  $$('.ra-mobile-tab').forEach(button=>{
-    button.addEventListener('click',event=>{
+  $('.ra-mobile-tab').forEach(button=>{
+    bindTapTarget(button,event=>{
       event.preventDefault();
       switchTab(button.dataset.raMobileTab);
     });
@@ -1060,9 +1082,9 @@ async function runGuidedSimulation(){
     focusAnimationStage($('#raEarthMount'));
   }
 
-  /* Fade the static preview into the cinematic timeline before narration.
-     This removes the abrupt full-network -> empty-intro reset on Run. */
-  if(!(await prepareGuidedOpening(runId)) || runId!==guided.runId) return;
+  /* Start the cinematic pre-roll synchronously. Do not await before the
+     first audio.play(): iOS Safari otherwise rejects narration playback. */
+  prepareGuidedOpening(runId);
 
   for(let i=0;i<6;i++){
     if(runId!==guided.runId) return;
@@ -1092,7 +1114,7 @@ async function runGuidedSimulation(){
 }
 
 function setupScenes(){
-  $$('.ra-scene-list button').forEach(button=>{
+  $('.ra-scene-list button').forEach(button=>{
     button.addEventListener('click',()=>{
       if(guided.active) stopGuidedSimulation();
       state.scene=Number(button.dataset.raScene);
@@ -1100,15 +1122,15 @@ function setupScenes(){
     });
   });
 
-  $$('.ra-mobile-scene-nav button').forEach(button=>{
-    button.addEventListener('click',()=>{
+  $('.ra-mobile-scene-nav button').forEach(button=>{
+    bindTapTarget(button,()=>{
       if(guided.active) stopGuidedSimulation();
       state.scene=Number(button.dataset.raMobileScene);
       renderScene();
     });
   });
 
-  $('#raRunPreview').addEventListener('click',runGuidedSimulation);
+  bindTapTarget($('#raRunPreview'),runGuidedSimulation);
 
   $('#raNarrationToggle').addEventListener('click',()=>{
     guided.narration=!guided.narration;
