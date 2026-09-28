@@ -1,257 +1,153 @@
-# CloudRescue — Development Log
+# Resilience Atlas — Development Log
 
-This log documents the main product and technical iterations completed during the FirstCommit build.
+This log records the main product and technical iterations behind the current prototype.
 
 ## Phase 1 — Research question → software problem
 
 Starting point:
-
 - systemic cloud concentration risk in banking;
-- a proposed Systemic Cloud Failover Reserve (SCFR) concept;
-- a need to make the coordination mechanism visible rather than only describing it in text.
+- the SCFR coordination concept;
+- a need to make a system-level recovery problem visible.
 
-Main learning:
-
-- a research idea is not yet a software specification;
-- the mechanism had to be translated into explicit state, inputs, allocation rules and outputs.
+The first challenge was translating an abstract finance idea into:
+- explicit inputs;
+- allocation rules;
+- state transitions;
+- measurable outputs.
 
 Result:
-
 - synthetic 20-bank network;
-- three shared providers;
+- three providers;
 - critical workload, readiness and systemic-importance parameters;
 - deterministic recovery logic.
 
----
-
-## Phase 2 — Deterministic simulation engine
-
-The first technical goal was to separate model logic from presentation.
+## Phase 2 — Controlled simulation engine
 
 Implemented:
-
-- provider outage selection;
-- emergency-market capacity;
-- individual reserves;
+- provider-outage selection;
+- emergency market capacity;
+- Individual Reserves;
 - pooled SCFR reserve;
-- allocation rules;
+- multiple SCFR allocation rules;
 - restored workload;
 - Systemic Resilience Score;
 - stranded reserve tracking.
 
-Key design constraint:
+Key invariant:
 
-**Individual Reserves and SCFR must receive the same aggregate reserve budget.**
+> **Individual Reserves and SCFR receive the same aggregate reserve budget.**
 
-This prevents the central comparison from becoming a simple 'more reserve produces better results' demonstration.
+This keeps the core experiment focused on coordination rather than simply adding more capacity.
 
-Learning:
+## Phase 3 — From dashboard to mechanism story
 
-- model invariants matter more than visual polish at the start;
-- the interface should never be able to create a state that violates the model budget.
+Early versions exposed metrics without making the mechanism obvious.
 
----
-
-## Phase 3 — From dashboard to guided explanation
-
-Early UI versions exposed the model but relied too heavily on numbers.
-
-Problem:
-
-- a non-specialist could see resilience scores without understanding why they changed.
-
-Response:
-
-- introduced a six-stage guided crisis replay;
-- visualized provider dependency;
-- visualized simultaneous demand;
-- visualized reserve fragmentation;
-- visualized pooled reallocation;
-- added captions and narration.
+The product was reorganized around a six-scene story:
+1. stable shared dependency;
+2. provider failure;
+3. simultaneous demand;
+4. ring-fenced reserve;
+5. pooled reallocation;
+6. outcome comparison.
 
 Learning:
+- mechanism-first explanation is stronger than metric-first explanation;
+- motion should explain state changes.
 
-- mechanism-first explanation is more useful than metric-first explanation;
-- motion should explain state transitions rather than exist as decoration.
+## Phase 4 — Resilience Atlas redesign
 
----
+The earlier interface looked too much like a generic hackathon dashboard.
 
-## Phase 4 — Narration and timing
+The product was rebuilt around the **Resilience Atlas** identity:
+- dark red/black simulation mode;
+- light blue/white analysis mode;
+- sharper high-tech geometry;
+- stronger visual hierarchy;
+- a global dependency map;
+- a compact judge-friendly simulation HUD.
 
-Problem:
+## Phase 5 — Narration + visual synchronization
 
-- fixed autoplay timing could advance a scene before narration completed;
-- some speech sounded unnatural or was interrupted.
+The guided experience moved from generic timed animation to word-level cue synchronization.
 
-Response:
+Implemented:
+- neural narration tracks;
+- cue timestamps;
+- scene-specific visual choreography;
+- smooth transitions between cues;
+- pause / stop controls;
+- reduced-motion behavior.
 
-- tied scene progression more closely to narration state;
-- added narrator selection;
-- added narration controls;
-- added Focus View;
-- reduced unnecessary motion effects.
+Several iterations were required to eliminate hard scene resets and abrupt animation jumps.
 
-Learning:
+## Phase 6 — Interactive Scenario Lab
 
-- audiovisual UX requires state synchronization, not only animation.
+The lab allows users to change:
+- failed provider;
+- market capacity;
+- reserve budget;
+- allocation rule.
 
----
+Running the scenario produces:
+- model-driven state changes;
+- recovery playback;
+- updated metrics;
+- a concise scenario conclusion.
 
-## Phase 5 — Reproducibility
+## Phase 7 — Evidence boundary and export
 
-The project needed to prove that the guided demo was not a hard-coded animation.
+Added a dedicated Model & Evidence view that distinguishes:
+- documented concentration-risk motivation;
+- synthetic network and numerical outputs.
 
 Added:
-
-- interactive Stress Lab;
-- model-driven replay of the current scenario;
-- deterministic seeded scenario generator;
-- Scenario IDs;
-- shareable scenario URLs;
+- readable scenario report export;
 - JSON export.
 
-Learning:
+## Phase 8 — Mobile and iOS hardening
 
-- a research prototype becomes much more credible when another user can reconstruct the same assumptions and result.
+The mobile version required real debugging rather than simple responsive CSS.
 
----
+Issues fixed included:
+- hidden layers intercepting touch events;
+- iOS audio user-activation requirements;
+- touch/click fallback behavior;
+- querySelector/querySelectorAll regressions that broke initialization;
+- mobile navigation and scenario controls.
 
-## Phase 6 — Sensitivity analysis
+## Phase 9 — Automated checks
 
-Problem:
+The project now uses Node.js checks and GitHub Actions.
 
-- one baseline scenario could look cherry-picked.
-
-Response:
-
-- added a resilience frontier;
-- added a two-dimensional Sensitivity Explorer;
-- added SCFR absolute-resilience and uplift views;
-- added current-scenario reference markers.
-
-Learning:
-
-- mechanism evaluation should expose where an effect appears and where it weakens.
-
----
-
-## Phase 7 — Automated checks
-
-Several UI changes created regressions, including multi-element selector mistakes.
-
-Response:
-
-- added model-invariant tests;
-- added UI smoke checks;
-- connected checks to GitHub Actions;
-- treated failing checks as part of the build process rather than as optional cleanup.
-
-Examples of protected properties:
-
-- resilience stays within valid bounds;
-- reserve allocation cannot exceed the budget;
-- SCFR and Individual Reserves use the same aggregate reserve;
-- affected banks correspond to the failed provider;
-- important controls and explanatory sections remain present.
+Regression coverage includes:
+- model invariants;
+- UI shell checks;
+- mobile interaction;
+- narration integration;
+- guided cue timing;
+- scenario playback;
+- mobile Safari fixes;
+- storyboard choreography.
 
 Learning:
 
-- even a small browser prototype benefits from automated regression checks.
-
----
-
-## Phase 8 — Visual redesign v1
-
-Problem:
-
-- the functional interface looked like a generic hackathon dashboard;
-- too many rounded cards, pills, micro-labels and decorative effects reduced credibility.
-
-Response:
-
-- reduced shadow and radius;
-- raised typography size;
-- simplified hierarchy;
-- introduced institutional navy / graphite / white palette;
-- removed game-like wording and decorative animation.
-
-Learning:
-
-- a serious financial-risk concept needs a visual language consistent with the subject.
-
----
-
-## Phase 9 — Institutional redesign v2
-
-The first redesign was still too conservative.
-
-Major changes:
-
-- dark systemic-risk hero;
-- shared-dependency topology preview;
-- custom CloudRescue mark;
-- dark live-system monitoring canvas;
-- editorial crisis-replay rail;
-- dark Stress Lab control rail;
-- executive Shock Summary header;
-- dark Controlled Comparison screen;
-- report-style Methodology;
-- report timelines for Development Journey and Research Roadmap;
-- research-chart styling;
-- compact evidence source rail;
-- custom favicon and sharing metadata.
-
-Learning:
-
-- changing component styling is not enough when the overall page composition still communicates 'dashboard';
-- visual hierarchy has to be redesigned at the page level.
-
----
-
-## Phase 10 — Submission hardening
-
-Prepared:
-
-- final Devpost copy;
-- Devpost field map;
-- 3–5 minute demo script;
-- screenshot plan;
-- judge pitch card;
-- technical-defense guide;
-- judging-criteria map;
-- final QA checklist;
-- AI assistance disclosure;
-- source and evidence documentation.
-
-Learning:
-
-- presentation is part of the product;
-- judges should not have to discover the strongest evidence by accident.
-
----
+> Small browser prototypes still benefit from automated regression protection.
 
 ## Current v0.1 status
 
-CloudRescue now includes:
-
+The current product includes:
 - deterministic synthetic simulation;
-- guided narrated crisis replay;
-- institutional monitoring UI;
-- interactive Stress Lab;
-- model-driven scenario replay;
-- seeded reproducibility;
-- shareable scenarios;
-- JSON export;
-- Controlled Comparison;
-- resilience frontier;
-- sensitivity explorer;
-- constraint tests;
+- guided narrated six-scene story;
+- Scenario Lab;
+- three recovery mechanisms;
+- same-budget Individual-vs-SCFR comparison;
+- Model & Evidence view;
+- readable + JSON export;
+- mobile-safe interaction;
 - automated model and UI checks;
-- public GitHub Pages deployment;
-- documented real-vs-synthetic boundary.
+- public GitHub Pages deployment.
 
 ## Core lesson
 
-> Building CloudRescue required moving from a finance question to explicit assumptions, then to a deterministic model, then to an understandable product, and finally to a reproducible and testable public prototype.
-
-That development journey is the main FirstCommit learning story.
+> The biggest step was not adding features. It was turning a finance question into explicit assumptions, then into a deterministic model, then into an understandable and testable product.
