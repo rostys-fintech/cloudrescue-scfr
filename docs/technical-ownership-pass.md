@@ -1,263 +1,111 @@
-# CloudRescue — Technical Ownership Pass
+# Resilience Atlas — technical ownership pass
 
-This checklist exists for one reason:
+Before judging, be able to explain the current product without relying on notes.
 
-**The author should be able to explain the project without relying on AI during judging.**
+## Part 1 — Explain the project in 45 seconds
 
-FirstCommit explicitly values understanding, learning and the ability to explain technical decisions.
+Be able to explain:
+1. shared-provider concentration creates correlated recovery demand;
+2. the three recovery mechanisms;
+3. why Individual Reserves and SCFR use the same aggregate reserve budget;
+4. who the product is for;
+5. why all numerical results are synthetic.
 
-Do not memorize answers mechanically. Work through each item until you can explain it in your own words.
-
----
-
-## Part 1 — Explain the product in 30 seconds
-
-You should be able to say, without reading:
-
-1. What problem CloudRescue models.
-2. Why shared cloud-provider dependency can create correlated operational risk.
-3. What the three recovery mechanisms are.
-4. Why Individual Reserves and SCFR use the same reserve budget.
-5. What the project does **not** claim.
-
-Pass condition:
-
-- you can explain all five points naturally in under 45 seconds.
-
----
-
-## Part 2 — Explain the simulation engine
+## Part 2 — Explain the engine
 
 Open:
-
 - `model/simulation.js`
 - `data/banks.js`
 
-You should be able to identify:
+Know where to find:
+- affected-provider selection;
+- market pool calculation;
+- reserve pool calculation;
+- Individual Reserve logic;
+- SCFR pooled allocation;
+- readiness constraint;
+- Systemic Resilience Score.
 
-- where synthetic banks are defined;
-- where provider assignments are stored;
-- where critical workload is stored;
-- where failover readiness is stored;
-- where systemic importance is stored;
-- where market capacity is calculated;
-- where reserve capacity is calculated;
-- where the three mechanisms differ;
-- where restored workload is calculated;
-- where Systemic Resilience Score is calculated.
+## Part 3 — Explain the controlled comparison
 
-Pass condition:
+In Scenario Lab, explain:
 
-You can point to the relevant code and explain the calculation in plain English.
+> The failed provider, bank data, market assumption and total reserve budget are held constant. The allocation mechanism changes.
 
----
+Know why stranded reserve appears under Individual Reserves.
 
-## Part 3 — Five model facts you must know
+## Part 4 — Explain the Robustness Sweep
 
-### 1. Emergency-market capacity
+Know:
+- it uses the same `compareStrategies()` engine;
+- it builds a local grid around market/reserve assumptions;
+- each cell is `SCFR resilience − Individual resilience`;
+- it is synthetic sensitivity analysis, not validation.
 
-Affected banks generate total critical demand.
+## Part 5 — Run a scenario yourself
 
-Emergency-market capacity is a user-selected percentage of that demand.
-
-### 2. Individual Reserves
-
-Pre-reserved capacity remains bank-specific.
-
-Reserve belonging to an unaffected bank cannot automatically move to an affected bank in the synthetic model.
-
-### 3. SCFR
-
-SCFR receives the **same aggregate reserve budget**.
-
-The difference is pooled allocation across affected banks.
-
-### 4. Failover readiness
-
-Allocated capacity alone is not enough.
-
-Recovery is limited by each synthetic bank's readiness.
-
-### 5. Systemic Resilience Score
-
-SRS is a weighted average of restored critical workload.
-
-It is a project-specific synthetic metric, not a regulatory standard.
-
-Pass condition:
-
-Explain all five without opening documentation.
-
----
-
-## Part 4 — Explain the controlled comparison
-
-Open the **Controlled Comparison** screen.
-
-Explain:
-
+Change:
 - failed provider;
-- number of affected banks;
-- emergency-market assumption;
-- reserve budget;
-- why both reserve mechanisms have the same aggregate budget;
-- why stranded reserve can occur;
-- why SCFR may change the result.
+- market capacity;
+- reserve percentage;
+- allocation rule.
 
-Important wording:
+Run the scenario and explain:
+- affected banks;
+- capacity gap;
+- workload restored;
+- resilience score;
+- scenario conclusion.
 
-> The comparison isolates the allocation mechanism. It does not give SCFR extra reserve.
+## Part 6 — Explain exports
 
-Pass condition:
+Know that:
+- readable report export creates a text summary;
+- JSON export captures machine-readable scenario and output values;
+- the engine is deterministic for the same inputs.
 
-A listener unfamiliar with the project understands why the comparison is fair within the synthetic model.
+## Part 7 — Understand tests
 
----
+Be able to explain why at least three checks matter:
+- budget constraint;
+- score bounds;
+- provider/affected-bank consistency;
+- UI regression protection;
+- mobile interaction protection.
 
-## Part 5 — Explain deterministic reproducibility
+## Part 8 — Explain limitations
 
-Open the Stress Lab.
-
-You should understand:
-
-- what a Scenario ID represents;
-- what the seed changes;
-- why the same seed reproduces the same assumptions;
-- how query parameters reconstruct a scenario;
-- what JSON export contains;
-- why the underlying recovery calculation is deterministic.
-
-Pass condition:
-
-Generate one seeded scenario, copy its URL, open it again and explain why the values match.
-
----
-
-## Part 6 — Explain Sensitivity Explorer
-
-You should be able to explain:
-
-- which two assumptions form the grid;
-- what each cell represents;
-- difference between SCFR resilience and SCFR uplift;
-- why sensitivity analysis is stronger than showing one baseline scenario;
-- why it still does not prove real-world effectiveness.
-
-Pass condition:
-
-Explain one high-uplift cell and one low-uplift cell in your own words.
-
----
-
-## Part 7 — Run the tests yourself
-
-In the repository, understand what the automated checks protect.
-
-Know examples such as:
-
-- scores stay inside valid bounds;
-- allocation cannot exceed available capacity;
-- Individual Reserves and SCFR use the same aggregate reserve budget;
-- affected banks match the failed provider;
-- required UI elements remain present.
-
-Pass condition:
-
-You can explain **why at least three tests exist**, not only that they pass.
-
----
-
-## Part 8 — Make one small change yourself
-
-Before final submission, make one small, intentional change that you understand completely.
-
-Good examples:
-
-- improve one sentence in the UI;
-- rename one clearly understood label;
-- adjust one non-critical spacing value;
-- improve one README sentence;
-- add one explanation to Methodology.
-
-Then:
-
-1. inspect the diff;
-2. commit it with a meaningful commit message;
-3. confirm checks pass.
-
-The purpose is not to manufacture commit history.
-
-The purpose is to practice the actual edit → review → test → commit workflow yourself.
-
----
-
-## Part 9 — Explain the limitations
-
-You should be able to name at least five missing real-world layers:
-
+Name at least five:
 - workload portability;
 - data synchronization;
-- network dependencies;
+- network bottlenecks;
 - recovery-time objectives;
 - contractual constraints;
-- regulatory / governance constraints;
-- provider-specific architecture;
-- cross-border issues;
-- economic cost.
+- provider compatibility;
+- governance;
+- cost.
 
-Pass condition:
+## Part 9 — Explain AI use honestly
 
-Explain why CloudRescue v0.1 is a **mechanism stress-test**, not a real-world forecast.
+Recommended wording:
 
----
+> AI tools materially assisted brainstorming, code drafting, debugging, documentation and interface iteration. I directed the research framing and product decisions, reviewed assumptions and outputs, tested the application and am responsible for understanding and presenting the final result.
 
-## Part 10 — Explain AI assistance honestly
+# Final ownership questions
 
-Recommended answer:
+Answer without notes:
 
-> AI tools materially assisted with brainstorming, code drafting, debugging, documentation and interface iteration. I directed the research framing and product decisions, reviewed the assumptions and outputs, tested the application, and worked through the final model and implementation so I can explain the project and its limitations.
-
-Do not claim:
-
-- that no AI was used;
-- that every line was written manually if that is not true;
-- that you understand code you have not actually reviewed.
-
----
-
-# Final ownership test
-
-Before submitting, answer these without notes:
-
-1. What exactly is the research question?
+1. What problem does Resilience Atlas model?
 2. What changes between Individual Reserves and SCFR?
 3. What stays constant?
 4. How is restored workload calculated?
 5. What is SRS?
-6. What does failover readiness do?
-7. What makes a scenario reproducible?
-8. What does the sensitivity heatmap test?
-9. What is real-world evidence and what is synthetic?
-10. What is the biggest limitation?
-11. What was the hardest technical problem?
-12. What did you personally learn?
+6. Why can reserve become stranded?
+7. What does Robustness Sweep test?
+8. What is real-world evidence and what is synthetic?
+9. What is the biggest limitation?
+10. What did you build during LovHack?
+11. What was the hardest technical bug?
+12. How was AI used?
 
-If you cannot answer one of these, revisit that part of the code or documentation before submission.
-
----
-
-## Completion state
-
-- [ ] Product explanation passed
-- [ ] Simulation engine reviewed
-- [ ] Five model facts passed
-- [ ] Controlled Comparison passed
-- [ ] Reproducibility passed
-- [ ] Sensitivity Explorer passed
-- [ ] Automated tests understood
-- [ ] One small change completed personally
-- [ ] Limitations passed
-- [ ] AI disclosure can be explained naturally
-- [ ] Final 12-question ownership test passed
-
-Only mark these complete after actually doing them.
+Only submit when you can answer all 12 naturally.
