@@ -6977,9 +6977,8 @@ body.ra-guided-running #simulation #raEarthMount{
   font-size:7.5px;
 }
 .ra-robustness-matrix{
-  --ra-matrix-cols:4;
   display:grid;
-  grid-template-columns:minmax(92px,1.25fr) repeat(calc(var(--ra-matrix-cols) - 1),minmax(64px,1fr));
+  grid-template-columns:minmax(92px,1.25fr) repeat(3,minmax(64px,1fr));
   gap:5px;
   align-items:stretch;
 }
@@ -7042,12 +7041,40 @@ body.ra-guided-running #simulation #raEarthMount{
   }
   .ra-robustness-matrix{
     overflow-x:auto;
-    grid-template-columns:96px repeat(calc(var(--ra-matrix-cols) - 1),72px);
+    grid-template-columns:96px repeat(3,72px);
     padding-bottom:4px;
   }
   .ra-matrix-head,
   .ra-matrix-corner,
   .ra-matrix-cell{
     min-height:44px;
+  }
+}
+
+
+/* FINAL COMPETITION QA — stable judge capture framing */
+.ra-robustness-matrix{
+  max-width:760px;
+}
+.ra-matrix-cell.is-current{
+  position:relative;
+  border-color:color-mix(in srgb,var(--ra-primary) 70%,var(--ra-border));
+}
+.ra-matrix-cell.is-current::after{
+  content:"CURRENT";
+  position:absolute;
+  right:5px;
+  bottom:3px;
+  color:var(--ra-primary);
+  font-size:5.5px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+@media(max-width:767px){
+  .ra-robustness-matrix{
+    max-width:none;
+  }
+  .ra-matrix-cell.is-current::after{
+    font-size:5px;
   }
 }
