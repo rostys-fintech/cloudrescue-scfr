@@ -63,3 +63,8 @@ It does not:
 - claim empirical validation of SCFR.
 
 The real-world concentration-risk problem is documented. The numerical experiment is synthetic.
+
+### Final media manifest
+[final-media-manifest.md](final-media-manifest.md)
+
+Technical details and upload order for the finished screenshot/video package.
