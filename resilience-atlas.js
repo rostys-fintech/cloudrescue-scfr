@@ -422,6 +422,61 @@ function evidenceSnapshot(){
   };
 }
 
+function localSweepLevels(value,min,max,step){
+  const levels=[Math.max(min,value-step),value,Math.min(max,value+step)];
+  return [...new Set(levels.map(v=>Math.round(v/5)*5))].sort((a,b)=>a-b);
+}
+
+function renderRobustnessSweep(){
+  const mount=$('#raRobustnessMatrix');
+  if(!mount) return;
+
+  const marketLevels=localSweepLevels(state.marketPct,0,50,20);
+  const reserveLevels=localSweepLevels(state.reservePct,0,60,20);
+  const cells=[];
+  let positive=0;
+  let maxUplift=-Infinity;
+
+  reserveLevels.forEach(reservePct=>{
+    marketLevels.forEach(marketPct=>{
+      const c=compareStrategies({
+        outageProvider:state.outageProviders[0] || 'blue',
+        outageProviders:[...state.outageProviders],
+        marketPct,
+        reservePct,
+        allocationRule:state.allocationRule
+      });
+      const uplift=c.scfr.resilience-c.individual.resilience;
+      cells.push({marketPct,reservePct,uplift});
+      if(uplift>.05) positive++;
+      maxUplift=Math.max(maxUplift,uplift);
+    });
+  });
+
+  const total=cells.length;
+  $('#raRobustPositive').textContent=positive+' / '+total;
+  $('#raRobustMax').textContent=(Number.isFinite(maxUplift)?Math.max(0,maxUplift):0).toFixed(1);
+  $('#raRobustShock').textContent=providerLabel(state.outageProviders);
+
+  const header=['<span class="ra-matrix-corner">RESERVE ↓ / MARKET →</span>']
+    .concat(marketLevels.map(v=>'<span class="ra-matrix-head">'+v+'%</span>'));
+
+  const rows=reserveLevels.map(reservePct=>{
+    const row=['<span class="ra-matrix-head">'+reservePct+'%</span>'];
+    marketLevels.forEach(marketPct=>{
+      const cell=cells.find(item=>item.marketPct===marketPct && item.reservePct===reservePct);
+      const value=cell?.uplift ?? 0;
+      const tone=value>5 ? 'strong' : value>1 ? 'positive' : value>.05 ? 'soft' : 'neutral';
+      const current=marketPct===state.marketPct && reservePct===state.reservePct ? ' is-current' : '';
+      row.push('<b class="ra-matrix-cell '+tone+current+'" title="Market '+marketPct+'%, reserve '+reservePct+'%">'+(value>=0?'+':'')+value.toFixed(1)+'</b>');
+    });
+    return row.join('');
+  });
+
+  mount.style.setProperty('--ra-matrix-cols',String(marketLevels.length+1));
+  mount.innerHTML=header.join('')+rows.join('');
+}
+
 function renderEvidence(){
   const c=comparison();
   const stats=systemStats();
@@ -438,6 +493,7 @@ function renderEvidence(){
   $('#raEvidenceScenario').textContent=
     providerLabel(state.outageProviders)+' · '+state.marketPct+'% market · '+state.reservePct+'% reserve · '+state.allocationRule+' rule';
 
+  renderRobustnessSweep();
   earth.evidence.update(earthPayload(c));
 }
 
