@@ -1,6 +1,6 @@
 # Resilience Atlas — final LovHack demo storyboard
 
-Target length: **2:25–2:50**
+Target length: **2:50–2:59**
 
 Goal: show the working product, not a presentation about the product.
 
@@ -15,18 +15,20 @@ Goal: show the working product, not a presentation about the product.
 - Do not speak over the built-in narrator.
 - Pause briefly on the strongest screens.
 
-## 0:00–0:14 — Hook
+## 0:00–0:19 — Research origin overlay
 
 ### Screen
-Simulation before Run.
+The live Resilience Atlas interface remains visible behind a compact research overlay.
 
-### Say
+The overlay shows:
 
-> A backup plan can work for one bank and still fail for the system if many banks depend on the same cloud provider and need recovery capacity at the same time.
+**Research → Shared cloud risk → SCFR → Resilience Atlas**
 
-> Resilience Atlas is a synthetic simulator for that coordination problem.
+### Narration
 
-Press **Run Guided Simulation**.
+> Resilience Atlas grew out of my broader research on what affects bank resilience and the role of digitalisation in it. I narrowed that question to one systemic cloud-resilience problem: when many banks share critical cloud infrastructure, can better coordination improve recovery without increasing the total reserve budget?
+
+The overlay fades away. Press **Run Guided Simulation**.
 
 ## 0:14–0:58 — Guided Simulation
 
