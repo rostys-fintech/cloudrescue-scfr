@@ -33,4 +33,11 @@ assert.match(css,/var\(--ra-canvas\)/);
 assert.match(css,/@media\(max-width:767px\)/);
 assert.match(css,/@media\(max-width:429px\)/);
 
+assert.match(html,/Same shock\. Same reserve budget\. Different coordination\./);
+assert.match(html,/CONTROLLED TEST/);
+assert.match(html,/BUILT FOR DISCUSSION BY/);
+assert.match(html,/Bank resilience teams/);
+assert.match(html,/Supervisors/);
+assert.match(html,/Researchers/);
+
 console.log('Resilience Atlas clean-shell checks passed.');
