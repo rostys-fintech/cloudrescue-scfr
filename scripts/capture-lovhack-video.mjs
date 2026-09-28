@@ -12,7 +12,7 @@ const target={
   hook:19.33061224489796,
   scenario:18.155102040816328,
   evidence:19.983673469387757,
-  close:11.702857142857143
+  close:14.027755102040816
 };
 
 const browser=await chromium.launch({
@@ -102,6 +102,16 @@ await page.evaluate(()=>{
     #captureResearchOverlay .step b{display:block;font:700 13px/1.25 system-ui,sans-serif;color:#fff;}
     #captureResearchOverlay .arrow{font:700 19px/1 system-ui,sans-serif;color:#ff6666;}
     #captureResearchOverlay .foot{margin-top:13px;font:600 11px/1.4 system-ui,sans-serif;color:#9aa3b3;}
+    #captureClosingNote{
+      position:fixed;z-index:999991;left:50%;top:92px;transform:translate(-50%,-8px);
+      padding:10px 16px 9px;border:1px solid rgba(255,74,74,.34);border-radius:999px;
+      background:rgba(5,8,12,.88);backdrop-filter:blur(12px);box-shadow:0 18px 48px rgba(0,0,0,.35);
+      color:#fff;opacity:0;pointer-events:none;transition:opacity .5s ease,transform .5s cubic-bezier(.22,.61,.36,1);
+      text-align:center;white-space:nowrap;
+    }
+    #captureClosingNote.is-visible{opacity:1;transform:translate(-50%,0);}
+    #captureClosingNote b{font:900 10px/1 system-ui,sans-serif;letter-spacing:.16em;color:#ff6b6b;}
+    #captureClosingNote span{margin-left:10px;font:700 10px/1 system-ui,sans-serif;letter-spacing:.08em;color:#d3d8e2;}
   `;
   document.head.appendChild(style);
   const cursor=document.createElement('div');
@@ -243,6 +253,14 @@ await settle(500);
 if(!(await page.locator('#lab').evaluate(node=>node.classList.contains('is-active')))){
   throw new Error('Closing frame did not return to Scenario Lab.');
 }
+await wait(8100);
+await page.evaluate(()=>{
+  const note=document.createElement('div');
+  note.id='captureClosingNote';
+  note.innerHTML='<b>THANK YOU</b><span>RESEARCH → PRACTICAL RESILIENCE</span>';
+  document.body.appendChild(note);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>note.classList.add('is-visible')));
+});
 await waitSegment(segment,target.close);
 
 const totalVisual=(Date.now()-guidedStart)/1000 + target.hook;
