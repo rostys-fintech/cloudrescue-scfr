@@ -1,34 +1,35 @@
-# CloudRescue — judge pitch card
+# Resilience Atlas — judge pitch card
 
 ## 30-second pitch
 
-CloudRescue is a synthetic stress lab for systemic cloud-outage resilience in banking.
+Resilience Atlas is a systemic cloud-resilience simulator for banking.
 
-The problem is simple: a backup plan can work for one bank and still fail for the system if many banks depend on the same provider and need backup capacity at the same time.
+The problem is simple: a backup plan can work for one bank and still fail for the system if many banks depend on the same provider and need recovery capacity at the same time.
 
-CloudRescue compares post-shock market sourcing, individual reserves and a pooled SCFR reserve under the **same shock and same reserve budget**.
+The prototype compares post-shock market sourcing, individual reserves and a pooled SCFR reserve under the **same shock and the same aggregate reserve budget**.
 
-The prototype is deterministic, replayable and shareable, so judges can change assumptions and reproduce the same scenario themselves.
+The real-world concentration-risk problem is documented; the numerical experiment is explicitly synthetic.
 
 ---
 
 ## 60-second pitch
 
-Financial institutions increasingly depend on a small number of critical ICT and cloud providers. That creates a coordination problem: when one provider fails, many institutions may need recovery capacity simultaneously.
+Financial institutions can depend on a small number of critical ICT and cloud providers. If one shared provider fails, several institutions may request backup capacity simultaneously.
 
-CloudRescue turns that systemic-risk question into an interactive synthetic model.
+Resilience Atlas turns that systemic-risk question into an interactive synthetic model.
 
-It simulates 20 stylized banks connected to three shared providers and compares three recovery mechanisms:
-
+It simulates 20 stylized banks connected to three shared providers and compares:
 - post-shock market sourcing;
 - institution-specific reserves;
 - a pooled Systemic Cloud Failover Reserve, or SCFR.
 
-The core comparison is controlled: **same shock, same reserve budget, different allocation mechanism**.
+The central experiment is controlled:
 
-Users can watch a guided crisis replay, change assumptions in the Stress Lab, replay their scenario, generate deterministic seeds, share scenario links, export JSON and explore sensitivity across reserve and market-capacity assumptions.
+> **Same shock. Same reserve budget. Different coordination.**
 
-The real-world risk motivation is documented; the network and numerical results are explicitly synthetic.
+Users can watch a narrated six-scene simulation, change the shock and capacity assumptions in Scenario Lab, compare recovery outcomes, and export the current scenario.
+
+The model is deterministic, the assumptions are visible, and the interface separates documented real-world motivation from synthetic numerical results.
 
 ---
 
@@ -42,50 +43,38 @@ The real-world risk motivation is documented; the network and numerical results 
 
 ---
 
-# If a judge asks: “What is actually new here?”
+## What is actually new here?
 
-A concise answer:
+> The project isolates an allocation problem. Individual Reserves and SCFR receive the same aggregate reserve budget, so the comparison asks whether coordination can reduce stranded capacity and improve system-level recovery without simply adding more resources.
 
-> The prototype does not simply visualize a cloud outage. It isolates an allocation problem. Individual Reserves and SCFR receive the same aggregate reserve budget, so the experiment asks whether coordination can reduce stranded capacity and improve system-level recovery without adding more reserve.
+## Why does this matter?
 
----
+> Operational resilience is often managed institution by institution, but shared third-party dependencies can create correlated recovery demand. Resilience Atlas makes that system-level coordination problem visible and testable.
 
-# If a judge asks: “Why does this matter?”
+## Is SCFR proven?
 
-> Operational resilience is usually discussed institution by institution, but shared third-party dependencies can create correlated demand. CloudRescue makes that system-level coordination problem visible and testable.
+> No. Resilience Atlas is a synthetic mechanism stress-test. It explores one coordination concept under explicit assumptions and does not claim empirical validation.
 
----
+## Why trust the demo?
 
-# If a judge asks: “Is SCFR proven to work?”
+> The simulation is deterministic, the assumptions are visible, the reserve-budget comparison is controlled, the current scenario can be exported, and automated checks protect model invariants and important UI behavior.
 
-> No. CloudRescue v0.1 is a synthetic mechanism stress-test. It shows how one coordination concept behaves under explicit assumptions. It does not claim empirical validation or real-world performance.
+## Who would use this?
 
----
+> Bank operational-resilience and technology-risk teams, supervisors, and financial-stability researchers could use a tool like this to discuss shared-provider concentration and recovery coordination more concretely.
 
-# If a judge asks: “Why should I trust the demo?”
+## What did you build or learn?
 
-> The model is deterministic, assumptions are visible, Individual Reserves and SCFR use the same reserve budget, scenarios can be exported as JSON, seeded scenarios are reproducible, and automated checks test model invariants and important UI interactions.
+> I started from a finance and systemic-risk question and learned how to translate it into computational assumptions, separate simulation logic from presentation, build dynamic SVG visualizations, synchronize narration with model state, debug mobile interaction, add regression tests and deploy the product publicly.
 
----
+## How was AI used?
 
-# If a judge asks: “What did you personally build or learn?”
+> AI tools materially assisted brainstorming, code drafting, debugging, documentation and interface iteration. I directed the research framing and product decisions, reviewed the model logic and assumptions, tested the implementation and am responsible for understanding and explaining the final project.
 
-> I started from a finance and systemic-risk question. During FirstCommit I learned to translate it into computational assumptions, separate the simulation engine from the interface, build dynamic visualizations, synchronize narration with application state, serialize reproducible scenarios, write automated checks and deploy the full product publicly.
+## One-line technical explanation
 
----
+> Resilience Atlas allocates limited recovery capacity to synthetic banks affected by a shared-provider outage, constrains restoration by failover readiness and computes a weighted Systemic Resilience Score.
 
-# If a judge asks about AI
+## Closing line
 
-> AI tools materially assisted with brainstorming, code drafting, debugging, documentation and interface iteration. I directed the research framing and product decisions, reviewed the model logic and assumptions, tested the implementation, and I am responsible for understanding and explaining the final project.
-
----
-
-# One-line technical explanation
-
-> CloudRescue allocates limited recovery capacity to banks affected by a shared-provider outage, constrains restoration by each bank's synthetic failover readiness, and calculates a weighted Systemic Resilience Score.
-
----
-
-# Closing line
-
-> CloudRescue is not a forecast. It is a transparent sandbox for asking a narrower question: when a common shock hits many institutions at once, can coordination make the same reserve budget work better?
+> Resilience Atlas is not a forecast. It is a transparent sandbox for asking whether coordination can make the same recovery resources work better when a common shock hits many institutions at once.
