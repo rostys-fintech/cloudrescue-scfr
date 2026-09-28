@@ -124,7 +124,7 @@ const labRun = {
 
 const sceneTitles = [
   'Stable dependency network',
-  'Shared-provider failure',
+  'Relevant shared failure',
   'Simultaneous backup demand',
   'Reserve stranded by ring-fencing',
   'Pooled reserve reallocation',
@@ -206,18 +206,18 @@ function scenePresentation(c){
       statLabel:'SYSTEM STRUCTURE',
       statValue:'20 banks · 3 shared providers',
       caption:'Banks are connected to shared infrastructure, not isolated technology stacks.',
-      voice:'In this simulation, we can see how banks depend on shared cloud providers. Twenty synthetic banks use three providers for critical digital capacity. Several banks depend on the same provider. This means that one provider failure can affect many banks at the same time.',
+      voice:'In this simulation, we can see how banks depend on shared cloud providers. Twenty synthetic banks use three providers for critical digital capacity. Several banks depend on the same provider. That shared dependency becomes systemically relevant only when the same failure domain affects critical workloads and creates simultaneous recovery demand.',
       rate:.86,
       visualDuration:6200
     },
     {
-      kicker:'SHARED PROVIDER FAILURE',
-      title:provider+(multiple ? ' fail at the same time.' : ' fails.'),
-      text:'The banks connected to the failed '+(multiple ? 'providers lose' : 'provider loses')+' access to critical capacity together. A technical problem at one shared dependency therefore becomes a system-wide recovery problem.',
+      kicker:'RELEVANT SHARED FAILURE',
+      title:'A relevant shared failure affects critical workloads.',
+      text:'In this synthetic scenario, a relevant failure at the selected '+(multiple ? 'providers affects' : 'provider affects')+' critical workloads across multiple banks. Those affected institutions then require recovery capacity at the same time.',
       statLabel:'AFFECTED BANKS',
       statValue:affected+' of '+banks.length,
-      caption:affected+' banks become affected because they share the same failed infrastructure.',
-      voice:'Now, '+provider+(multiple ? ' fail at the same time.' : ' fails.')+' The banks connected to '+(multiple ? 'these providers' : 'this provider')+' lose critical capacity together. In this scenario, '+affected+' banks are affected. The important point is that the shock is shared.',
+      caption:affected+' banks are exposed to the same relevant failure domain in this synthetic scenario.',
+      voice:'Now we introduce a relevant shared failure at '+provider+'. In this synthetic scenario, critical workloads at '+affected+' banks are affected within the same failure domain. The important point is not simply that they use the same provider. It is that the same relevant failure affects critical workloads and creates simultaneous recovery demand.',
       rate:.84,
       visualDuration:6500
     },
@@ -244,13 +244,13 @@ function scenePresentation(c){
       visualDuration:7200
     },
     {
-      kicker:'SHARED CLOUD FAILOVER RESERVE',
+      kicker:'SYSTEMIC CLOUD FAILOVER RESERVE',
       title:'The same reserve can be pooled and redirected.',
       text:'SCFR keeps the same total reserve budget but changes how it is coordinated. Unused prepared capacity can be redirected toward the affected banks that need it most.',
       statLabel:'WORKLOAD RESTORED',
       statValue:restored+'%',
       caption:'Pooling changes allocation, not the size of the total reserve budget.',
-      voice:'Now we test S C F R, the Shared Cloud Failover Reserve. The total reserve budget does not increase. The difference is coordination. Unused capacity can be pooled and redirected to the affected banks. In this synthetic run, '+restored+' percent of critical workload is restored.',
+      voice:'Now we test S C F R, the Systemic Cloud Failover Reserve. The total reserve budget does not increase. The difference is coordination. Unused capacity can be pooled and redirected to the affected banks. In this synthetic run, '+restored+' percent of critical workload is restored.',
       rate:.82,
       visualDuration:7600
     },
