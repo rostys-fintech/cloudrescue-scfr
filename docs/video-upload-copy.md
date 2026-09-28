@@ -22,6 +22,8 @@ Before submitting to Devpost, test the link in a private/incognito browser windo
 
 Resilience Atlas is an interactive synthetic simulator for systemic cloud-resilience risk in banking.
 
+The project grew out of my broader research on what affects bank resilience and the role of digitalisation in it. Resilience Atlas narrows that research to one operational-resilience mechanism: what happens when several banks depend on shared cloud infrastructure and whether coordinated failover capacity can improve recovery under the same aggregate reserve budget.
+
 It explores what happens when multiple synthetic banks depend on the same shared cloud provider and need recovery capacity at the same time.
 
 The prototype compares three recovery mechanisms:
