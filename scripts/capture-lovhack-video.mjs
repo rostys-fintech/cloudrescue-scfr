@@ -89,9 +89,19 @@ await point('.ra-nav-tab[data-ra-tab="lab"]');
 await page.locator('.ra-nav-tab[data-ra-tab="lab"]').click();
 await settle(850);
 
-await point('#raProviderToggles input[value="orange"]');
-await page.locator('#raProviderToggles input[value="blue"]').uncheck();
-await page.locator('#raProviderToggles input[value="orange"]').check();
+await point('#raProviderToggles .provider-orange');
+await page.evaluate(()=>{
+  const blue=document.querySelector('#raProviderToggles input[value="blue"]');
+  const orange=document.querySelector('#raProviderToggles input[value="orange"]');
+  if(blue?.checked){
+    blue.checked=false;
+    blue.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+  if(orange && !orange.checked){
+    orange.checked=true;
+    orange.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+});
 await wait(450);
 
 await page.evaluate(()=>{
