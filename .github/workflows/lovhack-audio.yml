@@ -18,57 +18,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install FFmpeg runtime
-        run: |
-          npm install --no-save playwright@1.55.0
-          npx playwright install ffmpeg
-          FFMPEG="$(find "$HOME/.cache/ms-playwright" -type f -name 'ffmpeg-linux' | head -n 1)"
-          test -n "$FFMPEG"
-          test -x "$FFMPEG"
-          echo "FFMPEG=$FFMPEG" >> "$GITHUB_ENV"
-          "$FFMPEG" -version | head -n 2
-
       - name: Download Viktor narration clips
         run: |
-          mkdir -p artifacts/lovhack-audio/raw artifacts/lovhack-audio/normalized
+          mkdir -p artifacts/lovhack-audio/raw
 
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=72afcc11-8878-4eeb-8066-84545ff8c653.wav' -o artifacts/lovhack-audio/raw/01-hook.wav
-
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=1d2a60f2-2dc1-41ab-9feb-d7c3b8a3f820.wav' -o artifacts/lovhack-audio/raw/02-guide-1.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=8630f5b1-7b6e-4c63-84e8-5f2551ddc12b.wav' -o artifacts/lovhack-audio/raw/03-guide-2.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=de6b3f25-4a42-4d8a-abee-d4979d0c395b.wav' -o artifacts/lovhack-audio/raw/04-guide-3.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=77965ee8-99bc-417b-afc5-0f1e533656fc.wav' -o artifacts/lovhack-audio/raw/05-guide-4.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=a16036c5-ef1c-4a08-93c6-57ad62c434cc.wav' -o artifacts/lovhack-audio/raw/06-guide-5.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=d798f2ca-cec2-4199-87d5-80cd7ae53419.wav' -o artifacts/lovhack-audio/raw/07-guide-6.wav
-
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=4f8e1055-372a-46cc-ab24-ca3ec1638a26.wav' -o artifacts/lovhack-audio/raw/08-scenario.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=2c6ebf45-f586-4b3a-a351-e9565f5912e5.wav' -o artifacts/lovhack-audio/raw/09-evidence.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=aa8e4bcc-85d9-4644-8e4b-6cb68ddf0618.wav' -o artifacts/lovhack-audio/raw/10-close.wav
 
-      - name: Normalize and concatenate
-        run: |
-          set -e
-          for f in artifacts/lovhack-audio/raw/*.wav; do
-            name="$(basename "$f")"
-            "$FFMPEG" -loglevel error -y -i "$f" -ar 48000 -ac 2 -c:a pcm_s16le "artifacts/lovhack-audio/normalized/$name"
-          done
+          file artifacts/lovhack-audio/raw/* | tee artifacts/lovhack-audio/file-types.txt
+          for f in artifacts/lovhack-audio/raw/*; do
+            printf "%s: " "$(basename "$f")"
+            head -c 16 "$f" | od -An -tx1
+          done | tee artifacts/lovhack-audio/headers.txt
 
-          : > artifacts/lovhack-audio/concat.txt
-          for f in artifacts/lovhack-audio/normalized/*.wav; do
-            echo "file '$PWD/$f'" >> artifacts/lovhack-audio/concat.txt
-          done
-
-          "$FFMPEG" -loglevel error -y -f concat -safe 0 -i artifacts/lovhack-audio/concat.txt -c copy artifacts/lovhack-audio/resilience-atlas-demo-narration.wav
-          python3 - <<'PY'
-          import wave
-          p='artifacts/lovhack-audio/resilience-atlas-demo-narration.wav'
-          with wave.open(p,'rb') as w:
-              duration=w.getnframes()/w.getframerate()
-          with open('artifacts/lovhack-audio/duration-seconds.txt','w') as f:
-              f.write(f'{duration:.6f}\n')
-          print(f'Final narration: {duration:.3f}s')
-          PY
-
+      - name: Upload raw narration clips
+        uses: actions/upload-artifact@v4
+        with:
+          name: resilience-atlas-lovhack-demo-audio-raw
+          path: artifacts/lovhack-audio/
+          if-no-files-found: error
+          retention-days: 14
       - name: Upload narration
         uses: actions/upload-artifact@v4
         with:
