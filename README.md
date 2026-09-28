@@ -139,6 +139,12 @@ Potential users of the concept include:
 - automated model and UI regression checks;
 - GitHub Actions and public GitHub Pages deployment.
 
+## What existed before LovHack
+
+The research question and SCFR concept predated the LovHack build period.
+
+The current Resilience Atlas software product — including its redesign, guided simulation, Scenario Lab, model/evidence experience, robustness sweep, mobile hardening, exports and regression coverage — was built and substantially developed during the LovHack Season 3 build window. The Git history preserves that work.
+
 ## Build journey
 
 The project started from a finance and systemic-risk question rather than a software template.
@@ -162,12 +168,29 @@ The Git history preserves this iteration.
 - Vanilla JavaScript / ES modules
 - SVG
 - browser Audio API
+- HeyGen-generated Viktor narration assets
 - JSON / Blob export
 - Node.js tests
 - GitHub Actions
 - GitHub Pages
 
 No front-end framework or backend is required for the current prototype.
+
+## Run locally
+
+No build step is required.
+
+```bash
+python3 -m http.server 8000
+```
+
+Then open `http://localhost:8000/`.
+
+To run the regression suite:
+
+```bash
+npm test
+```
 
 ## Evidence base
 
