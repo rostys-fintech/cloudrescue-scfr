@@ -1,252 +1,119 @@
-# FirstCommit judging map — CloudRescue
+# LovHack judging map — Resilience Atlas
 
-Official event criteria (checked on the FirstCommit Devpost page):
+This document maps the current product to the four areas that matter most for the submission.
 
-- **Learning & Growth — 30%**
-- **Creativity & Impact — 25%**
-- **Technical Execution — 25%**
-- **Presentation & Communication — 20%**
+## 1. Execution & Functionality
 
-This document maps CloudRescue features to those criteria so the submission does not rely on judges discovering the strongest evidence by accident.
+### Strong evidence
 
-Official event page:
-https://firstcommit.devpost.com/
+- Fully deployed working prototype on GitHub Pages.
+- Deterministic simulation engine separated from interface code.
+- Three recovery mechanisms under one shared shock.
+- Interactive Scenario Lab.
+- Model-driven scenario playback.
+- Narrated six-scene simulation with synchronized visual cues.
+- Responsive mobile layout.
+- iOS-specific touch and audio fixes.
+- Readable report and JSON export.
+- Automated model and UI regression checks.
+- GitHub Actions.
 
----
+### What judges should see
 
-## 1. Learning & Growth — 30%
+1. Run Guided Simulation.
+2. Open Scenario Lab.
+3. Change the failed provider or capacity assumptions.
+4. Run the scenario.
+5. Show the resulting capacity gap / recovery conclusion.
+6. Export the scenario only if time allows.
 
-### Strongest evidence already in the project
+### Technical point to emphasize
 
-- Started from a finance/systemic-risk question rather than a software template.
-- Translated an abstract policy mechanism into explicit computational assumptions.
-- Built a deterministic simulation engine.
-- Learned stateful browser interaction and SVG/DOM visualization.
-- Added browser narration and solved timing problems where scenes could advance before narration finished.
-- Added regression tests after UI selector bugs broke interaction.
-- Added seeded scenarios, share links and reproducible JSON export.
-- Added a visible Development Journey section.
-- Added an explicit AI-assistance disclosure and ownership statement.
+The core comparison holds the **aggregate reserve budget constant** between Individual Reserves and SCFR.
 
-### What the video must show
-
-Show **Development Journey · FirstCommit** near the end.
-
-Say clearly:
-
-> My background is finance and banking. During FirstCommit I learned how to turn a systemic-risk question into a deterministic model, an interactive browser application, reproducible scenarios and automated checks.
-
-### Risk to avoid
-
-Do not let the submission look like a pre-existing research project that merely received a website.
-
-The narrative should emphasize the software-development learning journey that happened during the hackathon.
+The product is not a prerecorded animation. The visuals consume the same underlying model state as the interactive controls.
 
 ---
 
-## 2. Creativity & Impact — 25%
+## 2. Problem & Impact
 
-### Strongest evidence
+### Problem
 
-- System-level framing of cloud resilience rather than institution-by-institution backup planning.
-- SCFR as a pooled, pre-arranged coordination mechanism.
-- Visual explanation of stranded reserve capacity.
-- Same-shock / same-reserve-budget comparison.
-- Guided audiovisual crisis replay.
-- Stress Lab that lets a non-specialist manipulate the mechanism.
+A bank can have a credible individual failover plan while the system still faces a shortage if many banks depend on the same external provider and request recovery capacity simultaneously.
 
-### What the video must show
+That is a **correlated recovery-demand problem**.
 
-The strongest creative sequence is:
+### Why it matters
 
-**Provider outage → simultaneous demand → stranded reserve → same reserve pooled → improved recovery**
-
-Use the line:
-
-> Same shock. Same reserve budget. Different coordination.
+The concept is relevant to:
+- operational-resilience teams;
+- technology-risk teams;
+- supervisors;
+- financial-stability researchers.
 
 ### Impact framing
 
-Do not claim that SCFR has been empirically validated.
+Do not claim that the prototype proves SCFR should be implemented.
 
-The meaningful contribution is:
+Use:
 
-> CloudRescue makes a real concentration-risk problem visible and provides a transparent sandbox for testing one possible coordination mechanism.
-
----
-
-## 3. Technical Execution — 25%
-
-### Strongest evidence
-
-- Separate deterministic simulation engine.
-- Three explicit allocation mechanisms.
-- Dynamic SVG dependency network.
-- Animated capacity and reserve movement.
-- Web Speech API narration.
-- Replay of any Stress Lab scenario.
-- Seeded deterministic scenarios.
-- Shareable URL serialization.
-- JSON export.
-- Sensitivity heatmap.
-- Automated model invariants.
-- Automated UI smoke checks.
-- GitHub Actions.
-- GitHub Pages deployment.
-- No external front-end framework required.
-
-### What the video must show
-
-Do not spend time opening source files line by line.
-
-Instead prove execution through product behavior:
-
-1. change assumptions;
-2. replay the changed scenario;
-3. generate a seed;
-4. show Scenario ID;
-5. copy/open a share link;
-6. show Sensitivity Explorer;
-7. briefly show green GitHub Actions checks.
-
-### Technical explanation to be ready for
-
-Be able to explain:
-
-- how market capacity is calculated;
-- how Individual Reserves differ from SCFR;
-- how failover readiness limits recovery;
-- how the Systemic Resilience Score is calculated;
-- why the same reserve budget is used in both reserve mechanisms;
-- how deterministic seed generation works;
-- what the automated tests verify.
+> Resilience Atlas makes a documented concentration-risk problem visible and provides a transparent sandbox for exploring one possible coordination mechanism.
 
 ---
 
-## 4. Presentation & Communication — 20%
+## 3. Innovation
 
-### Strongest evidence
+The strongest innovation is not the globe animation.
 
-- Guided audiovisual demo.
-- Captions.
-- Narration synchronized to speech completion.
-- Focus View.
-- Six-stage crisis journey.
-- Controlled Comparison mechanism comparison.
-- Real vs Synthetic transparency block.
-- Methodology architecture view.
-- Consistent light/dark institutional interface.
-- Dedicated demo script and screenshot plan.
+It is the **controlled mechanism comparison**:
 
-### Video priority
+- same outage;
+- same aggregate reserve budget;
+- different allocation structure.
 
-A judge should understand the project before seeing the Stress Lab controls.
+Individual Reserves can leave capacity stranded at unaffected institutions. SCFR allows the same aggregate reserve to be redirected to affected banks.
 
-Order:
+This isolates the value of **coordination**, rather than simply giving one strategy more resources.
 
-1. problem;
-2. guided crisis;
-3. same-budget comparison;
-4. interactive proof;
-5. reproducibility;
-6. methodology;
-7. learning journey.
+Best line:
 
-### Presentation risk
-
-Avoid narrating every metric.
-
-The interface contains details for inspection; the video should communicate the story.
+> **Same shock. Same reserve budget. Different coordination.**
 
 ---
 
-# Prize-category positioning
+## 4. Presentation & UX
 
-## Champion
+### Current strengths
 
-CloudRescue needs to show the combined story:
+- six-scene mechanism-first story;
+- synchronized neural narration;
+- dark high-tech simulation view;
+- light analysis mode;
+- mobile-safe navigation and controls;
+- concise visual readouts;
+- explicit “synthetic, not a forecast” boundary.
 
-**original problem framing + working product + technical understanding + visible learning.**
+### Judge flow
 
-## Best Web/App Experience
+A judge should understand the project in this order:
 
-Key evidence:
+1. shared dependency;
+2. common provider failure;
+3. simultaneous recovery demand;
+4. ring-fenced reserve;
+5. pooled reserve;
+6. outcome comparison;
+7. change assumptions in Scenario Lab;
+8. show evidence boundary.
 
-- guided demo;
-- focus mode;
-- dark/light themes;
-- interactive Stress Lab;
-- replay;
-- shareable scenarios;
-- clear navigation.
-
-## Best Design
-
-Key evidence:
-
-- institutional fintech visual language;
-- one dominant visual concept per guided scene;
-- consistent risk / warning / recovery color semantics;
-- before/after mechanism visualization;
-- typography and spacing polish.
-
-## Best Technical Achievement
-
-Key evidence:
-
-- deterministic engine;
-- replayable model-driven story;
-- shareable scenarios;
-- seeded generation;
-- sensitivity recomputation;
-- automated checks.
-
-## Biggest Learning Journey
-
-Key evidence:
-
-- finance background;
-- Development Journey section;
-- documented bugs and redesigns;
-- move from static numbers to mechanism-first visualization;
-- CI / reproducibility / deployment learning.
-
-## Most Polished Project
-
-Key evidence:
-
-- complete live deployment;
-- README and documentation;
-- narration;
-- themes;
-- replay;
-- sensitivity explorer;
-- challenge mode;
-- real/synthetic guardrails;
-- final QA checklist.
+Do not start with equations or source files.
 
 ---
 
-# Remaining gaps before submission
+# Biggest submission risks
 
-## Must finish
-
-- final live-site visual QA from screenshots;
-- confirm no overlap at common desktop widths;
-- confirm narration quality on the recording machine;
-- capture final screenshots;
-- record demo video;
-- paste final Devpost text;
-- verify all public links in incognito mode.
-
-## Do not add unless a clear bug appears
-
-- account/login system;
-- backend/database;
-- AI chatbot;
-- more model parameters;
-- more charts;
-- real-bank names;
-- real-world performance claims.
-
-At this stage, polish and communication have higher expected value than feature expansion.
+1. **Overclaiming** — never present synthetic outputs as real-world estimates.
+2. **Feature drift** — describe only features that are actually live.
+3. **Too much explanation** — the video must show product behavior.
+4. **Weak user framing** — explicitly name bank risk teams, supervisors and researchers.
+5. **Unclear novelty** — repeat that the comparison isolates coordination under the same reserve budget.
