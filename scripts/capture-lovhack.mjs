@@ -75,9 +75,12 @@ await page.evaluate(()=>{
   reserve.value='30';
   reserve.dispatchEvent(new Event('input',{bubbles:true}));
 });
+await settle(page,400);
+await page.locator('#raRunScenario').click();
+await page.locator('#raScenarioConclusion:not([hidden])').waitFor({state:'visible',timeout:20000});
 await settle(page,500);
-await page.locator('#raLabSheet').scrollIntoViewIfNeeded();
-await settle(page,250);
+await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+await settle(page,350);
 await viewportShot(page,'06-scenario-lab.png');
 
 await page.locator('#raResetLab').click();
