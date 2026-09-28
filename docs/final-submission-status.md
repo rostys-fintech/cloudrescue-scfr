@@ -63,6 +63,7 @@ Submission deadline: **4 Oct 2026 @ 11:45 PM EDT**
 - [x] Robustness Sweep added and documented
 - [x] Final Model checks passing
 - [x] Reproducible final-media workflow added
+- [x] Canonical CI final-demo artifact generated successfully (`10958640783`)
 
 ## Final media
 
