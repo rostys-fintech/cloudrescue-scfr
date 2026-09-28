@@ -129,7 +129,7 @@ https://github.com/rostys-fintech/cloudrescue-scfr
 
 ## Demo Video
 
-[ADD PUBLIC VIDEO URL]
+https://youtu.be/k7S-aZvqKXQ
 
 ## AI Assistance Disclosure
 
