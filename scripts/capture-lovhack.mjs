@@ -107,6 +107,15 @@ await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
 await settle(page,500);
 await viewportShot(page,'08-evidence-users.png');
 
+/* Extra Devpost polish captures: real light analysis theme + reproducibility/export */
+await page.locator('#raThemeToggle').click();
+await settle(page,700);
+await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+await settle(page,400);
+await viewportShot(page,'10-light-analysis-theme.png');
+
+await framedViewportShot(page,'.ra-repro-block','11-export-reproducibility.png',145);
+
 await desktop.close();
 
 const mobile=await browser.newContext({
