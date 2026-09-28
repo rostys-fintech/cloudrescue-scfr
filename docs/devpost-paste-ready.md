@@ -12,6 +12,18 @@ A systemic cloud-resilience simulator for shared-provider shocks in banking.
 
 Resilience Atlas is an interactive synthetic stress-test that shows how a shared cloud outage can create system-wide recovery demand — and whether coordinated reserve allocation can make the same recovery resources work better.
 
+## Research origin
+
+Resilience Atlas grew out of my broader research on **what affects bank resilience and the role of digitalisation in it**.
+
+I narrowed that broader topic to one operational-resilience question:
+
+> **When several banks depend on shared cloud infrastructure, can better coordination of failover capacity improve system-level recovery without increasing the aggregate reserve budget?**
+
+That question led to the SCFR concept and then to Resilience Atlas as a working synthetic stress-test.
+
+The research framing and SCFR concept existed before LovHack; the current software product and its interactive implementation were built during the LovHack build period.
+
 ## What problem does it solve?
 
 Financial institutions can depend on a limited set of critical ICT and cloud providers. That creates a system-level operational-resilience problem: a backup plan can work for one institution and still fail for the system if many institutions need the same recovery capacity at the same time.
