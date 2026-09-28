@@ -18,8 +18,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify FFmpeg
-        run: ffmpeg -version | head -n 2
+      - name: Install FFmpeg runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install ffmpeg
+          echo "$(find $HOME/.cache/ms-playwright -type f -name ffmpeg | head -n 1 | xargs dirname)" >> $GITHUB_PATH
 
       - name: Download Viktor narration clips
         run: |
