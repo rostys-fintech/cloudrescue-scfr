@@ -36,6 +36,11 @@ A truthful record of the build journey from finance question to deployed prototy
 
 Final live-product, repository, video and Devpost checks.
 
+### 7. Final capture runbook
+[capture-runbook.md](capture-runbook.md)
+
+Exact screenshot states, captions and upload order for the competition submission.
+
 ## Live project
 
 **Prototype:** https://rostys-fintech.github.io/cloudrescue-scfr/  
