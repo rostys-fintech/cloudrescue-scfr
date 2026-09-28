@@ -32,4 +32,12 @@ assert.match(css,/TOUCH \/ LANDSCAPE PHONE FIX/);
 assert.match(css,/@media\(max-width:1180px\)/);
 assert.match(css,/pointer:coarse/);
 
+assert.match(js,/function bindTapTarget\(/);
+assert.match(js,/addEventListener\('touchend'/);
+assert.match(js,/prepareGuidedOpening\(runId\);/);
+assert.doesNotMatch(js,/await prepareGuidedOpening\(runId\)/);
+assert.match(css,/MOBILE TAP RELIABILITY — iOS HIT TEST/);
+assert.match(css,/\.ra-lab-console:not\(\.is-mobile-open\)\{[\s\S]*pointer-events:none!important/);
+assert.match(html,/20260928-mobile01/);
+
 console.log('Mobile run-focus checks passed.');
