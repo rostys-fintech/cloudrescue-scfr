@@ -185,15 +185,15 @@ The prototype does not yet model:
 
 These are research extensions rather than hidden assumptions.
 
-## Build history and competition disclosure
+## Build history and disclosure
 
-The research question and SCFR concept predated the current software build.
+The research question and SCFR concept predated the current software prototype.
 
-The present **Resilience Atlas** product — including the redesign, guided simulation, Scenario Lab, model/evidence experience, robustness sweep, mobile hardening, exports and regression coverage — was built and substantially developed during the LovHack Season 3 build window. The Git history preserves that iteration.
+The present **Resilience Atlas** product — including the redesign, guided simulation, Scenario Lab, model/evidence experience, robustness sweep, mobile hardening, exports and regression coverage — was developed iteratively as a software implementation of that broader research direction. The Git history preserves that iteration.
 
 AI tools materially assisted brainstorming, code drafting, debugging, documentation and interface iteration. The project author selected the research framing and assumptions, reviewed outputs, directed product decisions, tested the implementation and is responsible for the final prototype.
 
-For competition-specific material, see:
+For implementation and review material, see:
 
 - [`docs/START-HERE.md`](docs/START-HERE.md)
 - [`docs/judge-pitch-card.md`](docs/judge-pitch-card.md)
