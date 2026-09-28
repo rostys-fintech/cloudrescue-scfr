@@ -78,6 +78,18 @@ The deterministic engine recalculates:
 
 Running a scenario produces a visual playback and a concise conclusion.
 
+## Robustness Sweep
+
+To avoid relying on one hand-picked baseline, Resilience Atlas reruns the same deterministic model across a local 3×3 grid around the current market-capacity and reserve assumptions.
+
+Each cell reports:
+
+**SCFR resilience − Individual Reserve resilience**
+
+under the same aggregate reserve budget.
+
+This makes it visible where coordination helps, where the effect is modest, and where changing the allocation mechanism adds little under the tested synthetic assumptions.
+
 ## Model & Evidence
 
 The product explicitly separates:
@@ -96,6 +108,34 @@ The product explicitly separates:
 - all numerical results.
 
 The current scenario can be exported as a readable report or JSON.
+
+Potential users of a tool like this include:
+- bank operational-resilience teams;
+- technology-risk teams;
+- supervisors;
+- financial-stability researchers.
+
+## What I built during LovHack
+
+The core research question and SCFR concept existed before the hackathon. During the LovHack build period, I turned that research direction into the current working product.
+
+The work completed during this build included:
+- the Resilience Atlas product redesign;
+- the six-scene narrated Guided Simulation;
+- word-level narration / visual synchronization;
+- smooth cue-to-cue transition logic;
+- the interactive Scenario Lab;
+- model-driven scenario playback and conclusion;
+- the Model & Evidence view;
+- the controlled same-budget comparison;
+- the Robustness Sweep;
+- readable report and JSON exports;
+- responsive mobile behavior;
+- iOS touch and audio fixes;
+- automated regression tests and GitHub Actions hardening;
+- judge-facing documentation and submission materials.
+
+The Git history preserves that development sequence.
 
 ## How I built it
 
@@ -152,7 +192,8 @@ I learned how to:
 - coordinate narration and animation state;
 - debug browser and mobile interaction;
 - write model and UI regression checks;
-- communicate model limitations clearly.
+- communicate model limitations clearly;
+- use sensitivity checks to avoid over-interpreting one synthetic baseline.
 
 ## What is next
 
