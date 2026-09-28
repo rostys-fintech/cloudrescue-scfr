@@ -5,7 +5,7 @@ const js=fs.readFileSync(new URL('../resilience-atlas.js',import.meta.url),'utf8
 const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'utf8');
 const html=fs.readFileSync(new URL('../resilience-atlas.html',import.meta.url),'utf8');
 
-assert.match(html,/20260927-story0[1-9]/);
+assert.match(html,/202609(?:27-story0[1-9]|28-mobile0[1-9])/);
 assert.match(js,/const GUIDED_CUES = \[/);
 assert.equal((js.match(/visualScene:/g)||[]).length >= 35,true);
 
