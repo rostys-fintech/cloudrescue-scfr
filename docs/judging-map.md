@@ -15,6 +15,7 @@ This document maps the current product to the four areas that matter most for th
 - Responsive mobile layout.
 - iOS-specific touch and audio fixes.
 - Readable report and JSON export.
+- Model-driven Robustness Sweep across nearby market/reserve assumptions.
 - Automated model and UI regression checks.
 - GitHub Actions.
 
@@ -25,7 +26,8 @@ This document maps the current product to the four areas that matter most for th
 3. Change the failed provider or capacity assumptions.
 4. Run the scenario.
 5. Show the resulting capacity gap / recovery conclusion.
-6. Export the scenario only if time allows.
+6. Show Robustness Sweep.
+7. Export the scenario only if time allows.
 
 ### Technical point to emphasize
 
@@ -92,6 +94,7 @@ Best line:
 - mobile-safe navigation and controls;
 - concise visual readouts;
 - explicit “synthetic, not a forecast” boundary.
+- compact robustness matrix that makes the sensitivity story visible.
 
 ### Judge flow
 
