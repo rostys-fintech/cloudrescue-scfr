@@ -105,17 +105,19 @@ Point to audience strip.
 
 > The concept is designed for discussion by bank resilience teams, supervisors and financial-stability researchers.
 
-## 2:25–2:42 — Close
+## Final close — Controlled Comparison
 
-Return to Controlled Comparison or Simulation.
+Remain on **Controlled Comparison**.
 
-Say:
+Narration:
 
-> This is not a forecast or a policy recommendation. It is a transparent sandbox for one narrower question: can better coordination make the same recovery resources work better?
+> Same shock. Same reserve budget. Different coordination. A plan B for one bank may not be a plan B for the system. Thank you for watching. My goal is to keep developing this research toward practical systemic cloud resilience in banking.
 
-Final line:
+During “Thank you for watching,” a compact closing note fades in:
 
-> A plan B for one bank may not be a plan B for the system.
+**THANK YOU · RESEARCH → PRACTICAL RESILIENCE**
+
+Do not cut to a separate end card; keep the working product visible until the final frame.
 
 ## Editing rules
 
