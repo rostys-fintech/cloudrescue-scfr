@@ -423,8 +423,24 @@ function evidenceSnapshot(){
 }
 
 function localSweepLevels(value,min,max,step){
-  const levels=[Math.max(min,value-step),value,Math.min(max,value+step)];
-  return [...new Set(levels.map(v=>Math.round(v/5)*5))].sort((a,b)=>a-b);
+  const snap=v=>Math.max(min,Math.min(max,Math.round(v/5)*5));
+  const levels=[snap(value-step),snap(value),snap(value+step)];
+
+  /* Keep the judge-facing matrix visually stable at 3×3, including
+     scenarios near a slider boundary. */
+  const unique=[...new Set(levels)];
+  for(let distance=step; unique.length<3 && distance<=max-min; distance+=step){
+    for(const candidate of [snap(value-distance),snap(value+distance)]){
+      if(!unique.includes(candidate)) unique.push(candidate);
+      if(unique.length===3) break;
+    }
+  }
+
+  for(let candidate=min; unique.length<3 && candidate<=max; candidate+=5){
+    if(!unique.includes(candidate)) unique.push(candidate);
+  }
+
+  return unique.slice(0,3).sort((a,b)=>a-b);
 }
 
 function renderRobustnessSweep(){
@@ -473,7 +489,6 @@ function renderRobustnessSweep(){
     return row.join('');
   });
 
-  mount.style.setProperty('--ra-matrix-cols',String(marketLevels.length+1));
   mount.innerHTML=header.join('')+rows.join('');
 }
 
