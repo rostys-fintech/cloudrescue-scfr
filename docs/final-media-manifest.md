@@ -2,13 +2,25 @@
 
 ## Final demo
 
-- Runtime: **164.703 seconds (2:44.7)**
+Verified local assembly from the successful LovHack visual and Viktor narration artifacts.
+
+- Runtime: **165.61 seconds (2:45.6)**
 - Resolution: **1920×1080**
+- Frame rate: **25 fps**
 - Video: **H.264**
-- Audio: **AAC, 48 kHz**
+- Audio: **AAC, mono, 48 kHz, 192 kbps target**
 - Narrator: **Viktor — Serious & Composed**
+- File size: **19.3 MB**
 - Story: hook → full Guided Simulation → Scenario Lab → Robustness Sweep → Evidence → controlled-comparison close
-- SHA-256: `b03c3b57832b2cdc32a96c3215b4516b04e8d6a7cef5882f19a7b64c82813940`
+- SHA-256: `3083345cc580de1576fa6246930f2d46bad3c3802cf7167add1da1202d884d7d`
+
+The source visual was 164.92 seconds. The narration track was 165.60 seconds, so the final frame is extended by approximately 0.76 seconds rather than truncating the closing narration.
+
+A reproducible assembly script is available at:
+- `scripts/assemble-lovhack-final.sh`
+
+A one-click CI build is available at:
+- `.github/workflows/lovhack-final-media.yml`
 
 ## Screenshot set
 
@@ -38,4 +50,4 @@ Use screenshots in this order:
 
 ## Remaining external step
 
-Upload the final MP4 to a publicly viewable video host, paste that URL into `docs/devpost-final-copy.md`, then complete the final Devpost preview.
+Upload `Resilience_Atlas_LovHack_Final_Demo.mp4` to a publicly viewable video host with no access request required. Paste that URL into `docs/devpost-final-copy.md` and `docs/devpost-paste-ready.md`, then complete the final Devpost preview.
