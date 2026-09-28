@@ -6940,3 +6940,114 @@ body.ra-guided-running #simulation #raEarthMount{
     padding:8px 9px;
   }
 }
+
+
+/* =========================================================
+   ROBUSTNESS SWEEP — local sensitivity around current scenario
+   ========================================================= */
+.ra-robustness-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin:12px 0;
+}
+.ra-robustness-summary article{
+  padding:11px 12px;
+  border:1px solid var(--ra-border);
+  background:var(--ra-surface-soft);
+}
+.ra-robustness-summary span{
+  display:block;
+  color:var(--ra-text-3);
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+.ra-robustness-summary b{
+  display:block;
+  margin-top:5px;
+  color:var(--ra-text-1);
+  font-size:20px;
+  letter-spacing:-.03em;
+}
+.ra-robustness-summary small{
+  display:block;
+  margin-top:3px;
+  color:var(--ra-text-3);
+  font-size:7.5px;
+}
+.ra-robustness-matrix{
+  --ra-matrix-cols:4;
+  display:grid;
+  grid-template-columns:minmax(92px,1.25fr) repeat(calc(var(--ra-matrix-cols) - 1),minmax(64px,1fr));
+  gap:5px;
+  align-items:stretch;
+}
+.ra-matrix-head,
+.ra-matrix-corner,
+.ra-matrix-cell{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:7px 8px;
+  border:1px solid var(--ra-border);
+  border-radius:6px;
+}
+.ra-matrix-head,
+.ra-matrix-corner{
+  color:var(--ra-text-3);
+  background:var(--ra-surface-soft);
+  font-size:7px;
+  font-weight:850;
+  letter-spacing:.07em;
+  text-align:center;
+}
+.ra-matrix-cell{
+  color:var(--ra-text-2);
+  background:var(--ra-surface);
+  font-size:12px;
+  font-variant-numeric:tabular-nums;
+}
+.ra-matrix-cell.soft{
+  background:color-mix(in srgb,var(--ra-teal) 5%,var(--ra-surface));
+}
+.ra-matrix-cell.positive{
+  color:var(--ra-teal);
+  background:color-mix(in srgb,var(--ra-teal) 9%,var(--ra-surface));
+  border-color:color-mix(in srgb,var(--ra-teal) 26%,var(--ra-border));
+}
+.ra-matrix-cell.strong{
+  color:var(--ra-teal);
+  background:color-mix(in srgb,var(--ra-teal) 15%,var(--ra-surface));
+  border-color:color-mix(in srgb,var(--ra-teal) 40%,var(--ra-border));
+}
+.ra-matrix-cell.is-current{
+  box-shadow:inset 0 0 0 1px var(--ra-primary);
+}
+.ra-robustness-boundary{
+  display:block;
+  margin-top:10px;
+  color:var(--ra-text-3);
+  font-size:8px;
+  line-height:1.45;
+}
+
+@media(max-width:767px){
+  .ra-robustness-summary{
+    grid-template-columns:1fr 1fr;
+  }
+  .ra-robustness-summary article:last-child{
+    grid-column:1/-1;
+  }
+  .ra-robustness-matrix{
+    overflow-x:auto;
+    grid-template-columns:96px repeat(calc(var(--ra-matrix-cols) - 1),72px);
+    padding-bottom:4px;
+  }
+  .ra-matrix-head,
+  .ra-matrix-corner,
+  .ra-matrix-cell{
+    min-height:44px;
+  }
+}
