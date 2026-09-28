@@ -14,7 +14,7 @@ Resilience Atlas is an interactive synthetic stress-test that shows how a shared
 
 **Prototype:** https://rostys-fintech.github.io/cloudrescue-scfr/  
 **GitHub:** https://github.com/rostys-fintech/cloudrescue-scfr  
-**Demo video:** [ADD FINAL VIDEO LINK]
+**Demo video:** https://youtu.be/k7S-aZvqKXQ
 
 ## Inspiration
 
