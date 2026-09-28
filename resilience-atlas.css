@@ -6795,3 +6795,51 @@ body.ra-guided-running #simulation #raEarthMount{
     transition-duration:.12s!important;
   }
 }
+
+
+/* =========================================================
+   MOBILE TAP RELIABILITY — iOS HIT TEST + TRUE HIDDEN SHEETS
+   ========================================================= */
+@media (max-width:960px), (pointer:coarse) and (max-width:1180px){
+  .ra-lab-console:not(.is-mobile-open){
+    pointer-events:none!important;
+  }
+  .ra-lab-console.is-mobile-open{
+    pointer-events:auto!important;
+  }
+  .ra-mobile-sheet-backdrop[hidden]{
+    display:none!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+
+  .ra-mobile-app-nav{
+    pointer-events:auto!important;
+    isolation:isolate;
+  }
+  .ra-mobile-tab{
+    position:relative;
+    z-index:2;
+    pointer-events:auto!important;
+    cursor:pointer;
+    touch-action:manipulation!important;
+    -webkit-user-select:none;
+    user-select:none;
+  }
+
+  #raRunPreview,
+  .ra-mobile-scene-nav button{
+    position:relative;
+    z-index:2;
+    pointer-events:auto!important;
+    touch-action:manipulation!important;
+    -webkit-user-select:none;
+    user-select:none;
+  }
+
+  .ra-earth-overlay,
+  #raEarthMount::before,
+  #raEarthMount::after{
+    pointer-events:none!important;
+  }
+}
