@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://resource2.heygen.ai" crossorigin>
   <link rel="mask-icon" href="resilience-atlas-mark.svg?v=20260927-polish01" color="#246FBF">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260928-mobile02">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260928-judge01">
 </head>
 <body>
   <div class="ra-app">
@@ -336,10 +336,16 @@
             <header>
               <div>
                 <span>COMPARE RECOVERY MODELS</span>
-                <b>Same shock. Different allocation.</b>
+                <b>Same shock. Same reserve budget. Different coordination.</b>
               </div>
               <small id="raCompareContext">Blue Cloud · 20% market · 25% reserve</small>
             </header>
+
+            <div class="ra-compare-principle">
+              <span>CONTROLLED TEST</span>
+              <b>Individual Reserves and SCFR receive the same aggregate reserve pool.</b>
+              <small>The allocation mechanism changes; the reserve budget does not.</small>
+            </div>
 
             <div class="ra-model-compare-grid">
               <button class="ra-model-card is-active" data-ra-compare="market" type="button">
@@ -439,6 +445,14 @@
               <b>Banks, workloads, readiness and numerical outputs</b>
               <small>Illustrative test bed — not estimates of real institutions.</small>
             </article>
+          </div>
+          <div class="ra-audience-strip" aria-label="Potential users">
+            <span>BUILT FOR DISCUSSION BY</span>
+            <div>
+              <article><b>Bank resilience teams</b><small>Explore shared-provider recovery bottlenecks.</small></article>
+              <article><b>Supervisors</b><small>Make concentration and coordination assumptions visible.</small></article>
+              <article><b>Researchers</b><small>Stress-test mechanisms without presenting synthetic outputs as forecasts.</small></article>
+            </div>
           </div>
         </header>
 
