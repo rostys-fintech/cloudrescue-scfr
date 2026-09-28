@@ -53,10 +53,20 @@ Submission deadline: **4 Oct 2026 @ 11:45 PM EDT**
 - [x] Development log updated
 - [x] AI disclosure explicit
 
+## Final preparation completed
+
+- [x] Final Devpost copy updated with build-period disclosure
+- [x] LovHack form map updated
+- [x] Screenshot capture runbook prepared
+- [x] Video storyboard prepared
+- [x] Judge pitch and technical defense aligned
+- [x] Robustness Sweep added and documented
+- [x] Final Model checks passing
+
 ## Still required before submission
 
-- [ ] Final live-site visual QA
-- [ ] Capture final screenshots
+- [x] Final live-site code/layout QA
+- [ ] Capture final screenshots using `docs/capture-runbook.md`
 - [ ] Record 2–3 minute demo video
 - [ ] Watch final video once from start to finish
 - [ ] Upload video and verify public access
