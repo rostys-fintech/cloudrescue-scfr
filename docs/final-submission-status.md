@@ -65,7 +65,7 @@ Submission deadline: **4 Oct 2026 @ 11:45 PM EDT**
 - [x] Robustness Sweep added and documented
 - [x] Final Model checks passing
 - [x] Reproducible final-media workflow added
-- [x] Canonical CI final-demo artifact generated successfully (`10958640783`)
+- [x] Canonical CI final-demo artifact generated successfully (`10961186027`)
 
 ## Final media
 
@@ -73,7 +73,8 @@ Submission deadline: **4 Oct 2026 @ 11:45 PM EDT**
 - [x] Controlled Comparison and Robustness Sweep recaptured as full 16:9 judge frames
 - [x] Final demo assembled in 1920×1080 H.264/AAC
 - [x] Research-origin presentation overlay added over the live product
-- [x] Final demo runtime: **2:46.8**
+- [x] Research-to-practice thank-you close added without hiding the working product
+- [x] Final demo runtime: **2:56.1**
 - [x] Viktor — Serious & Composed narration
 - [x] Scene-level narration timestamps aligned to measured visual transitions
 - [x] Final MP4 container verified and key frames decoded successfully
