@@ -51,7 +51,7 @@ jobs:
       - name: Download Viktor narration
         run: |
           mkdir -p artifacts/lovhack-audio/raw
-          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=72afcc11-8878-4eeb-8066-84545ff8c653.wav' -o artifacts/lovhack-audio/raw/01-hook.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=fe4cfd33-c8f7-4276-be1c-97f1050bbca0.wav' -o artifacts/lovhack-audio/raw/01-hook.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=1d2a60f2-2dc1-41ab-9feb-d7c3b8a3f820.wav' -o artifacts/lovhack-audio/raw/02-guide-1.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=8630f5b1-7b6e-4c63-84e8-5f2551ddc12b.wav' -o artifacts/lovhack-audio/raw/03-guide-2.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=de6b3f25-4a42-4d8a-abee-d4979d0c395b.wav' -o artifacts/lovhack-audio/raw/04-guide-3.wav
