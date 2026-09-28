@@ -1,0 +1,53 @@
+name: LovHack demo visual
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lovhack-video.yml'
+      - 'scripts/capture-lovhack-video.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start local app
+        run: |
+          python3 -m http.server 4173 > /tmp/resilience-atlas-server.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/resilience-atlas-server.log
+          exit 1
+
+      - name: Record demo visual
+        run: node scripts/capture-lovhack-video.mjs
+
+      - name: Upload demo visual
+        uses: actions/upload-artifact@v4
+        with:
+          name: resilience-atlas-lovhack-demo-visual
+          path: artifacts/lovhack-video/
+          if-no-files-found: error
+          retention-days: 14
