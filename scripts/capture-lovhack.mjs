@@ -39,6 +39,20 @@ async function sectionShot(page,selector,name,padding=18){
   await page.screenshot({path:path.join(outDir,name),clip});
 }
 
+async function framedViewportShot(page,selector,name,top=160){
+  const locator=page.locator(selector);
+  await locator.scrollIntoViewIfNeeded();
+  await settle(page,300);
+  await page.evaluate(({selector,top})=>{
+    const el=document.querySelector(selector);
+    if(!el) return;
+    const y=el.getBoundingClientRect().top+window.scrollY-top;
+    window.scrollTo({top:Math.max(0,y),behavior:'instant'});
+  },{selector,top});
+  await settle(page,450);
+  await viewportShot(page,name);
+}
+
 const desktop=await browser.newContext({
   viewport:{width:1920,height:1080},
   deviceScaleFactor:1,
@@ -61,7 +75,7 @@ for(const [scene,file] of [
 
 await page.locator('.ra-nav-tab[data-ra-tab="lab"]').click();
 await settle(page,900);
-await sectionShot(page,'.ra-model-compare','05-controlled-comparison.png',14);
+await framedViewportShot(page,'.ra-model-compare','05-controlled-comparison.png',155);
 
 await page.evaluate(()=>{
   const blue=document.querySelector('#raProviderToggles input[value="blue"]');
@@ -87,7 +101,7 @@ await page.locator('#raResetLab').click();
 await settle(page,500);
 await page.locator('.ra-nav-tab[data-ra-tab="evidence"]').click();
 await settle(page,900);
-await sectionShot(page,'.ra-robustness-block','07-robustness-sweep.png',16);
+await framedViewportShot(page,'.ra-robustness-block','07-robustness-sweep.png',145);
 
 await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
 await settle(page,500);
