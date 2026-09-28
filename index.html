@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://resource2.heygen.ai" crossorigin>
   <link rel="mask-icon" href="resilience-atlas-mark.svg?v=20260927-polish01" color="#246FBF">
   <link rel="stylesheet" href="design-tokens.css?v=20260927-ra01">
-  <link rel="stylesheet" href="resilience-atlas.css?v=20260928-judge01">
+  <link rel="stylesheet" href="resilience-atlas.css?v=20260928-mobile03">
 </head>
 <body>
   <div class="ra-app">
@@ -576,6 +576,37 @@
           </div>
         </section>
 
+        <section class="ra-method-block ra-robustness-block">
+          <header class="ra-section-head">
+            <div>
+              <span>ROBUSTNESS SWEEP</span>
+              <h3>Does coordination only help in one chosen scenario?</h3>
+            </div>
+            <p>The simulator reruns a local 3×3 grid around the current market and reserve assumptions. Each cell shows SCFR resilience minus Individual Reserve resilience.</p>
+          </header>
+
+          <div class="ra-robustness-summary">
+            <article>
+              <span>POSITIVE UPLIFT</span>
+              <b id="raRobustPositive">—</b>
+              <small>tested synthetic combinations</small>
+            </article>
+            <article>
+              <span>MAX UPLIFT</span>
+              <b id="raRobustMax">—</b>
+              <small>resilience-score points</small>
+            </article>
+            <article>
+              <span>CURRENT SHOCK</span>
+              <b id="raRobustShock">—</b>
+              <small>provider selection held fixed</small>
+            </article>
+          </div>
+
+          <div class="ra-robustness-matrix" id="raRobustnessMatrix" aria-label="SCFR coordination uplift robustness matrix"></div>
+          <small class="ra-robustness-boundary">Synthetic diagnostic only. A positive cell means pooled SCFR coordination restores more systemically weighted workload than ring-fenced Individual Reserves under the same aggregate reserve budget for that tested assumption pair.</small>
+        </section>
+
         <section class="ra-method-block">
           <header class="ra-section-head">
             <div>
@@ -693,6 +724,6 @@
     </footer>
   </div>
 
-  <script type="module" src="resilience-atlas.js?v=20260928-mobile02"></script>
+  <script type="module" src="resilience-atlas.js?v=20260928-mobile03"></script>
 </body>
 </html>
