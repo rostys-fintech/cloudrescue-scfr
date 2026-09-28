@@ -85,8 +85,8 @@ Submission deadline: **4 Oct 2026 @ 11:45 PM EDT**
 - [x] Capture final screenshots using `docs/capture-runbook.md`
 - [x] Assemble verified 2–3 minute H.264/AAC demo video
 - [x] Run final video integrity + key-frame QA
-- [ ] Upload final MP4 to a public video host and verify access
-- [ ] Add final video link to Devpost copy
+- [x] Upload final MP4 to a public video host and verify access
+- [x] Add final video link to Devpost copy
 - [ ] Complete Devpost submission
 - [ ] Confirm build-period disclosure is clear
 - [ ] Confirm all links in private/incognito mode
