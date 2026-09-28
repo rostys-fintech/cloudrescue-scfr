@@ -1,0 +1,82 @@
+name: LovHack final demo
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lovhack-final-media.yml'
+      - 'scripts/assemble-lovhack-final.sh'
+      - 'scripts/capture-lovhack-video.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start local app
+        run: |
+          python3 -m http.server 4173 > /tmp/resilience-atlas-server.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/resilience-atlas-server.log
+          exit 1
+
+      - name: Record final demo visual
+        run: node scripts/capture-lovhack-video.mjs
+
+      - name: Download Viktor narration
+        run: |
+          mkdir -p artifacts/lovhack-audio/raw
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=72afcc11-8878-4eeb-8066-84545ff8c653.wav' -o artifacts/lovhack-audio/raw/01-hook.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=1d2a60f2-2dc1-41ab-9feb-d7c3b8a3f820.wav' -o artifacts/lovhack-audio/raw/02-guide-1.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=8630f5b1-7b6e-4c63-84e8-5f2551ddc12b.wav' -o artifacts/lovhack-audio/raw/03-guide-2.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=de6b3f25-4a42-4d8a-abee-d4979d0c395b.wav' -o artifacts/lovhack-audio/raw/04-guide-3.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=77965ee8-99bc-417b-afc5-0f1e533656fc.wav' -o artifacts/lovhack-audio/raw/05-guide-4.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=a16036c5-ef1c-4a08-93c6-57ad62c434cc.wav' -o artifacts/lovhack-audio/raw/06-guide-5.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=d798f2ca-cec2-4199-87d5-80cd7ae53419.wav' -o artifacts/lovhack-audio/raw/07-guide-6.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=4f8e1055-372a-46cc-ab24-ca3ec1638a26.wav' -o artifacts/lovhack-audio/raw/08-scenario.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=2c6ebf45-f586-4b3a-a351-e9565f5912e5.wav' -o artifacts/lovhack-audio/raw/09-evidence.wav
+          curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=aa8e4bcc-85d9-4644-8e4b-6cb68ddf0618.wav' -o artifacts/lovhack-audio/raw/10-close.wav
+
+      - name: Assemble H.264/AAC final MP4
+        run: bash scripts/assemble-lovhack-final.sh
+
+      - name: Verify container and key frames
+        run: |
+          ffprobe -v error             -show_entries format=duration,size:stream=codec_name,codec_type,width,height,sample_rate,channels             artifacts/lovhack-final/Resilience_Atlas_LovHack_Final_Demo.mp4
+          for t in 0 60 120 160; do
+            ffmpeg -v error -ss "$t"               -i artifacts/lovhack-final/Resilience_Atlas_LovHack_Final_Demo.mp4               -frames:v 1 -f null -
+          done
+
+      - name: Upload final LovHack media
+        uses: actions/upload-artifact@v4
+        with:
+          name: resilience-atlas-lovhack-final-demo
+          path: |
+            artifacts/lovhack-final/Resilience_Atlas_LovHack_Final_Demo.mp4
+            artifacts/lovhack-final/media-manifest.txt
+            artifacts/lovhack-video/timeline.json
+          if-no-files-found: error
+          retention-days: 14
