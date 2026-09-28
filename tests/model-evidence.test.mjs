@@ -8,7 +8,7 @@ const js = fs.readFileSync(new URL('../resilience-atlas.js', import.meta.url), '
 for (const id of [
   'raEvidenceEarthMount','raEvidenceBanks','raEvidenceProviders','raEvidenceLoad',
   'raEvidenceDemand','raEvidenceMarketPool','raEvidenceReservePool','raEvidenceHHI',
-  'raEvidenceScenario','raExportEvidence','raExportJson'
+  'raEvidenceScenario','raExportEvidence','raExportJson','raRobustnessMatrix','raRobustPositive','raRobustMax','raRobustShock'
 ]) {
   assert.match(html,new RegExp("id=[\\\"']"+id+"[\\\"']"),'missing '+id);
 }
@@ -19,11 +19,15 @@ assert.match(html,/EXPERIMENT DESIGN/);
 assert.match(html,/EVIDENCE BASE/);
 assert.match(html,/LIMITATIONS/);
 assert.match(html,/REPRODUCIBILITY/);
+assert.match(html,/ROBUSTNESS SWEEP/);
 assert.match(html,/PROTOTYPE TRANSPARENCY/);
 assert.match(html,/bis\.org/);
 assert.match(html,/eba\.europa\.eu/);
 assert.match(html,/esma\.europa\.eu/);
 
+assert.match(js,/function renderRobustnessSweep\(/);
+assert.match(js,/function localSweepLevels\(/);
+assert.match(js,/c\.scfr\.resilience-c\.individual\.resilience/);
 assert.match(js,/function evidenceSnapshot\(/);
 assert.match(js,/function exportReadableReport\(/);
 assert.match(js,/function exportJson\(/);
@@ -44,5 +48,7 @@ assert.match(css,/\.ra-equation-grid/);
 assert.match(css,/\.ra-source-grid/);
 assert.match(css,/\.ra-limit-grid/);
 assert.match(css,/\.ra-repro-grid/);
+assert.match(css,/\.ra-robustness-matrix/);
+assert.match(css,/\.ra-matrix-cell\.is-current/);
 
 console.log('Model & Evidence checks passed.');
