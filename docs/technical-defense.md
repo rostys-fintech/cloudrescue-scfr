@@ -1,341 +1,205 @@
-# CloudRescue technical defense — likely judge questions
+# Resilience Atlas — technical defense
 
-This file is not a script to memorize word-for-word. It is a compact explanation of how the project works so the author can confidently explain every major decision.
+This is a compact judge-preparation guide for the current prototype.
 
----
+## 1. What is Resilience Atlas simulating?
 
-## 1. What is CloudRescue actually simulating?
+A synthetic shared-provider operational shock.
 
-CloudRescue simulates a **common operational shock**.
+One or more synthetic cloud providers fail. Banks assigned to those providers simultaneously need recovery capacity for critical workloads.
 
-A synthetic cloud provider fails. Every synthetic bank assigned to that provider simultaneously needs backup capacity for its critical workload.
+The model compares:
+1. post-shock market sourcing;
+2. Individual Reserves;
+3. SCFR pooled reserve.
 
-The model then compares three ways of obtaining that capacity:
+## 2. Why 20 banks and 3 providers?
 
-1. post-shock market capacity;
-2. bank-specific pre-reserved capacity;
-3. pooled pre-reserved SCFR capacity.
+They form a stylized test bed that is large enough to show shared dependency while remaining visually understandable.
 
-The model asks how much critical workload can be restored under each mechanism.
+They are not real market shares or real institutions.
 
----
+## 3. What is the central experiment?
 
-## 2. Why are there 20 banks and 3 providers?
+**Individual Reserves vs SCFR**, with the **same aggregate reserve budget**.
 
-They are a **stylized test bed**, not empirical estimates.
+This matters because otherwise a better SCFR outcome could simply result from giving it more capacity.
 
-Twenty banks are enough to make the shared-dependency structure visible without making the interface unreadable.
+The intended difference is the allocation mechanism.
 
-Three providers make concentration visible while still allowing different outage scenarios.
+## 4. How is emergency market capacity calculated?
 
-The exact numbers are synthetic and should not be defended as real market shares.
+For affected banks:
 
----
+```text
+market pool = affected critical demand × market %
+```
 
-## 3. What is the main experiment?
+This is a synthetic assumption. The model does not simulate real pricing or bidding.
 
-The cleanest experiment compares:
+## 5. What are Individual Reserves?
 
-**Individual Reserves vs SCFR Pooled Reserve**
+Each bank has its own pre-arranged share of the aggregate reserve budget.
 
-while holding the **total reserve budget constant**.
+If a bank is unaffected, its reserve cannot automatically move to another bank in this mechanism.
 
-That is important because otherwise a better SCFR result could simply come from giving it more capacity.
-
-The experiment tries to isolate the effect of the **allocation mechanism**.
-
----
-
-## 4. How does market capacity work?
-
-For the affected banks, the model calculates total critical workload demand.
-
-A user-selected percentage of that demand becomes the amount of emergency capacity that can be sourced after the outage.
-
-Example:
-
-If affected demand is 600 units and emergency-market capacity is 20%, the model has roughly 120 units available from the market.
-
-That capacity is then allocated according to the model logic.
-
----
-
-## 5. What is an Individual Reserve?
-
-The system pre-reserves capacity before the crisis, but each bank owns its own share.
-
-If a bank is not affected by the provider outage, its reserve cannot automatically be transferred to an affected bank.
-
-That unused capacity is counted as **stranded reserve**.
-
-This is the fragmentation problem CloudRescue makes visible.
-
----
+Unused reserve can therefore remain **stranded**.
 
 ## 6. What is SCFR?
 
-SCFR stands for **Systemic Cloud Failover Reserve**.
+SCFR means **Systemic Cloud Failover Reserve**.
 
-In the prototype it is a conceptual coordination mechanism:
+In the prototype:
+- capacity is arranged before the shock;
+- the aggregate reserve budget is the same as under Individual Reserves;
+- pooled capacity can be redirected across affected banks according to a selected allocation rule.
 
-- reserve capacity is arranged before the crisis;
-- the total reserve budget is the same as in the Individual Reserve scenario;
-- instead of being permanently ring-fenced bank by bank, it can be allocated across affected banks according to an explicit rule.
+It is a conceptual mechanism, not a claim that this governance structure already exists or is legally feasible.
 
-CloudRescue does not claim that this mechanism is already legally or technically feasible in the real banking system.
-
----
-
-## 7. What are the SCFR allocation rules?
-
-The user can choose among three simplified rules.
+## 7. What allocation rules are available?
 
 ### Systemic priority
-Capacity goes first toward banks with higher stylized systemic importance.
+Higher synthetic critical-load × importance values are prioritized.
 
 ### Equal allocation
-Capacity is shared more evenly across affected banks.
+Capacity is shared across banks that still need it.
 
 ### Readiness first
-Capacity prioritizes banks that can technically convert backup capacity into restored workload more effectively.
+Banks with higher synthetic failover readiness receive priority.
 
-These are simplified experimental rules, not policy recommendations.
+These are experimental rules, not policy recommendations.
 
----
+## 8. Why does readiness matter?
 
-## 8. Why does failover readiness matter?
-
-Capacity alone does not guarantee recovery.
-
-A bank may receive enough backup capacity but still be limited by how prepared it is to fail over workloads.
-
-Each synthetic bank therefore has a readiness value between 0 and 1.
-
-The model calculates:
+Capacity does not automatically equal restored workload.
 
 ```text
 capacity_ratio = min(allocated_capacity / critical_load, 1)
-
 restored_fraction = capacity_ratio × readiness
 ```
 
-So even full capacity cannot produce 100% restored workload if readiness is below 1.
-
----
+So even a fully supplied synthetic bank can restore less than 100% if its readiness is below 1.
 
 ## 9. What is the Systemic Resilience Score?
-
-The SRS is a weighted average of restored workload across affected banks.
 
 ```text
 SRS = Σ(wᵢ × restored_fractionᵢ) / Σ(wᵢ) × 100
 ```
 
-The weight combines:
+where the synthetic weight combines critical workload and stylized systemic importance.
 
-- critical workload; and
-- stylized systemic importance.
+SRS is a project-specific metric, not a regulatory standard.
 
-A higher SRS means more systemically weighted critical workload is restored.
+## 10. What makes the model deterministic?
 
-It is an internal synthetic metric, not an industry-standard regulatory score.
+The recovery engine contains no random draw.
 
----
-
-## 10. Why not just count how many banks recovered?
-
-A binary recovered / not recovered count loses information.
-
-One bank could restore 79% of its workload and another 5%, but both might be counted as “not recovered” under a threshold.
-
-SRS preserves more of the recovery distribution while still giving a readable headline metric.
-
-The interface also exposes bank-level outcomes and critical-workload restoration so SRS is not the only result.
-
----
-
-## 11. What makes the simulation deterministic?
-
-For the same inputs, the engine contains no random draw in the recovery calculation.
-
-Therefore:
-
-**same scenario assumptions → same outputs**
-
-The seeded scenario generator is also deterministic.
-
-The seed is converted into a repeatable pseudo-random sequence that selects:
-
-- outage provider;
-- market-capacity percentage;
-- reserve percentage;
-- allocation rule.
-
-The seed chooses the scenario; the simulation itself remains deterministic.
-
----
-
-## 12. How do shareable scenarios work?
-
-The current assumptions are serialized into URL query parameters:
-
-- provider;
+For the same:
+- provider shock;
 - market capacity;
-- reserve budget;
+- reserve percentage;
 - allocation rule;
-- optional seed.
 
-When another user opens the link, CloudRescue reads those parameters and restores the same Stress Lab configuration.
+the same outputs are produced.
 
-No database is needed.
-
----
-
-## 13. Is Replay scenario a separate animation?
+## 11. Is the Guided Simulation prerecorded?
 
 No.
 
-Replay takes the **current Stress Lab assumptions** and passes them into the same guided-story renderer.
+The Guided Simulation uses the same model state and scenario calculations as the interactive product, but the six-scene baseline narration is a fixed explanatory sequence.
 
-That changes:
+The Scenario Lab separately allows judges to change assumptions and run a model-driven scenario playback.
 
-- outage provider;
-- number of affected banks;
-- capacity demand;
-- shortage;
-- stranded reserve;
-- SCFR outcome;
-- narration text;
-- visual highlighting.
+## 12. What does the Robustness Sweep do?
 
-This is important because it shows the guided story is connected to the model rather than being only a prerecorded baseline animation.
+It constructs a local grid around the current:
+- market-capacity assumption;
+- reserve-capacity assumption.
 
----
+For each tested pair it runs `compareStrategies()` and calculates:
 
-## 14. What does the Sensitivity Explorer calculate?
+```text
+coordination uplift =
+SCFR resilience − Individual Reserve resilience
+```
 
-It repeatedly runs the simulation over a grid of:
+It shows whether the coordination effect persists, weakens or disappears across nearby synthetic assumptions.
 
-- emergency-market capacity values; and
-- reserve-capacity values.
+It is a diagnostic, not empirical validation.
 
-For every cell it computes either:
+## 13. What do the automated tests protect?
 
-- SCFR resilience; or
-- SCFR resilience uplift versus Individual Reserves.
-
-It is a compact way to see whether the mechanism depends on one cherry-picked scenario.
-
----
-
-## 15. What do the automated tests check?
-
-The tests include model invariants and UI smoke checks.
-
-Examples of model invariants:
-
-- resilience scores remain within valid bounds;
-- allocated reserve cannot exceed the reserve budget;
+Examples:
+- resilience scores stay within valid bounds;
+- allocations do not exceed available pools;
 - Individual Reserves and SCFR receive the same aggregate reserve budget;
-- affected banks correspond to the failed provider;
-- increasing pooled reserve should not reduce SCFR resilience in the deterministic baseline structure.
+- affected banks match the selected failed providers;
+- required UI controls remain present;
+- narration and storyboard cues remain wired;
+- mobile interaction regressions are caught.
 
-UI checks verify the presence of important controls and guard against regressions that previously broke multi-element DOM interactions.
+## 14. Why vanilla JavaScript?
 
----
-
-## 16. Why vanilla JavaScript instead of React or another framework?
-
-For this MVP the application does not need a component framework.
-
-Vanilla JavaScript keeps:
-
-- the deployment simple;
-- the model easy to inspect;
+For this prototype, it keeps:
+- deployment simple;
 - dependencies minimal;
-- the relationship between simulation state and visualization explicit.
+- model logic inspectable;
+- the connection between state and visualization explicit.
 
-The choice is not a claim that vanilla JavaScript is always better. It is appropriate for the scope of this prototype.
+It is a scope decision, not a claim that frameworks are unnecessary in general.
 
----
+## 15. What is real?
 
-## 17. What is real in this project?
-
-The **problem motivation** is real:
-
+The motivation:
 - third-party ICT concentration;
-- reliance on critical external providers;
+- critical external-provider dependence;
 - operational-resilience concerns.
 
-These are documented by BIS, EBA and DORA-related oversight.
+These are documented in BIS, EBA and DORA-related material.
 
----
+## 16. What is synthetic?
 
-## 18. What is synthetic?
-
-The following are synthetic:
-
-- 20-bank network;
+- bank network;
 - provider assignments;
-- workload values;
+- workloads;
 - readiness values;
 - systemic weights;
 - capacity units;
-- numerical resilience results.
+- resilience scores;
+- all numerical improvements.
 
-Therefore the correct wording is:
+Correct wording:
 
 > In this synthetic scenario, the model shows...
 
-not:
+Incorrect wording:
 
-> SCFR would improve real banking-system resilience by X%.
+> SCFR would improve the real banking system by X%.
 
----
+## 17. Biggest limitations
 
-## 19. What is the biggest limitation?
-
-The model does not yet represent the full technical feasibility of moving real banking workloads between environments.
-
-Missing real-world layers include:
-
+Not yet modeled:
 - workload portability;
 - data synchronization;
+- provider-specific architecture;
 - network dependencies;
 - recovery-time objectives;
-- legal and contractual constraints;
-- provider-specific architecture;
-- cross-border governance;
-- economic cost.
+- legal / contractual constraints;
+- governance;
+- cross-border rules;
+- reserve cost;
+- empirical calibration.
 
-Those are future research questions, not hidden assumptions.
+## 18. How was AI used?
 
----
+Use:
 
-## 20. What did you personally learn?
+> AI tools materially assisted brainstorming, code drafting, debugging, documentation and interface iteration. I selected the research framing and assumptions, directed product decisions, reviewed outputs, tested the implementation and am responsible for understanding and presenting the final prototype.
 
-A strong answer:
+# Five facts to remember
 
-> I started with a finance question rather than a software idea. I learned how to convert an abstract systemic-risk mechanism into explicit computational assumptions, separate model logic from interface logic, visualize state changes, debug timing and DOM-state problems, build deterministic scenario sharing, write model invariants and UI checks, and deploy the final prototype publicly.
-
----
-
-## 21. How was AI used?
-
-Use a fully transparent answer:
-
-> AI tools materially assisted with brainstorming, code drafting, debugging, documentation and interface iteration. I directed the project, selected the research framing and assumptions, reviewed the model outputs, decided which features and guardrails to keep, tested the behavior, and am responsible for understanding and explaining the final project.
-
-Do not describe the project as if no significant AI assistance occurred.
-
----
-
-# Five equations / facts to remember
-
-1. **Same total reserve budget** in Individual Reserves and SCFR.
+1. **Same aggregate reserve budget** in Individual Reserves and SCFR.
 2. `restored_fraction = capacity_ratio × readiness`.
 3. `capacity_ratio = min(allocation / critical_load, 1)`.
-4. SRS is a weighted average of restored fractions.
-5. Seed generation selects assumptions; the recovery model itself is deterministic.
-
-If you can explain these five points and the real-vs-synthetic boundary, you can explain the core of CloudRescue.
+4. SRS is a weighted restored-workload metric.
+5. Robustness Sweep compares SCFR vs Individual across nearby assumptions; it does not validate real-world effectiveness.
