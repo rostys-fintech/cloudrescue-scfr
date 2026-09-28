@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const baseURL=process.env.CAPTURE_BASE_URL || 'http://127.0.0.1:4173/';
+const localAudioDir=process.env.CAPTURE_AUDIO_DIR ? path.resolve(process.env.CAPTURE_AUDIO_DIR) : null;
 const outDir=path.resolve('artifacts/lovhack-video');
 const rawDir=path.join(outDir,'raw');
 await fs.mkdir(rawDir,{recursive:true});
@@ -26,6 +27,25 @@ const context=await browser.newContext({
 });
 const page=await context.newPage();
 const video=page.video();
+
+const guidedAudioMap={
+  '1d2a60f2-2dc1-41ab-9feb-d7c3b8a3f820':'02-guide-1.wav',
+  '8630f5b1-7b6e-4c63-84e8-5f2551ddc12b':'03-guide-2.wav',
+  'de6b3f25-4a42-4d8a-abee-d4979d0c395b':'04-guide-3.wav',
+  '77965ee8-99bc-417b-afc5-0f1e533656fc':'05-guide-4.wav',
+  'a16036c5-ef1c-4a08-93c6-57ad62c434cc':'06-guide-5.wav',
+  'd798f2ca-cec2-4199-87d5-80cd7ae53419':'07-guide-6.wav'
+};
+
+if(localAudioDir){
+  await page.route('https://resource2.heygen.ai/text_to_speech/**',async route=>{
+    const match=route.request().url().match(/id=([0-9a-f-]+)\.wav/i);
+    const file=match ? guidedAudioMap[match[1]] : null;
+    if(!file) return route.continue();
+    const body=await fs.readFile(path.join(localAudioDir,file));
+    await route.fulfill({status:200,contentType:'audio/wav',body});
+  });
+}
 
 const wait=ms=>page.waitForTimeout(ms);
 async function settle(ms=700){
@@ -81,6 +101,9 @@ await page.locator('#raRunPreview').click();
 const guidedStart=Date.now();
 await page.locator('#raGuidedStatus').filter({hasText:'COMPLETE'}).waitFor({timeout:125000});
 const guidedDuration=(Date.now()-guidedStart)/1000;
+if(guidedDuration>105.5){
+  throw new Error('Guided visual drifted beyond narration timing: '+guidedDuration.toFixed(2)+'s');
+}
 await wait(250);
 
 /* 03 — Scenario Lab */
@@ -136,12 +159,16 @@ await waitSegment(segment,target.evidence);
 segment=Date.now();
 await point('.ra-nav-tab[data-ra-tab="lab"]');
 await page.locator('.ra-nav-tab[data-ra-tab="lab"]').click();
+await page.locator('#lab.is-active').waitFor({state:'visible',timeout:3000});
 await settle(650);
 await page.locator('.ra-model-compare').scrollIntoViewIfNeeded();
 await settle(700);
 await point('.ra-model-card[data-ra-compare="scfr"]');
 await page.locator('.ra-model-card[data-ra-compare="scfr"]').click();
 await settle(500);
+if(!(await page.locator('#lab').evaluate(node=>node.classList.contains('is-active')))){
+  throw new Error('Closing frame did not return to Scenario Lab.');
+}
 await waitSegment(segment,target.close);
 
 const totalVisual=(Date.now()-guidedStart)/1000 + target.hook;
