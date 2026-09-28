@@ -145,6 +145,7 @@ The current prototype uses:
 - Vanilla JavaScript / ES modules;
 - SVG;
 - browser audio;
+- HeyGen-generated Viktor narration assets;
 - JSON / Blob export;
 - Node.js regression tests;
 - GitHub Actions;
