@@ -1,191 +1,155 @@
-# CloudRescue screenshot and thumbnail plan — institutional v2
+# Resilience Atlas — screenshot plan
 
-## Visual rule
+## Rule
 
-All final screenshots should use the **same desktop viewport**, preferably 16:9, and the **institutional v2** interface.
+Use the **current Resilience Atlas interface only**.
 
-Primary visual language now:
-- **CRISIS mode:** black + crimson, angular system-console aesthetic;
-- **ANALYSIS mode:** white + electric blue, clean research-console aesthetic;
-- sharp cut-corner geometry rather than rounded SaaS cards;
-- live-system topology, technical grid and restrained glow;
-- the same product can switch instantly between alert and analysis views.
+Do not use screenshots from older CloudRescue dashboard versions.
 
-Do not mix screenshots from the earlier white-card UI.
+Keep:
+- one consistent desktop viewport;
+- dark Simulation / Scenario Lab for main visuals;
+- light or current Evidence view for analytical transparency;
+- no browser clutter.
 
-## Theme rule
+## Screenshot 1 — Product identity
 
-Use **CRISIS mode** for the main Devpost visual sequence because it has the strongest cinematic identity.
-
-Include **one ANALYSIS-mode screenshot** near the end to demonstrate the dual-mode product system.
-
-Do not alternate themes randomly between adjacent screenshots.
-
-## Screenshot 1 — Hero / product identity
-
-Capture the full **CRISIS-mode** hero.
+Capture Simulation before Run.
 
 Must show:
-- CloudRescue title;
-- core hypothesis;
-- shared dependency topology;
-- 20 banks / 3 providers / 3 mechanisms context;
-- both primary actions.
+- Resilience Atlas identity;
+- global dependency map;
+- Guided Simulation controls;
+- 20 banks / 3 providers context.
 
-Suggested caption:
+Caption:
 
-> **CloudRescue — a systemic cloud-resilience research prototype for shared-provider shocks.**
+> **A systemic cloud-resilience simulator for shared-provider shocks in banking.**
 
-Why this is important:
-This is the first visual a judge should see. It now communicates both product identity and mechanism context without requiring any scrolling.
+## Screenshot 2 — Provider failure
 
-## Screenshot 2 — Common shock / live monitoring canvas
-
-Capture Scene 2 in Crisis Replay.
-
-Must show:
-- dark live-system canvas;
-- failed provider;
-- affected-bank exposure map;
-- affected-bank count;
-- incident state in the system header.
-
-Suggested caption:
-
-> **A shared-provider outage creates correlated recovery demand across multiple institutions.**
-
-## Screenshot 3 — Reserve fragmentation
-
-Capture Scene 4.
-
-Must show:
-- dark monitoring canvas;
-- same reserve budget;
-- visible ring-fence barrier;
-- blocked / stranded reserve;
-- affected-bank recovery state.
-
-Suggested caption:
-
-> **Capacity can exist and still be unusable when reserves are institution-specific.**
-
-## Screenshot 4 — Coordinated SCFR allocation
-
-Capture Scene 5.
-
-Must show:
-- SCFR reserve pool;
-- same aggregate reserve budget;
-- reserve movement to affected banks;
-- recovery-state improvement.
-
-Suggested caption:
-
-> **SCFR changes the allocation mechanism, not the quantity of reserve.**
-
-## Screenshot 5 — Controlled Comparison — primary competition visual
-
-This should be the **strongest analytical screenshot**.
-
-Capture the full dark Before / After view.
-
-Must show:
-- CONTROLLED COMPARISON label;
-- failed provider;
-- affected-bank count;
-- emergency-market assumption;
-- reserve budget;
-- Individual Reserves on the left;
-- SCFR Pooled Reserve on the right;
-- central resilience uplift;
-- same-budget proof.
-
-Suggested caption:
-
-> **Same shock. Same reserve budget. Different coordination.**
-
-Use this screenshot prominently on Devpost.
-
-## Screenshot 6 — Stress Lab / institutional control room
+Capture Scene 02.
 
 Show:
-- dark scenario-controls rail;
-- Scenario ID / seed;
-- provider, market and reserve assumptions;
-- dark Shock Summary header;
-- executive mechanism readout;
-- recovery-mechanism comparison.
+- failed provider;
+- correlated affected-bank exposure;
+- crisis-state visual.
 
-Suggested caption:
+Caption:
 
-> **The Stress Lab lets users change assumptions and immediately recompute the same deterministic model.**
+> **One shared-provider outage can affect multiple institutions at the same time.**
 
-## Screenshot 7 — Sensitivity Explorer
+## Screenshot 3 — Ring-fenced reserve
+
+Capture Scene 04.
 
 Show:
-- current scenario marker;
-- institutional research-chart styling;
-- SCFR uplift view;
-- enough surrounding UI to make clear this is part of the Stress Lab.
+- affected banks;
+- reserve fragmentation / stranded capacity;
+- shortage still present.
 
-Suggested caption:
+Caption:
 
-> **Sensitivity analysis shows where coordination matters across market-capacity and reserve assumptions.**
+> **Capacity can exist in the system and still be stranded in the wrong place.**
 
-## Screenshot 8 — ANALYSIS mode / Methodology
+## Screenshot 4 — Pooled SCFR recovery
 
-Switch to **ANALYSIS** and capture the Research Framework introduction plus either:
-- model architecture, or
-- Real-world motivation / synthetic boundary.
+Capture Scene 05.
 
-Suggested caption:
+Show:
+- pooled reserve;
+- reserve redirection;
+- recovering affected banks.
 
-> **Observed concentration risk is separated from synthetic model assumptions and outputs.**
+Caption:
 
-## Screenshot 9 — Development Journey
+> **SCFR changes coordination, not the aggregate reserve budget.**
 
-Optional, but useful for the Learning & Growth criterion.
+## Screenshot 5 — Controlled comparison
 
-Capture:
-- DEVELOPMENT JOURNEY · FIRSTCOMMIT;
-- report-style timeline;
-- AI-assisted, human-owned disclosure.
+This is the strongest analytical screenshot.
 
-Suggested caption:
+Capture Scenario Lab comparison with:
+- “Same shock. Same reserve budget. Different coordination.”
+- Controlled Test callout;
+- Market / Individual / SCFR cards;
+- current scenario assumptions.
 
-> **From a finance question to a deterministic simulation, reproducibility, automated testing and public deployment.**
+Caption:
 
-# Recommended Devpost order
+> **The central experiment isolates coordination instead of simply giving SCFR more resources.**
 
-1. Hero
-2. Controlled Comparison
-3. Common Shock
-4. Reserve Fragmentation
-5. SCFR Allocation
-6. Stress Lab
-7. Sensitivity Explorer
-8. Methodology
-9. Development Journey
+## Screenshot 6 — Scenario Lab
 
-# Thumbnail concept
+Show:
+- scenario controls;
+- provider selection;
+- market and reserve assumptions;
+- allocation rule;
+- outcome metrics.
 
-Keep the thumbnail simpler than the application.
+Caption:
+
+> **Judges can change the shock and recovery assumptions and rerun the same deterministic model.**
+
+## Screenshot 7 — Robustness Sweep
+
+Capture the matrix and summary.
+
+Show:
+- Positive Uplift count;
+- Max Uplift;
+- current provider shock;
+- 3×3 matrix.
+
+Caption:
+
+> **The model reruns nearby assumptions to show where coordination helps and where the effect weakens.**
+
+## Screenshot 8 — Model & Evidence
+
+Show:
+- real-world motivation vs synthetic model boundary;
+- “Built for discussion by” audience strip.
+
+Caption:
+
+> **Documented concentration risk is separated from synthetic model outputs and target users are explicit.**
+
+## Screenshot 9 — Mobile
+
+Capture one polished phone view:
+- bottom navigation;
+- Simulation or Scenario Lab;
+- no clipped controls.
+
+Caption:
+
+> **The prototype is fully usable on mobile, including guided playback and navigation.**
+
+## Recommended order
+
+1. Product identity
+2. Controlled comparison
+3. Provider failure
+4. Ring-fenced reserve
+5. SCFR recovery
+6. Scenario Lab
+7. Robustness Sweep
+8. Model & Evidence
+9. Mobile
+
+## Thumbnail
 
 Text:
-**CloudRescue**
+**Resilience Atlas**  
 **Shared cloud shock → coordinated recovery**
 
-Visual composition:
-- deep navy background;
-- three cloud/provider nodes;
-- bank clusters beneath;
-- one provider path highlighted in muted red;
-- central reserve pool highlighted in restrained green.
+Keep it simple:
+- dark background;
+- three provider nodes;
+- clustered bank dependencies;
+- one failed provider path;
+- one coordinated recovery flow.
 
-Do not use:
-- screenshots inside the thumbnail;
-- tiny metrics;
-- long descriptions;
-- bright gradients;
-- neon colors;
-- more than one line of explanatory copy.
+Avoid tiny metrics and long copy.
