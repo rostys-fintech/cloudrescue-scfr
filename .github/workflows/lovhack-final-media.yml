@@ -31,6 +31,11 @@ jobs:
           npm install --no-save playwright@1.55.0
           npx playwright install --with-deps chromium
 
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Start local app
         run: |
           python3 -m http.server 4173 > /tmp/resilience-atlas-server.log 2>&1 &
