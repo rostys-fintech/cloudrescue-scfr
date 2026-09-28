@@ -92,17 +92,15 @@ Briefly show the export controls.
 
 > The current scenario can also be exported as a readable report or JSON.
 
-## 2:28–2:48 — Why it matters / close
+## Final close
 
-Return to the simulation or comparison view.
+Return to **Controlled Comparison**.
 
 Say:
 
-> The potential users are bank operational-resilience teams, supervisors and financial-stability researchers. The prototype is not a policy recommendation. It is a transparent sandbox for asking whether better coordination can make the same recovery resources work better.
+> Same shock. Same reserve budget. Different coordination. A plan B for one bank may not be a plan B for the system. Thank you for watching. My goal is to keep developing this research toward practical systemic cloud resilience in banking.
 
-Final line:
-
-> A plan B for one bank may not be a plan B for the system.
+Keep the product visible until the final frame.
 
 ## Recording rules
 
