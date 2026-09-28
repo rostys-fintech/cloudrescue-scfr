@@ -95,14 +95,46 @@ let segment=Date.now();
 await wait(9000);
 await point('#raRunPreview');
 await waitSegment(segment,target.hook);
+
+await page.evaluate(()=>{
+  const scene=document.querySelector('#raGuidedScene');
+  window.__captureGuidedTiming={
+    start:performance.now(),
+    sceneStarts:[0,null,null,null,null,null]
+  };
+  const observer=new MutationObserver(()=>{
+    const text=scene?.textContent || '';
+    const match=text.match(/SCENE\s+(\d+)/i);
+    if(!match) return;
+    const index=Number(match[1])-1;
+    if(index<0 || index>5) return;
+    const timing=window.__captureGuidedTiming;
+    if(timing.sceneStarts[index]==null){
+      timing.sceneStarts[index]=(performance.now()-timing.start)/1000;
+    }
+  });
+  observer.observe(scene,{childList:true,subtree:true,characterData:true});
+  window.__captureGuidedTiming.observer=observer;
+});
 await page.locator('#raRunPreview').click();
 
 /* 02 — full Guided Simulation */
 const guidedStart=Date.now();
 await page.locator('#raGuidedStatus').filter({hasText:'COMPLETE'}).waitFor({timeout:125000});
 const guidedDuration=(Date.now()-guidedStart)/1000;
+const guidedTiming=await page.evaluate(()=>{
+  const timing=window.__captureGuidedTiming;
+  timing?.observer?.disconnect();
+  return {
+    sceneStarts:timing?.sceneStarts || [0],
+    completeSeconds:timing ? (performance.now()-timing.start)/1000 : null
+  };
+});
 if(guidedDuration>105.5){
   throw new Error('Guided visual drifted beyond narration timing: '+guidedDuration.toFixed(2)+'s');
+}
+if(guidedTiming.sceneStarts.filter(v=>Number.isFinite(v)).length!==6){
+  throw new Error('Could not capture all guided scene start times: '+JSON.stringify(guidedTiming.sceneStarts));
 }
 await wait(250);
 
@@ -181,6 +213,7 @@ await browser.close();
 await fs.writeFile(path.join(outDir,'timeline.json'),JSON.stringify({
   targetSegments:target,
   guidedActualSeconds:guidedDuration,
+  guidedSceneStartsSeconds:guidedTiming.sceneStarts,
   guidedNominalSeconds:103.628,
   estimatedTotalVisualSeconds:totalVisual
 },null,2));
