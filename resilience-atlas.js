@@ -532,20 +532,20 @@ function setupEvidence(){
 
 function renderScene(){
   $('#raCanvasTitle').textContent = sceneTitles[state.scene];
-  $('.ra-scene-list button').forEach((button,index)=>{
+  $$('.ra-scene-list button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
-  $('.ra-mobile-scene-nav button').forEach((button,index)=>{
+  $$('.ra-mobile-scene-nav button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
   renderBaseline();
 }
 
 function renderGuidedShell(c){
-  $('.ra-scene-list button').forEach((button,index)=>{
+  $$('.ra-scene-list button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
-  $('.ra-mobile-scene-nav button').forEach((button,index)=>{
+  $$('.ra-mobile-scene-nav button').forEach((button,index)=>{
     button.classList.toggle('is-active', index === state.scene);
   });
 
@@ -643,7 +643,7 @@ function bindTapTarget(node,handler){
 }
 
 function setupTabs(){
-  $('.ra-nav-tab').forEach(button=>{
+  $$('.ra-nav-tab').forEach(button=>{
     button.addEventListener('click',()=>switchTab(button.dataset.raTab));
     button.addEventListener('keydown',event=>{
       if(!['ArrowLeft','ArrowRight'].includes(event.key)) return;
@@ -657,7 +657,7 @@ function setupTabs(){
     });
   });
 
-  $('.ra-mobile-tab').forEach(button=>{
+  $$('.ra-mobile-tab').forEach(button=>{
     bindTapTarget(button,event=>{
       event.preventDefault();
       switchTab(button.dataset.raMobileTab);
@@ -1114,7 +1114,7 @@ async function runGuidedSimulation(){
 }
 
 function setupScenes(){
-  $('.ra-scene-list button').forEach(button=>{
+  $$('.ra-scene-list button').forEach(button=>{
     button.addEventListener('click',()=>{
       if(guided.active) stopGuidedSimulation();
       state.scene=Number(button.dataset.raScene);
@@ -1122,7 +1122,7 @@ function setupScenes(){
     });
   });
 
-  $('.ra-mobile-scene-nav button').forEach(button=>{
+  $$('.ra-mobile-scene-nav button').forEach(button=>{
     bindTapTarget(button,()=>{
       if(guided.active) stopGuidedSimulation();
       state.scene=Number(button.dataset.raMobileScene);
