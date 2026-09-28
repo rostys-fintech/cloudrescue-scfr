@@ -9,7 +9,7 @@ const js=fs.readFileSync(new URL('../resilience-atlas.js',import.meta.url),'utf8
 assert.equal(index,html);
 assert.match(html,/ra-guided-hud ra-video-hud/);
 assert.doesNotMatch(html,/id="raWaveform"/);
-assert.match(html,/202609(?:27-story0[1-9]|28-mobile0[1-9])/);
+assert.match(html,/202609(?:27-story0[1-9]|28-(?:mobile|qa)0[1-9])/);
 
 assert.match(css,/STORYBOARD STAGE 1 — VIDEO HUD \+ SCENE 01 MASTER/);
 assert.match(css,/#simulation \.ra-video-hud\{[\s\S]*position:relative!important[\s\S]*margin:0!important/);
