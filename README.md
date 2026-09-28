@@ -1,39 +1,39 @@
 # Resilience Atlas — Systemic Cloud Resilience Lab
 
-**What happens when many banks depend on the same cloud provider and need recovery capacity at the same time?**
+**An interactive research prototype for studying systemic cloud concentration and coordinated recovery in banking.**
 
-Resilience Atlas is an interactive systemic cloud-resilience simulator for banking. It turns the **Systemic Cloud Failover Reserve (SCFR)** research concept into a working visual prototype.
+Resilience Atlas turns the **Systemic Cloud Failover Reserve (SCFR)** concept into a working simulation. It asks what happens when several banks depend on the same cloud provider and need recovery capacity at the same time.
 
-> **Prototype boundary:** the banking network, provider assignments, workload values and numerical resilience outputs are synthetic and illustrative. The project does not assess any real bank or cloud provider and does not forecast real-world recovery.
+> **Research boundary:** the banking network, provider assignments, workload values and numerical resilience outputs are synthetic and illustrative. The prototype does not assess any real bank or cloud provider and does not forecast real-world recovery outcomes.
 
-## Live demo
+## Live prototype
 
-**Prototype:** https://rostys-fintech.github.io/cloudrescue-scfr/  
+**Demo:** https://rostys-fintech.github.io/cloudrescue-scfr/  
 **Repository:** https://github.com/rostys-fintech/cloudrescue-scfr
 
-## The core experiment
+## Research question
 
-A shared cloud-provider outage can create a coordination problem: several banks may need backup capacity simultaneously while immediate market capacity is limited.
+A shared cloud-provider outage can create correlated recovery demand across multiple institutions while immediately available market capacity is limited.
 
-Resilience Atlas compares three recovery mechanisms under the same shock:
-
-1. **Post-shock Market Sourcing** — affected banks seek limited emergency capacity after the outage.
-2. **Individual Reserves** — capacity is pre-arranged but ring-fenced bank by bank, so unused capacity can remain stranded.
-3. **SCFR Pooled Reserve** — the same aggregate reserve budget is pooled and allocated across affected banks using a transparent rule.
-
-The key comparison is:
-
-> **Same shock. Same reserve budget. Different coordination.**
-
-The project asks a deliberately narrow question:
+The prototype asks:
 
 > **Can coordination make the same reserve budget work better during a shared-provider outage?**
 
-## What judges can actually use
+It compares three recovery mechanisms under the same shock and the same aggregate reserve budget:
+
+1. **Post-shock Market Sourcing** — affected banks seek limited emergency capacity after the outage.
+2. **Individual Reserves** — capacity is pre-arranged but ring-fenced bank by bank.
+3. **SCFR Pooled Reserve** — the same aggregate reserve budget is pooled and allocated across affected banks using a transparent rule.
+
+The central comparison is:
+
+> **Same shock. Same reserve budget. Different coordination.**
+
+## What the prototype does
 
 ### Guided Simulation
 
-A six-scene narrated simulation explains:
+A six-scene narrated simulation shows:
 
 1. a stable shared-provider dependency network;
 2. a shared-provider failure;
@@ -42,16 +42,14 @@ A six-scene narrated simulation explains:
 5. pooled SCFR reallocation;
 6. recovery outcomes across the three mechanisms.
 
-The story uses the same deterministic model as the interactive lab. Word-level narration cues drive the visual timeline, with mobile-safe controls and a responsive layout.
-
 ### Scenario Lab
 
-Users can change:
+Users can vary:
 
 - which synthetic provider fails;
 - immediate market capacity;
 - total pre-reserved capacity;
-- SCFR allocation rule.
+- the SCFR allocation rule.
 
 The model recalculates:
 
@@ -61,13 +59,11 @@ The model recalculates:
 - capacity gap;
 - critical workload restored;
 - stranded reserve under Individual Reserves;
-- weighted Systemic Resilience Score.
-
-The lab includes model-driven scenario playback and a concise scenario conclusion.
+- a weighted Systemic Resilience Score.
 
 ### Model & Evidence
 
-The evidence view separates:
+The evidence view clearly separates:
 
 **Observed motivation**
 - third-party ICT concentration risk;
@@ -82,19 +78,18 @@ The evidence view separates:
 - systemic weights;
 - all numerical outputs.
 
-A **Robustness Sweep** reruns a local 3×3 grid around the current market/reserve assumptions and reports SCFR-vs-Individual resilience uplift.
+A **Robustness Sweep** reruns a local 3×3 grid around the selected market/reserve assumptions and reports the SCFR-vs-Individual resilience difference.
 
-The current scenario can be exported as:
-- a readable report;
-- JSON for reproducibility.
+The current scenario can also be exported as a readable report or JSON.
 
 ## Model logic
 
 Each synthetic bank has:
+
 - a primary cloud provider;
 - critical workload demand;
 - failover readiness;
-- a stylized systemic-importance weight.
+- a stylised systemic-importance weight.
 
 For an affected bank *i*:
 
@@ -112,79 +107,47 @@ where w_i = critical_load_i × systemic_importance_i
 
 The same aggregate pre-reserved capacity is used for **Individual Reserves** and **SCFR**. The intended difference is the allocation mechanism.
 
-See `research/methodology.md` for detail.
+See [`research/methodology.md`](research/methodology.md) for the full methodological description.
 
 ## Why this matters
 
-Operational resilience is often discussed institution by institution. Shared infrastructure can create **correlated recovery demand** across multiple institutions at once.
+Operational resilience is often discussed institution by institution. Shared infrastructure can create a system-level coordination problem because several institutions may need scarce recovery capacity simultaneously.
 
-Resilience Atlas makes that system-level coordination problem visible and testable without pretending that a synthetic prototype is empirical evidence.
+Resilience Atlas makes that problem visible and testable without presenting a synthetic prototype as empirical evidence.
 
 Potential users of the concept include:
+
 - bank operational-resilience and technology-risk teams;
 - supervisors and financial-stability researchers;
 - researchers studying third-party ICT concentration and coordinated recovery.
 
-## Current product strengths
+## Evidence base
 
-- deterministic simulation engine separated from presentation;
-- three explicit recovery mechanisms;
-- SVG dependency network and recovery flows;
-- narrated six-scene guided simulation;
-- interactive Scenario Lab;
-- transparent real-vs-synthetic evidence boundary;
-- model-driven Robustness Sweep across nearby market/reserve assumptions;
-- readable and JSON scenario exports;
-- responsive mobile experience;
-- automated model and UI regression checks;
-- GitHub Actions and public GitHub Pages deployment.
+The real-world motivation is informed by public operational-resilience material from:
 
-## What existed before LovHack
+- BIS / Financial Stability Institute;
+- EU DORA oversight material;
+- European Banking Authority risk reports.
 
-The research question and SCFR concept predated the LovHack build period.
+See [`research/evidence-base.md`](research/evidence-base.md).
 
-The current Resilience Atlas software product — including its redesign, guided simulation, Scenario Lab, model/evidence experience, robustness sweep, mobile hardening, exports and regression coverage — was built and substantially developed during the LovHack Season 3 build window. The Git history preserves that work.
+These sources motivate the problem. They do **not** validate the synthetic numerical results or prove that SCFR would work in practice.
 
-## Build journey
+## Reproducibility
 
-The project started from a finance and systemic-risk question rather than a software template.
+The simulation engine is deterministic and separated from presentation logic.
 
-During the current build, the work included:
-- translating the SCFR concept into explicit allocation rules;
-- separating model logic from interface logic;
-- designing and rebuilding the product as **Resilience Atlas**;
-- creating a synchronized narrated simulation;
-- adding scenario controls and model-driven playback;
-- building mobile-safe interaction and fixing iOS touch/audio issues;
-- adding automated tests after real UI regressions;
-- documenting assumptions, limitations and evidence boundaries.
-
-The Git history preserves this iteration.
-
-## Technologies
-
-- HTML5
-- CSS3
-- Vanilla JavaScript / ES modules
-- SVG
-- browser Audio API
-- HeyGen-generated Viktor narration assets
-- JSON / Blob export
-- Node.js tests
-- GitHub Actions
-- GitHub Pages
-
-No front-end framework or backend is required for the current prototype.
-
-## Run locally
-
-No build step is required.
+To run locally:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000/`.
+Then open:
+
+```text
+http://localhost:8000/
+```
 
 To run the regression suite:
 
@@ -192,48 +155,57 @@ To run the regression suite:
 npm test
 ```
 
-## Evidence base
+## Technology
 
-The real-world motivation is informed by public operational-resilience material from:
-- BIS / Financial Stability Institute;
-- EU DORA oversight material;
-- European Banking Authority risk reports.
+- HTML5
+- CSS3
+- Vanilla JavaScript / ES modules
+- SVG
+- browser Audio API
+- JSON / Blob export
+- Node.js tests
+- GitHub Actions
+- GitHub Pages
 
-See `research/evidence-base.md`.
+No front-end framework or backend is required for the current prototype.
 
-These sources motivate the problem. They do **not** validate the synthetic numerical results or prove that SCFR would work in practice.
+## Current limitations
 
-## Limitations
+The prototype does not yet model:
 
-The current prototype does not yet model:
 - workload portability constraints;
 - provider-specific architectures;
-- data synchronization;
+- data synchronisation;
 - recovery-time objectives;
 - network dependencies;
 - legal and contractual constraints;
 - cross-border governance;
-- cost optimization;
+- cost optimisation;
 - empirical calibration.
 
-Those are research extensions, not hidden assumptions.
+These are research extensions rather than hidden assumptions.
 
-## AI assistance disclosure
+## Build history and competition disclosure
+
+The research question and SCFR concept predated the current software build.
+
+The present **Resilience Atlas** product — including the redesign, guided simulation, Scenario Lab, model/evidence experience, robustness sweep, mobile hardening, exports and regression coverage — was built and substantially developed during the LovHack Season 3 build window. The Git history preserves that iteration.
 
 AI tools materially assisted brainstorming, code drafting, debugging, documentation and interface iteration. The project author selected the research framing and assumptions, reviewed outputs, directed product decisions, tested the implementation and is responsible for the final prototype.
 
-## Judge materials
+For competition-specific material, see:
 
-Start with:
-- `docs/START-HERE.md`
-- `docs/judge-pitch-card.md`
-- `docs/demo-script.md`
-- `docs/judging-map.md`
-- `docs/technical-defense.md`
-- `docs/submission-checklist.md`
-- `docs/development-log.md`
+- [`docs/START-HERE.md`](docs/START-HERE.md)
+- [`docs/judge-pitch-card.md`](docs/judge-pitch-card.md)
+- [`docs/demo-script.md`](docs/demo-script.md)
+- [`docs/judging-map.md`](docs/judging-map.md)
+- [`docs/technical-defense.md`](docs/technical-defense.md)
+- [`docs/submission-checklist.md`](docs/submission-checklist.md)
+- [`docs/development-log.md`](docs/development-log.md)
 
 ## Author
 
 **Rostyslav Honcharenko**  
-Finance & banking researcher interested in FinTech, digital finance and systemic resilience.
+Finance & banking researcher focused on financial stability, digital finance, FinTech and systemic resilience.
+
+**LinkedIn:** https://www.linkedin.com/in/rostyslav-honcharenko/
