@@ -70,7 +70,17 @@ Say:
 
 Do not read every metric.
 
-## 1:50–2:15 — Model & Evidence
+## 1:50–2:08 — Robustness Sweep
+
+Switch to **Model & Evidence** and show **Robustness Sweep**.
+
+Say:
+
+> To avoid relying on one hand-picked scenario, the simulator reruns a local grid around the current market and reserve assumptions.
+
+> Each cell shows SCFR resilience minus Individual Reserve resilience under the same aggregate reserve budget.
+
+## 2:08–2:28 — Model & Evidence
 
 Switch to **Model & Evidence**.
 
@@ -82,7 +92,7 @@ Briefly show the export controls.
 
 > The current scenario can also be exported as a readable report or JSON.
 
-## 2:15–2:35 — Why it matters / close
+## 2:28–2:48 — Why it matters / close
 
 Return to the simulation or comparison view.
 
