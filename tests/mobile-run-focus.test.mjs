@@ -9,7 +9,7 @@ const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'ut
 assert.equal(index,html);
 assert.match(html,/id="raHudPause"/);
 assert.match(html,/id="raHudStop"/);
-assert.match(html,/202609(?:27-story0[1-9]|28-mobile0[1-9])/);
+assert.match(html,/202609(?:27-story0[1-9]|28-(?:mobile|qa)0[1-9])/);
 
 assert.match(js,/function focusAnimationStage\(/);
 assert.match(js,/scrollIntoView\(\{block:'start',behavior:'auto'\}\)/);
@@ -42,6 +42,6 @@ assert.match(js,/prepareGuidedOpening\(runId\);/);
 assert.doesNotMatch(js,/await prepareGuidedOpening\(runId\)/);
 assert.match(css,/MOBILE TAP RELIABILITY — iOS HIT TEST/);
 assert.match(css,/\.ra-lab-console:not\(\.is-mobile-open\)\{[\s\S]*pointer-events:none!important/);
-assert.match(html,/202609(?:27-story0[1-9]|28-mobile0[1-9])/);
+assert.match(html,/202609(?:27-story0[1-9]|28-(?:mobile|qa)0[1-9])/);
 
 console.log('Mobile run-focus checks passed.');
