@@ -1,207 +1,152 @@
-# FirstCommit — Devpost form map for CloudRescue
+# LovHack Season 3 — Devpost form map for Resilience Atlas
 
-Verified against the current FirstCommit Devpost event page and rules on 27 Sep 2026.
+Verified against the current LovHack Season 3 Devpost page and rules.
 
-Official event: https://firstcommit.devpost.com/
-Official rules: https://firstcommit.devpost.com/rules
+## Event
 
-## Deadline
+**LovHack Season 3**  
+Build period: **September 26–October 4, 2026**  
+Deadline: **October 4, 2026 @ 11:45 PM EDT**
 
-**Sep 30, 2026 @ 5:00 PM EDT**
-
-Target: have the final submission materially complete several hours before the deadline.
+The current product work and Git history should clearly show what was built during this period.
 
 ## 1. Project name
 
-**CloudRescue**
+**Resilience Atlas**
 
 ## 2. Tagline
 
-**A systemic cloud-resilience stress lab for shared-provider shocks in banking.**
+**A systemic cloud-resilience simulator for shared-provider shocks in banking.**
 
 ## 3. Project description
 
-Use: docs/devpost-final-copy.md
+Use: `docs/devpost-final-copy.md`
 
-The description must clearly explain:
-- what was built;
-- the problem it solves;
-- who it is for;
-- how it works;
-- what was learned;
-- significant AI assistance.
+It must clearly explain:
+- the problem;
+- target users;
+- how the solution works;
+- why the approach is different;
+- what was built during LovHack;
+- AI assistance;
+- what is synthetic vs observed.
 
 ## 4. Public GitHub repository
 
 https://github.com/rostys-fintech/cloudrescue-scfr
 
-Confirm in incognito mode that it is visible without login.
-
-## 5. Live deployment
+## 5. Working prototype
 
 https://rostys-fintech.github.io/cloudrescue-scfr/
 
-Recommended by the event and useful for judging.
-
 ## 6. Demo video
 
-Target length: **3:30–4:15**
+Required length: **2–3 minutes**
 
-Use: docs/demo-script.md
+Use:
+- `docs/demo-script.md`
+- `docs/video-storyboard.md`
 
-Show, in this order:
-1. institutional hero;
-2. Crisis Replay;
-3. shared-provider outage;
-4. reserve fragmentation;
-5. SCFR pooled allocation;
-6. Stress Lab;
-7. Scenario ID / reproducibility;
-8. Controlled Comparison;
-9. Sensitivity Explorer;
-10. Methodology / real-vs-synthetic boundary;
-11. Development Journey.
+Recommended flow:
+1. problem hook;
+2. Guided Simulation;
+3. Scenario Lab interaction;
+4. controlled same-budget comparison;
+5. Robustness Sweep;
+6. Model & Evidence boundary;
+7. close with target users + core insight.
 
-## 7. Screenshots
+Most of the video should show the actual product.
 
-Use: docs/screenshot-plan.md
+## 7. Technologies used
 
-Recommended order:
-1. institutional hero;
-2. Controlled Comparison;
-3. common-shock monitoring canvas;
-4. reserve fragmentation;
-5. SCFR pooled allocation;
-6. Stress Lab control room;
-7. Sensitivity Explorer;
-8. Methodology;
-9. Development Journey.
-
-## 8. README requirements
-
-The current rules require a README containing:
-- project overview;
-- technologies used;
-- setup instructions;
-- credits / external resources;
-- AI usage disclosure.
-
-## 9. Built With
-
-If Devpost has a separate Built With field, use only technologies actually present:
+Use only technologies actually present:
 - HTML5
 - CSS3
-- JavaScript
+- JavaScript / ES modules
 - SVG
-- Web Speech API
-- Web Animations API
+- browser Audio API
+- JSON / Blob export
 - Node.js
 - GitHub Actions
 - GitHub Pages
+- AI-assisted development tools (disclosed transparently)
 
-## 10. Learning & Growth — 30%
+## 8. What was built during LovHack
 
-This is the largest judging criterion.
+Emphasize work completed during Sep 26–Oct 4:
+- Resilience Atlas product redesign;
+- narrated six-scene Guided Simulation;
+- word-level narration / visual synchronization;
+- smooth cue-transition engine;
+- Scenario Lab and playback;
+- scenario conclusion;
+- Model & Evidence view;
+- controlled same-budget framing;
+- Robustness Sweep;
+- readable + JSON exports;
+- mobile responsive rebuild;
+- iOS touch/audio fixes;
+- regression tests and GitHub Actions hardening;
+- judge-facing documentation.
 
-Key evidence:
-- finance / banking starting point;
-- translated systemic-risk concept into computational rules;
-- separated simulation engine from UI;
-- built SVG / DOM visualization;
-- synchronized narration with application state;
-- added deterministic seeded scenarios;
-- added URL serialization;
-- added automated checks;
-- deployed publicly;
-- redesigned the interface from a generic hackathon dashboard into an institutional risk-intelligence product.
+If any research framing or earlier conceptual work predates LovHack, disclose that honestly and distinguish it from the software/product build.
 
-## 11. Creativity & Impact — 25%
+## 9. Judging priorities
 
-Key message:
+### Execution & Functionality — 35%
 
-**Same shock. Same reserve budget. Different coordination.**
-
-The distinctive experiment holds the shock and total reserve budget constant while comparing institution-specific reserve allocation with pooled systemic allocation.
-
-## 12. Technical Execution — 25%
-
-Proof to surface:
+Lead with:
+- working deployed prototype;
 - deterministic model;
-- separate simulation engine;
-- dynamic provider/bank network;
-- model-driven replay;
-- Web Speech narration;
-- seeded scenarios;
-- shareable URLs;
-- JSON export;
-- sensitivity analysis;
-- model invariants;
-- UI smoke checks;
-- GitHub Actions;
-- public deployment.
+- real interaction;
+- responsive mobile;
+- scenario playback;
+- exports;
+- automated tests;
+- robustness sweep.
 
-## 13. Presentation & Communication — 20%
+### Problem & Impact — 25%
 
-Presentation priorities:
-1. explain the problem before the controls;
-2. use the dark institutional Crisis Replay;
-3. show Controlled Comparison as the main analytical payoff;
-4. explicitly state real vs synthetic;
-5. show the learning journey at the end.
+Target users:
+- bank operational-resilience teams;
+- technology-risk teams;
+- supervisors;
+- financial-stability researchers.
 
-## 14. Prize-category positioning
+Core problem:
+shared-provider dependency can create correlated recovery demand.
 
-### Champion
-Strongest combined story: creative idea + working product + technical understanding + visible learning.
+### Innovation & Creativity — 20%
 
-### Most Ambitious Project
-Emphasize systemic-risk research + simulation + visualization + reproducibility + automated testing.
+Strongest novelty:
+> **Same shock. Same reserve budget. Different coordination.**
 
-### Most Creative Idea
-Emphasize systemic rather than bank-by-bank resilience, the fixed-budget experiment, and pooled reserve concept.
+Individual Reserves and SCFR use the same aggregate reserve pool; the allocation mechanism changes.
 
-### Best Web/App Experience
-Emphasize guided replay, focus mode, live Stress Lab, scenario replay, reproducible links, and navigation.
+### Presentation & UX — 20%
 
-### Best Design
-Use institutional v2 screenshots only.
+Use:
+- Guided Simulation as the hook;
+- Scenario Lab as execution proof;
+- Robustness Sweep as technical depth;
+- Model & Evidence as trust / transparency.
 
-### Best Technical Achievement
-Emphasize deterministic engine, model-driven replay, seeded scenarios, sensitivity recomputation, and automated checks.
-
-### Biggest Learning Journey
-Emphasize transition from finance question to model, software architecture, visualization, reproducibility, testing, and deployment.
-
-### Most Polished Project
-Emphasize live deployment, themes, narration, favicon/metadata, reproducibility, documentation, and automated checks.
-
-## 15. AI disclosure
+## 10. AI disclosure
 
 Use:
 
-> AI tools materially assisted with brainstorming, code drafting, debugging, documentation and interface iteration. I remained responsible for the research framing, assumptions, interpretation, model guardrails, feature selection, testing decisions and final submission. I can explain the simulation logic, assumptions, limitations and technical design used in the final project.
+> AI tools materially assisted brainstorming, code drafting, debugging, documentation and interface iteration. I selected the research framing and assumptions, directed product decisions, reviewed outputs, tested the implementation and am responsible for the final prototype.
 
-Do not minimize significant AI usage.
+## 11. Integrity checks
 
-## 16. Final integrity checks
-
-- GitHub public;
-- multiple meaningful commits visible;
-- README complete;
-- external sources credited;
-- significant AI use disclosed;
-- live site functional;
-- video publicly viewable;
-- project description accurate;
-- no synthetic result represented as a real-world estimate;
-- no claim that SCFR is empirically validated.
-
-## 17. Submission files
-
-- Final description: docs/devpost-final-copy.md
-- Demo script: docs/demo-script.md
-- Screenshot plan: docs/screenshot-plan.md
-- Technical defense: docs/technical-defense.md
-- Judge pitch: docs/judge-pitch-card.md
-- Judging map: docs/judging-map.md
-- Final QA: docs/submission-checklist.md
+Before submission:
+- working demo opens without login;
+- GitHub repo is public;
+- video is public;
+- README matches the live site;
+- no removed feature is described as current;
+- build-period contribution is clear;
+- AI assistance is disclosed;
+- no synthetic result is presented as a real-world estimate;
+- SCFR is not described as empirically validated.
