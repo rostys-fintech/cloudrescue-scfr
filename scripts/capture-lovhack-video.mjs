@@ -9,7 +9,7 @@ const rawDir=path.join(outDir,'raw');
 await fs.mkdir(rawDir,{recursive:true});
 
 const target={
-  hook:12.120816326530612,
+  hook:19.33061224489796,
   scenario:18.155102040816328,
   evidence:19.983673469387757,
   close:11.702857142857143
@@ -83,16 +83,57 @@ await page.evaluate(()=>{
       box-shadow:0 0 0 4px rgba(55,173,255,.16),0 0 18px rgba(55,173,255,.35);
       transition:left .42s cubic-bezier(.22,.61,.36,1),top .42s cubic-bezier(.22,.61,.36,1),transform .18s ease;
     }
+    #captureResearchOverlay{
+      position:fixed;z-index:999990;left:50%;top:49%;transform:translate(-50%,-50%);
+      width:min(980px,calc(100vw - 180px));padding:24px 28px 22px;
+      background:linear-gradient(135deg,rgba(4,7,11,.93),rgba(11,14,20,.88));
+      border:1px solid rgba(255,74,74,.38);box-shadow:0 30px 90px rgba(0,0,0,.46);
+      backdrop-filter:blur(14px);border-radius:12px;color:#f7f8fb;
+      opacity:0;transition:opacity .55s ease,transform .55s cubic-bezier(.22,.61,.36,1);
+      pointer-events:none;
+    }
+    #captureResearchOverlay.is-visible{opacity:1;transform:translate(-50%,-50%) scale(1);}
+    #captureResearchOverlay .eyebrow{font-size:11px;letter-spacing:.18em;font-weight:900;color:#ff6666;margin-bottom:10px;}
+    #captureResearchOverlay h2{margin:0;font:700 34px/1.14 system-ui,sans-serif;letter-spacing:-.025em;max-width:900px;}
+    #captureResearchOverlay .question{margin-top:10px;color:#c5cad5;font:500 17px/1.45 system-ui,sans-serif;max-width:900px;}
+    #captureResearchOverlay .flow{display:grid;grid-template-columns:1.35fr auto 1.25fr auto .7fr auto 1fr;gap:10px;align-items:center;margin-top:18px;}
+    #captureResearchOverlay .step{min-height:58px;padding:10px 12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.035);border-radius:8px;}
+    #captureResearchOverlay .step span{display:block;font:800 9px/1 system-ui,sans-serif;letter-spacing:.12em;color:#9aa3b3;margin-bottom:6px;}
+    #captureResearchOverlay .step b{display:block;font:700 13px/1.25 system-ui,sans-serif;color:#fff;}
+    #captureResearchOverlay .arrow{font:700 19px/1 system-ui,sans-serif;color:#ff6666;}
+    #captureResearchOverlay .foot{margin-top:13px;font:600 11px/1.4 system-ui,sans-serif;color:#9aa3b3;}
   `;
   document.head.appendChild(style);
   const cursor=document.createElement('div');
   cursor.id='captureCursor';
   document.body.appendChild(cursor);
+
+  const overlay=document.createElement('section');
+  overlay.id='captureResearchOverlay';
+  overlay.innerHTML=`
+    <div class="eyebrow">RESEARCH → CONCEPT → PROTOTYPE</div>
+    <h2>From bank resilience research to a testable systemic cloud mechanism</h2>
+    <div class="question">Broader question: <b>What affects bank resilience — and what role does digitalisation play?</b></div>
+    <div class="flow">
+      <div class="step"><span>RESEARCH</span><b>Bank resilience × digitalisation</b></div>
+      <div class="arrow">→</div>
+      <div class="step"><span>NARROWED RISK</span><b>Shared cloud dependency</b></div>
+      <div class="arrow">→</div>
+      <div class="step"><span>CONCEPT</span><b>SCFR</b></div>
+      <div class="arrow">→</div>
+      <div class="step"><span>PROTOTYPE</span><b>Resilience Atlas</b></div>
+    </div>
+    <div class="foot">Question tested: can coordination improve recovery without increasing the total reserve budget?</div>
+  `;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>overlay.classList.add('is-visible')));
 });
 
 /* 01 — hook */
 let segment=Date.now();
-await wait(9000);
+await wait(15500);
+await page.evaluate(()=>document.querySelector('#captureResearchOverlay')?.classList.remove('is-visible'));
+await wait(650);
 await point('#raRunPreview');
 await waitSegment(segment,target.hook);
 
@@ -116,6 +157,7 @@ await page.evaluate(()=>{
   observer.observe(scene,{childList:true,subtree:true,characterData:true});
   window.__captureGuidedTiming.observer=observer;
 });
+await page.evaluate(()=>document.querySelector('#captureResearchOverlay')?.remove());
 await page.locator('#raRunPreview').click();
 
 /* 02 — full Guided Simulation */
