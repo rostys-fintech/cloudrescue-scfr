@@ -1,4 +1,4 @@
-# CloudRescue — Model Walkthrough
+# Resilience Atlas — Model Walkthrough
 
 This walkthrough explains the current v0.1 simulation engine in plain language.
 
@@ -45,16 +45,17 @@ These values are synthetic inputs used only to make the mechanism visible.
 # 2. affectedBanks()
 
 ```js
-function affectedBanks(outageProvider) {
+function affectedBanks(outageProviders) {
+  const failed = new Set(outageProviders);
   return banks
-    .filter(b => b.provider === outageProvider)
+    .filter(b => failed.has(b.provider))
     .map(b => ({...b, allocation:0}));
 }
 ```
 
 ## What it does
 
-Selects only banks connected to the failed provider.
+Selects banks connected to any provider included in the selected outage set.
 
 Every affected bank starts the recovery calculation with:
 
@@ -226,7 +227,7 @@ SRS is therefore not simply the average recovery percentage across banks.
 
 Important:
 
-SRS is a **CloudRescue synthetic research metric**.
+SRS is a **Resilience Atlas synthetic research metric**.
 
 It is not an official regulatory metric.
 
@@ -238,7 +239,7 @@ This function builds one complete recovery scenario.
 
 Inputs:
 
-- outage provider
+- one or more outage providers
 - emergency-market capacity %
 - pre-reserved capacity %
 - recovery strategy
@@ -352,6 +353,8 @@ the full reserve pool can be allocated across affected banks using the selected 
 
 ## Central experiment
 
+The interface's Robustness Sweep also reruns this same comparison over nearby market/reserve assumptions.
+
 Individual Reserves:
 
 **same budget → institution-specific allocation**
@@ -428,7 +431,7 @@ When comparing Individual Reserves with SCFR:
 
 - reserve allocation mechanism
 
-That distinction is the central methodological point in CloudRescue.
+That distinction is the central methodological point in Resilience Atlas.
 
 ---
 
@@ -446,7 +449,7 @@ The engine does **not** currently simulate:
 - cross-border rules
 - reserve cost
 - recovery-time objectives
-- multi-provider simultaneous failures
+- empirical provider-specific failure probabilities
 
 These are not bugs.
 
@@ -497,7 +500,7 @@ A strong simple explanation is:
 
 # 19. The most important caveat
 
-CloudRescue shows:
+Resilience Atlas shows:
 
 **how a mechanism behaves under explicit synthetic assumptions.**
 
