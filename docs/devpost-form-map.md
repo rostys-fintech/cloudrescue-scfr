@@ -66,6 +66,7 @@ Use only technologies actually present:
 - JavaScript / ES modules
 - SVG
 - browser Audio API
+- HeyGen (Viktor narration generation)
 - JSON / Blob export
 - Node.js
 - GitHub Actions
