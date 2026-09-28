@@ -18,6 +18,12 @@ Resilience Atlas is an interactive synthetic stress-test that shows how a shared
 
 ## Inspiration
 
+Resilience Atlas grew out of my broader research on **what affects bank resilience and the role of digitalisation in it**.
+
+That broader question led me to a narrower operational-resilience problem: digitalisation can improve banking efficiency and service delivery, but it can also create shared dependencies when many institutions rely on the same critical cloud infrastructure.
+
+From there, I developed the **Systemic Cloud Failover Reserve (SCFR)** concept as one possible coordination mechanism to test.
+
 Financial institutions can depend on a limited set of critical ICT and cloud providers. That creates a systemic operational-resilience problem: a backup plan can work for one institution and still fail at the system level if many institutions need the same backup capacity at the same time.
 
 Resilience Atlas started from one question:
@@ -25,6 +31,20 @@ Resilience Atlas started from one question:
 > **If the aggregate reserve budget stays fixed, can better coordination improve systemic recovery after a shared-provider outage?**
 
 The prototype does not model any real bank or cloud provider. It uses a transparent synthetic system to make the coordination problem visible and testable.
+
+## Research origin
+
+My broader research asks:
+
+> **What affects bank resilience, and what role does digitalisation play in it?**
+
+Resilience Atlas focuses on one narrower mechanism inside that broader question:
+
+> **When several banks depend on shared cloud infrastructure, can better coordination of failover capacity improve system-level recovery without increasing the aggregate reserve budget?**
+
+SCFR is therefore not presented as an empirically proven solution. It is a research concept translated into an explicit, testable synthetic mechanism.
+
+This distinction matters: the **research framing and SCFR concept predated LovHack**, while the current Resilience Atlas software product, interactive simulation, robustness analysis, mobile experience, testing and submission media were built during the LovHack build period.
 
 ## What it does
 
