@@ -6843,3 +6843,100 @@ body.ra-guided-running #simulation #raEarthMount{
     pointer-events:none!important;
   }
 }
+
+
+/* =========================================================
+   JUDGE FLOW — controlled comparison + audience framing
+   ========================================================= */
+
+.ra-compare-principle{
+  margin:0 12px 12px;
+  padding:10px 12px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  grid-template-areas:
+    "label statement"
+    "label note";
+  gap:2px 12px;
+  align-items:center;
+  border:1px solid color-mix(in srgb,var(--ra-primary) 28%,var(--ra-border));
+  border-radius:var(--ra-radius-xs);
+  background:color-mix(in srgb,var(--ra-primary) 4%,var(--ra-surface-soft));
+}
+.ra-compare-principle>span{
+  grid-area:label;
+  color:var(--ra-primary);
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.11em;
+  white-space:nowrap;
+}
+.ra-compare-principle>b{
+  grid-area:statement;
+  color:var(--ra-text-1);
+  font-size:10px;
+  line-height:1.3;
+}
+.ra-compare-principle>small{
+  grid-area:note;
+  color:var(--ra-text-3);
+  font-size:8px;
+  line-height:1.35;
+}
+
+.ra-audience-strip{
+  grid-column:1/-1;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--ra-border);
+}
+.ra-audience-strip>span{
+  display:block;
+  margin-bottom:8px;
+  color:var(--ra-primary);
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.ra-audience-strip>div{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.ra-audience-strip article{
+  min-width:0;
+  padding:9px 10px;
+  border-left:2px solid color-mix(in srgb,var(--ra-primary) 55%,var(--ra-border));
+  background:color-mix(in srgb,var(--ra-primary) 3%,transparent);
+}
+.ra-audience-strip b{
+  display:block;
+  color:var(--ra-text-1);
+  font-size:9px;
+}
+.ra-audience-strip small{
+  display:block;
+  margin-top:3px;
+  color:var(--ra-text-3);
+  font-size:7.5px;
+  line-height:1.4;
+}
+
+@media(max-width:767px){
+  .ra-compare-principle{
+    margin:0 8px 10px;
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "label"
+      "statement"
+      "note";
+    gap:4px;
+  }
+  .ra-audience-strip>div{
+    grid-template-columns:1fr;
+    gap:5px;
+  }
+  .ra-audience-strip article{
+    padding:8px 9px;
+  }
+}
