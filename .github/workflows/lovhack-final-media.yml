@@ -48,9 +48,6 @@ jobs:
           cat /tmp/resilience-atlas-server.log
           exit 1
 
-      - name: Record final demo visual
-        run: node scripts/capture-lovhack-video.mjs
-
       - name: Download Viktor narration
         run: |
           mkdir -p artifacts/lovhack-audio/raw
@@ -64,6 +61,11 @@ jobs:
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=4f8e1055-372a-46cc-ab24-ca3ec1638a26.wav' -o artifacts/lovhack-audio/raw/08-scenario.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=2c6ebf45-f586-4b3a-a351-e9565f5912e5.wav' -o artifacts/lovhack-audio/raw/09-evidence.wav
           curl -fL 'https://resource2.heygen.ai/text_to_speech/cfeac6df519c45a6bb5baf826fb0a7c2/623ed104a08f47caa430f7b73daeccc3/id=aa8e4bcc-85d9-4644-8e4b-6cb68ddf0618.wav' -o artifacts/lovhack-audio/raw/10-close.wav
+
+      - name: Record final demo visual
+        env:
+          CAPTURE_AUDIO_DIR: artifacts/lovhack-audio/raw
+        run: node scripts/capture-lovhack-video.mjs
 
       - name: Assemble H.264/AAC final MP4
         run: bash scripts/assemble-lovhack-final.sh
