@@ -9,7 +9,7 @@ const css=fs.readFileSync(new URL('../resilience-atlas.css',import.meta.url),'ut
 assert.equal(index,html,'default entrypoint should stay synced');
 assert.match(html,/preconnect" href="https:\/\/resource2\.heygen\.ai"/);
 assert.match(html,/class="ra-sim-secondary"/);
-assert.match(html,/202609(?:27-story0[1-9]|28-mobile0[1-9])/);
+assert.match(html,/202609(?:27-story0[1-9]|28-(?:mobile|qa)0[1-9])/);
 
 assert.match(js,/const GUIDED_AUDIO_TRACKS = \[/);
 assert.equal((js.match(/resource2\.heygen\.ai\/text_to_speech/g)||[]).length,6);
