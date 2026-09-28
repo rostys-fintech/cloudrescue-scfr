@@ -82,6 +82,8 @@ The evidence view separates:
 - systemic weights;
 - all numerical outputs.
 
+A **Robustness Sweep** reruns a local 3×3 grid around the current market/reserve assumptions and reports SCFR-vs-Individual resilience uplift.
+
 The current scenario can be exported as:
 - a readable report;
 - JSON for reproducibility.
@@ -131,6 +133,7 @@ Potential users of the concept include:
 - narrated six-scene guided simulation;
 - interactive Scenario Lab;
 - transparent real-vs-synthetic evidence boundary;
+- model-driven Robustness Sweep across nearby market/reserve assumptions;
 - readable and JSON scenario exports;
 - responsive mobile experience;
 - automated model and UI regression checks;
