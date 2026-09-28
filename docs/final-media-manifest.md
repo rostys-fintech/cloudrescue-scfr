@@ -12,7 +12,7 @@ Verified local assembly from the successful LovHack visual and Viktor narration 
 - Narrator: **Viktor — Serious & Composed**
 - File size: **19.3 MB**
 - Story: hook → full Guided Simulation → Scenario Lab → Robustness Sweep → Evidence → controlled-comparison close
-- SHA-256: `3083345cc580de1576fa6246930f2d46bad3c3802cf7167add1da1202d884d7d`
+- SHA-256: `97f212634e745c9b45612f0b5e18f2c48de7eab40b5ae702138908efe4acbbc2`
 
 The source visual was 164.92 seconds. The narration track was 165.60 seconds, so the final frame is extended by approximately 0.76 seconds rather than truncating the closing narration.
 
@@ -21,6 +21,12 @@ A reproducible assembly script is available at:
 
 A one-click CI build is available at:
 - `.github/workflows/lovhack-final-media.yml`
+
+Canonical CI build:
+- Workflow run: `36396451341`
+- GitHub Actions artifact ID: `10958640783`
+- Artifact name: `resilience-atlas-lovhack-final-demo`
+- CI build status: **SUCCESS**
 
 ## Screenshot set
 
