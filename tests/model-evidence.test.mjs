@@ -27,6 +27,11 @@ assert.match(html,/esma\.europa\.eu/);
 
 assert.match(js,/function renderRobustnessSweep\(/);
 assert.match(js,/function localSweepLevels\(/);
+// Keep the judge-facing matrix at a stable 3×3 across slider boundaries.
+assert.match(js,/unique\.length<3/);
+assert.match(css,/repeat\(3,minmax\(64px,1fr\)\)/);
+assert.match(css,/repeat\(3,72px\)/);
+assert.doesNotMatch(css,/repeat\(calc\(var\(--ra-matrix-cols\)/);
 assert.match(js,/c\.scfr\.resilience-c\.individual\.resilience/);
 assert.match(js,/function evidenceSnapshot\(/);
 assert.match(js,/function exportReadableReport\(/);
