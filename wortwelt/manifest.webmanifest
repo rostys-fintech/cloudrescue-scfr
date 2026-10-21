@@ -1,0 +1,12 @@
+{
+  "name": "WortWelt — німецька щодня",
+  "short_name": "WortWelt",
+  "description": "Тренуй німецькі артиклі та вивчай лексику з ілюстраціями",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef5f8",
+  "theme_color": "#1687d6",
+  "lang": "uk",
+  "icons": []
+}
